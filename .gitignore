@@ -16,6 +16,7 @@ x86/
 build/
 bld/
 [Oo]bj/
+BuildOutput/
 
 # Doxygen intermediate files
 latex/
