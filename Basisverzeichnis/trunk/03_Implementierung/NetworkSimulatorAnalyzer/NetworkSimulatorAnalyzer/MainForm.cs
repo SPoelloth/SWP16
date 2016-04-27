@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NetworkSimulatorAnalyzer.Logging;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -14,6 +14,7 @@ namespace NetworkSimulatorAnalyzer
   {
     public MainForm()
     {
+      LogManager.WriteToLog("MainForm Constructor");
       InitializeComponent();
     }
   }
