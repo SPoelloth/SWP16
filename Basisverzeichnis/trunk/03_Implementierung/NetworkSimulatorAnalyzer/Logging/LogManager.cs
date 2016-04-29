@@ -6,12 +6,12 @@ namespace NetworkSimulatorAnalyzer.Logging
 {
   public class LogManager
   {
-    public static string LogfilePath { get; private set; }
+    public static string LogfilePath { get; }
     static object fileLock = new object();
 
     static LogManager()
     {
-      LogfilePath = string.Format(@"Logs\Session_{0:dd.MM.yy_HH.mm.ss}.log", DateTime.Now);
+      LogfilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs", $@"Session_{DateTime.Now:dd.MM.yy_HH.mm.ss}.log");
       Directory.CreateDirectory("Logs");
       WriteToLog("Hi, I'm your logfile!");
     }
@@ -20,7 +20,7 @@ namespace NetworkSimulatorAnalyzer.Logging
     {
       lock (fileLock)
       {
-        File.AppendAllText(LogfilePath, string.Format("{0:HH:mm:ss} {1}{2}", DateTime.Now, text, Environment.NewLine));
+        File.AppendAllText(LogfilePath, $"{DateTime.Now:HH:mm:ss} {text}{Environment.NewLine}");
       }
     }
 
