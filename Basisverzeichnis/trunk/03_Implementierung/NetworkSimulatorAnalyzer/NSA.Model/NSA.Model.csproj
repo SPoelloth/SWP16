@@ -40,11 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetworkComponents\Computer.cs" />
+    <Compile Include="NetworkComponents\Hardwarenode.cs" />
+    <Compile Include="NetworkComponents\Router.cs" />
+    <Compile Include="NetworkComponents\Switch.cs" />
+    <Compile Include="NetworkComponents\Workstation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessLogic\" />
-    <Folder Include="NetworkComponents\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
