@@ -40,6 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\Packet.cs" />
+    <Compile Include="BusinessLogic\Project.cs" />
+    <Compile Include="BusinessLogic\Rule.cs" />
+    <Compile Include="BusinessLogic\Simulation.cs" />
+    <Compile Include="BusinessLogic\Testscenario.cs" />
     <Compile Include="NetworkComponents\Computer.cs" />
     <Compile Include="NetworkComponents\Connection.cs" />
     <Compile Include="NetworkComponents\Hardwarenode.cs" />
@@ -54,9 +59,7 @@
     <Compile Include="NetworkComponents\Workstation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessLogic\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
