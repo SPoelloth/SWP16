@@ -1,12 +1,11 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
     class Interface
     {
-        private String name;
-        private IPAddress ip;
+        private string name;
+        private IPAddress ipAddress;
         private IPAddress subnetmask;
     }
 }

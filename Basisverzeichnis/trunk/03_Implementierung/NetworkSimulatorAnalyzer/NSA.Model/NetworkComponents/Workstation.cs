@@ -1,14 +1,16 @@
 ﻿using NSA.Model.NetworkComponents;
 using System.Collections.Generic;
-using System.Net;
 
 namespace NetworkSimulatorAnalyzer.Model.NetworkComponents
 {
     class Workstation : Hardwarenode
     {
         private List<Interface> interfaces;
-        //        private subnetmask;   => Welcher Typ?
         private Routingtable routingtable;
+
+        public Workstation(string name) : base(name)
+        {
+        }
 
         public Hardwarenode GetNextHardwarenode(Hardwarenode node)
         {
