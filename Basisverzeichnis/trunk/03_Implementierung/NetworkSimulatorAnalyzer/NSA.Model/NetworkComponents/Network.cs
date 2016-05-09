@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NSA.Model.NetworkComponents
 {
-    class Network
+	public class Network
     {
         private List<Hardwarenode> nodes;
         private List<Connection> connections;

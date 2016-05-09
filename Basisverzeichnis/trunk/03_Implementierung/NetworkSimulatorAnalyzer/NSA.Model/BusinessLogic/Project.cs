@@ -3,7 +3,7 @@ using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {
-    class Project
+	public class Project
     {
         // todo: decide if we need this class.
         // if not, then decide which type the member networkRepresantion
