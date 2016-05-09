@@ -2,7 +2,7 @@
 
 namespace NSA.Model.BusinessLogic
 {
-    class Testscenario
+	public class Testscenario
     {
         private List<Rule> rules;
     }
