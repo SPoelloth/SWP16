@@ -1,5 +1,7 @@
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
+using NSA.Model.BusinessLogic;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
@@ -16,7 +18,7 @@ namespace NSA.Controller
 		// Constructor:
 		public SimulationManager(List<Simulation> simulations)
 		{
-
+			this.simulations = simulations;
 		}
 
 		public void OnHopSelected()

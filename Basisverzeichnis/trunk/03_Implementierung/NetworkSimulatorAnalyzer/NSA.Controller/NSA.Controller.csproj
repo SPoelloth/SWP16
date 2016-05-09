@@ -45,6 +45,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulationManager.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NSA.Model\NSA.Model.csproj">
+      <Project>{afa9c232-0494-496f-b2cf-4890cd616537}</Project>
+      <Name>NSA.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

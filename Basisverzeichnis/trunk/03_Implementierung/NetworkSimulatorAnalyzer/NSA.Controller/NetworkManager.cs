@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NSA.Model.BusinessLogic;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
@@ -11,13 +12,14 @@ namespace NSA.Controller
 		// Default constructor:
 		public NetworkManager()
 		{
-
+			createConfigControls();
 		}
 
 		// Constructor:
 		public NetworkManager(Network network)
 		{
 			this.network = network;
+			createConfigControls();
 		}
 
 		private void createConfigControls()

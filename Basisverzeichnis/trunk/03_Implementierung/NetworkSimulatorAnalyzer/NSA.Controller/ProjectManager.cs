@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NSA.Model.BusinessLogic;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
@@ -12,13 +13,14 @@ namespace NSA.Controller
 		// Default constructor:
 		public ProjectManager()
 		{
-
+			
 		}
 
 		// Constructor:
-		public ProjectManager(Project currentProject)
+		public ProjectManager(Project currentProject, List<Testscenario> testscenarios)
 		{
 			this.currentProject = currentProject;
+			this.testscenarios = testscenarios;
 		}
 
 		public void OnCreateNewProject()
