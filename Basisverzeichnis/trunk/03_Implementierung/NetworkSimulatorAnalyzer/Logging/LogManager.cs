@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace NetworkSimulatorAnalyzer.Logging
+namespace LogManager
 {
   public class LogManager
   {

@@ -1,4 +1,4 @@
-﻿namespace NetworkSimulatorAnalyzer.Model.NetworkComponents
+﻿namespace NSA.Model.NetworkComponents
 {
     class Router : Workstation
     {

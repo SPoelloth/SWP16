@@ -1,6 +1,4 @@
-﻿using NetworkSimulatorAnalyzer.Model.NetworkComponents;
-
-namespace NSA.Model.NetworkComponents
+﻿namespace NSA.Model.NetworkComponents
 {
     class Connection
     {

@@ -1,7 +1,6 @@
-﻿using NSA.Model.NetworkComponents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace NetworkSimulatorAnalyzer.Model.NetworkComponents
+namespace NSA.Model.NetworkComponents
 {
     class Workstation : Hardwarenode
     {

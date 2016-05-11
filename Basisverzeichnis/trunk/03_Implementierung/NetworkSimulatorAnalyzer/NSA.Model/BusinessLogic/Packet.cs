@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NetworkSimulatorAnalyzer.Model.NetworkComponents;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {

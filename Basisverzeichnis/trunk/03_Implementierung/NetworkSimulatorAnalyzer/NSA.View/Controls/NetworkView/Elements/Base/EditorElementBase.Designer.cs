@@ -1,13 +1,13 @@
-﻿namespace NetworkSimulatorAnalyzer
+﻿namespace NSA.View.Controls.NetworkView.Elements.Base
 {
-  partial class MainForm
+  partial class EditorElementBase
   {
-    /// <summary>
+    /// <summary> 
     /// Erforderliche Designervariable.
     /// </summary>
     private System.ComponentModel.IContainer components = null;
 
-    /// <summary>
+    /// <summary> 
     /// Verwendete Ressourcen bereinigen.
     /// </summary>
     /// <param name="disposing">True, wenn verwaltete Ressourcen gelöscht werden sollen; andernfalls False.</param>
@@ -20,28 +20,18 @@
       base.Dispose(disposing);
     }
 
-    #region Vom Windows Form-Designer generierter Code
+    #region Vom Komponenten-Designer generierter Code
 
-    /// <summary>
-    /// Erforderliche Methode für die Designerunterstützung.
+    /// <summary> 
+    /// Erforderliche Methode für die Designerunterstützung. 
     /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
     /// </summary>
     private void InitializeComponent()
     {
-      this.SuspendLayout();
-      // 
-      // Form1
-      // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+      components = new System.ComponentModel.Container();
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(404, 262);
-      this.Name = "Form1";
-      this.Text = "Network Simulator and Analyzer";
-      this.ResumeLayout(false);
-
     }
 
     #endregion
   }
 }
-

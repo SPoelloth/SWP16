@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\NetworkSimulatorAnalyzer\BuildOutput\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,6 +32,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,12 +42,172 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\ConfigControlBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\ConfigControlBase.Designer.cs">
+      <DependentUpon>ConfigControlBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\GWConfigControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\GWConfigControl.Designer.cs">
+      <DependentUpon>GWConfigControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\InterfaceConfigControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\InterfaceConfigControl.Designer.cs">
+      <DependentUpon>InterfaceConfigControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\LayerstackConfigControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\LayerstackConfigControl.Designer.cs">
+      <DependentUpon>LayerstackConfigControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\RouteConfigControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\ComponentRepresentation\RouteConfigControl.Designer.cs">
+      <DependentUpon>RouteConfigControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\InfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\InfoControl.Designer.cs">
+      <DependentUpon>InfoControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\HistoryTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\HistoryTabPage.Designer.cs">
+      <DependentUpon>HistoryTabPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\HopsTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\HopsTabPage.Designer.cs">
+      <DependentUpon>HopsTabPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\ResultTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\ResultTabPage.Designer.cs">
+      <DependentUpon>ResultTabPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\ScenarioTabPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\TabPages\ScenarioTabPage.Designer.cs">
+      <DependentUpon>ScenarioTabPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\ComputerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\ComputerControl.designer.cs">
+      <DependentUpon>ComputerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\ConnectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\ConnectionControl.designer.cs">
+      <DependentUpon>ConnectionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\IConfigurable.cs" />
+    <Compile Include="Controls\NetworkView\Elements\LayerStackControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\LayerStackControl.designer.cs">
+      <DependentUpon>LayerStackControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\RouterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\RouterControl.designer.cs">
+      <DependentUpon>RouterControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\SwitchControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\SwitchControl.designer.cs">
+      <DependentUpon>SwitchControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\WorkstationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\WorkstationControl.designer.cs">
+      <DependentUpon>WorkstationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\NetworkViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\NetworkViewControl.Designer.cs">
+      <DependentUpon>NetworkViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\Base\EditorElementBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\Elements\Base\EditorElementBase.Designer.cs">
+      <DependentUpon>EditorElementBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\PropertyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\PropertyControl.Designer.cs">
+      <DependentUpon>PropertyControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Toolbar\ToolbarControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Toolbar\ToolbarControl.designer.cs">
+      <DependentUpon>ToolbarControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ComponentRepresentation\" />
-    <Folder Include="Controls\" />
-    <Folder Include="Forms\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\InfoControl.resx">
+      <DependentUpon>InfoControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\TabPages\HistoryTabPage.resx">
+      <DependentUpon>HistoryTabPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\TabPages\HopsTabPage.resx">
+      <DependentUpon>HopsTabPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\TabPages\ResultTabPage.resx">
+      <DependentUpon>ResultTabPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\TabPages\ScenarioTabPage.resx">
+      <DependentUpon>ScenarioTabPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NetworkView\NetworkViewControl.resx">
+      <DependentUpon>NetworkViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\PropertyControl.resx">
+      <DependentUpon>PropertyControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Toolbar\ToolbarControl.resx">
+      <DependentUpon>ToolbarControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logging\NSA.Logging.csproj">
+      <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
+      <Name>NSA.Logging</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,4 @@
-﻿using NetworkSimulatorAnalyzer.Model.NetworkComponents;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace NSA.Model.NetworkComponents
 {
