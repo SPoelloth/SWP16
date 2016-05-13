@@ -203,7 +203,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logging\NSA.Logging.csproj">
+    <ProjectReference Include="..\NSA.Logging\NSA.Logging.csproj">
       <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
       <Name>NSA.Logging</Name>
     </ProjectReference>
