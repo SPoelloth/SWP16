@@ -1,54 +1,56 @@
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
-using NSA.Model.BusinessLogic;
-using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
-	class SimulationManager
-	{
-		private List<Simulation> simulations;
+    internal class SimulationManager
+    {
+        public List<Simulation> Simulations { get; }
 
-		// Default constructor:
-		public SimulationManager()
-		{
+        // Default constructor:
+        public SimulationManager()
+        {
 
-		}
+        }
 
-		// Constructor:
-		public SimulationManager(List<Simulation> simulations)
-		{
-			this.simulations = simulations;
-		}
+        // Constructor:
+        public SimulationManager(List<Simulation> simulations)
+        {
+            Simulations = simulations;
+        }
 
-		public void OnHopSelected()
-		{
+        public void OnHopSelected()
+        {
 
-		}
+        }
 
-		public void StartSimulation(Simulation sim)
-		{
+        public void StartSimulation(Simulation sim)
+        {
 
-		}
+        }
 
-		public void StartTestscenario()
-		{
+        public void StartTestscenario()
+        {
 
-		}
+        }
 
-		public void AddSimulationToHistory(Simulation sim)
-		{
+        public void AddSimulationToHistory(Simulation sim)
+        {
 
-		}
+        }
 
-		public void RunSimulationFromHistory()
-		{
+        public void RunSimulationFromHistory()
+        {
 
-		}
+        }
 
-		public void RunLastSimulation()
-		{
+        public void RunLastSimulation()
+        {
 
-		}
-	}
+        }
+    }
+
+    class SimulationManagerImpl : SimulationManager
+    {
+    }
 }
