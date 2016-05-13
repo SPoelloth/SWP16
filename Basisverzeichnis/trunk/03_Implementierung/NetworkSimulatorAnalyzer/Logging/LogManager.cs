@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace LogManager
+namespace NSA.Logging
 {
   public class LogManager
   {

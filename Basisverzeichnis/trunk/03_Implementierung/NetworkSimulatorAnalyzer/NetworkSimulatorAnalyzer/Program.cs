@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Windows.Forms;
-using NSA.View.Controls.Forms;
+using NSA.View.Forms;
 
-namespace NetworkSimulatorAnalyzer
+namespace NSA
 {
-  static class Program
-  {
-    /// <summary>
-    /// Der Haupteinstiegspunkt für die Anwendung.
-    /// </summary>
-    [STAThread]
-    static void Main()
+    internal static class Program
     {
-      Application.EnableVisualStyles();
-      Application.SetCompatibleTextRenderingDefault(false);
-      Application.Run(new MainForm());
+        /// <summary>
+        /// Der Haupteinstiegspunkt für die Anwendung.
+        /// </summary>
+        [STAThread]
+        private static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
+        }
     }
-  }
 }

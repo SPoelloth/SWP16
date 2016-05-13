@@ -1,6 +1,6 @@
 ﻿using NSA.View.Controls.NetworkView;
 
-namespace NSA.View.Controls.Forms
+namespace NSA.View.Forms
 {
   partial class MainForm
   {
@@ -91,9 +91,9 @@ namespace NSA.View.Controls.Forms
     #endregion
 
     private NetworkViewControl networkViewControl1;
-    private InfoControl.InfoControl infoControl1;
-    private Toolbar.ToolbarControl toolbarControl1;
-    private PropertyControl.PropertyControl propertyControl1;
+    private Controls.InfoControl.InfoControl infoControl1;
+    private Controls.Toolbar.ToolbarControl toolbarControl1;
+    private Controls.PropertyControl.PropertyControl propertyControl1;
   }
 }
 
