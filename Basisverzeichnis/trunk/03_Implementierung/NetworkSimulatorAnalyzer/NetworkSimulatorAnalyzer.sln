@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkSimulatorAnalyzer", "NetworkSimulatorAnalyzer\NetworkSimulatorAnalyzer.csproj", "{5642323C-4689-47C1-97EE-FFD96C4CE776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSA.Logging", "Logging\NSA.Logging.csproj", "{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSA.Logging", "NSA.Logging\NSA.Logging.csproj", "{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSA.Model", "NSA.Model\NSA.Model.csproj", "{AFA9C232-0494-496F-B2CF-4890CD616537}"
 EndProject

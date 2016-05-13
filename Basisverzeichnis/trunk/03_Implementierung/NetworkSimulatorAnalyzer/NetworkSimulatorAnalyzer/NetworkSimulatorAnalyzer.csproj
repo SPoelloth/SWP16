@@ -7,7 +7,7 @@
     <ProjectGuid>{5642323C-4689-47C1-97EE-FFD96C4CE776}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NetworkSimulatorAnalyzer</RootNamespace>
+    <RootNamespace>NSA</RootNamespace>
     <AssemblyName>NetworkSimulatorAnalyzer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>NetworkSimulatorAnalyzer.Program</StartupObject>
+    <StartupObject>NSA.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -76,7 +76,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logging\NSA.Logging.csproj">
+    <ProjectReference Include="..\NSA.Logging\NSA.Logging.csproj">
       <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
       <Name>NSA.Logging</Name>
     </ProjectReference>

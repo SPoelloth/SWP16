@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NSA.View</RootNamespace>
     <AssemblyName>NSA.View</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,34 +43,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\ConfigControlBase.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\ConfigControlBase.Designer.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.Designer.cs">
       <DependentUpon>ConfigControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\GWConfigControl.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\GWConfigControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\GWConfigControl.Designer.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\GWConfigControl.Designer.cs">
       <DependentUpon>GWConfigControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\InterfaceConfigControl.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\InterfaceConfigControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\InterfaceConfigControl.Designer.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\InterfaceConfigControl.Designer.cs">
       <DependentUpon>InterfaceConfigControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\LayerstackConfigControl.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\LayerstackConfigControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\LayerstackConfigControl.Designer.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\LayerstackConfigControl.Designer.cs">
       <DependentUpon>LayerstackConfigControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\RouteConfigControl.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\RouteConfigControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\PropertyControl\ComponentRepresentation\RouteConfigControl.Designer.cs">
+    <Compile Include="Controls\PropertyControl\ConfigControls\RouteConfigControl.Designer.cs">
       <DependentUpon>RouteConfigControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\InfoControl\InfoControl.cs">
@@ -102,41 +103,41 @@
     <Compile Include="Controls\InfoControl\TabPages\ScenarioTabPage.Designer.cs">
       <DependentUpon>ScenarioTabPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\ComputerControl.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\ComputerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\ComputerControl.designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\ComputerControl.designer.cs">
       <DependentUpon>ComputerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\ConnectionControl.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\ConnectionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\ConnectionControl.designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\ConnectionControl.designer.cs">
       <DependentUpon>ConnectionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\IConfigurable.cs" />
-    <Compile Include="Controls\NetworkView\Elements\LayerStackControl.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\IConfigurable.cs" />
+    <Compile Include="Controls\NetworkView\NetworkElements\LayerStackControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\LayerStackControl.designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\LayerStackControl.designer.cs">
       <DependentUpon>LayerStackControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\RouterControl.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\RouterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\RouterControl.designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\RouterControl.designer.cs">
       <DependentUpon>RouterControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\SwitchControl.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\SwitchControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\SwitchControl.designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\SwitchControl.designer.cs">
       <DependentUpon>SwitchControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\WorkstationControl.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\WorkstationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\WorkstationControl.designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\WorkstationControl.designer.cs">
       <DependentUpon>WorkstationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\NetworkView\NetworkViewControl.cs">
@@ -145,16 +146,22 @@
     <Compile Include="Controls\NetworkView\NetworkViewControl.Designer.cs">
       <DependentUpon>NetworkViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\Base\EditorElementBase.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\Base\EditorElementBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\NetworkView\Elements\Base\EditorElementBase.Designer.cs">
+    <Compile Include="Controls\NetworkView\NetworkElements\Base\EditorElementBase.Designer.cs">
       <DependentUpon>EditorElementBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Forms\MainForm.cs">
+    <Compile Include="Forms\AdvancedSimulationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\Forms\MainForm.Designer.cs">
+    <Compile Include="Forms\AdvancedSimulationForm.Designer.cs">
+      <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PropertyControl\PropertyControl.cs">
@@ -171,11 +178,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="ComponentRepresentation\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\Forms\MainForm.resx">
+    <EmbeddedResource Include="Forms\AdvancedSimulationForm.resx">
+      <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\InfoControl\InfoControl.resx">
@@ -204,7 +212,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Logging\NSA.Logging.csproj">
+    <ProjectReference Include="..\NSA.Logging\NSA.Logging.csproj">
       <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
       <Name>NSA.Logging</Name>
     </ProjectReference>
