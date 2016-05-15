@@ -49,8 +49,4 @@ namespace NSA.Controller
 
         }
     }
-
-    class SimulationManagerImpl : SimulationManager
-    {
-    }
 }

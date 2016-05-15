@@ -4,7 +4,7 @@ using NSA.Model.BusinessLogic;
 
 namespace NSA.Controller
 {
-    class ProjectManager
+    internal class ProjectManager
     {
         public Project CurrentProject { get; }
         public List<Testscenario> Testscenarios { get; }
@@ -37,7 +37,7 @@ namespace NSA.Controller
 
         }
 
-        public void SaveAs(String path)
+        public void SaveAs(string path)
         {
 
         }

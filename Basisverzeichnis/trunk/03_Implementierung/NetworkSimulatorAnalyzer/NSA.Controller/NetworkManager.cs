@@ -3,24 +3,24 @@ using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
-    class NetworkManager
+    internal class NetworkManager
     {
         public Network Network1 { get; }
 
         // Default constructor:
         public NetworkManager()
         {
-            createConfigControls();
+            CreateConfigControls();
         }
 
         // Constructor:
         public NetworkManager(Network network)
         {
             Network1 = network;
-            createConfigControls();
+            CreateConfigControls();
         }
 
-        private void createConfigControls()
+        private static void CreateConfigControls()
         {
 
         }
@@ -50,17 +50,17 @@ namespace NSA.Controller
 
         }
 
-        public void CreateConnection(String start, String end)
+        public void CreateConnection(string start, string end)
         {
 
         }
 
-        public void RemoveHardwarenode(String name)
+        public void RemoveHardwarenode(string name)
         {
 
         }
 
-        public void RemoveConnection(String name)
+        public void RemoveConnection(string name)
         {
 
         }
