@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.NetworkView.NetworkElements.Base
@@ -6,6 +7,15 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
     public partial class EditorElementBase : UserControl
     {
         Image Image;
+        public Action<EditorElementBase>  Selected;
+
+        private bool isSelected = false;
+        public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; Invalidate(); } } }
+
+        public EditorElementBase() : this(new Point(0, 0))
+        {
+
+        }
 
         public EditorElementBase(Point location)
         {
@@ -52,10 +62,16 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             dragging = false;
         }
 
-        // protected override void OnMouseHover(System.EventArgs e)
-        // {
-        //  // Cursor = Cursors.Hand;
-        //   //base.OnMouseHover(e);
-        // }
+        protected override void OnMouseHover(System.EventArgs e)
+        {
+            Cursor = Cursors.Hand;
+            base.OnMouseHover(e);
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            Selected?.Invoke(this);
+            base.OnMouseClick(e);
+        }
     }
 }
