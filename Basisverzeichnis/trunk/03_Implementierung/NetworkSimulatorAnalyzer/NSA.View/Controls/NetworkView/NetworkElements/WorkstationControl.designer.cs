@@ -1,4 +1,4 @@
-﻿namespace NSA.View.Controls.NetworkView.Elements
+﻿namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     partial class WorkstationControl
     {

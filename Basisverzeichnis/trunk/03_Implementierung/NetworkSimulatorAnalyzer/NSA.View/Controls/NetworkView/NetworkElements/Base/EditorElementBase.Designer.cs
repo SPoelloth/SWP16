@@ -1,4 +1,4 @@
-﻿namespace NSA.View.Controls.NetworkView.Elements.Base
+﻿namespace NSA.View.Controls.NetworkView.NetworkElements.Base
 {
   partial class EditorElementBase
   {

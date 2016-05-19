@@ -3,12 +3,12 @@ using NSA.Logging;
 
 namespace NSA.View.Forms
 {
-  public partial class MainForm : Form
-  {
-    public MainForm()
+    public partial class MainForm : Form
     {
-      LogManager.WriteToLog("MainForm Constructor");
-      InitializeComponent();
+        public MainForm()
+        {
+            LogManager.WriteToLog("MainForm Constructor");
+            InitializeComponent();
+        }
     }
-  }
 }

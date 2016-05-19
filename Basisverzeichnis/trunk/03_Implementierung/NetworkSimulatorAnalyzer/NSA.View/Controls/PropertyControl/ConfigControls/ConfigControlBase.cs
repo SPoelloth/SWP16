@@ -1,17 +1,17 @@
 ﻿using System.Windows.Forms;
 
-namespace NSA.View.Controls.PropertyControl.ComponentRepresentation
+namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
-  public partial class ConfigControlBase : Control
-  {
-    public ConfigControlBase()
+    public partial class ConfigControlBase : Control
     {
-      InitializeComponent();
-    }
+        public ConfigControlBase()
+        {
+            InitializeComponent();
+        }
 
-    protected override void OnPaint(PaintEventArgs pe)
-    {
-      base.OnPaint(pe);
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            base.OnPaint(pe);
+        }
     }
-  }
 }

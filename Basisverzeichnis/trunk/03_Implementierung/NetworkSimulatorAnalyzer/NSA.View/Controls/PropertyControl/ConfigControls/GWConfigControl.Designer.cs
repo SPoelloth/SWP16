@@ -1,4 +1,4 @@
-﻿namespace NSA.View.Controls.PropertyControl.ComponentRepresentation
+﻿namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
     partial class GWConfigControl
     {
