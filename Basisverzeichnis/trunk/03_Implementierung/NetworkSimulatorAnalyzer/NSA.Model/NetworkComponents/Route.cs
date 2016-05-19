@@ -2,7 +2,7 @@
 
 namespace NSA.Model.NetworkComponents
 {
-    class Route
+    public class Route
     {
         private IPAddress destination;
         private IPAddress subnetmask;

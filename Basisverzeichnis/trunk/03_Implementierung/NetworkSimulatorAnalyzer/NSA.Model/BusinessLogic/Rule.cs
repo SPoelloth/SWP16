@@ -1,6 +1,6 @@
 ﻿namespace NSA.Model.BusinessLogic
 {
-    class Rule
+    public class Rule
     {
     }
 }

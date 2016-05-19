@@ -2,7 +2,7 @@
 
 namespace NSA.Model.NetworkComponents
 {
-    class Layerstack
+    public class Layerstack
     {
         private List<ILayer> layers;
 

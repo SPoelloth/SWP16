@@ -2,7 +2,7 @@
 
 namespace NSA.Model.NetworkComponents
 {
-    class Workstation : Hardwarenode
+    public class Workstation : Hardwarenode
     {
         private List<Interface> interfaces;
         private Routingtable routingtable;

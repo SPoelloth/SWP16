@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace NSA.Model.NetworkComponents
 {
-    class Hardwarenode
+    public class Hardwarenode
     {
         private Layerstack layerstack;
         private Dictionary<String, Connection> connections = new Dictionary<string, Connection>();
-        private string name;
+        public string Name { get; set; }
 
         public Hardwarenode(String name)
         {
-            this.name = name;
+            this.Name = name;
             layerstack = new Layerstack();
         }
 

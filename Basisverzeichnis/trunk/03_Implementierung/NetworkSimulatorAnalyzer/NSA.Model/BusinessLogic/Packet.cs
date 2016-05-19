@@ -4,7 +4,7 @@ using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {
-    class Packet
+    public class Packet
     {
         private Hardwarenode source;
         private Hardwarenode destination;

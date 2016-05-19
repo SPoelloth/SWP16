@@ -1,8 +1,14 @@
 ﻿namespace NSA.Model.NetworkComponents
 {
-    class Connection
+    public class Connection
     {
-        private Hardwarenode start;
-        private Hardwarenode end;
+        public Hardwarenode start;
+        public Hardwarenode end;
+
+        public Connection(Hardwarenode source, Hardwarenode target)
+        {
+            start = source;
+            end = target;
+        }
     }
 }

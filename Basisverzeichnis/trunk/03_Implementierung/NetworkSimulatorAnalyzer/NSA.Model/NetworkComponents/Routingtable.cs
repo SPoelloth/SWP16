@@ -2,7 +2,7 @@
 
 namespace NSA.Model.NetworkComponents
 {
-    class Routingtable
+    public class Routingtable
     {
         private List<Route> routes;
     }

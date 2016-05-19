@@ -2,7 +2,7 @@
 
 namespace NSA.Model.NetworkComponents
 {
-    class Interface
+    public class Interface
     {
         private string name;
         private IPAddress ipAddress;

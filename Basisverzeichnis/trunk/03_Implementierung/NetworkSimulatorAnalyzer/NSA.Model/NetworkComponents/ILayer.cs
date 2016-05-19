@@ -1,6 +1,6 @@
 ﻿namespace NSA.Model.NetworkComponents
 {
-    interface ILayer
+    public interface ILayer
     {
     }
 }

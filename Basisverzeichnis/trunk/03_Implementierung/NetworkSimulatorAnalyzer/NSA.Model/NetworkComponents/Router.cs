@@ -1,6 +1,6 @@
 ﻿namespace NSA.Model.NetworkComponents
 {
-    class Router : Workstation
+    public class Router : Workstation
     {
         private bool isGateway;
 
