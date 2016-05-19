@@ -180,6 +180,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Controls\NetworkView\NetworkElements\WorkstationControl.resx">
+      <DependentUpon>WorkstationControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdvancedSimulationForm.resx">
       <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>
     </EmbeddedResource>
