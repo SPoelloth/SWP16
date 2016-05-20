@@ -4,8 +4,7 @@ namespace NSA.View.Controls.InfoControl.TabPages
 {
     public partial class ScenarioTabPage : TabPage
     {
-        public ScenarioTabPage()
-            : base("Scenarios")
+        public ScenarioTabPage() : base("Scenarios")
         {
             InitializeComponent();
         }

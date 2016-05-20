@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\NetworkView\LabelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NetworkView\LabelControl.Designer.cs">
+      <DependentUpon>LabelControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -180,9 +186,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.resx">
-      <DependentUpon>ConfigControlBase.cs</DependentUpon>
-	</EmbeddedResource>
+    <EmbeddedResource Include="Controls\NetworkView\LabelControl.resx">
+      <DependentUpon>LabelControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\NetworkView\NetworkElements\WorkstationControl.resx">
       <DependentUpon>WorkstationControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -221,10 +227,6 @@
     <ProjectReference Include="..\NSA.Logging\NSA.Logging.csproj">
       <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
       <Name>NSA.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NSA.Model\NSA.Model.csproj">
-      <Project>{AFA9C232-0494-496F-B2CF-4890CD616537}</Project>
-      <Name>NSA.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

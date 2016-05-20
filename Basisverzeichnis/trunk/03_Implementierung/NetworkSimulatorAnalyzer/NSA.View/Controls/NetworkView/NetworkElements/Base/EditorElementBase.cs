@@ -7,18 +7,20 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
     public partial class EditorElementBase : UserControl
     {
         Image Image;
+        string Name;
         public Action<EditorElementBase>  Selected;
 
         private bool isSelected = false;
         public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; Invalidate(); } } }
 
-        public EditorElementBase() : this(new Point(0, 0))
+        public EditorElementBase() : this(new Point(0, 0), "EditorElementBase")
         {
 
         }
 
-        public EditorElementBase(Point location)
+        public EditorElementBase(Point location,string name)
         {
+            Name = name;
             Location = location;
             Size = new Size(100, 100);
             Image = new Bitmap(100, 100);
@@ -29,6 +31,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
                 g.DrawLine(Pens.Red, 100, 0, 0, 100);
             }
             InitializeComponent();
+            DoubleBuffered = true;
         }
 
         protected override void OnPaint(PaintEventArgs e)

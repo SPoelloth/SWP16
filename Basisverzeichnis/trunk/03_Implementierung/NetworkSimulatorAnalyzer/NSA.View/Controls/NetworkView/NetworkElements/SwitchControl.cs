@@ -6,7 +6,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     public partial class SwitchControl : EditorElementBase, IConfigurable
     {
-        public SwitchControl(Point location) : base(location)
+        public SwitchControl(Point location) : base(location, "SwitchControl")
         {
         }
 

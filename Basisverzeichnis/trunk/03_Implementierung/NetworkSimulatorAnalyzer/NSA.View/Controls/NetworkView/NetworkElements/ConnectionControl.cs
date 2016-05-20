@@ -6,7 +6,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     public partial class ConnectionControl : EditorElementBase
     {
-        public ConnectionControl(Point location) : base(location)
+        public ConnectionControl(Point location) : base(location, "Connection")
         {
         }
 

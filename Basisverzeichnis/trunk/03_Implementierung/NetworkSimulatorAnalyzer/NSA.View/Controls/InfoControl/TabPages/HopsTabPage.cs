@@ -4,8 +4,7 @@ namespace NSA.View.Controls.InfoControl.TabPages
 {
     public partial class HopsTabPage : TabPage
     {
-        public HopsTabPage()
-            : base("Hops")
+        public HopsTabPage() : base("Hops")
         {
             InitializeComponent();
         }
