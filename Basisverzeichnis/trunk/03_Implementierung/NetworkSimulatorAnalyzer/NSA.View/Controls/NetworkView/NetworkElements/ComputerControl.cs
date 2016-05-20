@@ -1,17 +1,17 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace NSA.View.Controls.NetworkView.Elements
+namespace NSA.View.Controls.NetworkView.NetworkElements
 {
-  public partial class ComputerControl : WorkstationControl
-  {
-    public ComputerControl(Point location) : base(location)
+    public partial class ComputerControl : WorkstationControl
     {
-    }
+        public ComputerControl(Point location) : base(location)
+        {
+        }
 
-    protected override void OnPaint(PaintEventArgs pe)
-    {
-      base.OnPaint(pe);
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            base.OnPaint(pe);
+        }
     }
-  }
 }

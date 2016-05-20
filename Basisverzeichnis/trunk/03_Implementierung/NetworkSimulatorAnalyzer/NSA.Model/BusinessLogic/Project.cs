@@ -14,6 +14,6 @@ namespace NSA.Model.BusinessLogic
 
         private Network network;
         private NetworkRepresantation networkRepresantation;
-        private List<Simulation> simulations;
+	    private string path;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NSA.Model.NetworkComponents
 {
-    class Switch : Hardwarenode
+    public class Switch : Hardwarenode
     {
         private List<string> interfaces;
 

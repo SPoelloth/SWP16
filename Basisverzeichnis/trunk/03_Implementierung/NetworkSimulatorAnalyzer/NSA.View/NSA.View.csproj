@@ -44,31 +44,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.Designer.cs">
       <DependentUpon>ConfigControlBase.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\GWConfigControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\GWConfigControl.Designer.cs">
       <DependentUpon>GWConfigControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\InterfaceConfigControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\InterfaceConfigControl.Designer.cs">
       <DependentUpon>InterfaceConfigControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\LayerstackConfigControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\LayerstackConfigControl.Designer.cs">
       <DependentUpon>LayerstackConfigControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\RouteConfigControl.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\PropertyControl\ConfigControls\RouteConfigControl.Designer.cs">
       <DependentUpon>RouteConfigControl.cs</DependentUpon>
@@ -180,6 +180,12 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.resx">
+      <DependentUpon>ConfigControlBase.cs</DependentUpon>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Controls\NetworkView\NetworkElements\WorkstationControl.resx">
+      <DependentUpon>WorkstationControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdvancedSimulationForm.resx">
       <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -215,6 +221,10 @@
     <ProjectReference Include="..\NSA.Logging\NSA.Logging.csproj">
       <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
       <Name>NSA.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NSA.Model\NSA.Model.csproj">
+      <Project>{AFA9C232-0494-496F-B2CF-4890CD616537}</Project>
+      <Name>NSA.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

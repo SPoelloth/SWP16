@@ -1,17 +1,17 @@
 ﻿using System.Windows.Forms;
 
-namespace NSA.View.Controls.NetworkView.Elements
+namespace NSA.View.Controls.NetworkView.NetworkElements
 {
-  public partial class LayerStackControl : Control
-  {
-    public LayerStackControl()
+    public partial class LayerStackControl : Control
     {
-      InitializeComponent();
-    }
+        public LayerStackControl()
+        {
+            InitializeComponent();
+        }
 
-    protected override void OnPaint(PaintEventArgs pe)
-    {
-      base.OnPaint(pe);
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            base.OnPaint(pe);
+        }
     }
-  }
 }

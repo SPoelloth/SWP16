@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.View.Controls.PropertyControl
 {
@@ -7,6 +8,11 @@ namespace NSA.View.Controls.PropertyControl
         public PropertyControl()
         {
             InitializeComponent();
+        }
+
+        public void AddControl(UserControl control)
+        {
+            this.flpContents.Controls.Add(control);
         }
     }
 }
