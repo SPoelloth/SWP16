@@ -19,7 +19,7 @@ namespace NSA.Controller
             Simulations = simulations;
         }
 
-        public void OnHopSelected()
+        public void HopSelected()
         {
 
         }

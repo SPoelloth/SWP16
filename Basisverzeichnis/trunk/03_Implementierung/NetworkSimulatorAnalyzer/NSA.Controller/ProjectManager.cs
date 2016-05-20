@@ -22,11 +22,6 @@ namespace NSA.Controller
             Testscenarios = testscenarios;
         }
 
-        public void OnCreateNewProject()
-        {
-
-        }
-
         public void CreateNewProject()
         {
 

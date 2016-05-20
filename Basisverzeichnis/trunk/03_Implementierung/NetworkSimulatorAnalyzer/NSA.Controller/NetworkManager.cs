@@ -25,22 +25,22 @@ namespace NSA.Controller
 
         }
 
-        public void OnHardwarenodeSelected()
+        public void HardwarenodeSelected()
         {
 
         }
 
-        public void OnInterfaceChanged()
+        public void InterfaceChanged()
         {
 
         }
 
-        public void OnRouteChanged()
+        public void RouteChanged()
         {
 
         }
 
-        public void OnGatewayChanged()
+        public void GatewayChanged()
         {
 
         }
