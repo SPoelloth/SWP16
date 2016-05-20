@@ -40,7 +40,7 @@ namespace NSA.View.Controls.NetworkView
         {
             var label = new LabelControl(element);
             Controls.Add(element);
-         //   Controls.Add(label);
+            Controls.Add(label);
             element.Selected += Element_Selected;
         }
 

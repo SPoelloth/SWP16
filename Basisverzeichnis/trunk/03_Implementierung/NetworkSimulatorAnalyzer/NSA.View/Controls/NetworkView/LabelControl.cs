@@ -9,35 +9,41 @@ namespace NSA.View.Controls.NetworkView
     {
         private EditorElementBase parentElement;
 
+        public LabelControl()
+        {
+            InitializeComponent();
+            textBox.Text = "Text";    
+        }
+
         public LabelControl(EditorElementBase element)
         {
             element.LocationChanged += Element_LocationChanged;
             parentElement = element;
             InitializeComponent();
-            textBox1.TextChanged += Label1_TextChanged;
-            textBox1.KeyDown += TextBox1_KeyDown;
-            textBox1.LostFocus += TextBox1_LostFocus;
-            textBox1.Text = element.Name;
-            Height = textBox1.Height;
+            textBox.TextChanged += Label1_TextChanged;
+            textBox.KeyDown += TextBox1_KeyDown;
+            textBox.LostFocus += TextBox1_LostFocus;
+            textBox.Text = element.Name;
+            Height = textBox.Height;
             Label1_TextChanged(parentElement, null);
         }
 
         private void TextBox1_LostFocus(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text)) textBox1.Text = "Name";
+            if (string.IsNullOrWhiteSpace(textBox.Text)) textBox.Text = "Name";
         }
 
         private void Element_LocationChanged(object sender, EventArgs e)
         {
-            Location = new Point(parentElement.Location.X + parentElement.Width / 2 - Width / 2 + 3, parentElement.Location.Y - textBox1.Height);
+            Location = new Point(parentElement.Location.X + parentElement.Width / 2 - Width / 2 + 3, parentElement.Location.Y - textBox.Height);
         }
 
         private void Label1_TextChanged(object sender, EventArgs e)
         {
-            var measure = TextRenderer.MeasureText(textBox1.Text, textBox1.Font);
-            Width = textBox1.Width = measure.Width;
+            var measure = TextRenderer.MeasureText(textBox.Text, textBox.Font);
+            Width = textBox.Width = measure.Width;
             Height = measure.Height;
-            parentElement.Name = textBox1.Text;
+            parentElement.Name = textBox.Text;
             Element_LocationChanged(parentElement, null);
         }
 

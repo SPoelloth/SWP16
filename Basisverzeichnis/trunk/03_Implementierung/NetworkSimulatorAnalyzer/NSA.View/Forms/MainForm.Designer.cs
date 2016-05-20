@@ -30,59 +30,58 @@ namespace NSA.View.Forms
     /// </summary>
     private void InitializeComponent()
     {
-            this.propertyControl1 = new NSA.View.Controls.PropertyControl.PropertyControl();
-            this.toolbarControl1 = new NSA.View.Controls.Toolbar.ToolbarControl();
-            this.infoControl1 = new NSA.View.Controls.InfoControl.InfoControl();
-            this.networkViewControl1 = new NSA.View.Controls.NetworkView.NetworkViewControl();
+            this.propertyControl = new NSA.View.Controls.PropertyControl.PropertyControl();
+            this.toolbarControl = new NSA.View.Controls.Toolbar.ToolbarControl();
+            this.infoControl = new NSA.View.Controls.InfoControl.InfoControl();
+            this.networkViewControl = new NSA.View.Controls.NetworkView.NetworkViewControl();
             this.SuspendLayout();
             // 
-            // propertyControl1
+            // propertyControl
             // 
-            this.propertyControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyControl1.Location = new System.Drawing.Point(768, 12);
-            this.propertyControl1.Name = "propertyControl1";
-            this.propertyControl1.Size = new System.Drawing.Size(150, 506);
-            this.propertyControl1.TabIndex = 3;
+            this.propertyControl.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.propertyControl.Location = new System.Drawing.Point(764, 64);
+            this.propertyControl.Name = "propertyControl";
+            this.propertyControl.Size = new System.Drawing.Size(150, 439);
+            this.propertyControl.TabIndex = 3;
             // 
-            // toolbarControl1
+            // toolbarControl
             // 
-            this.toolbarControl1.AutoSize = true;
-            this.toolbarControl1.Location = new System.Drawing.Point(1, 1);
-            this.toolbarControl1.Name = "toolbarControl1";
-            this.toolbarControl1.Size = new System.Drawing.Size(752, 46);
-            this.toolbarControl1.TabIndex = 2;
+            this.toolbarControl.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.toolbarControl.AutoSize = true;
+            this.toolbarControl.Location = new System.Drawing.Point(12, 12);
+            this.toolbarControl.Name = "toolbarControl";
+            this.toolbarControl.Size = new System.Drawing.Size(902, 46);
+            this.toolbarControl.TabIndex = 2;
             // 
-            // infoControl1
+            // infoControl
             // 
-            this.infoControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.infoControl1.Location = new System.Drawing.Point(2, 365);
-            this.infoControl1.Name = "infoControl1";
-            this.infoControl1.Size = new System.Drawing.Size(751, 173);
-            this.infoControl1.TabIndex = 1;
+            this.infoControl.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.infoControl.Location = new System.Drawing.Point(12, 351);
+            this.infoControl.Name = "infoControl";
+            this.infoControl.Size = new System.Drawing.Size(746, 173);
+            this.infoControl.TabIndex = 1;
             // 
-            // networkViewControl1
+            // networkViewControl
             // 
-            this.networkViewControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.networkViewControl1.Location = new System.Drawing.Point(1, 47);
-            this.networkViewControl1.Name = "networkViewControl1";
-            this.networkViewControl1.Size = new System.Drawing.Size(752, 312);
-            this.networkViewControl1.TabIndex = 0;
+            this.networkViewControl.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.networkViewControl.Location = new System.Drawing.Point(12, 64);
+            this.networkViewControl.Name = "networkViewControl";
+            this.networkViewControl.Size = new System.Drawing.Size(746, 281);
+            this.networkViewControl.TabIndex = 0;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(930, 541);
-            this.Controls.Add(this.propertyControl1);
-            this.Controls.Add(this.toolbarControl1);
-            this.Controls.Add(this.infoControl1);
-            this.Controls.Add(this.networkViewControl1);
+            this.ClientSize = new System.Drawing.Size(926, 527);
+            this.Controls.Add(this.propertyControl);
+            this.Controls.Add(this.toolbarControl);
+            this.Controls.Add(this.infoControl);
+            this.Controls.Add(this.networkViewControl);
+            this.MinimumSize = new System.Drawing.Size(750, 500);
             this.Name = "MainForm";
             this.Text = "Network Simulator and Analyzer";
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -90,10 +89,10 @@ namespace NSA.View.Forms
 
     #endregion
 
-    private NetworkViewControl networkViewControl1;
-    private Controls.InfoControl.InfoControl infoControl1;
-    private Controls.Toolbar.ToolbarControl toolbarControl1;
-    private Controls.PropertyControl.PropertyControl propertyControl1;
+    private NetworkViewControl networkViewControl;
+    private Controls.InfoControl.InfoControl infoControl;
+    private Controls.Toolbar.ToolbarControl toolbarControl;
+    private Controls.PropertyControl.PropertyControl propertyControl;
     }
 }
 

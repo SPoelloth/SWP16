@@ -14,7 +14,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         private Pen separatorPen = new Pen(Color.Black, 2);
         private Pen selectedPen = Pens.Red;
         private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(60, 60, 60), Color.FromArgb(175, 175, 175));
-        private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 300), Color.FromArgb(50, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
+        private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 200), Color.FromArgb(50, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
         private Brush dotBrush = new SolidBrush(Color.FromArgb(0, 255, 0));
         #endregion Workstation Colors
         #region Port Colors
@@ -49,7 +49,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         protected override void OnPaint(PaintEventArgs pe)
         {
             Graphics g = pe.Graphics;
-            var offsetY = 3;
+            var offsetY = 0;
             g.FillRectangle(backgroundBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
             g.FillRectangle(backgroundGradientBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
             g.FillRectangle(dotBrush, new Rectangle(5, offsetY + 5, 2, 2));
@@ -59,18 +59,20 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
             int portsize = 10;
             int portdistance = 2;
-            int offset = 30;
-            int portPinsLength = 4;
+            int portOffsetY = 30;
+            int portPinsLength = portsize / 2 - 1;
+            int portPinCount = 4;
+
             for (int i = 0; i < portcount; i++)
             {
-                var portRectangle = new Rectangle((Width - portsize) * (i % 2) + (1 - (i % 2) * 3), (i / 2) * (portsize + portdistance) + offset, portsize, portsize);
+                var portRectangle = new Rectangle((Width - portsize) * (i % 2) + (1 - (i % 2) * 3), (i / 2) * (portsize + portdistance) + portOffsetY, portsize, portsize);
                 g.FillRectangle(portBackgroundBrush, portRectangle);
-                
-                for (int j = 1; j < 5; j++)
+
+                for (int j = 1; j < portPinCount + 1; j++)
                 {
-                    int y = portRectangle.Y + 2 * j;
-                    int x = portRectangle.X + (i % 2) * portPinsLength + 1 + (1 - (i % 2) * 2) * 4;
-                    g.DrawLine(portPins, new Point(x, y), new Point(x + portPinsLength, y));
+                    float y = portRectangle.Y + (portsize - borderPen.Width * 2) / portPinCount * j;
+                    int x = portRectangle.X + ((i + 1) % 2) * (portsize - portPinsLength);
+                    g.DrawLine(portPins, new PointF(x, y), new PointF(x + portPinsLength, y));
                 }
                 g.FillRectangle(portOverlayBrush, portRectangle);
                 g.DrawRectangle(borderPen, portRectangle);
