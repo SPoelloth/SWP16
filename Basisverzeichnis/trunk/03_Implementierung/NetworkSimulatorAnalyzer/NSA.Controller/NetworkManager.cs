@@ -10,17 +10,17 @@ namespace NSA.Controller
         // Default constructor:
         public NetworkManager()
         {
-            CreateConfigControls();
+            createConfigControls();
         }
 
         // Constructor:
         public NetworkManager(Network network)
         {
             Network1 = network;
-            CreateConfigControls();
+            createConfigControls();
         }
 
-        private static void CreateConfigControls()
+        private void createConfigControls()
         {
 
         }
