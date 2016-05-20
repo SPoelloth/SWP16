@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -19,12 +20,15 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #endregion Workstation Colors
         #region Port Colors
         private Brush portBackgroundBrush = new SolidBrush(Color.FromArgb(150, 150, 150));
+        private Brush portHighlightBrush = new SolidBrush(Color.FromArgb(100, 255, 255, 255));
         private LinearGradientBrush portOverlayBrush = new LinearGradientBrush(new Point(), new Point(5, 0), Color.FromArgb(0, 0, 0, 0), Color.FromArgb(100, 0, 0, 0));
         private Pen portPins = Pens.White;
         #endregion Port Colors
         #endregion Colors
 
-        int portcount = 1;
+        private List<Rectangle> portHitboxes = new List<Rectangle>();
+
+        int portcount = 10;
         public int NetworkPortCount { get { return portcount; } set { portcount = value; CalculateDimension(); } }
 
         public WorkstationControl() : this(new Point(10, 10), "WorkstationControl")
@@ -48,6 +52,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         protected override void OnPaint(PaintEventArgs pe)
         {
+            portHitboxes = new List<Rectangle>();
             Graphics g = pe.Graphics;
             var offsetY = 0;
             g.FillRectangle(backgroundBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
@@ -66,6 +71,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             for (int i = 0; i < portcount; i++)
             {
                 var portRectangle = new Rectangle((Width - portsize) * (i % 2) + (1 - (i % 2) * 3), (i / 2) * (portsize + portdistance) + portOffsetY, portsize, portsize);
+                portHitboxes.Add(portRectangle);
                 g.FillRectangle(portBackgroundBrush, portRectangle);
 
                 for (int j = 1; j < portPinCount + 1; j++)
@@ -74,10 +80,21 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                     int x = portRectangle.X + ((i + 1) % 2) * (portsize - portPinsLength);
                     g.DrawLine(portPins, new PointF(x, y), new PointF(x + portPinsLength, y));
                 }
-                g.FillRectangle(portOverlayBrush, portRectangle);
+                g.FillRectangle(portRectangle.Contains(mouseLocation) ? portHighlightBrush : portOverlayBrush, portRectangle);
                 g.DrawRectangle(borderPen, portRectangle);
             }
             g.DrawRectangle(IsSelected ? selectedPen : borderPen, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
+        }
+
+        Point mouseLocation = new Point();
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            mouseLocation = e.Location;
+            foreach (var r in portHitboxes)
+            {
+                Invalidate(r);
+            }
+            base.OnMouseMove(e);
         }
     }
 }
