@@ -6,16 +6,16 @@ namespace NSA.Model.NetworkComponents
     public class Hardwarenode
     {
         private Layerstack layerstack;
-        private Dictionary<String, Connection> connections = new Dictionary<string, Connection>();
+        private Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Hardwarenode"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public Hardwarenode(String name)
+        /// <param name="n">The name.</param>
+        public Hardwarenode(string n)
         {
-            this.Name = name;
+            this.Name = n;
             layerstack = new Layerstack();
         }
 
@@ -55,20 +55,34 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="tags">Optional tags.</param>
+        /// <param name="result">String representing the result</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public Hardwarenode Send(Hardwarenode destination, Dictionary<string, Object> tags)
+        public Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, Object> tags, ref string result)
         {
-            return this;
+            Hardwarenode nextNode = this;
+            for (int i = 0; i < layerstack.GetSize(); i++)
+            {
+                if(nextNode != null)
+                    nextNode = layerstack.GetLayer(i).ValidateSend();
+            }
+            return nextNode == this ? null : nextNode;
         }
 
         /// <summary>
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="tags">Optional tags.</param>
+        /// <param name="result">String representing the result</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public bool Receive(Dictionary<string, Object> tags)
+        public bool Receive(ref Dictionary<string, Object> tags, ref string result)
         {
-            return true;
+            bool res = true;
+            for (int i = 0; i < layerstack.GetSize(); i++)
+            {
+                if(res)
+                    res = layerstack.GetLayer(i).ValidateReceive();
+            }
+            return res;
         }
 
         #endregion
