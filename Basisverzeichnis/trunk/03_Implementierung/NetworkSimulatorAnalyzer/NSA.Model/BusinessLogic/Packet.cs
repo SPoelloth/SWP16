@@ -8,7 +8,7 @@ namespace NSA.Model.BusinessLogic
     {
         private Hardwarenode source;
         private Hardwarenode destination;
-        private List<Hardwarenode> hops;
+        private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
         private string result = "";
         private Dictionary<string, object> tags;

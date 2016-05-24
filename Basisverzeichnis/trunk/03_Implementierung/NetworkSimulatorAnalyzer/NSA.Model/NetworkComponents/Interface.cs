@@ -5,7 +5,7 @@ namespace NSA.Model.NetworkComponents
     public class Interface
     {
         private string name;
-        private IPAddress ipAddress;
+        public IPAddress IpAddress { get; }
         private IPAddress subnetmask;
     }
 }

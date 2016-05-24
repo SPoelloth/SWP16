@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
     public class Hardwarenode
     {
-        private Layerstack layerstack;
-        private Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
+        protected Layerstack layerstack;
+        protected Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
         /// <summary>
@@ -15,7 +16,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="n">The name.</param>
         public Hardwarenode(string n)
         {
-            this.Name = n;
+            Name = n;
             layerstack = new Layerstack();
         }
 
@@ -31,6 +32,16 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="con">The connection to be removed.</param>
         public virtual void RemoveConnection(Connection con) {}
+
+        /// <summary>
+        /// Checks if the Hardwarenode has the IP
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <returns>A bool</returns>
+        public virtual bool HasIP(IPAddress ip)
+        {
+            return false;
+        }
 
         /// <summary>
         /// Adds a layer to the layerstack.
@@ -57,15 +68,9 @@ namespace NSA.Model.NetworkComponents
         /// <param name="tags">Optional tags.</param>
         /// <param name="result">String representing the result</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, Object> tags, ref string result)
+        public virtual Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, Object> tags, ref string result)
         {
-            Hardwarenode nextNode = this;
-            for (int i = 0; i < layerstack.GetSize(); i++)
-            {
-                if(nextNode != null)
-                    nextNode = layerstack.GetLayer(i).ValidateSend();
-            }
-            return nextNode == this ? null : nextNode;
+            return null;
         }
 
         /// <summary>
@@ -74,15 +79,9 @@ namespace NSA.Model.NetworkComponents
         /// <param name="tags">Optional tags.</param>
         /// <param name="result">String representing the result</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public bool Receive(ref Dictionary<string, Object> tags, ref string result)
+        public virtual bool Receive(ref Dictionary<string, Object> tags, ref string result)
         {
-            bool res = true;
-            for (int i = 0; i < layerstack.GetSize(); i++)
-            {
-                if(res)
-                    res = layerstack.GetLayer(i).ValidateReceive();
-            }
-            return res;
+            return false;
         }
 
         #endregion

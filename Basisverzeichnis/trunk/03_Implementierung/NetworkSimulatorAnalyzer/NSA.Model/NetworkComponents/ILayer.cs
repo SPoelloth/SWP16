@@ -1,4 +1,7 @@
-﻿namespace NSA.Model.NetworkComponents
+﻿using System.Collections.Generic;
+using System.Net;
+
+namespace NSA.Model.NetworkComponents
 {
     public interface ILayer
     {
@@ -6,7 +9,7 @@
         /// Validates the layer while sending a packet.
         /// </summary>
         /// <returns>null if not successfull or the next Hardwarenode if it was</returns>
-        Hardwarenode ValidateSend();
+        void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, Workstation destination, Dictionary<string, Connection> connections, Routingtable routingtable);
 
         /// <summary>
         /// Validates the layer while receiving a packet.

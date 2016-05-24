@@ -4,9 +4,9 @@ namespace NSA.Model.NetworkComponents
 {
     public class Route
     {
-        private IPAddress destination;
-        private IPAddress subnetmask;
-        private IPAddress gateway;
+        public IPAddress Destination { get; }
+        public IPAddress Subnetmask { get; }
+        public IPAddress Gateway { get; }
         private Interface iface;
     }
 }

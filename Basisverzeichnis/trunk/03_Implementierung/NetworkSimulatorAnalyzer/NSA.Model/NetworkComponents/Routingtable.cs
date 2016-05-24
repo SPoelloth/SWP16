@@ -23,5 +23,24 @@ namespace NSA.Model.NetworkComponents
         {
             routes.Remove(route);
         }
+
+        /// <summary>
+        /// Gets the size of the routingtable.
+        /// </summary>
+        /// <returns>The size</returns>
+        public int GetSize()
+        {
+            return routes.Count;
+        }
+
+        /// <summary>
+        /// Gets the route at the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>The route at the index</returns>
+        public Route GetRouteAt(int index)
+        {
+            return routes[index];
+        }
     }
 }
