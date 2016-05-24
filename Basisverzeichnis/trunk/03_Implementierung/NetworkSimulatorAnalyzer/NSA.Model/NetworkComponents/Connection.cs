@@ -2,18 +2,21 @@
 {
     public class Connection
     {
-        public Hardwarenode start;
-        public Hardwarenode end;
+        public Hardwarenode Start { get; private set; }
+        public Hardwarenode End { get; private set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Connection"/> class.
+        /// Initializes a new instance of the <see cref="Connection" /> class.
         /// </summary>
         /// <param name="source">The sourcenode.</param>
         /// <param name="target">The targetnode.</param>
-        public Connection(Hardwarenode source, Hardwarenode target)
+        /// <param name="name">The name (used as an ID).</param>
+        public Connection(Hardwarenode source, Hardwarenode target, string name)
         {
-            start = source;
-            end = target;
+            Start = source;
+            End = target;
+            Name = name;
         }
     }
 }

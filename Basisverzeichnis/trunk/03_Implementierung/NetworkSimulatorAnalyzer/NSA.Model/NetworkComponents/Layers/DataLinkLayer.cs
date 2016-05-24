@@ -9,14 +9,14 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             foreach (Connection c in connections.Values)
             {
-                if (c.end.HasIP(nextNodeIP))
+                if (c.End.HasIP(nextNodeIP))
                 {
-                    nextNode = c.end;
+                    nextNode = c.End;
                     return;
                 }
-                else if (c.start.HasIP(nextNodeIP))
+                else if (c.Start.HasIP(nextNodeIP))
                 {
-                    nextNode = c.start;
+                    nextNode = c.Start;
                     return;
                 }
             }

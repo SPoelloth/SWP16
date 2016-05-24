@@ -6,8 +6,8 @@ namespace NSA.Model.NetworkComponents
 {
 	public class Network
     {
-        private List<Hardwarenode> Nodes;
-        private List<Connection> Connections;
+        private List<Hardwarenode> nodes;
+        private List<Connection> connections;
 
         /// <summary>
         /// Returns the Hardwarenode with the name.
@@ -16,7 +16,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>The Hardwarenode with this name or default value</returns>
         public Hardwarenode GetHardwarenodeByName(string name)
 	    {
-	        return Nodes.FirstOrDefault(n => n.Name == name);
+	        return nodes.FirstOrDefault(n => n.Name == name);
 	    }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="newNode">The new node.</param>
         public void AddHardwarenode(Hardwarenode newNode)
 	    {
-	        Nodes.Add(newNode);
+	        nodes.Add(newNode);
 	    }
 
         /// <summary>
@@ -35,15 +35,15 @@ namespace NSA.Model.NetworkComponents
         /// <exception cref="System.InvalidOperationException">Connection already exists!</exception>
         public void AddConnection(Connection newConnection)
 	    {
-	        if (!Nodes.Contains(newConnection.start) || !Nodes.Contains(newConnection.end)) return;
-	        if(Connections.Count(c => c.start == newConnection.start && c.end == newConnection.end
-	           || c.start == newConnection.end && c.end == newConnection.start) > 0
-	           || Connections.Contains(newConnection))
+	        if (!nodes.Contains(newConnection.Start) || !nodes.Contains(newConnection.End)) return;
+	        if(connections.Count(c => c.Start == newConnection.Start && c.End == newConnection.End
+	           || c.Start == newConnection.End && c.End == newConnection.Start) > 0
+	           || connections.Contains(newConnection))
 	        {
 	            // there's already a connection between the two nodes
 	            throw new InvalidOperationException("Connection already exists!");
 	        }
-	        Connections.Add(newConnection);
+	        connections.Add(newConnection);
 	    }
     }
 }

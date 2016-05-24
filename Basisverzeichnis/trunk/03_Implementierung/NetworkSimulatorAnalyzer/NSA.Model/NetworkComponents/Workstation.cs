@@ -7,14 +7,17 @@ namespace NSA.Model.NetworkComponents
     public class Workstation : Hardwarenode
     {
         private List<Interface> interfaces = new List<Interface>();
-        private Routingtable routingtable;
+        private Routingtable routingtable = new Routingtable();
+        private IPAddress standardGateway;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Workstation"/> class.
+        /// Initializes a new instance of the <see cref="Workstation" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
-        public Workstation(string name) : base(name)
+        /// <param name="gateway">The gateway address.</param>
+        public Workstation(string name, byte[] gateway) : base(name)
         {
+            standardGateway = new IPAddress(gateway);
             layerstack.AddLayer(new PhysicalLayer());
             layerstack.AddLayer(new DataLinkLayer());
             layerstack.AddLayer(new NetworkLayer());
@@ -33,6 +36,15 @@ namespace NSA.Model.NetworkComponents
             return interfaces;
         }
 
+        /// <summary>
+        /// Hardwarenode sends the package to specified destination.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="tags">Optional tags.</param>
+        /// <param name="result">String representing the result</param>
+        /// <returns>
+        /// The Hardwarenode which received the package or null if an error occured
+        /// </returns>
         public override Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, object> tags, ref string result)
         {
             Hardwarenode nextNode = this;
@@ -45,6 +57,14 @@ namespace NSA.Model.NetworkComponents
             return nextNode == this ? null : nextNode;
         }
 
+        /// <summary>
+        /// Hardwarenode receives the package.
+        /// </summary>
+        /// <param name="tags">Optional tags.</param>
+        /// <param name="result">String representing the result</param>
+        /// <returns>
+        /// bool that indicates if the Hardwarenode received the package
+        /// </returns>
         public override bool Receive(ref Dictionary<string, object> tags, ref string result)
         {
             bool res = true;
