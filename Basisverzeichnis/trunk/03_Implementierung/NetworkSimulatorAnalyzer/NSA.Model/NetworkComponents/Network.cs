@@ -45,5 +45,23 @@ namespace NSA.Model.NetworkComponents
 	        }
 	        connections.Add(newConnection);
 	    }
+
+        /// <summary>
+        /// Removes the hardwarnode.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        public void RemoveHardwarnode(string name)
+        {
+            foreach (Hardwarenode h in nodes)
+            {
+                // A Hardwarenode is identified by its name. 
+                // This loop is cancelled as soon as the correct hardwarenode which should be removed is reached. 
+                if (h.Name == name)
+                {
+                    nodes.Remove(h);
+                    return;
+                }
+            }
+        }
     }
 }

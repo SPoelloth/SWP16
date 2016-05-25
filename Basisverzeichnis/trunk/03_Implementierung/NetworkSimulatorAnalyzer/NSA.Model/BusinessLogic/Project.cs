@@ -5,15 +5,18 @@ namespace NSA.Model.BusinessLogic
 {
 	public class Project
     {
-        // todo: decide if we need this class.
-        // if not, then decide which type the member networkRepresantion
-        // should have
-        private class NetworkRepresantation
-        {
-        }
+        private Network network { get; set; }
+        private string path { get; set; }
 
-        private Network network;
-        private NetworkRepresantation networkRepresantation;
-	    private string path;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Project"/> class.
+        /// </summary>
+        /// <param name="_network">The _network.</param>
+        /// <param name="_path">The _path.</param>
+        public Project(Network _network, string _path)
+        {
+            network = _network;
+            path = _path;
+        }
     }
 }
