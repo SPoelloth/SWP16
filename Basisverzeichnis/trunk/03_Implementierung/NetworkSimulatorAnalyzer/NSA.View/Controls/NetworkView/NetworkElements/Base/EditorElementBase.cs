@@ -10,6 +10,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         string Name;
         public Action<EditorElementBase>  Selected;
 
+        public static int ZIndexStart = 0;
+        public int ZIndex;
+
         private bool isSelected = false;
         public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; Invalidate(); } } }
 
@@ -20,6 +23,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
 
         public EditorElementBase(Point location,string name)
         {
+            ZIndex = ZIndexStart++;
             Name = name;
             Location = location;
             Size = new Size(100, 100);
@@ -65,7 +69,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             dragging = false;
         }
 
-        protected override void OnMouseHover(System.EventArgs e)
+        protected override void OnMouseHover(EventArgs e)
         {
             Cursor = Cursors.Hand;
             base.OnMouseHover(e);

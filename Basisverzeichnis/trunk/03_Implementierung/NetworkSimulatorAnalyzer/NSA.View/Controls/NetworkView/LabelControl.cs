@@ -5,8 +5,10 @@ using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.View.Controls.NetworkView
 {
-    public partial class LabelControl : UserControl
+    public partial class LabelControl : EditorElementBase
     {
+        public new static int ZIndexStart = 1000;
+
         private EditorElementBase parentElement;
 
         public LabelControl()
@@ -17,6 +19,7 @@ namespace NSA.View.Controls.NetworkView
 
         public LabelControl(EditorElementBase element)
         {
+            ZIndex = ZIndexStart++;
             element.LocationChanged += Element_LocationChanged;
             parentElement = element;
             InitializeComponent();
@@ -56,6 +59,9 @@ namespace NSA.View.Controls.NetworkView
                 //this is to remove focus from the textbox
             }
         }
-
+        protected override void OnPaint(PaintEventArgs e)
+        {
+          
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     public partial class WorkstationControl : EditorElementBase, IConfigurable
     {
+        #region Parameters
         #region Colors
         #region Workstation Colors
         private Pen borderPen = Pens.Black;
@@ -25,11 +26,22 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         private Pen portPins = Pens.White;
         #endregion Port Colors
         #endregion Colors
+        #region Port Parameter
+        
+        const int portsize = 10;
+        const int portdistance = 2;
+        const int portOffsetY = 30;
+        const int portPinsLength = portsize / 2 - 1;
+        const int portPinCount = 4;
 
+        #endregion Port Parameter
+
+        #endregion Parameters
+        
         private List<Rectangle> portHitboxes = new List<Rectangle>();
 
-        int portcount = 10;
-        public int NetworkPortCount { get { return portcount; } set { portcount = value; CalculateDimension(); } }
+        int portcount = 2;
+        public int NetworkPortCount { get { return portcount; } set { portcount = value; calculateDimension(); } }
 
         public WorkstationControl() : this(new Point(10, 10), "WorkstationControl")
         {
@@ -41,18 +53,30 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             portOverlayBrush.WrapMode = WrapMode.TileFlipX;
             InitializeComponent();
             Name = name;
-            CalculateDimension();
+            calculateDimension();
+            calculateHitboxes();
         }
 
-        private void CalculateDimension()
+        private void calculateDimension()
         {
             Width = 50;
             Height = 100 + 6 * (NetworkPortCount > 9 ? NetworkPortCount - 9 - (NetworkPortCount & 1) : 0);
         }
 
-        protected override void OnPaint(PaintEventArgs pe)
+        private void calculateHitboxes()
         {
             portHitboxes = new List<Rectangle>();
+
+            for (int i = 0; i < portcount; i++)
+            {
+                var portRectangle = new Rectangle((Width - portsize) * (i % 2) + (1 - (i % 2) * 3), (i / 2) * (portsize + portdistance) + portOffsetY, portsize, portsize);
+                portHitboxes.Add(portRectangle);
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs pe)
+        {
+            calculateHitboxes();
             Graphics g = pe.Graphics;
             var offsetY = 0;
             g.FillRectangle(backgroundBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
@@ -61,17 +85,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             g.FillRectangle(dotBrush, new Rectangle(10, offsetY + 5, 2, 2));
             g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
             g.DrawLine(separatorPen, 3, offsetY + 11, Width - 4, offsetY + 11);
-
-            int portsize = 10;
-            int portdistance = 2;
-            int portOffsetY = 30;
-            int portPinsLength = portsize / 2 - 1;
-            int portPinCount = 4;
-
-            for (int i = 0; i < portcount; i++)
+            
+            for (int i = 0; i < portHitboxes.Count; i++)
             {
-                var portRectangle = new Rectangle((Width - portsize) * (i % 2) + (1 - (i % 2) * 3), (i / 2) * (portsize + portdistance) + portOffsetY, portsize, portsize);
-                portHitboxes.Add(portRectangle);
+                var portRectangle = portHitboxes[i];
                 g.FillRectangle(portBackgroundBrush, portRectangle);
 
                 for (int j = 1; j < portPinCount + 1; j++)
@@ -95,6 +112,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                 Invalidate(r);
             }
             base.OnMouseMove(e);
+        }
+
+        public Rectangle GetPortBoundsByID(int port)
+        {
+            return portHitboxes[port];
         }
     }
 }
