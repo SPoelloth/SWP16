@@ -1,4 +1,6 @@
-﻿namespace NSA.Model.NetworkComponents
+﻿using System;
+
+namespace NSA.Model.NetworkComponents
 {
     public class Connection
     {
@@ -11,12 +13,12 @@
         /// </summary>
         /// <param name="source">The sourcenode.</param>
         /// <param name="target">The targetnode.</param>
-        /// <param name="name">The name (used as an ID).</param>
-        public Connection(Hardwarenode source, Hardwarenode target, string name)
+        // Frage: nach welchem Schema sollen connections benannt werden (zwecks Eindeutigkeit)?
+        public Connection(Hardwarenode source, Hardwarenode target)
         {
             Start = source;
             End = target;
-            Name = name;
+            Name = Guid.NewGuid().ToString("N");
         }
     }
 }

@@ -8,16 +8,15 @@ namespace NSA.Model.NetworkComponents
     {
         private List<Interface> interfaces = new List<Interface>();
         private Routingtable routingtable = new Routingtable();
-        private IPAddress standardGateway;
+        public IPAddress StandardGateway { private get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
+        /// The IP address of the standardgateway must be set seperatly.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="gateway">The gateway address.</param>
-        public Workstation(string name, byte[] gateway) : base(name)
+        public Workstation(string name) : base(name)
         {
-            standardGateway = new IPAddress(gateway);
             layerstack.AddLayer(new PhysicalLayer());
             layerstack.AddLayer(new DataLinkLayer());
             layerstack.AddLayer(new NetworkLayer());
