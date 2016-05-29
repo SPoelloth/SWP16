@@ -8,15 +8,13 @@ namespace NSA.Model.BusinessLogic
         private Network network { get; set; }
         private string path { get; set; }
 
+        // Default Konstruktor
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>
-        /// <param name="_network">The _network.</param>
-        /// <param name="_path">The _path.</param>
-        public Project(Network _network, string _path)
+        public Project( )
         {
-            network = _network;
-            path = _path;
+            
         }
     }
 }
