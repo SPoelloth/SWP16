@@ -16,9 +16,5 @@ namespace NSA.Model.BusinessLogic
         {
             
         }
-
-        public Project()
-        {
-        }
     }
 }
