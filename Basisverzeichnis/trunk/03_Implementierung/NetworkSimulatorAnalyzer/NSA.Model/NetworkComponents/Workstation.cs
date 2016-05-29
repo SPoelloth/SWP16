@@ -8,7 +8,7 @@ namespace NSA.Model.NetworkComponents
     {
         private List<Interface> interfaces = new List<Interface>();
         private Routingtable routingtable = new Routingtable();
-        public IPAddress StandardGateway { private get; set; }
+        public IPAddress StandardGateway { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
@@ -29,10 +29,68 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Gets the interfaces.
         /// </summary>
-        /// <returns>The Interfaces</returns>
+        /// <returns>
+        /// The Interfaces
+        /// </returns>
         public List<Interface> GetInterfaces()
         {
             return interfaces;
+        }
+
+        /// <summary>
+        /// Adds a new interface to the workstation
+        /// </summary>
+        /// <param name="iface">The iface.</param>
+        public void AddInterface(Interface iface)
+        {
+            interfaces.Add(iface);
+        }
+
+        /// <summary>
+        /// Removes the given interface.
+        /// </summary>
+        /// <param name="iface">The iface.</param>
+        public void RemoveInterface(Interface iface)
+        {
+            interfaces.Remove(iface);
+        }
+
+        /// <summary>
+        /// Adds the route.
+        /// </summary>
+        /// <param name="route">The route.</param>
+        public void AddRoute(Route route)
+        {
+            routingtable.AddRoute(route);
+        }
+
+        /// <summary>
+        /// Removes the route.
+        /// </summary>
+        /// <param name="route">The route.</param>
+        public void RemoveRoute(Route route)
+        {
+            routingtable.RemoveRoute(route);
+        }
+
+
+        /// <summary>
+        /// Checks if the Hardwarenode has the IP
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <returns>
+        /// bool: true if workstation has the ip, otherwise false
+        /// </returns>
+        public override bool HasIP(IPAddress ip)
+        {
+            bool hasIp = false;
+
+            foreach (Interface iface in interfaces)
+            {
+                hasIp = iface.IpAddress.Equals(ip);
+                if (hasIp) break;
+            }
+            return hasIp;
         }
 
         /// <summary>

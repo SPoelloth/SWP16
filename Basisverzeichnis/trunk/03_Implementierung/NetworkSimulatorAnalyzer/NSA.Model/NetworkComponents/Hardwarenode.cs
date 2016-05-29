@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
     public class Hardwarenode
     {
-        protected Layerstack layerstack;
-        // Frage: string in Dictionary der Connection-Name?
+        protected Layerstack layerstack = new Layerstack();
         protected Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
@@ -18,7 +16,6 @@ namespace NSA.Model.NetworkComponents
         public Hardwarenode(string n)
         {
             Name = n;
-            layerstack = new Layerstack();
         }
 
         #region Methods
@@ -27,7 +24,7 @@ namespace NSA.Model.NetworkComponents
         /// Adds a connection.
         /// </summary>
         /// <param name="con">The connection to be added.</param>
-        public virtual void AddConnection(Connection con)
+        public void AddConnection(Connection con)
         {
             connections.Add(con.Name, con);
         }
@@ -36,7 +33,7 @@ namespace NSA.Model.NetworkComponents
         /// Removes a connection.
         /// </summary>
         /// <param name="con">The connection to be removed.</param>
-        public virtual void RemoveConnection(Connection con)
+        public void RemoveConnection(Connection con)
         {
             connections.Remove(con.Name);
         }
@@ -87,7 +84,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="tags">Optional tags.</param>
         /// <param name="result">String representing the result</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(ref Dictionary<string, Object> tags, ref string result)
+        public virtual bool Receive(ref Dictionary<string, object> tags, ref string result)
         {
             return false;
         }
