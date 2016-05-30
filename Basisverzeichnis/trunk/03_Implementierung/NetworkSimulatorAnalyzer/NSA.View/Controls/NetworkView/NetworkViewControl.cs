@@ -30,14 +30,6 @@ namespace NSA.View.Controls.NetworkView
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            foreach (EditorElementBase c in Controls.OfType<EditorElementBase>().ToList())
-            // wir brauchen eine kopie der liste, wir können nicht im foreach die reihenfolge ändern
-            {
-                Console.WriteLine(c.ZIndex);
-                Controls.SetChildIndex(c, c.ZIndex);
-            }
-            Console.WriteLine("=======");
-
             base.OnPaint(e);
             e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
         }
@@ -58,6 +50,20 @@ namespace NSA.View.Controls.NetworkView
             }
             Controls.Add(element);
             element.Selected += Element_Selected;
+
+            //Controls neu sortieren von hinten nach vorne
+            // SetChildZIndex(..) funktioniert nicht auf linux!
+            SuspendLayout();
+
+            // wir brauchen eine kopie der liste, wir können nicht im foreach die reihenfolge ändern
+            var controls = Controls.OfType<EditorElementBase>().OrderBy(o => o.ZIndex).ToList();
+
+            foreach (EditorElementBase c in controls)
+            {
+                Controls.Remove(c);
+                Controls.Add(c);
+            }
+            ResumeLayout();
         }
 
         private void Element_Selected(EditorElementBase element)
