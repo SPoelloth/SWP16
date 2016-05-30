@@ -182,7 +182,6 @@
     <Compile Include="Controls\Toolbar\ToolbarControl.designer.cs">
       <DependentUpon>ToolbarControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helper\Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
