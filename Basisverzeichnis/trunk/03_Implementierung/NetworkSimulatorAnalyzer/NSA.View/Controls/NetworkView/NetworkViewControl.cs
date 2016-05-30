@@ -54,8 +54,9 @@ namespace NSA.View.Controls.NetworkView
             //Controls neu sortieren von hinten nach vorne
             // SetChildZIndex(..) funktioniert nicht auf linux!
             SuspendLayout();
-            var controls = Controls.OfType<EditorElementBase>().OrderBy(o => o.ZIndex).ToList();
+
             // wir brauchen eine kopie der liste, wir können nicht im foreach die reihenfolge ändern
+            var controls = Controls.OfType<EditorElementBase>().OrderBy(o => o.ZIndex).ToList();
 
             foreach (EditorElementBase c in controls)
             {
