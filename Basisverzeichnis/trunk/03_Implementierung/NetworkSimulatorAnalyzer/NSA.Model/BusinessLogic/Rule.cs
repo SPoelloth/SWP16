@@ -34,18 +34,39 @@
         {
             Rule rule = Rule.Parse(stringRule);
                 
-            NetworkManager.Instance.GetHardwarenodeByName(startNode); // find starting node
+            NetworkManager.Instance.GetHardwarenodeByName(rule.startNode); // find starting node
                 
-            if (simulationType & SimulationType.Only)
+            if (rule.simulationType & SimulationType.Only)
             {
                 //TODO: find all end nodes, subnets
             }
-                
-            //TODO: create simulaitons
+            
+            ArrayList<Simulation> result = new ArrayList<Simulation>();
+            foreach (var endNode in rule.endNodes)
+            {
+                //TODO: create simulaitons
+            }
+            
+            return result;
         }
         
-        private Rule Parse(string rule)
+        public Rule(string startNode, ArrayList<string> endNodes, ArrayList<Dictionary<string, string>> options, SimulationType simulationType, bool expectedResult)
         {
+            this.startNode = startNode;
+            this.endNodes  = endNodes;
+            this.simulationType = simulationType;
+            this.options = options;
+            this.expectedResult = expectedResult;
+        }
+        
+        public static Rule Parse(string rule)
+        {
+            SimulationType simulationType;
+            string startNode;
+            ArrayList<string> endNodes;
+            ArrayList<Dictionary<string, string>> options;
+            bool expectedResult;
+        
             int index = rule.indexOf(Rule.separator);
             int i = 0;
             while (index > 0)
@@ -110,6 +131,8 @@
             
             if (this.startNode == null || this.endNodes == null || options == null)
             { throw new ArgumentException("Rule doesn't contain all the needed information", rule); }
+            
+            return Rule(startNode, endNodes, options, simulationType, expectedResult);
         }
         
         public static bool CheckForTrueOrFalse(string text)
