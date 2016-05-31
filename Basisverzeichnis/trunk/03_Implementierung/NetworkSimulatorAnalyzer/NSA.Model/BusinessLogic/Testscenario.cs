@@ -5,7 +5,6 @@ namespace NSA.Model.BusinessLogic
 {
 	public class Testscenario
     {
-        private List<Rule> rules;
         public string Id { get; }
 
         public Testscenario()

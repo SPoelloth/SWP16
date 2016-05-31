@@ -42,7 +42,6 @@ namespace NSA.View.Controls.NetworkView
 
         public void AddElement(EditorElementBase element)
         {
-            Console.WriteLine(element.ZIndex);
             if (element is IConfigurable)
             {
                 var label = new LabelControl(element);
@@ -52,7 +51,7 @@ namespace NSA.View.Controls.NetworkView
             element.Selected += Element_Selected;
 
             //Controls neu sortieren von hinten nach vorne
-            // SetChildZIndex(..) funktioniert nicht auf linux!
+            // SetChildIndex(..) funktioniert nicht auf linux! :(
             SuspendLayout();
 
             // wir brauchen eine kopie der liste, wir können nicht im foreach die reihenfolge ändern

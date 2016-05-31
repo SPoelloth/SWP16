@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="BusinessLogic\Packet.cs" />
     <Compile Include="BusinessLogic\Project.cs" />
-    <Compile Include="BusinessLogic\Rule.cs" />
     <Compile Include="BusinessLogic\Simulation.cs" />
     <Compile Include="BusinessLogic\Testscenario.cs" />
     <Compile Include="NetworkComponents\Layers\ApplicationLayer.cs" />
