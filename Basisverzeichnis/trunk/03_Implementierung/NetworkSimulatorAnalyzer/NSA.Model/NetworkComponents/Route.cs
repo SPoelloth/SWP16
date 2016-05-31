@@ -7,6 +7,6 @@ namespace NSA.Model.NetworkComponents
         public IPAddress Destination { get; }
         public IPAddress Subnetmask { get; }
         public IPAddress Gateway { get; }
-        private Interface iface;
+        public Interface Iface { get; }
     }
 }

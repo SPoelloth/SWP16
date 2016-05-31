@@ -11,22 +11,23 @@ namespace NSA.Model.NetworkComponents.Layers
             return true;
         }
 
-        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, Workstation destination, Dictionary<string, Connection> connections, Routingtable routingtable)
+        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, ref string interfaceName, Workstation destination, 
+            Dictionary<string, Connection> connections, Routingtable routingtable)
         {
-            // Jeremy: hier muss die nächste Rechner-IP mithilfe der Routingtabelle ermittelt werden
-            // Zuerst schauen ob die Zieladresse  der Route das Netz oder die IP des Ziels ist
             List<Interface> interfaces = destination.GetInterfaces();
             foreach (Interface iface in interfaces)
             {
                 for (int i = 0; i < routingtable.GetSize(); i++)
                 {
                     Route r = routingtable.GetRouteAt(i);
-                    if (IPAddressExtensions.IsInSameSubnet(iface.IpAddress, r.Destination, r.Subnetmask))
+                    if (iface.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
                     {
                         nextNodeIP = r.Gateway;
+                        interfaceName = r.Iface.Name;
                     }
                 }
             }
+            //Falls vorhanden an Standard-Gateway schicken
             nextNode = null;
         }
     }
