@@ -106,10 +106,11 @@ namespace NSA.Model.NetworkComponents
         {
             Hardwarenode nextNode = this;
             IPAddress nextNodeIP = null;
+            string interfaceName = "";
             for (int i = layerstack.GetSize() - 1; i >= 0; i--)
             {
                 if (nextNode != null)
-                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIP, destination as Workstation, connections, routingtable);
+                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIP, ref interfaceName, destination as Workstation, connections, routingtable);
             }
             return nextNode == this ? null : nextNode;
         }
