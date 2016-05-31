@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
@@ -19,6 +20,9 @@ namespace NSA.View.Controls.NetworkView
             testElements.Add(new ComputerControl(new Point(20, 20), "Test1"));
             testElements.Add(new ComputerControl(new Point(200, 150), "Test2"));
             testElements.Add(new ComputerControl(new Point(400, 100), "Computer 1"));
+            testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0));
+            testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0));
+
             foreach (var e in testElements) AddElement(e);
 
             DoubleBuffered = true;
@@ -38,10 +42,28 @@ namespace NSA.View.Controls.NetworkView
 
         public void AddElement(EditorElementBase element)
         {
-            var label = new LabelControl(element);
+            Console.WriteLine(element.ZIndex);
+            if (element is IConfigurable)
+            {
+                var label = new LabelControl(element);
+                Controls.Add(label);
+            }
             Controls.Add(element);
-            Controls.Add(label);
             element.Selected += Element_Selected;
+
+            //Controls neu sortieren von hinten nach vorne
+            // SetChildZIndex(..) funktioniert nicht auf linux!
+            SuspendLayout();
+
+            // wir brauchen eine kopie der liste, wir können nicht im foreach die reihenfolge ändern
+            var controls = Controls.OfType<EditorElementBase>().OrderBy(o => o.ZIndex).ToList();
+
+            foreach (EditorElementBase c in controls)
+            {
+                Controls.Remove(c);
+                Controls.Add(c);
+            }
+            ResumeLayout();
         }
 
         private void Element_Selected(EditorElementBase element)

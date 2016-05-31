@@ -1,6 +1,9 @@
-﻿namespace NSA.View.Controls.NetworkView.NetworkElements
+﻿using System.Drawing;
+
+namespace NSA.View.Controls.NetworkView.NetworkElements
 {
-    interface IConfigurable
+    public interface IConfigurable
     {
+        Rectangle GetPortBoundsByID(int port);   
     }
 }

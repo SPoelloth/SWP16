@@ -15,12 +15,34 @@ namespace NSA.Model.BusinessLogic
 	        expectedResult = _result;
 	    }
 
-	    public void AddPacketSend(Packet packet)
+        /// <summary>
+        /// Adds the packet send.
+        /// </summary>
+        /// <param name="packet">The packet.</param>
+        public void AddPacketSend(Packet packet)
 	    {
-	    }
+            packetsSend.Add(packet);
+        }
 
-	    public void Execute()
+        /// <summary>
+        /// Executes this instance.
+        /// </summary>
+        public void Execute()
 	    {
-	    }
+            foreach (Packet sendpacket in packetsSend)
+            {
+                Packet p = sendpacket.Send();
+
+                if (p != null)
+                {
+                    packetsReceived.Add(p);
+                }
+            }
+
+            foreach (Packet backpacket in packetsReceived)
+            {
+                backpacket.Send();
+            }
+        }
     }
 }

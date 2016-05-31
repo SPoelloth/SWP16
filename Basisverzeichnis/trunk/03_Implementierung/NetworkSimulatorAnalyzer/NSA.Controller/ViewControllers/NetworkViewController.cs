@@ -48,7 +48,7 @@ namespace NSA.Controller.ViewControllers
             
         }
 
-        public void AddHardwarenode()
+        public void AddHardwarenode(Hardwarenode node)
         {
             // Get new Hardwarenode from Networkmanager
             // Subscribe to BL events
@@ -56,6 +56,36 @@ namespace NSA.Controller.ViewControllers
             // Create Hardwarenoderepresentation
             // Subscribe to UI events
             // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
+        }
+
+        public void AddConnection(Connection connection)
+        {
+            // Get new Connection from Networkmanager
+            // Subscribe to BL events
+
+            // Create Connectionrepresentation
+            // Subscribe to UI events
+            // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
+        }
+
+        public void RemoveHardwarenode(Hardwarenode node)
+        {
+            // Get Hardwarenode from Networkmanager
+            // UnSubscribe to BL events
+
+            // Remove Hardwarenoderepresentation
+            // UnSubscribe from UI events
+            // Remove Representation from NetworkViewControl
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            // Get new Connection from Networkmanager
+            // Subscribe to BL events
+
+            // Create Connectionrepresentation
+            // UnSubscribe from UI events
+            // Remove Representation from NetworkViewControl
         }
     }
 }

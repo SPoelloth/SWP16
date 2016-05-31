@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
     public class Hardwarenode
     {
-        protected Layerstack layerstack;
+        protected Layerstack layerstack = new Layerstack();
         protected Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
@@ -17,21 +16,27 @@ namespace NSA.Model.NetworkComponents
         public Hardwarenode(string n)
         {
             Name = n;
-            layerstack = new Layerstack();
         }
 
         #region Methods
+
         /// <summary>
         /// Adds a connection.
         /// </summary>
-        /// <param name="con">The connection to be removed.</param>
-        public virtual void AddConnection(Connection con) {}
+        /// <param name="con">The connection to be added.</param>
+        public void AddConnection(Connection con)
+        {
+            connections.Add(con.Name, con);
+        }
 
         /// <summary>
         /// Removes a connection.
         /// </summary>
         /// <param name="con">The connection to be removed.</param>
-        public virtual void RemoveConnection(Connection con) {}
+        public void RemoveConnection(Connection con)
+        {
+            connections.Remove(con.Name);
+        }
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
@@ -68,7 +73,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="tags">Optional tags.</param>
         /// <param name="result">String representing the result</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, Object> tags, ref string result)
+        public virtual Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, object> tags, ref string result)
         {
             return null;
         }
@@ -79,7 +84,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="tags">Optional tags.</param>
         /// <param name="result">String representing the result</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(ref Dictionary<string, Object> tags, ref string result)
+        public virtual bool Receive(ref Dictionary<string, object> tags, ref string result)
         {
             return false;
         }

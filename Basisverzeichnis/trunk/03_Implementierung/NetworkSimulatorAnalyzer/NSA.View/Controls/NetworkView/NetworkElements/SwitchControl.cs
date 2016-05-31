@@ -14,5 +14,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         {
             base.OnPaint(pe);
         }
+
+        public Rectangle GetPortBoundsByID(int port)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

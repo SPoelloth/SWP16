@@ -25,6 +25,15 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
+        /// Removes the route at the given index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        public void RemoveRouteAtIndex(int index)
+        {
+            routes.RemoveAt(index);
+        }
+
+        /// <summary>
         /// Gets the size of the routingtable.
         /// </summary>
         /// <returns>The size</returns>
