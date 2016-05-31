@@ -10,12 +10,12 @@ namespace NSA.Model.NetworkComponents
         public string Name { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Hardwarenode"/> class.
+        /// Initializes a new instance of the <see cref="Hardwarenode" /> class.
         /// </summary>
-        /// <param name="n">The name.</param>
-        public Hardwarenode(string n)
+        /// <param name="Name">The name.</param>
+        public Hardwarenode(string Name)
         {
-            Name = n;
+            this.Name = Name;
         }
 
         #region Methods
@@ -23,19 +23,38 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a connection.
         /// </summary>
-        /// <param name="con">The connection to be added.</param>
-        public void AddConnection(Connection con)
+        /// <param name="Con">The connection to be added.</param>
+        /// <param name="IfaceName">Name of the interface where the connection should be added.</param>
+        public virtual void AddConnection(Connection Con, string IfaceName)
         {
-            connections.Add(con.Name, con);
+            connections.Add(IfaceName, Con);
         }
 
         /// <summary>
         /// Removes a connection.
         /// </summary>
-        /// <param name="con">The connection to be removed.</param>
-        public void RemoveConnection(Connection con)
+        /// <param name="IfaceName">Name of the interface where the connection should be removed.</param>
+        public virtual void RemoveConnection(string IfaceName)
         {
-            connections.Remove(con.Name);
+            connections.Remove(IfaceName);
+        }
+
+        /// <summary>
+        /// Adds a layer to the layerstack.
+        /// </summary>
+        /// <param name="Lay">The layer to be added.</param>
+        public void AddLayer(ILayer Lay)
+        {
+            layerstack.AddLayer(Lay);
+        }
+
+        /// <summary>
+        /// Removes a layer from the layerstack.
+        /// </summary>
+        /// <param name="Lay">The layer to be removed.</param>
+        public void RemoveLayer(ILayer Lay)
+        {
+            layerstack.RemoveLayer(Lay);
         }
 
         /// <summary>
@@ -49,31 +68,13 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
-        /// Adds a layer to the layerstack.
-        /// </summary>
-        /// <param name="lay">The layer to be added.</param>
-        public void AddLayer(ILayer lay)
-        {
-            layerstack.AddLayer(lay);
-        }
-
-        /// <summary>
-        /// Removes a layer from the layerstack.
-        /// </summary>
-        /// <param name="lay">The layer to be removed.</param>
-        public void RemoveLayer(ILayer lay)
-        {
-            layerstack.RemoveLayer(lay);
-        }
-
-        /// <summary>
         /// Hardwarenode sends the package to specified destination.
         /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="tags">Optional tags.</param>
-        /// <param name="result">String representing the result</param>
+        /// <param name="Destination">The destination.</param>
+        /// <param name="Tags">Optional tags.</param>
+        /// <param name="Result">String representing the result</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, object> tags, ref string result)
+        public virtual Hardwarenode Send(Hardwarenode Destination, ref Dictionary<string, object> Tags, ref string Result)
         {
             return null;
         }
@@ -81,10 +82,10 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Hardwarenode receives the package.
         /// </summary>
-        /// <param name="tags">Optional tags.</param>
-        /// <param name="result">String representing the result</param>
+        /// <param name="Tags">Optional tags.</param>
+        /// <param name="Result">String representing the result</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(ref Dictionary<string, object> tags, ref string result)
+        public virtual bool Receive(ref Dictionary<string, object> Tags, ref string Result)
         {
             return false;
         }
