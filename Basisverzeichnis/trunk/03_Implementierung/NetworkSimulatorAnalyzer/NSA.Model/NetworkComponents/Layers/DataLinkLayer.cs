@@ -5,20 +5,18 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     class DataLinkLayer : ILayer
     {
-        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, Workstation destination, Dictionary<string, Connection> connections, Routingtable routingtable)
+        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, ref string interfaceName, Workstation destination,
+            Dictionary<string, Connection> connections, Routingtable routingtable)
         {
-            foreach (Connection c in connections.Values)
+            if (connections[interfaceName].End.HasIP(nextNodeIP))
             {
-                if (c.End.HasIP(nextNodeIP))
-                {
-                    nextNode = c.End;
-                    return;
-                }
-                else if (c.Start.HasIP(nextNodeIP))
-                {
-                    nextNode = c.Start;
-                    return;
-                }
+                nextNode = connections[interfaceName].End;
+                return;
+            }
+            else if (connections[interfaceName].Start.HasIP(nextNodeIP))
+            {
+                nextNode = connections[interfaceName].Start;
+                return;
             }
             //result string muss hier noch auf Fehlerfall gesetzt werden
             nextNode = null;

@@ -14,8 +14,8 @@ namespace NSA.Model.NetworkComponents
         /// Initializes a new instance of the <see cref="Workstation" /> class.
         /// The IP address of the standardgateway must be set seperatly.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public Workstation(string name) : base(name)
+        /// <param name="Name">The Name.</param>
+        public Workstation(string Name) : base(Name)
         {
             layerstack.AddLayer(new PhysicalLayer());
             layerstack.AddLayer(new DataLinkLayer());
@@ -40,54 +40,55 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a new interface to the workstation
         /// </summary>
-        /// <param name="iface">The iface.</param>
-        public void AddInterface(Interface iface)
+        /// <param name="Iface">The iface.</param>
+        public void AddInterface(Interface Iface)
         {
-            interfaces.Add(iface);
+            interfaces.Add(Iface);
         }
 
         /// <summary>
         /// Removes the given interface.
         /// </summary>
-        /// <param name="iface">The iface.</param>
-        public void RemoveInterface(Interface iface)
+        /// <param name="Iface">The iface.</param>
+        public void RemoveInterface(Interface Iface)
         {
-            interfaces.Remove(iface);
+            RemoveConnection(Iface.Name);
+            interfaces.Remove(Iface);
         }
 
         /// <summary>
         /// Adds the route.
         /// </summary>
-        /// <param name="route">The route.</param>
-        public void AddRoute(Route route)
+        /// <param name="Route">The route.</param>
+        public void AddRoute(Route Route)
         {
-            routingtable.AddRoute(route);
+            routingtable.AddRoute(Route);
         }
 
         /// <summary>
         /// Removes the route.
         /// </summary>
-        /// <param name="route">The route.</param>
-        public void RemoveRoute(Route route)
+        /// <param name="Route">The route.</param>
+        public void RemoveRoute(Route Route)
         {
-            routingtable.RemoveRoute(route);
+            routingtable.RemoveRoute(Route);
         }
 
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
         /// </summary>
-        /// <param name="ip">The ip.</param>
+        /// <param name="Ip">The ip.</param>
         /// <returns>
         /// bool: true if workstation has the ip, otherwise false
         /// </returns>
-        public override bool HasIP(IPAddress ip)
+        public override bool HasIP(IPAddress Ip)
         {
             bool hasIp = false;
 
             foreach (Interface iface in interfaces)
             {
-                hasIp = iface.IpAddress.Equals(ip);
+                hasIp = iface.IpAddress.Equals(Ip);
                 if (hasIp) break;
             }
             return hasIp;
@@ -96,20 +97,21 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Hardwarenode sends the package to specified destination.
         /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="tags">Optional tags.</param>
-        /// <param name="result">String representing the result</param>
+        /// <param name="Destination">The destination.</param>
+        /// <param name="Tags">Optional tags.</param>
+        /// <param name="Result">String representing the result</param>
         /// <returns>
         /// The Hardwarenode which received the package or null if an error occured
         /// </returns>
-        public override Hardwarenode Send(Hardwarenode destination, ref Dictionary<string, object> tags, ref string result)
+        public override Hardwarenode Send(Hardwarenode Destination, ref Dictionary<string, object> Tags, ref string Result)
         {
             Hardwarenode nextNode = this;
             IPAddress nextNodeIP = null;
+            string interfaceName = "";
             for (int i = layerstack.GetSize() - 1; i >= 0; i--)
             {
                 if (nextNode != null)
-                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIP, destination as Workstation, connections, routingtable);
+                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIP, ref interfaceName, Destination as Workstation, connections, routingtable);
             }
             return nextNode == this ? null : nextNode;
         }
@@ -117,12 +119,12 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Hardwarenode receives the package.
         /// </summary>
-        /// <param name="tags">Optional tags.</param>
-        /// <param name="result">String representing the result</param>
+        /// <param name="Tags">Optional tags.</param>
+        /// <param name="Result">String representing the result</param>
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(ref Dictionary<string, object> tags, ref string result)
+        public override bool Receive(ref Dictionary<string, object> Tags, ref string Result)
         {
             bool res = true;
             for (int i = 0; i < layerstack.GetSize(); i++)

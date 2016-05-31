@@ -13,10 +13,10 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="ip">The ip address.</param>
         /// <param name="subnetmask">The subnetmask.</param>
-        /// <param name="name">The name, e.g. eth0.</param>
-        public Interface(IPAddress ip, IPAddress subnetmask, string name)
+        /// <param name="Number">The number (e.g. 0 for eth0).</param>
+        public Interface(IPAddress ip, IPAddress subnetmask, int Number)
         {
-            Name = name;
+            Name = "eth"+Number;
             IpAddress = ip;
             this.subnetmask = subnetmask;
         }

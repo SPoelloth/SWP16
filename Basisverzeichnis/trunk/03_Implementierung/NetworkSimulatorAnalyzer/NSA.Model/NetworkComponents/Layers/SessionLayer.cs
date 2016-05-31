@@ -10,7 +10,7 @@ namespace NSA.Model.NetworkComponents.Layers
             return true;
         }
 
-        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, Workstation destination, Dictionary<string, Connection> connections, Routingtable routingtable)
+        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, ref string interfaceName, Workstation destination, Dictionary<string, Connection> connections, Routingtable routingtable)
         {
             nextNode = null;
         }

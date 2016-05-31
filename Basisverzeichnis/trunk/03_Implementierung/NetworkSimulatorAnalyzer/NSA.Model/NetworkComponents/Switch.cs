@@ -28,19 +28,20 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds the interface.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public void AddInterface(string name)
+        public void AddInterface()
         {
-            interfaces.Add(name);
+            // ToDo auf geloeschte Interfaces achten!
+            interfaces.Add("eth"+interfaces.Count);
         }
 
         /// <summary>
         /// Removes the interface.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public void RemoveInterface(string name)
+        /// <param name="IfaceName">The name.</param>
+        public void RemoveInterface(string IfaceName)
         {
-            interfaces.Remove(name);
+            RemoveConnection(IfaceName);
+            interfaces.Remove(IfaceName);
         }
     }
 }
