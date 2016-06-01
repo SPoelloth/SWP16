@@ -28,14 +28,6 @@ namespace NSA.Controller
 
         public static ProjectManager Instance = new ProjectManager();
 
-        private Project _currentProject;
-        private List<Testscenario> _testscenarios;
-        
-        private ProjectManager()
-        {
-            _currentProject = new Project();
-        }
-
         public void CreateNewProject()
         {
             currentProject = new Project();
@@ -113,7 +105,7 @@ namespace NSA.Controller
             return form;
         }
 
-        private void Form_Shown(object sender, System.EventArgs e)
+        private void Form_Shown(object Sender, System.EventArgs E)
         {
             ToolbarController.Instance.Init();
         }
