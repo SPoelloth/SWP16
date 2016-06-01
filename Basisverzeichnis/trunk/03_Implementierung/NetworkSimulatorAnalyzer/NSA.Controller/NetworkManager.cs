@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
@@ -80,30 +81,47 @@ namespace NSA.Controller
 
         private void createConfigControls()
         {
-            // todo
+            // todo: klären, was genau hier passieren soll
         }
 
         private Hardwarenode getWorkstationByIP(IPAddress ip)
         {
             Hardwarenode node = null;
 
-            // todo
+            // todo: wir müssen die entsprechende methode in Network aufrufen, oder
+            // am Besten gleich Zugriff auf die nodes-liste bekommen
 
             return node;
         }
 
         public void HardwarenodeSelected()
         {
-            // todo
+            // todo: klären, was die methode machen soll
         }
 
+        /// <summary>
+        /// Changes the interface of the workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="interfaceName">The name of the interface which should be changed</param>
+        /// <param name="ipAddress">The new IPAddress of the interface</param>
+        /// <param name="subnetmask">The new subnetmask of the interface</param>
         public void InterfaceChanged(string workstationName, string interfaceName, IPAddress ipAddress, IPAddress subnetmask)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                // todo
-               // List<Interface> interfaces = workstation.GetInterfaces();
+                Interface myInterface = workstation.GetInterfaces().Single(i => i.Name == interfaceName);
+                myInterface.IpAddress = ipAddress;
+                myInterface.Subnetmask = subnetmask;
+                // todo: Testen, dass diese methode sich wie gewünscht verhält.
+                // Weil: Wir haben nun zwar die eigenschaften vom Inteface geändert.
+                // Aber müssen wir auch die workstation benachrichtgigen, dass sich z.b. die ip-Adresse
+                // vom Interface verändert hat?
+                // Workstation hat auch die Connections für die Interfaces vom Hardwarenode geerbt.
+                // Sollen die Connections für die anderen Nodes, die mit diesem Inteface verbunden sind,
+                // nun entfernt werden? Denn die anderen Nodes erwarten wahrscheinlich nicht unbedingt,
+                // dass sich die IpAdresse vom Interface ihres Verbindungs-Nodes sich ändern (?)
             }
         }
 
@@ -120,9 +138,18 @@ namespace NSA.Controller
             }
         }
 
+        /// <summary>
+        /// Changes the gateway of a workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="gateway">The new gateway</param>
         public void GatewayChanged(string workstationName, IPAddress gateway)
         {
-            // todo
+            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
+            if (null != workstation)
+            {
+                workstation.StandardGateway = gateway;
+            }
         }
 
         /// <summary>
@@ -192,6 +219,13 @@ namespace NSA.Controller
         public void RemoveHardwarenode(string name)
         {
             Hardwarenode node = network.GetHardwarenodeByName(name);
+
+            if (uniqueNodeNames.Contains(name))
+            {
+                uniqueNodeNames.Remove(name);
+                // Reuse the name for a future node.
+                nextUniqueNodeName = name; 
+            }
 
             network.RemoveHardwarnode(name);
             NetworkViewController.Instance.RemoveHardwarenode(node);
