@@ -8,37 +8,37 @@ namespace NSA.Controller
 {
     internal class ProjectManager
     {
-        private Project _currentProject;
-        private List<Testscenario> _testscenarios;
+        private Project currentProject;
+        private List<Testscenario> testscenarios;
 
         // Default constructor:
         public ProjectManager()
         {
-            _currentProject = null;
+            currentProject = null;
         }
 
         // Constructor:
-        public ProjectManager(Project currentProject, List<Testscenario> testscenarios)
+        public ProjectManager(Project CurrentProject, List<Testscenario> Testscenarios)
         {
-            _currentProject = currentProject;
-            _testscenarios = testscenarios;
+            currentProject = CurrentProject;
+            testscenarios = Testscenarios;
         }
 
         public void CreateNewProject()
         {
-            _currentProject = new Project();
-            _testscenarios = new List<Testscenario>();
+            currentProject = new Project();
+            testscenarios = new List<Testscenario>();
         }
 
         public void CloseProject()
         {
-            _currentProject = null;
-            _testscenarios.Clear();
+            currentProject = null;
+            testscenarios.Clear();
         }
 
-        public void SaveAs(string path)
+        public void SaveAs(string Path)
         {
-            WriteToBinaryFile(path, _currentProject);
+            WriteToBinaryFile(Path, currentProject);
         }
 
         public void LoadTestscenarios()
@@ -49,16 +49,16 @@ namespace NSA.Controller
             var file = openFileDialog.FileName;
             try
             {
-                _testscenarios.Add(ReadFromBinaryFile<Testscenario>(file));
+                testscenarios.Add(ReadFromBinaryFile<Testscenario>(file));
             }
             catch (IOException)
             {
             }
         }
 
-        public Testscenario GetTestscenarioById(string id)
+        public Testscenario GetTestscenarioById(string Id)
         {
-            return _testscenarios?.FirstOrDefault(testscenario => testscenario.Id.Equals(id));
+            return testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
         }
 
         /// <summary>
@@ -67,15 +67,15 @@ namespace NSA.Controller
         /// <para>To prevent a variable from being serialized, decorate it with the [NonSerialized] attribute; cannot be applied to properties.</para>
         /// </summary>
         /// <typeparam name="T">The type of object being written to the XML file.</typeparam>
-        /// <param name="filePath">The file path to write the object instance to.</param>
-        /// <param name="objectToWrite">The object instance to write to the XML file.</param>
-        /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
+        /// <param name="FilePath">The file path to write the object instance to.</param>
+        /// <param name="ObjectToWrite">The object instance to write to the XML file.</param>
+        /// <param name="Append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
+        public static void WriteToBinaryFile<T>(string FilePath, T ObjectToWrite, bool Append = false)
         {
-            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
+            using (Stream stream = File.Open(FilePath, Append ? FileMode.Append : FileMode.Create))
             {
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                binaryFormatter.Serialize(stream, objectToWrite);
+                binaryFormatter.Serialize(stream, ObjectToWrite);
             }
         }
 
@@ -83,11 +83,11 @@ namespace NSA.Controller
         /// Reads an object instance from a binary file.
         /// </summary>
         /// <typeparam name="T">The type of object to read from the XML.</typeparam>
-        /// <param name="filePath">The file path to read the object instance from.</param>
+        /// <param name="FilePath">The file path to read the object instance from.</param>
         /// <returns>Returns a new instance of the object read from the binary file.</returns>
-        public static T ReadFromBinaryFile<T>(string filePath)
+        public static T ReadFromBinaryFile<T>(string FilePath)
         {
-            using (Stream stream = File.Open(filePath, FileMode.Open))
+            using (Stream stream = File.Open(FilePath, FileMode.Open))
             {
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 return (T)binaryFormatter.Deserialize(stream);
