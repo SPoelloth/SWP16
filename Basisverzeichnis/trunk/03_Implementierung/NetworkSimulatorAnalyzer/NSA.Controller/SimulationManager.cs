@@ -7,10 +7,10 @@ namespace NSA.Controller
     {
         public List<Simulation> Simulations { get; }
 
-        // Default constructor:
+        
         public SimulationManager()
         {
-            // todo
+            Simulations = new List<Simulation>();
         }
 
         // Constructor:
@@ -26,7 +26,7 @@ namespace NSA.Controller
 
         public void StartSimulation(Simulation sim)
         {
-            // todo
+            sim.Execute();
         }
 
         public void StartTestscenario()

@@ -79,12 +79,17 @@ namespace NSA.Controller
             createConfigControls();
         }
 
-        private void createConfigControls()
+        public void createConfigControls()
         {
             // todo: klären, was genau hier passieren soll
         }
 
-        private Hardwarenode getWorkstationByIP(IPAddress ip)
+        /// <summary>
+        /// Searches and returns a workstation
+        /// </summary>
+        /// <param name="ip">The name of the workstation</param>
+        /// <returns>The found workstation</returns>
+        public Hardwarenode getWorkstationByIP(IPAddress ip)
         {
             Hardwarenode node = null;
 
@@ -92,6 +97,19 @@ namespace NSA.Controller
             // am Besten gleich Zugriff auf die nodes-liste bekommen
 
             return node;
+        }
+
+        /// <summary>
+        /// Gets all the workstations
+        /// </summary>
+        /// <returns>The workstations</returns>
+        public List<Workstation> GetAllWorkstations()
+        {
+            List<Workstation> workstations = null;
+            // todo: wir müssen die entsprechende methode in Network aufrufen, oder
+            // am Besten gleich Zugriff auf die nodes-liste bekommen
+
+            return workstations;
         }
 
         public void HardwarenodeSelected()
@@ -125,13 +143,97 @@ namespace NSA.Controller
             }
         }
 
+        /// <summary>
+        /// Adds a new interface to the workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="ipAddress">The ipAddress</param>
+        /// <param name="subnetmask">The subnetmask</param>
+        /// <param name="number">The number of the interface(e.g. 0 for eth0).</param>
+        public void AddInterface(string workstationName, IPAddress ipAddress, IPAddress subnetmask,
+            int number)
+        {
+            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
+            if (null != workstation)
+            {
+                Interface interfaceObj = new Interface(ipAddress, subnetmask, number);
+                workstation.AddInterface(interfaceObj);
+            }
+        }
+
+        /// <summary>
+        /// Removes an interface from the workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="number">The number of the interface(e.g. 0 for eth0).</param>
+        public void RemoveInterface(string workstationName, int number)
+        {
+            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
+            if (null != workstation)
+            {
+                // todo: it would be good if the Interface had a property "Number", so that we could search for it
+                // (because if interface name-pattern changes, this method would not work).
+                // or alternatively add a "static const string name prefix = "eth"" to Interfac-class
+                Interface myInterface = workstation.GetInterfaces().Single(i => i.Name == "eth"+number);
+                workstation.RemoveInterface(myInterface);
+            }
+        }
+
+        /// <summary>
+        /// Updates the changed route with new values
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="destination">The new destination address</param>
+        /// <param name="subnetmask">The new subnetmask</param>
+        /// <param name="gateway">The new gateway</param>
+        /// <param name="iface">The new interface</param>
         public void RouteChanged(string workstationName, IPAddress destination, IPAddress subnetmask,
             IPAddress gateway, Interface iface)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                // todo: missing methods in network
+                // todo: we need following Methods in network:
+                // make Routingtable in Network public
+                // or
+                // add "int GetRoutesCount()" and "Route GetRouteAt(int routeIndex)" to Network
+            }
+        }
+
+        /// <summary>
+        /// Adds a route to the routingtable of the workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="destination">The destination address</param>
+        /// <param name="subnetmask">The subnetmask</param>
+        /// <param name="gateway">The gateway</param>
+        /// <param name="iface">The interface</param>
+        public void AddRoute(string workstationName, IPAddress destination, IPAddress subnetmask,
+            IPAddress gateway, Interface iface)
+        {
+            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
+            if (null != workstation)
+            {
+                Route route = new Route(destination, subnetmask, gateway, iface);
+                workstation.AddRoute(route);
+            }
+        }
+
+        /// <summary>
+        /// Removes a route from the routingtable of the workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="destination">The destination address</param>
+        /// <param name="subnetmask">The subnetmask</param>
+        /// <param name="gateway">The gateway</param>
+        /// <param name="iface">The interface</param>
+        public void RemoveRoute(string workstationName, IPAddress destination, IPAddress subnetmask,
+            IPAddress gateway, Interface iface)
+        {
+            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
+            if (null != workstation)
+            {
+                // todo: we need following Methods in network:
                 // make Routingtable in Network public
                 // or
                 // add "int GetRoutesCount()" and "Route GetRouteAt(int routeIndex)" to Network
@@ -150,6 +252,16 @@ namespace NSA.Controller
             {
                 workstation.StandardGateway = gateway;
             }
+        }
+
+        /// <summary>
+        /// Returns a hardwarenode object.
+        /// </summary>
+        /// <param name="name">The name of the hardwarenode</param>
+        /// <returns>The hardwarenode object</returns>
+        public Hardwarenode GetHardwarenodeByName(string name)
+        {
+            return network.GetHardwarenodeByName(name);
         }
 
         /// <summary>
@@ -240,16 +352,6 @@ namespace NSA.Controller
             //Connection connection = network.GetConnectionByName(name); // todo: misssing method in Network
             //NetworkViewController.Instance.RemoveConnection(connection);
             //network.RemoveConnection(name); // todo: misssing method in Network
-        }
-
-        /// <summary>
-        /// Returns a hardwarenode object.
-        /// </summary>
-        /// <param name="name">The name of the hardwarenode</param>
-        /// <returns>The hardwarenode object</returns>
-        public Hardwarenode GetHardwarenodeByName(string name)
-        {
-            return network.GetHardwarenodeByName(name);
         }
     }
 }
