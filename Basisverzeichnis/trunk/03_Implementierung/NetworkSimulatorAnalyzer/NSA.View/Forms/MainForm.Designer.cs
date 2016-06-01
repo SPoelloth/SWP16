@@ -31,7 +31,7 @@ namespace NSA.View.Forms
     private void InitializeComponent()
     {
             this.propertyControl = new NSA.View.Controls.PropertyControl.PropertyControl();
-            this.toolbarControl = new NSA.View.Controls.Toolbar.ToolbarControl();
+            this.ToolbarControl = new NSA.View.Controls.Toolbar.ToolbarControl();
             this.infoControl = new NSA.View.Controls.InfoControl.InfoControl();
             this.networkViewControl = new NSA.View.Controls.NetworkView.NetworkViewControl();
             this.SuspendLayout();
@@ -44,14 +44,15 @@ namespace NSA.View.Forms
             this.propertyControl.Size = new System.Drawing.Size(150, 439);
             this.propertyControl.TabIndex = 3;
             // 
-            // toolbarControl
+            // ToolbarControl
             // 
-            this.toolbarControl.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.toolbarControl.AutoSize = true;
-            this.toolbarControl.Location = new System.Drawing.Point(12, 12);
-            this.toolbarControl.Name = "toolbarControl";
-            this.toolbarControl.Size = new System.Drawing.Size(902, 46);
-            this.toolbarControl.TabIndex = 2;
+            this.ToolbarControl.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.ToolbarControl.AutoSize = true;
+            this.ToolbarControl.Location = new System.Drawing.Point(12, 12);
+            this.ToolbarControl.Name = "ToolbarControl";
+            this.ToolbarControl.Size = new System.Drawing.Size(902, 46);
+            this.ToolbarControl.TabIndex = 2;
+            this.ToolbarControl.Tag = "ToolbarControl";
             // 
             // infoControl
             // 
@@ -75,7 +76,7 @@ namespace NSA.View.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(926, 527);
             this.Controls.Add(this.propertyControl);
-            this.Controls.Add(this.toolbarControl);
+            this.Controls.Add(this.ToolbarControl);
             this.Controls.Add(this.infoControl);
             this.Controls.Add(this.networkViewControl);
             this.MinimumSize = new System.Drawing.Size(750, 500);
@@ -91,7 +92,7 @@ namespace NSA.View.Forms
 
     private NetworkViewControl networkViewControl;
     private Controls.InfoControl.InfoControl infoControl;
-    private Controls.Toolbar.ToolbarControl toolbarControl;
+    private Controls.Toolbar.ToolbarControl ToolbarControl;
     private Controls.PropertyControl.PropertyControl propertyControl;
     }
 }

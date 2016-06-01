@@ -1,4 +1,3 @@
-using System;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
 
@@ -14,10 +13,7 @@ namespace NSA.Controller
         public static NetworkManager Instance {
             get {
                 lock (padlock) {
-                    if (instance == null) {
-                        instance = new NetworkManager();
-                    }
-                    return instance;
+                    return instance ?? (instance = new NetworkManager());
                 }
             }
         }
@@ -64,9 +60,24 @@ namespace NSA.Controller
 
         }
 
-        public void CreateHardwareNode(string name, Enum typ)
+        public void CreateWorkstation()
         {
+            // name kommt nicht vom UI
+            // es muss ein eindeutiger defaultname hier erzeugt werden
 
+            // workstation zum model hinzufügen
+            // dem UI sagen das es eine neue hardwarenode gibt
+            //NetworkViewController.Instance.AddHardwarenode(...);
+        }
+
+        public void CreateSwitch()
+        {
+            // name kommt nicht vom UI
+            // es muss ein eindeutiger defaultname hier erzeugt werden
+
+            // switch zum model hinzufügen
+            // dem UI sagen das es eine neue hardwarenode gibt
+            //NetworkViewController.Instance.AddHardwarenode(...);
         }
 
         public void CreateConnection(string start, string end)

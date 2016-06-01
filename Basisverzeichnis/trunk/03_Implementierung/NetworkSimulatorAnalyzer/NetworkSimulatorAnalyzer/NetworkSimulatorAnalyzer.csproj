@@ -76,6 +76,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NSA.Controller\NSA.Controller.csproj">
+      <Project>{703dcf0d-38e1-411f-972e-e9581f0f58d2}</Project>
+      <Name>NSA.Controller</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NSA.Logging\NSA.Logging.csproj">
       <Project>{B6058B3D-B1A5-42D7-A5B0-EAD02AE8CCF2}</Project>
       <Name>NSA.Logging</Name>
