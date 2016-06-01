@@ -9,28 +9,28 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a route to the table.
         /// </summary>
-        /// <param name="route">The route.</param>
-        public void AddRoute(Route route)
+        /// <param name="Route">The route.</param>
+        public void AddRoute(Route Route)
         {
-            routes.Add(route);
+            routes.Add(Route);
         }
 
         /// <summary>
         /// Removes a route from the table.
         /// </summary>
-        /// <param name="route">The route.</param>
-        public void RemoveRoute(Route route)
+        /// <param name="Route">The route.</param>
+        public void RemoveRoute(Route Route)
         {
-            routes.Remove(route);
+            routes.Remove(Route);
         }
 
         /// <summary>
         /// Removes the route at the given index.
         /// </summary>
-        /// <param name="index">The index.</param>
-        public void RemoveRouteAtIndex(int index)
+        /// <param name="Index">The index.</param>
+        public void RemoveRouteAtIndex(int Index)
         {
-            routes.RemoveAt(index);
+            routes.RemoveAt(Index);
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Gets the route at the specified index.
         /// </summary>
-        /// <param name="index">The index.</param>
+        /// <param name="Index">The index.</param>
         /// <returns>The route at the index</returns>
-        public Route GetRouteAt(int index)
+        public Route GetRouteAt(int Index)
         {
-            return routes[index];
+            return routes[Index];
         }
     }
 }

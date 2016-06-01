@@ -12,16 +12,16 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Initializes a new instance of the <see cref="Route" /> class.
         /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="subnetmask">The subnetmask.</param>
-        /// <param name="gateway">The gateway.</param>
-        /// <param name="intface">The intface.</param>
-        public Route(IPAddress destination, IPAddress subnetmask, IPAddress gateway, Interface intface)
+        /// <param name="Destination">The Destination IP.</param>
+        /// <param name="Subnetmask">The Mask.</param>
+        /// <param name="Gateway">The Gateway.</param>
+        /// <param name="Iface">The Interface to be used.</param>
+        public Route(IPAddress Destination, IPAddress Subnetmask, IPAddress Gateway, Interface Iface)
         {
-            Destination = destination;
-            Subnetmask = subnetmask;
-            Gateway = gateway;
-            Iface = intface;
+            this.Destination = Destination;
+            this.Subnetmask = Subnetmask;
+            this.Gateway = Gateway;
+            this.Iface = Iface;
         }
     }
 }

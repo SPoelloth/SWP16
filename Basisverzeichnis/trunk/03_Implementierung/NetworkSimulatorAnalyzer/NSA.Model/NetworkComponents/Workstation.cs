@@ -74,6 +74,18 @@ namespace NSA.Model.NetworkComponents
             routingtable.RemoveRoute(Route);
         }
 
+        /// <summary>
+        /// Gets the routingtable entry at the given index.
+        /// </summary>
+        /// <param name="Index">The index.</param>
+        /// <returns>
+        /// The <see cref="Route"/> object at the given index.
+        /// </returns>
+        public Route GetRouteAt(int Index)
+        {
+            return routingtable.GetRouteAt(Index);
+        }
+
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
@@ -106,12 +118,12 @@ namespace NSA.Model.NetworkComponents
         public override Hardwarenode Send(Hardwarenode Destination, ref Dictionary<string, object> Tags, ref string Result)
         {
             Hardwarenode nextNode = this;
-            IPAddress nextNodeIP = null;
+            IPAddress nextNodeIp = null;
             string interfaceName = "";
             for (int i = layerstack.GetSize() - 1; i >= 0; i--)
             {
                 if (nextNode != null)
-                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIP, ref interfaceName, Destination as Workstation, connections, routingtable);
+                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIp, ref interfaceName, Destination as Workstation, connections, routingtable);
             }
             return nextNode == this ? null : nextNode;
         }

@@ -11,12 +11,12 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Initializes a new instance of the <see cref="Connection" /> class.
         /// </summary>
-        /// <param name="source">The sourcenode.</param>
-        /// <param name="target">The targetnode.</param>
-        public Connection(Hardwarenode source, Hardwarenode target)
+        /// <param name="Source">The sourcenode.</param>
+        /// <param name="Target">The targetnode.</param>
+        public Connection(Hardwarenode Source, Hardwarenode Target)
         {
-            Start = source;
-            End = target;
+            Start = Source;
+            End = Target;
             Name = Guid.NewGuid().ToString("N");
         }
     }

@@ -63,5 +63,14 @@ namespace NSA.Model.NetworkComponents
                 }
             }
         }
+
+        /// <summary>
+        /// Removes the connection.
+        /// </summary>
+        /// <param name="ConnectionName">Name of the connection.</param>
+        public void RemoveConnection(string ConnectionName)
+	    {
+            // der connection name ist eindeutig (Tamara)
+	    }
     }
 }

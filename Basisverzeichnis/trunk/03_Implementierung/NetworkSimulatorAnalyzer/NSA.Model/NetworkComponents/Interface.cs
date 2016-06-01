@@ -11,14 +11,14 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Initializes a new instance of the <see cref="Interface" /> class.
         /// </summary>
-        /// <param name="ip">The ip address.</param>
-        /// <param name="subnetmask">The subnetmask.</param>
+        /// <param name="Ip">The ip address of the interface.</param>
+        /// <param name="Mask">The corresponding subnetmask.</param>
         /// <param name="Number">The number (e.g. 0 for eth0).</param>
-        public Interface(IPAddress ip, IPAddress mask, int Number)
+        public Interface(IPAddress Ip, IPAddress Mask, int Number)
         {
             Name = "eth"+Number;
-            IpAddress = ip;
-            this.Subnetmask = mask;
+            IpAddress = Ip;
+            Subnetmask = Mask;
         }
     }
 }
