@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using NSA.Controller;
+using NSA.Controller.ViewControllers;
 using NSA.View.Forms;
 
 namespace NSA
@@ -14,7 +16,8 @@ namespace NSA
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(MainForm.Instance);
+            Application.Run(ProjectManager.Instance.CreateWindow());
+            
         }
     }
 }

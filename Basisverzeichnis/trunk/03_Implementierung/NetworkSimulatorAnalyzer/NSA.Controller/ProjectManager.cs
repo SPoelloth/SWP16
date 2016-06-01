@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
+using NSA.View.Forms;
 
 namespace NSA.Controller
 {
-    internal class ProjectManager
+    public class ProjectManager
     {
         private Project currentProject;
         private List<Testscenario> testscenarios;
@@ -22,6 +24,16 @@ namespace NSA.Controller
         {
             currentProject = CurrentProject;
             testscenarios = Testscenarios;
+        }
+
+        public static ProjectManager Instance = new ProjectManager();
+
+        private Project _currentProject;
+        private List<Testscenario> _testscenarios;
+        
+        private ProjectManager()
+        {
+            _currentProject = new Project();
         }
 
         public void CreateNewProject()
@@ -92,6 +104,18 @@ namespace NSA.Controller
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 return (T)binaryFormatter.Deserialize(stream);
             }
+        }
+
+        public Form CreateWindow()
+        {
+            var form = MainForm.Instance;
+            form.Shown += Form_Shown;
+            return form;
+        }
+
+        private void Form_Shown(object sender, System.EventArgs e)
+        {
+            ToolbarController.Instance.Init();
         }
     }
 }

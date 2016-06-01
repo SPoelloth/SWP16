@@ -49,6 +49,7 @@
     <Compile Include="ViewControllers\InfoController.cs" />
     <Compile Include="ViewControllers\NetworkViewController.cs" />
     <Compile Include="ViewControllers\PropertyController.cs" />
+    <Compile Include="ViewControllers\ToolbarController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NSA.Model\NSA.Model.csproj">
