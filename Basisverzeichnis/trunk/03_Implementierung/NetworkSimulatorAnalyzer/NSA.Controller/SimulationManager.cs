@@ -10,7 +10,7 @@ namespace NSA.Controller
         // Default constructor:
         public SimulationManager()
         {
-
+            // todo
         }
 
         // Constructor:
@@ -21,32 +21,32 @@ namespace NSA.Controller
 
         public void HopSelected()
         {
-
+            // todo
         }
 
         public void StartSimulation(Simulation sim)
         {
-
+            // todo
         }
 
         public void StartTestscenario()
         {
-
+            // todo
         }
 
         public void AddSimulationToHistory(Simulation sim)
         {
-
+            // todo
         }
 
         public void RunSimulationFromHistory()
         {
-
+            // todo
         }
 
         public void RunLastSimulation()
         {
-
+            // todo
         }
     }
 }

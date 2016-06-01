@@ -96,7 +96,7 @@ namespace NSA.Controller.ViewControllers
         void AddComputer_Click(object sender, EventArgs e)
         {
             // MessageBox.Show((sender as Button).Text + " clicked");
-            NetworkManager.Instance.CreateWorkstation();
+            NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
         }
 
         void SaveProjectAs_Click(object sender, EventArgs e)
