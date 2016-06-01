@@ -1,4 +1,5 @@
 using System;
+using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
@@ -73,6 +74,10 @@ namespace NSA.Controller
             Hardwarenode A = GetHardwarenodeByName(start);
             Hardwarenode B = GetHardwarenodeByName(end);
             Connection newConnection = new Connection(A, B);
+
+            // todo model
+
+            NetworkViewController.Instance.AddConnection(newConnection);
         }
 
         public void RemoveHardwarenode(string name)
@@ -87,7 +92,7 @@ namespace NSA.Controller
 
         public Hardwarenode GetHardwarenodeByName(string name)
         {
-            return this.Network?.GetHardwarenodeByName(name);
+            return Network?.GetHardwarenodeByName(name);
         }
     }
 }
