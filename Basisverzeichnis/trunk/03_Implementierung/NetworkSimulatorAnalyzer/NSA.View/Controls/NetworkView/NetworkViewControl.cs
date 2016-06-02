@@ -15,17 +15,20 @@ namespace NSA.View.Controls.NetworkView
         public NetworkViewControl()
         {
             InitializeComponent();
+            DoubleBuffered = true;
 
             //testcode
-            testElements.Add(new ComputerControl(new Point(20, 20), "Test1"));
-            testElements.Add(new ComputerControl(new Point(200, 150), "Test2"));
-            testElements.Add(new ComputerControl(new Point(400, 100), "Computer 1"));
+            testElements.Add(new ComputerControl(new Point(20, 20), "Computer 1"));
+            ((WorkstationControl)testElements[0]).NetworkPortCount = 4;
+            testElements.Add(new ComputerControl(new Point(200, 20), "Computer 2"));
+            testElements.Add(new ComputerControl(new Point(380, 20), "Computer 3"));
             testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0));
             testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0));
 
+            testElements.Add(new ComputerControl(new Point(200, 180), "Computer 4"));
+            testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[5], 0));
             foreach (var e in testElements) AddElement(e);
 
-            DoubleBuffered = true;
         }
 
         protected override void OnPaint(PaintEventArgs e)

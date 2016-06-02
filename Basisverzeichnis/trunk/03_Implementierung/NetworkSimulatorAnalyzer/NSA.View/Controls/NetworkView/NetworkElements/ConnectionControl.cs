@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
@@ -12,10 +13,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         WorkstationControl Element1, Element2;
         int Port1, Port2;
 
-        public ConnectionControl(NetworkViewControl a, WorkstationControl element1, int port1, WorkstationControl element2, int port2)
+        public ConnectionControl(NetworkViewControl parent, WorkstationControl element1, int port1, WorkstationControl element2, int port2)
         {
             ZIndex = ZIndexStart++;
-            Parent = a;
+            //Parent = parent;
             Element1 = element1;
             Element2 = element2;
             Port1 = port1;
@@ -27,7 +28,23 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             Element2.LocationChanged += Element_LocationChanged;
         }
 
-        private void Element_LocationChanged(object sender, System.EventArgs e)
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle = cp.ExStyle | 0x20;
+                return cp;
+            }
+        }
+
+        protected override void OnParentBackColorChanged(EventArgs e)
+        {
+            Invalidate();
+            base.OnParentBackColorChanged(e);
+        }
+
+        private void Element_LocationChanged(object sender, EventArgs e)
         {
             CalculateSize();
             Invalidate();
@@ -59,7 +76,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             var a = new Point(startElement.X + startElement.Width - Location.X, startElement.Y + startElement.Height / 2 - Location.Y);
             var b = new Point(targetElement.X - Location.X, targetElement.Y + targetElement.Height / 2 - Location.Y);
 
-            g.DrawLine(Pens.Black, a, b);
+            Point am = new Point((a.X + b.X) / 2, a.Y);
+            Point bm = new Point((a.X + b.X) / 2, b.Y);
+
+            g.DrawLine(Pens.Black, a, am);
+            g.DrawLine(Pens.Black, am, bm);
+            g.DrawLine(Pens.Black, bm, b);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
