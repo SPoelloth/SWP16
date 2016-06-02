@@ -293,6 +293,7 @@ namespace NSA.Controller
                     break;
             }
 
+            uniqueNodeNames.Add(nextUniqueNodeName);
             // Add node to the Network and to the NetworkViewController
             network.AddHardwarenode(node);
             NetworkViewController.Instance.AddHardwarenode(node);
@@ -332,15 +333,15 @@ namespace NSA.Controller
         {
             Hardwarenode node = network.GetHardwarenodeByName(name);
 
+            network.RemoveHardwarnode(name);
+            NetworkViewController.Instance.RemoveHardwarenode(node);
+
             if (uniqueNodeNames.Contains(name))
             {
                 uniqueNodeNames.Remove(name);
                 // Reuse the name for a future node.
-                nextUniqueNodeName = name; 
+                nextUniqueNodeName = name;
             }
-
-            network.RemoveHardwarnode(name);
-            NetworkViewController.Instance.RemoveHardwarenode(node);
         }
 
         /// <summary>
