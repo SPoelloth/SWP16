@@ -82,6 +82,9 @@ namespace NSA.Controller
         public void createConfigControls()
         {
             // todo: klären, was genau hier passieren soll
+            // Ursprünglich war diese Funktion (eigentlich private) dafür gedacht,
+            // die zu den Elementen gehörenden ConfigControls zu erstellen.
+            // Bei der momentanen Situation denke ich ist diese Methode überflüssig (Tamara)
         }
 
         /// <summary>
@@ -115,6 +118,7 @@ namespace NSA.Controller
         public void HardwarenodeSelected()
         {
             // todo: klären, was die methode machen soll
+            // wohl auch überflüssig geworden
         }
 
         /// <summary>
