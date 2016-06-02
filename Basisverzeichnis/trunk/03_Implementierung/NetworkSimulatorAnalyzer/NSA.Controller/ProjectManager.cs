@@ -16,7 +16,7 @@ namespace NSA.Controller
         public static ProjectManager Instance = new ProjectManager();
         private ProjectManager()
         {
-            currentProject = new Project();
+            CreateNewProject();
         }
 
         public void CreateNewProject()
