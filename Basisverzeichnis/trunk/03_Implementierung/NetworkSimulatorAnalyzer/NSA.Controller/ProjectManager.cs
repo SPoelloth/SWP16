@@ -13,20 +13,11 @@ namespace NSA.Controller
         private Project currentProject;
         private List<Testscenario> testscenarios;
 
-        // Default constructor:
-        public ProjectManager()
-        {
-            currentProject = null;
-        }
-
-        // Constructor:
-        public ProjectManager(Project CurrentProject, List<Testscenario> Testscenarios)
-        {
-            currentProject = CurrentProject;
-            testscenarios = Testscenarios;
-        }
-
         public static ProjectManager Instance = new ProjectManager();
+        private ProjectManager()
+        {
+            currentProject = new Project();
+        }
 
         public void CreateNewProject()
         {
