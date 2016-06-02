@@ -5,7 +5,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
     public partial class ConfigControlBase : UserControl
     {
-        public event Action Closing;
+        public event Action<ConfigControlBase> Closing;
 
         public ConfigControlBase()
         {
@@ -19,7 +19,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 
         private void buttonClose_Click(object sender, System.EventArgs e)
         {
-            Closing?.Invoke();
+            Closing?.Invoke(this);
         }
     }
 }

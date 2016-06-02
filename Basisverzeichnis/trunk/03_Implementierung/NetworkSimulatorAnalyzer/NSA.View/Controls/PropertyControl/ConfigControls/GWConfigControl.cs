@@ -1,11 +1,14 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
     public partial class GWConfigControl : ConfigControlBase
     {
-        public GWConfigControl(IPAddress ip, string name)
+        public event Action<IPAddress> GatewayChanged;
+
+        public GWConfigControl(IPAddress ip)
         {
             InitializeComponent();
         }

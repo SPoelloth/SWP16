@@ -28,7 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // InterfaceConfigControl
+            // 
+            this.Name = "InterfaceConfigControl";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion

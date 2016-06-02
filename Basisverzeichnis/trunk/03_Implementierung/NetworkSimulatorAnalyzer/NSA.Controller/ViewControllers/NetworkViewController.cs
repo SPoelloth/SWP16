@@ -47,7 +47,7 @@ namespace NSA.Controller.ViewControllers
         
         public void EditorElement_Selected(EditorElementBase selectedElement)
         {
-            //PropertyController.Instance.LoadElementProperties(selectedElement.Name);
+            PropertyController.Instance.LoadElementProperties(selectedElement.Name);
         }
 
         public void AddHardwarenode(Hardwarenode node)

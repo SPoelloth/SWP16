@@ -158,6 +158,9 @@
     <Compile Include="Controls\NetworkView\NetworkElements\Base\EditorElementBase.Designer.cs">
       <DependentUpon>EditorElementBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PropertyControl\Misc\AddButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\AdvancedSimulationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -191,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\NetworkView\NetworkElements\WorkstationControl.resx">
       <DependentUpon>WorkstationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\InterfaceConfigControl.resx">
+      <DependentUpon>InterfaceConfigControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdvancedSimulationForm.resx">
       <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>
