@@ -76,7 +76,15 @@ namespace NSA.Model.NetworkComponents
         /// <param name="ConnectionName">Name of the connection.</param>
         public void RemoveConnection(string ConnectionName)
 	    {
-            // der connection name ist eindeutig (Tamara)
+            foreach (Connection c in connections)
+            {
+                // This loop is cancelled as soon as the connection which should be removed is reached. 
+                if (c.Name == ConnectionName)
+                {
+                    connections.Remove(c);
+                    return;
+                }
+            }
 	    }
     }
 }
