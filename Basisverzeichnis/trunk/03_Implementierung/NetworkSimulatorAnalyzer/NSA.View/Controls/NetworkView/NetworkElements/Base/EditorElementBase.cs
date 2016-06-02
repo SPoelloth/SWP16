@@ -8,7 +8,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
     {
         Image Image;
         string Name;
-        public Action<EditorElementBase>  Selected;
+        public Action<EditorElementBase> Selected;
 
         public static int ZIndexStart = 0;
         public int ZIndex;
@@ -21,7 +21,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
 
         }
 
-        public EditorElementBase(Point location,string name)
+        public EditorElementBase(Point location, string name)
         {
             ZIndex = ZIndexStart++;
             Name = name;

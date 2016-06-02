@@ -69,6 +69,7 @@ namespace NSA.View.Forms
             this.networkViewControl.Name = "networkViewControl";
             this.networkViewControl.Size = new System.Drawing.Size(746, 281);
             this.networkViewControl.TabIndex = 0;
+            this.networkViewControl.Tag = "NetworkviewControl";
             // 
             // MainForm
             // 
@@ -79,7 +80,7 @@ namespace NSA.View.Forms
             this.Controls.Add(this.ToolbarControl);
             this.Controls.Add(this.infoControl);
             this.Controls.Add(this.networkViewControl);
-            this.MinimumSize = new System.Drawing.Size(750, 500);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "MainForm";
             this.Text = "Network Simulator and Analyzer";
             this.Resize += new System.EventHandler(this.MainForm_Resize);

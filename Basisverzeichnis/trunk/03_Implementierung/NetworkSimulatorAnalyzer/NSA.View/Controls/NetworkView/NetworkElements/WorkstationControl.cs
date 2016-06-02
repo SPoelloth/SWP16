@@ -27,7 +27,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #endregion Port Colors
         #endregion Colors
         #region Port Parameter
-        
+
         const int portsize = 10;
         const int portdistance = 2;
         const int portOffsetY = 30;
@@ -37,7 +37,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #endregion Port Parameter
 
         #endregion Parameters
-        
+
         private List<Rectangle> portHitboxes = new List<Rectangle>();
 
         int portcount = 2;
@@ -85,7 +85,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             g.FillRectangle(dotBrush, new Rectangle(10, offsetY + 5, 2, 2));
             g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
             g.DrawLine(separatorPen, 3, offsetY + 11, Width - 4, offsetY + 11);
-            
+
             for (int i = 0; i < portHitboxes.Count; i++)
             {
                 var portRectangle = portHitboxes[i];

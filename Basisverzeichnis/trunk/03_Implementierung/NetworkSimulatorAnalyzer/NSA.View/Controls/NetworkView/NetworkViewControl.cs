@@ -10,6 +10,7 @@ namespace NSA.View.Controls.NetworkView
 {
     public partial class NetworkViewControl : UserControl
     {
+        public event Action<EditorElementBase> SelectionChanged;
         List<EditorElementBase> testElements = new List<EditorElementBase>();
 
         public NetworkViewControl()
@@ -22,11 +23,11 @@ namespace NSA.View.Controls.NetworkView
             ((WorkstationControl)testElements[0]).NetworkPortCount = 4;
             testElements.Add(new ComputerControl(new Point(200, 20), "Computer 2"));
             testElements.Add(new ComputerControl(new Point(380, 20), "Computer 3"));
-            testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0));
-            testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0));
+            testElements.Add(new ConnectionControl((WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0));
+            testElements.Add(new ConnectionControl((WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0));
 
             testElements.Add(new ComputerControl(new Point(200, 180), "Computer 4"));
-            testElements.Add(new ConnectionControl(this, (WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[5], 0));
+            testElements.Add(new ConnectionControl((WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[5], 0));
             foreach (var e in testElements) AddElement(e);
 
         }
@@ -77,6 +78,7 @@ namespace NSA.View.Controls.NetworkView
                 control.IsSelected = false;
             }
             element.IsSelected = true;
+            SelectionChanged?.Invoke(element);
         }
 
         protected override void OnClick(EventArgs e)

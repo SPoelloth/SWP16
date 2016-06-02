@@ -9,6 +9,12 @@ namespace NSA.Model.NetworkComponents
         private List<Hardwarenode> nodes;
         private List<Connection> connections;
 
+	    public Network()
+	    {
+            nodes = new List<Hardwarenode>();
+            connections = new List<Connection>();
+	    }
+
         /// <summary>
         /// Returns the Hardwarenode with the name.
         /// </summary>

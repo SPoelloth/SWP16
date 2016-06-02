@@ -13,10 +13,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         WorkstationControl Element1, Element2;
         int Port1, Port2;
 
-        public ConnectionControl(NetworkViewControl parent, WorkstationControl element1, int port1, WorkstationControl element2, int port2)
+        public ConnectionControl(WorkstationControl element1, int port1, WorkstationControl element2, int port2)
         {
             ZIndex = ZIndexStart++;
-            //Parent = parent;
             Element1 = element1;
             Element2 = element2;
             Port1 = port1;

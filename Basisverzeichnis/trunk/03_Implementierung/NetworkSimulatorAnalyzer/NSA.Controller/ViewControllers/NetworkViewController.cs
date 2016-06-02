@@ -41,11 +41,13 @@ namespace NSA.Controller.ViewControllers
         NetworkViewController()
         {
             networkViewControl = MainForm.Instance.GetComponent("NetworkviewControl") as NetworkViewControl;
+            if (networkViewControl == null) throw new NullReferenceException("NetworkviewControl is null");
+            networkViewControl.SelectionChanged += EditorElement_Selected;
         }
-
+        
         public void EditorElement_Selected(EditorElementBase selectedElement)
         {
-            
+            //PropertyController.Instance.LoadElementProperties(selectedElement.Name);
         }
 
         public void AddHardwarenode(Hardwarenode node)
