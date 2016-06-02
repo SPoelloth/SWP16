@@ -86,6 +86,15 @@ namespace NSA.Model.NetworkComponents
             return routingtable.GetRouteAt(Index);
         }
 
+        /// <summary>
+        /// Gets number of route entries in the routing table.
+        /// </summary>
+        /// <returns>int: Number of route entries</returns>
+        public int GetRouteCount()
+        {
+            return routingtable.GetSize();
+        }
+
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
