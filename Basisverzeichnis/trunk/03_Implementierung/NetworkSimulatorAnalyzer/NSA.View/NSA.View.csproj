@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\NetworkView\Connection.cs" />
     <Compile Include="Controls\NetworkView\LabelControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

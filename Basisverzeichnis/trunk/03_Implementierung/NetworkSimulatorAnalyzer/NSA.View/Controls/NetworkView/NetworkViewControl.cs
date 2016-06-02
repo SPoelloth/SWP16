@@ -11,25 +11,24 @@ namespace NSA.View.Controls.NetworkView
     public partial class NetworkViewControl : UserControl
     {
         public event Action<EditorElementBase> SelectionChanged;
+        internal List<VisualConnection> connections = new List<VisualConnection>();
         List<EditorElementBase> testElements = new List<EditorElementBase>();
 
         public NetworkViewControl()
         {
             InitializeComponent();
             DoubleBuffered = true;
-
             //testcode
             testElements.Add(new ComputerControl(new Point(20, 20), "Computer 1"));
             ((WorkstationControl)testElements[0]).NetworkPortCount = 4;
             testElements.Add(new ComputerControl(new Point(200, 20), "Computer 2"));
             testElements.Add(new ComputerControl(new Point(380, 20), "Computer 3"));
-            testElements.Add(new ConnectionControl((WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0));
-            testElements.Add(new ConnectionControl((WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0));
 
             testElements.Add(new ComputerControl(new Point(200, 180), "Computer 4"));
-            testElements.Add(new ConnectionControl((WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[5], 0));
+            AddElement(new VisualConnection((WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0, this));
+            AddElement(new VisualConnection((WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0, this));
+            AddElement(new VisualConnection((WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[3], 0, this));
             foreach (var e in testElements) AddElement(e);
-
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -42,6 +41,11 @@ namespace NSA.View.Controls.NetworkView
         {
             Invalidate();
             base.OnSizeChanged(e);
+        }
+
+        public void AddElement(VisualConnection VisualConnection)
+        {
+            connections.Add(VisualConnection);
         }
 
         public void AddElement(EditorElementBase element)

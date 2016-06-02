@@ -80,5 +80,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             Selected?.Invoke(this);
             base.OnMouseClick(e);
         }
+
+        public virtual Rectangle GetPortBoundsByID(int port)
+        {
+            throw new InvalidOperationException();
+        }
     }
 }

@@ -28,10 +28,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #endregion Colors
         #region Port Parameter
 
-        const int portsize = 10;
+        int portsize = 10;
         const int portdistance = 2;
         const int portOffsetY = 30;
-        const int portPinsLength = portsize / 2 - 1;
+        const int portPinsLength = 10 / 2 - 1;
         const int portPinCount = 4;
 
         #endregion Port Parameter
@@ -47,6 +47,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         {
         }
 
+        //protected override void ScaleCore(float dx, float dy)
+        //{
+        //    portsize = (int)(10 * dx);
+        //    base.ScaleCore(dx, dy);
+        //}
+        
         public WorkstationControl(Point location, string name) : base(location, name)
         {
             backgroundGradientBrush.WrapMode = WrapMode.TileFlipX;
@@ -114,7 +120,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             base.OnMouseMove(e);
         }
 
-        public Rectangle GetPortBoundsByID(int port)
+        public override Rectangle GetPortBoundsByID(int port)
         {
             return portHitboxes[port];
         }

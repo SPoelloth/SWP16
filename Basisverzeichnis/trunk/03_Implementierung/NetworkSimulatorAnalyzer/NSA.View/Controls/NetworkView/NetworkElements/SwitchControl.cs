@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
@@ -6,7 +7,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     public partial class SwitchControl : EditorElementBase, IConfigurable
     {
-        public SwitchControl(Point location) : base(location, "SwitchControl")
+        public SwitchControl(Point location, string name) : base(location, name)
         {
         }
 
@@ -15,9 +16,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             base.OnPaint(pe);
         }
 
-        public Rectangle GetPortBoundsByID(int port)
+        public override Rectangle GetPortBoundsByID(int port)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

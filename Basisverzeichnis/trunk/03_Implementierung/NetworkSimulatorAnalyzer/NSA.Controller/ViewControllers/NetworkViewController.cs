@@ -8,6 +8,8 @@ using NSA.Model.NetworkComponents;
 using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 using NSA.View.Forms;
+using System.Drawing;
+using NSA.View.Controls.NetworkView.NetworkElements;
 
 namespace NSA.Controller.ViewControllers
 {
@@ -36,7 +38,7 @@ namespace NSA.Controller.ViewControllers
         #endregion Singleton
 
         private NetworkViewControl networkViewControl;
-        
+
 
         NetworkViewController()
         {
@@ -44,7 +46,7 @@ namespace NSA.Controller.ViewControllers
             if (networkViewControl == null) throw new NullReferenceException("NetworkviewControl is null");
             networkViewControl.SelectionChanged += EditorElement_Selected;
         }
-        
+
         public void EditorElement_Selected(EditorElementBase selectedElement)
         {
             PropertyController.Instance.LoadElementProperties(selectedElement.Name);
@@ -52,12 +54,8 @@ namespace NSA.Controller.ViewControllers
 
         public void AddHardwarenode(Hardwarenode node)
         {
-            // Get new Hardwarenode from Networkmanager
-            // Subscribe to BL events
-
-            // Create Hardwarenoderepresentation
-            // Subscribe to UI events
-            // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
+            if (node is Workstation) networkViewControl.AddElement(new WorkstationControl(new Point(100, 100), node.Name));
+            if (node is Switch) networkViewControl.AddElement(new SwitchControl(new Point(100, 100), node.Name));
         }
 
         public void AddConnection(Connection connection)
