@@ -16,31 +16,38 @@ namespace NSA.View.Controls.NetworkView
 
         public NetworkViewControl()
         {
-            InitializeComponent();
             DoubleBuffered = true;
+            InitializeComponent();
             //testcode
             testElements.Add(new ComputerControl(new Point(20, 20), "Computer 1"));
             ((WorkstationControl)testElements[0]).NetworkPortCount = 4;
             testElements.Add(new ComputerControl(new Point(200, 20), "Computer 2"));
             testElements.Add(new ComputerControl(new Point(380, 20), "Computer 3"));
+            ((WorkstationControl)testElements[2]).NetworkPortCount = 4;
+            testElements.Add(new ComputerControl(new Point(200, 160), "Computer 4"));
+            testElements.Add(new ComputerControl(new Point(500, 20), "Computer 5"));
+            testElements.Add(new ComputerControl(new Point(280, 160), "Computer 6"));
+            testElements.Add(new ComputerControl(new Point(525, 160), "Computer 7"));
 
-            testElements.Add(new ComputerControl(new Point(200, 180), "Computer 4"));
             AddElement(new VisualConnection((WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0, this));
             AddElement(new VisualConnection((WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0, this));
             AddElement(new VisualConnection((WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[3], 0, this));
+            AddElement(new VisualConnection((WorkstationControl)testElements[2], 1, (WorkstationControl)testElements[4], 0, this));
+            AddElement(new VisualConnection((WorkstationControl)testElements[2], 2, (WorkstationControl)testElements[5], 1, this));
+            AddElement(new VisualConnection((WorkstationControl)testElements[2], 3, (WorkstationControl)testElements[6], 0, this));
             foreach (var e in testElements) AddElement(e);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
-        }
+       // protected override void OnPaint(PaintEventArgs e)
+       // {
+       //     base.OnPaint(e);
+       //     e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
+       // }
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            Invalidate();
             base.OnSizeChanged(e);
+            Invalidate();
         }
 
         public void AddElement(VisualConnection VisualConnection)
@@ -60,7 +67,6 @@ namespace NSA.View.Controls.NetworkView
 
             //Controls neu sortieren von hinten nach vorne
             // SetChildIndex(..) funktioniert nicht auf linux! :(
-            SuspendLayout();
 
             // wir brauchen eine kopie der liste, wir können nicht im foreach die reihenfolge ändern
             var controls = Controls.OfType<EditorElementBase>().OrderBy(o => o.ZIndex).ToList();
@@ -70,7 +76,6 @@ namespace NSA.View.Controls.NetworkView
                 Controls.Remove(c);
                 Controls.Add(c);
             }
-            ResumeLayout();
         }
 
         private void Element_Selected(EditorElementBase element)

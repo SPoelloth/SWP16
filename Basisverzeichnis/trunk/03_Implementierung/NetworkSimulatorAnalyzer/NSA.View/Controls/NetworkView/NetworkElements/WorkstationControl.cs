@@ -52,7 +52,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         //    portsize = (int)(10 * dx);
         //    base.ScaleCore(dx, dy);
         //}
-        
+
         public WorkstationControl(Point location, string name) : base(location, name)
         {
             backgroundGradientBrush.WrapMode = WrapMode.TileFlipX;

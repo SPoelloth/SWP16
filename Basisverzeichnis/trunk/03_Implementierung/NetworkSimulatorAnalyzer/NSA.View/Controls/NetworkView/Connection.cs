@@ -24,24 +24,23 @@ namespace NSA.View.Controls.NetworkView
             Element2 = element2;
             Port1 = port1;
             Port2 = port2;
-            CalculateSize();
             Element1.LocationChanged += Element_LocationChanged;
             Element2.LocationChanged += Element_LocationChanged;
-            CalculateSize();
+            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
+            CalculateLineParts();
+            foreach (var c in connectionControls) Parent.Controls.Add(c);
         }
 
         private void Element_LocationChanged(object sender, EventArgs e)
         {
-            foreach (var c in connectionControls.ToList())
-            {
-                Parent.Controls.Remove(c);
-                connectionControls.Remove(c);
-                c.Dispose();
-            }
-            CalculateSize();
+            CalculateLineParts();
         }
 
-        private void CalculateSize()
+        private void CalculateLineParts()
         {
             var startElement = Element1.GetPortBoundsByID(Port1);
             var targetElement = Element2.GetPortBoundsByID(Port2);
@@ -66,11 +65,11 @@ namespace NSA.View.Controls.NetworkView
 
             if (DirectConnectionPossible(Element1PixelMargin, Element2PixelMargin))
             {
-                connectionControls.Add(new ConnectionControl(Element1Start, Element1PixelMargin, Parent));
-                connectionControls.Add(new ConnectionControl(Element1PixelMargin, am, Parent));
-                connectionControls.Add(new ConnectionControl(am, bm, Parent));
-                connectionControls.Add(new ConnectionControl(bm, Element2PixelMargin, Parent));
-                connectionControls.Add(new ConnectionControl(Element2PixelMargin, Element2Start, Parent));
+               connectionControls[0].SetPoints(Element1Start, Element1PixelMargin);
+               connectionControls[1].SetPoints(Element1PixelMargin, am);
+               connectionControls[2].SetPoints(am, bm);
+               connectionControls[3].SetPoints(bm, Element2PixelMargin);
+               connectionControls[4].SetPoints(Element2PixelMargin, Element2Start);
             }
             //else 
             //{

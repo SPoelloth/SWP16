@@ -14,7 +14,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         public int ZIndex;
 
         private bool isSelected = false;
-        public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; Invalidate(); } } }
+        public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value;  Invalidate(); } } }
 
         public EditorElementBase() : this(new Point(0, 0), "EditorElementBase")
         {
@@ -54,7 +54,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
                 lastMouseLocation = e.Location;
             }
         }
-
+        
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (!dragging) return;
@@ -67,6 +67,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         protected override void OnMouseUp(MouseEventArgs e)
         {
             dragging = false;
+            Parent.Invalidate();
         }
 
         protected override void OnMouseHover(EventArgs e)

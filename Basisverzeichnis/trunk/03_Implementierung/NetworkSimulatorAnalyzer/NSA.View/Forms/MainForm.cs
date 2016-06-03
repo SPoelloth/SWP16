@@ -41,5 +41,15 @@ namespace NSA.View.Forms
             infoControl.Width = networkViewControl.Width;
             networkViewControl.Invalidate();
         }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
     }
 }

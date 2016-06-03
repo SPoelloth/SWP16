@@ -55,8 +55,6 @@ namespace NSA.Controller.ViewControllers
             btn = new Button { Height = 40, Width = 80, Text = "Erweiterte Simulation" };
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
-
-            flp.Invalidate();
         }
         
         public void Init()
