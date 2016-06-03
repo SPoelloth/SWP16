@@ -57,7 +57,31 @@ namespace NSA.Controller
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
-            WriteToXmlFile(file, currentProject);
+            try
+            {
+                WriteToXmlFile(file, currentProject);
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// Loads a Project.
+        /// </summary>
+        public void LoadProject()
+        {
+            var openFileDialog = new OpenFileDialog();
+            var result = openFileDialog.ShowDialog();
+            if (result != DialogResult.OK) return;
+            var file = openFileDialog.FileName;
+            try
+            {
+                ReadFromXmlFile<Project>(file);
+            }
+            catch (IOException)
+            {
+            }
         }
 
         /// <summary>

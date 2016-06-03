@@ -7,7 +7,6 @@ namespace NSA.Model.BusinessLogic
 	public class Project
 	{
 	    public string Path { get; set; }
-
 	    public Network Network { get; set; }
 
 	    // Default Konstruktor
@@ -16,7 +15,8 @@ namespace NSA.Model.BusinessLogic
         /// </summary>
         public Project()
         {
-            
+            Network = new Network();
+            Path = null;
         }
     }
 }
