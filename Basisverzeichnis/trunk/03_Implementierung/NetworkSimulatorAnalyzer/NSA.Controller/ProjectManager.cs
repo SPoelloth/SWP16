@@ -77,7 +77,7 @@ namespace NSA.Controller
             var file = openFileDialog.FileName;
             try
             {
-                ReadFromXmlFile<Project>(file);
+                currentProject = ReadFromXmlFile<Project>(file);
             }
             catch (IOException)
             {
