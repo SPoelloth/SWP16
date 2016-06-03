@@ -15,17 +15,27 @@ namespace NSA.Controller
         private List<Testscenario> testscenarios;
 
         public static ProjectManager Instance = new ProjectManager();
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
         private ProjectManager()
         {
             CreateNewProject();
         }
 
+        /// <summary>
+        /// Creates a new Project.
+        /// </summary>
         public void CreateNewProject()
         {
             currentProject = new Project();
             testscenarios = new List<Testscenario>();
         }
 
+        /// <summary>
+        /// Saves the Project without path selection if the project has already a path.
+        /// Otherwise saveas is called.
+        /// </summary>
         public void Save()
         {
             if (currentProject.Path == null)
@@ -38,6 +48,9 @@ namespace NSA.Controller
             }
         }
 
+        /// <summary>
+        /// Saves the Project with path selection.
+        /// </summary>
         public void SaveAs()
         {
             var openFileDialog = new OpenFileDialog();
@@ -47,6 +60,9 @@ namespace NSA.Controller
             WriteToXmlFile(file, currentProject);
         }
 
+        /// <summary>
+        /// Loads the Testscenarios.
+        /// </summary>
         public void LoadTestscenarios()
         {
             var openFileDialog = new OpenFileDialog();
@@ -62,6 +78,11 @@ namespace NSA.Controller
             }
         }
 
+        /// <summary>
+        /// Gets a Testscenario by its id.
+        /// </summary>
+        /// <param name="Id">The id of the Testscenario.</param>
+        /// <returns>Returns the Testscenario.</returns>
         public Testscenario GetTestscenarioById(string Id)
         {
             return testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
@@ -114,6 +135,10 @@ namespace NSA.Controller
             }
         }
 
+        /// <summary>
+        /// Creates a Window.
+        /// </summary>
+        /// <returns>Returns a form.</returns>
         public Form CreateWindow()
         {
             var form = MainForm.Instance;
@@ -121,6 +146,11 @@ namespace NSA.Controller
             return form;
         }
 
+        /// <summary>
+        /// Inits the ToolbarController
+        /// </summary>
+        /// <param name="Sender">The sender object.</param>
+        /// <param name="E">The EventArgs.</param>
         private static void Form_Shown(object Sender, System.EventArgs E)
         {
             ToolbarController.Instance.Init();
