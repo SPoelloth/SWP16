@@ -12,7 +12,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         private const int LineWidth = 3;
 
         Point Point1, Point2;
-        Control myParent;
 
         public ConnectionControl(Point point1, Point point2)
         {
@@ -40,7 +39,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         protected override void OnPaint(PaintEventArgs pe)
         {
             var g = pe.Graphics;
-            g.FillRectangle(Brushes.Black, ClientRectangle);
+            g.Clear(IsSelected ? Color.Red : Color.Black);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
         }
     }
 }

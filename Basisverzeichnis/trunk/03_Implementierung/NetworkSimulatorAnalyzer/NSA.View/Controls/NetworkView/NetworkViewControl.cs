@@ -38,11 +38,11 @@ namespace NSA.View.Controls.NetworkView
             foreach (var e in testElements) AddElement(e);
         }
 
-       // protected override void OnPaint(PaintEventArgs e)
-       // {
-       //     base.OnPaint(e);
-       //     e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
-       // }
+        // protected override void OnPaint(PaintEventArgs e)
+        // {
+        //     base.OnPaint(e);
+        //     e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
+        // }
 
         protected override void OnSizeChanged(EventArgs e)
         {
@@ -53,6 +53,7 @@ namespace NSA.View.Controls.NetworkView
         public void AddElement(VisualConnection VisualConnection)
         {
             connections.Add(VisualConnection);
+            VisualConnection.Selected += Connection_Selected;
         }
 
         public void AddElement(EditorElementBase element)
@@ -78,26 +79,36 @@ namespace NSA.View.Controls.NetworkView
             }
         }
 
+        private void Connection_Selected(VisualConnection sender)
+        {
+            foreach (var c in Controls.OfType<EditorElementBase>())
+            {
+                if (c is ConnectionControl) continue;
+                c.IsSelected = false;
+            }
+            foreach (var c in connections)
+            {
+                c.IsSelected = c == sender;
+            }
+        }
+
         private void Element_Selected(EditorElementBase element)
         {
-            foreach (var c in Controls)
+            foreach (var c in Controls.OfType<EditorElementBase>())
             {
-                var control = c as EditorElementBase;
-                if (control == null) continue;
-                control.IsSelected = false;
+                c.IsSelected = false;
             }
-            element.IsSelected = true;
+            foreach (var c in connections)
+            {
+                c.IsSelected = false;
+            }
+            if (element != null) element.IsSelected = true;
             SelectionChanged?.Invoke(element);
         }
 
         protected override void OnClick(EventArgs e)
         {
-            foreach (var c in Controls)
-            {
-                var control = c as EditorElementBase;
-                if (control == null) continue;
-                control.IsSelected = false;
-            }
+            Element_Selected(null);
             base.OnClick(e);
         }
     }
