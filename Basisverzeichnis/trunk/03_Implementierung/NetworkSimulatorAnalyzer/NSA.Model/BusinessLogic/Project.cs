@@ -1,18 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {
 	public class Project
-    {
-        private Network network { get; set; }
-        private string path { get; set; }
+	{
+	    public string Path { get; set; }
 
-        // Default Konstruktor
+	    public Network Network { get; set; }
+
+	    // Default Konstruktor
         /// <summary>
         /// Initializes a new instance of the <see cref="Project"/> class.
         /// </summary>
-        public Project( )
+        public Project()
         {
             
         }
