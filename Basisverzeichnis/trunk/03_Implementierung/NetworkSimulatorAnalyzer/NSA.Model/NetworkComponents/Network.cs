@@ -58,16 +58,19 @@ namespace NSA.Model.NetworkComponents
         /// <param name="name">The name.</param>
         public void RemoveHardwarnode(string name)
         {
-            foreach (Hardwarenode h in nodes)
-            {
-                // A Hardwarenode is identified by its name. 
-                // This loop is cancelled as soon as the correct hardwarenode which should be removed is reached. 
-                if (h.Name == name)
-                {
-                    nodes.Remove(h);
-                    return;
-                }
-            }
+            nodes.RemoveAll(s => s.Name == name);
+
+            // das ist das gleiche:
+            //foreach (Hardwarenode h in nodes)
+            //{
+            //    // A Hardwarenode is identified by its name. 
+            //    // This loop is cancelled as soon as the correct hardwarenode which should be removed is reached. 
+            //    if (h.Name == name)
+            //    {
+            //        nodes.Remove(h);
+            //        return;
+            //    }
+            //}
         }
 
         /// <summary>
