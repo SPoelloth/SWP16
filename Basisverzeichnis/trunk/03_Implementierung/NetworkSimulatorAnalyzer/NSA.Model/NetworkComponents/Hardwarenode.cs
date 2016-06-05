@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
 {
@@ -72,9 +73,10 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Result">String representing the result</param>
+        /// <param name="Res">The Result of the simulation</param>
+        /// <param name="nextNodeIP">The IP of the next Node</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual Hardwarenode Send(Hardwarenode Destination, ref Dictionary<string, object> Tags, ref string Result)
+        public virtual Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
         {
             return null;
         }
@@ -83,10 +85,37 @@ namespace NSA.Model.NetworkComponents
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Result">String representing the result</param>
+        /// <param name="Res">The Result of the simulation</param>
+        /// <param name="nextNodeIP"></param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(ref Dictionary<string, object> Tags, ref string Result)
+        public virtual bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
         {
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the connections.
+        /// </summary>
+        /// <returns>Connections</returns>
+        public Dictionary<string, Connection> GetConnections()
+        {
+            return connections;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            Hardwarenode n = obj as Hardwarenode;
+            if (n == null)
+                return false;
+            if (n.Name == Name)
+                return true;
             return false;
         }
 

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
 {
@@ -14,6 +16,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Name">The name of the switch.</param>
         public Switch(string Name) : base(Name)
         {
+            
         }
 
         /// <summary>
@@ -54,6 +57,30 @@ namespace NSA.Model.NetworkComponents
             RemoveConnection(IfaceName);
             Interfaces.Remove(IfaceName);
             nextInterface = int.Parse(IfaceName.Substring(namePrefix.Length, IfaceName.Length - namePrefix.Length));
+        }
+
+        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
+        {
+            foreach (Connection c in connections.Values)
+            {
+                if (c.End.HasIP(nextNodeIP))
+                {
+                    return c.End;
+                }
+                if (c.Start.HasIP(nextNodeIP))
+                {
+                    return c.Start;
+                }
+            }
+            Res.ErrorID = 4;
+            Res.Res = "There is no Connection for the next Hardwarenode.";
+            Res.SendError = true;
+            return null;
+        }
+
+        public override bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
+        {
+            return base.Receive(Tags, Res, nextNodeIP);
         }
     }
 }

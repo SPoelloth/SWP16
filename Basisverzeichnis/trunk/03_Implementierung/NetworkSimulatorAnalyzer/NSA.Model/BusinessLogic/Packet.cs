@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -10,7 +12,7 @@ namespace NSA.Model.BusinessLogic
         private Hardwarenode destination;
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
-        private string result = "";
+        private Result result;
         private Dictionary<string, object> tags;
 
         public Packet(Hardwarenode _source, Hardwarenode _destination,
@@ -29,12 +31,13 @@ namespace NSA.Model.BusinessLogic
         /// <returns>The Returnpacket if sending to destination was successfull</returns>
         public Packet Send()
         {
-            while (hops[hops.Count - 1] != destination && result == "")
+            IPAddress nextNodeIP = null;
+            while (hops[hops.Count - 1] != destination && result.ErrorID == 0)
             {
-                Hardwarenode nextNode = hops[hops.Count - 1].Send(destination, ref tags, ref result);
+                Hardwarenode nextNode = hops[hops.Count - 1].Send(destination, tags, result, nextNodeIP);
                 if (nextNode != null)
                 {
-                    nextNode.Receive(ref tags, ref result);
+                    nextNode.Receive(tags, result, nextNodeIP);
                     hops.Add(nextNode);
                 }
             }

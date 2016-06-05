@@ -6,29 +6,39 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     class NetworkLayer : ILayer
     {
-        public bool ValidateReceive()
+        public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
         {
             return true;
         }
 
-        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, ref string interfaceName, Workstation destination, 
-            Dictionary<string, Connection> connections, Routingtable routingtable)
+        public void ValidateSend(Hardwarenode nextNode, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {
             List<Interface> interfaces = destination.GetInterfaces();
-            foreach (Interface iface in interfaces)
+            foreach (Interface i in interfaces)
             {
-                for (int i = 0; i < routingtable.GetSize(); i++)
+                for (int j = 0; j < currentNode.GetRouteCount(); j++)
                 {
-                    Route r = routingtable.GetRouteAt(i);
+                    Route r = currentNode.GetRouteAt(j);
                     if (iface.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
                     {
                         nextNodeIP = r.Gateway;
-                        interfaceName = r.Iface.Name;
+                        iface = r.Iface;
                     }
                 }
             }
-            //Falls vorhanden an Standard-Gateway schicken
-            nextNode = null;
+            if (currentNode.StandardGateway != null && nextNodeIP == null)
+            {
+                nextNodeIP = currentNode.StandardGateway;
+                iface = currentNode.StandardGatewayPort;
+            }
+            else if (nextNodeIP == null)
+            {
+                Res.ErrorID = 1;
+                Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
+                Res.LayerError = new NetworkLayer();
+                Res.SendError = true;
+                nextNode = null;
+            }
         }
     }
 }

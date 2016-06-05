@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 using NSA.Model.NetworkComponents.Layers;
 
 namespace NSA.Model.NetworkComponents
@@ -9,6 +11,7 @@ namespace NSA.Model.NetworkComponents
         private List<Interface> interfaces = new List<Interface>();
         private Routingtable routingtable = new Routingtable();
         public IPAddress StandardGateway { get; set; }
+        public Interface StandardGatewayPort { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
@@ -24,6 +27,7 @@ namespace NSA.Model.NetworkComponents
             layerstack.AddLayer(new SessionLayer());
             layerstack.AddLayer(new PresentationLayer());
             layerstack.AddLayer(new ApplicationLayer());
+            StandardGateway = null;
         }
 
         /// <summary>
@@ -132,37 +136,46 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="Result">String representing the result</param>
+        /// <param name="nextNodeIP"></param>
         /// <returns>
         /// The Hardwarenode which received the package or null if an error occured
         /// </returns>
-        public override Hardwarenode Send(Hardwarenode Destination, ref Dictionary<string, object> Tags, ref string Result)
+        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Result, IPAddress nextNodeIP)
         {
             Hardwarenode nextNode = this;
-            IPAddress nextNodeIp = null;
-            string interfaceName = "";
+            Interface iface = null;
             for (int i = layerstack.GetSize() - 1; i >= 0; i--)
             {
                 if (nextNode != null)
-                    layerstack.GetLayer(i).ValidateSend(ref nextNode, ref nextNodeIp, ref interfaceName, Destination as Workstation, connections, routingtable);
+                {
+                    Workstation dest = Destination as Workstation;
+                    if(dest != null)
+                        layerstack.GetLayer(i).ValidateSend(nextNode, nextNodeIP, iface, dest, this, Result);
+                    else
+                    {
+                        throw new ArgumentException("Destination is no Workstation.");
+                    }
+                }
             }
-            return nextNode == this ? null : nextNode;
+            return nextNode.Equals(this) ? null : nextNode;
         }
 
         /// <summary>
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Result">String representing the result</param>
+        /// <param name="Res"></param>
+        /// <param name="nextNodeIP"></param>
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(ref Dictionary<string, object> Tags, ref string Result)
+        public override bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
         {
             bool res = true;
             for (int i = 0; i < layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = layerstack.GetLayer(i).ValidateReceive();
+                    res = layerstack.GetLayer(i).ValidateReceive(nextNodeIP, this, Res);
             }
             return res;
         }

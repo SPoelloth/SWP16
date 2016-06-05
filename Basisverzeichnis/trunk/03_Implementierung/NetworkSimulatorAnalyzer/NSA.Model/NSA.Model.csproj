@@ -45,6 +45,7 @@
     <Compile Include="BusinessLogic\Project.cs" />
     <Compile Include="BusinessLogic\Simulation.cs" />
     <Compile Include="BusinessLogic\Testscenario.cs" />
+    <Compile Include="NetworkComponents\Helper Classes\Result.cs" />
     <Compile Include="NetworkComponents\Layers\ApplicationLayer.cs" />
     <Compile Include="NetworkComponents\Computer.cs" />
     <Compile Include="NetworkComponents\Connection.cs" />

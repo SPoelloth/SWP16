@@ -1,30 +1,38 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
     class DataLinkLayer : ILayer
     {
-        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, ref string interfaceName, Workstation destination,
-            Dictionary<string, Connection> connections, Routingtable routingtable)
+        public void ValidateSend(Hardwarenode nextNode, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {
-            if (connections[interfaceName].End.HasIP(nextNodeIP))
+            if (currentNode.GetConnections().ContainsKey(iface.Name))
             {
-                nextNode = connections[interfaceName].End;
+                nextNode = currentNode.GetConnections()[iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[iface.Name].End : currentNode.GetConnections()[iface.Name].Start;
                 return;
             }
-            else if (connections[interfaceName].Start.HasIP(nextNodeIP))
-            {
-                nextNode = connections[interfaceName].Start;
-                return;
-            }
-            //result string muss hier noch auf Fehlerfall gesetzt werden
+            Res.ErrorID = 2;
+            Res.Res = "There is no Connection at the Interface from choosen the Route.";
+            Res.LayerError = new DataLinkLayer();
+            Res.SendError = true;
             nextNode = null;
         }
 
-        public bool ValidateReceive()
+        public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
         {
-            return true;
+            List<Interface> ifaces = currentNode.GetInterfaces();
+            foreach (Interface i in ifaces)
+            {
+                if (nextNodeIP.Equals(i.IpAddress))
+                    return true;
+            }
+            Res.ErrorID = 3;
+            Res.Res = "The Connection is to the wrong node.";
+            Res.LayerError = new DataLinkLayer();
+            Res.SendError = false;
+            return false;
         }
     }
 }
