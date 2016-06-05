@@ -18,11 +18,11 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Returns the Hardwarenode with the name.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="Name">The name.</param>
         /// <returns>The Hardwarenode with this name or default value</returns>
-        public Hardwarenode GetHardwarenodeByName(string name)
+        public Hardwarenode GetHardwarenodeByName(string Name)
 	    {
-	        return nodes.FirstOrDefault(n => n.Name == name);
+	        return nodes.FirstOrDefault(N => N.Name == Name);
 	    }
 
         /// <summary>

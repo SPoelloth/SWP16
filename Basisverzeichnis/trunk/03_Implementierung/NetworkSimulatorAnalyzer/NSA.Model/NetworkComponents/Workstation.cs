@@ -57,6 +57,17 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
+        /// Gets the interface count.
+        /// </summary>
+        /// <returns>
+        /// int: interface count
+        /// </returns>
+        public int GetInterfaceCount()
+        {
+            return interfaces.Count;
+        }
+
+        /// <summary>
         /// Adds the route.
         /// </summary>
         /// <param name="Route">The route.</param>

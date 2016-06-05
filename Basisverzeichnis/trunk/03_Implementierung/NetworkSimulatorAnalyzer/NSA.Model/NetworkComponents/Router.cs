@@ -7,8 +7,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Router"/> class.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public Router(string name) : base(name)
+        /// <param name="Name">The name.</param>
+        public Router(string Name) : base(Name)
         {
         }
     }
