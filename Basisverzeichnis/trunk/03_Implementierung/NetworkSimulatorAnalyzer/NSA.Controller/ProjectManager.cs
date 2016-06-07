@@ -53,10 +53,10 @@ namespace NSA.Controller
         /// </summary>
         public void SaveAs()
         {
-            var openFileDialog = new OpenFileDialog();
-            var result = openFileDialog.ShowDialog();
+            var saveFileDialog = new SaveFileDialog();
+            var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
-            var file = openFileDialog.FileName;
+            var file = saveFileDialog.FileName;
             try
             {
                 WriteToXmlFile(file, currentProject);
