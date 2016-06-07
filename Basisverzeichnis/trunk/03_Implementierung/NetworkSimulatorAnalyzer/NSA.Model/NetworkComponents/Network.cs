@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
@@ -89,5 +90,45 @@ namespace NSA.Model.NetworkComponents
                 }
             }
 	    }
+
+        /// <summary>
+        /// Gets the workstation by ip.
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <returns></returns>
+        public Hardwarenode getWorkstationByIP(IPAddress ip)
+        {
+            foreach (Hardwarenode h in nodes)
+            {
+                if (h.HasIP(ip) == true) return h;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets all workstations.
+        /// </summary>
+        /// <returns>all Workstations</returns>
+        public List<Workstation> GetAllWorkstations()
+        {
+            List<Workstation> workstation = new List<Workstation>();
+
+            foreach (Hardwarenode h in nodes)
+            {
+                if (h is Workstation) workstation.Add((Workstation)h);
+            }
+            return workstation;
+        }
+
+        /// <summary>
+        /// Gets the name of the connection by.
+        /// </summary>
+        /// <param name="Name">The name.</param>
+        /// <returns>the connection with its name</returns>
+        public Connection GetConnectionByName(string Name)
+        {
+            return connections.FirstOrDefault(N => N.Name == Name);
+        }
+
     }
 }
