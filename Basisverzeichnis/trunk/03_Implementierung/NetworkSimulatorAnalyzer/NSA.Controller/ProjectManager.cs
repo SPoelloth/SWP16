@@ -54,6 +54,7 @@ namespace NSA.Controller
         public void SaveAs()
         {
             var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "XML|*.xml";
             var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
@@ -72,6 +73,7 @@ namespace NSA.Controller
         public void LoadProject()
         {
             var openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "XML|*.xml";
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
