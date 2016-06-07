@@ -99,17 +99,17 @@ namespace NSA.Controller.ViewControllers
 
         void SaveProjectAs_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            ProjectManager.Instance.SaveAs();
         }
 
         void SaveProject_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            ProjectManager.Instance.Save();
         }
 
         void OpenProject_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+           // ProjectManager.Instance.OpenProject();
         }
     }
 }

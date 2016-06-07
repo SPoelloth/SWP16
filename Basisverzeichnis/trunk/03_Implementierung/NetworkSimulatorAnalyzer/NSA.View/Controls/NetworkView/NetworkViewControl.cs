@@ -36,13 +36,24 @@ namespace NSA.View.Controls.NetworkView
             AddElement(new VisualConnection((WorkstationControl)testElements[2], 2, (WorkstationControl)testElements[5], 1, this));
             AddElement(new VisualConnection((WorkstationControl)testElements[2], 3, (WorkstationControl)testElements[6], 0, this));
             foreach (var e in testElements) AddElement(e);
+
         }
 
-        // protected override void OnPaint(PaintEventArgs e)
-        // {
-        //     base.OnPaint(e);
-        //     e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
-        // }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            //e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
+            if (debug)
+            {
+                var g = e.Graphics;
+                int i = 0;
+                foreach (var c in Controls.OfType<EditorElementBase>())
+                {
+                    g.DrawString($"{c.GetType().Name+c.ZIndex} X:{c.Location.X} Y:{c.Location.Y} Selected:{c.IsSelected}", SystemFonts.DefaultFont, Brushes.Blue, 2, i++ * (SystemFonts.DefaultFont.Height + 2));
+                }
+
+            }
+        }
 
         protected override void OnSizeChanged(EventArgs e)
         {
@@ -106,10 +117,15 @@ namespace NSA.View.Controls.NetworkView
             SelectionChanged?.Invoke(element);
         }
 
+        bool debug = false;
         protected override void OnClick(EventArgs e)
         {
             Element_Selected(null);
             base.OnClick(e);
+
+            var args = (MouseEventArgs)e;
+            debug = args.X < 10 && args.Y < 10;
+            if (debug) Invalidate();
         }
     }
 }
