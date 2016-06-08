@@ -7,8 +7,11 @@ namespace NSA.Controller
     {
         public List<Simulation> Simulations { get; }
 
-        
-        public SimulationManager()
+        public static SimulationManager Instance = new SimulationManager();
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
+        private SimulationManager()
         {
             Simulations = new List<Simulation>();
         }
