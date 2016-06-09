@@ -6,6 +6,7 @@ using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
+using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.Controller
 {
@@ -21,6 +22,16 @@ namespace NSA.Controller
         private ProjectManager()
         {
             CreateNewProject();
+        }
+
+        /// <summary>
+        /// Gets the NetworkRepresentation.
+        /// </summary>
+        /// <returns>Returns the NetworkRepresentation.</returns>
+        public List<EditorElementBase> GetNetworkRepresentation()
+        {
+            var networkRepresentation = new List<EditorElementBase>();
+            return networkRepresentation;
         }
 
         /// <summary>
@@ -53,8 +64,7 @@ namespace NSA.Controller
         /// </summary>
         public void SaveAs()
         {
-            var saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "XML|*.xml";
+            var saveFileDialog = new SaveFileDialog {Filter = "XML|*.xml"};
             var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
@@ -72,8 +82,7 @@ namespace NSA.Controller
         /// </summary>
         public void LoadProject()
         {
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "XML|*.xml";
+            var openFileDialog = new OpenFileDialog {Filter = "XML|*.xml"};
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
