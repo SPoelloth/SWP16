@@ -73,7 +73,9 @@ namespace NSA.Controller.ViewControllers
 
         void AdvancedSimulation_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            AdvancedSimulationForm form = new AdvancedSimulationForm();
+            var dlgresult = form.ShowDialog();
+            if (dlgresult != DialogResult.OK) return;
         }
 
         void QuickSimulation_Click(object sender, EventArgs e)

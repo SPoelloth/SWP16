@@ -33,12 +33,12 @@
             this.ttlLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.sourceComboBox = new System.Windows.Forms.ComboBox();
+            this.targetComboBox = new System.Windows.Forms.ComboBox();
+            this.hopCountTextBox = new System.Windows.Forms.TextBox();
+            this.animationTimeTextBox = new System.Windows.Forms.TextBox();
+            this.resultCombo = new System.Windows.Forms.ComboBox();
+            this.startButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // sourceLabel
@@ -86,75 +86,80 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Erwartetes Ergebnis:";
             // 
-            // comboBox1
+            // sourceComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(166, 13);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 5;
+            this.sourceComboBox.FormattingEnabled = true;
+            this.sourceComboBox.Location = new System.Drawing.Point(166, 13);
+            this.sourceComboBox.Name = "sourceComboBox";
+            this.sourceComboBox.Size = new System.Drawing.Size(121, 21);
+            this.sourceComboBox.TabIndex = 5;
+            this.sourceComboBox.SelectedIndexChanged += new System.EventHandler(this.sourceComboBox_SelectedIndexChanged);
             // 
-            // comboBox2
+            // targetComboBox
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(166, 40);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 6;
+            this.targetComboBox.FormattingEnabled = true;
+            this.targetComboBox.Location = new System.Drawing.Point(166, 40);
+            this.targetComboBox.Name = "targetComboBox";
+            this.targetComboBox.Size = new System.Drawing.Size(121, 21);
+            this.targetComboBox.TabIndex = 6;
+            this.targetComboBox.SelectedIndexChanged += new System.EventHandler(this.targetComboBox_SelectedIndexChanged);
             // 
-            // textBox1
+            // hopCountTextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(166, 67);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(121, 20);
-            this.textBox1.TabIndex = 7;
-            this.textBox1.Text = "255";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.hopCountTextBox.Location = new System.Drawing.Point(166, 67);
+            this.hopCountTextBox.Name = "hopCountTextBox";
+            this.hopCountTextBox.Size = new System.Drawing.Size(121, 20);
+            this.hopCountTextBox.TabIndex = 7;
+            this.hopCountTextBox.Text = "255";
+            this.hopCountTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.hopCountTextBox.TextChanged += new System.EventHandler(this.hopCountTextBox_TextChanged);
             // 
-            // textBox2
+            // animationTimeTextBox
             // 
-            this.textBox2.Location = new System.Drawing.Point(166, 93);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(121, 20);
-            this.textBox2.TabIndex = 8;
-            this.textBox2.Text = "1000 ms";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.animationTimeTextBox.Location = new System.Drawing.Point(166, 93);
+            this.animationTimeTextBox.Name = "animationTimeTextBox";
+            this.animationTimeTextBox.Size = new System.Drawing.Size(121, 20);
+            this.animationTimeTextBox.TabIndex = 8;
+            this.animationTimeTextBox.Text = "1000 ms";
+            this.animationTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.animationTimeTextBox.TextChanged += new System.EventHandler(this.animationTimeTextBox_TextChanged);
             // 
-            // comboBox3
+            // resultCombo
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Items.AddRange(new object[] {
+            this.resultCombo.FormattingEnabled = true;
+            this.resultCombo.Items.AddRange(new object[] {
             "Bitte Auswählen",
             "Erfolgreich",
             "Timeout",
             "Ziel nicht erreichbar",
             "Hier Ergebnisse aus Sim eintragen"});
-            this.comboBox3.Location = new System.Drawing.Point(166, 119);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(121, 21);
-            this.comboBox3.TabIndex = 9;
+            this.resultCombo.Location = new System.Drawing.Point(166, 119);
+            this.resultCombo.Name = "resultCombo";
+            this.resultCombo.Size = new System.Drawing.Size(121, 21);
+            this.resultCombo.TabIndex = 9;
+            this.resultCombo.SelectedIndexChanged += new System.EventHandler(this.resultCombo_SelectedIndexChanged);
             // 
-            // button1
+            // startButton
             // 
-            this.button1.Location = new System.Drawing.Point(216, 150);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Start";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.startButton.Location = new System.Drawing.Point(216, 150);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(75, 23);
+            this.startButton.TabIndex = 10;
+            this.startButton.Text = "Start";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // AdvancedSimulationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(303, 185);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.comboBox3);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.startButton);
+            this.Controls.Add(this.resultCombo);
+            this.Controls.Add(this.animationTimeTextBox);
+            this.Controls.Add(this.hopCountTextBox);
+            this.Controls.Add(this.targetComboBox);
+            this.Controls.Add(this.sourceComboBox);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.ttlLabel);
@@ -174,11 +179,11 @@
         private System.Windows.Forms.Label ttlLabel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox sourceComboBox;
+        private System.Windows.Forms.ComboBox targetComboBox;
+        private System.Windows.Forms.TextBox hopCountTextBox;
+        private System.Windows.Forms.TextBox animationTimeTextBox;
+        private System.Windows.Forms.ComboBox resultCombo;
+        private System.Windows.Forms.Button startButton;
     }
 }
