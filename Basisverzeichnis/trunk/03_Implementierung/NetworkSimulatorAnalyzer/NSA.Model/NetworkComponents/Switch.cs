@@ -7,7 +7,7 @@ namespace NSA.Model.NetworkComponents
     public class Switch : Hardwarenode
     {
         public List<string> Interfaces { get; private set; } = new List<string>();
-        private readonly string namePrefix = "eth0";
+        private readonly string interfaceNamePrefix = "eth";
         private int nextInterface;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace NSA.Model.NetworkComponents
         public string AddInterface()
         {
             //ToDo Mehrere Lücken, d.h. mehrer gelöschte Interfaces beachten!
-            string name = namePrefix + nextInterface;
+            string name = interfaceNamePrefix + nextInterface;
             Interfaces.Add(name);
 
             if (nextInterface == (Interfaces.Count - 1))
@@ -49,25 +49,26 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
-        /// Removes the interface with the given name.
+        /// Removes the interface with the given number.
         /// </summary>
-        /// <param name="IfaceName">The name of the interface to be removed.</param>
-        public void RemoveInterface(string IfaceName)
+        /// <param name="number">The number.</param>
+        public void RemoveInterface(int number)
         {
-            RemoveConnection(IfaceName);
-            Interfaces.Remove(IfaceName);
-            nextInterface = int.Parse(IfaceName.Substring(namePrefix.Length, IfaceName.Length - namePrefix.Length));
+            string ifaceName = interfaceNamePrefix + number;
+            RemoveConnection(ifaceName);
+            Interfaces.Remove(ifaceName);
+            nextInterface = int.Parse(ifaceName.Substring(interfaceNamePrefix.Length, ifaceName.Length - interfaceNamePrefix.Length));
         }
 
-        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
+        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
             foreach (Connection c in connections.Values)
             {
-                if (c.End.HasIP(nextNodeIP))
+                if (c.End.HasIP(NextNodeIp))
                 {
                     return c.End;
                 }
-                if (c.Start.HasIP(nextNodeIP))
+                if (c.Start.HasIP(NextNodeIp))
                 {
                     return c.Start;
                 }
@@ -76,11 +77,6 @@ namespace NSA.Model.NetworkComponents
             Res.Res = "There is no Connection for the next Hardwarenode.";
             Res.SendError = true;
             return null;
-        }
-
-        public override bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
-        {
-            return base.Receive(Tags, Res, nextNodeIP);
         }
     }
 }

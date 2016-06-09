@@ -98,6 +98,7 @@ namespace NSA.Controller
 
             // todo: wir müssen die entsprechende methode in Network aufrufen, oder
             // am Besten gleich Zugriff auf die nodes-liste bekommen
+            // methode in network hinzugefügt
 
             return node;
         }
@@ -111,6 +112,7 @@ namespace NSA.Controller
             List<Workstation> workstations = null;
             // todo: wir müssen die entsprechende methode in Network aufrufen, oder
             // am Besten gleich Zugriff auf die nodes-liste bekommen
+            // methode in network hinzugefügt
 
             return workstations;
         }
@@ -160,8 +162,12 @@ namespace NSA.Controller
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                Interface interfaceObj = new Interface(ipAddress, subnetmask, number);
-                workstation.AddInterface(interfaceObj);
+                // Alte AddInterface Methode
+                //Interface interfaceObj = new Interface(ipAddress, subnetmask, number);
+                //workstation.AddInterface(interfaceObj);
+
+                // Neu (Nummer wird automatisch vergeben)
+                workstation.AddInterface(ipAddress, subnetmask);
             }
         }
 
@@ -178,8 +184,14 @@ namespace NSA.Controller
                 // todo: it would be good if the Interface had a property "Number", so that we could search for it
                 // (because if interface name-pattern changes, this method would not work).
                 // or alternatively add a "static const string name prefix = "eth"" to Interfac-class
-                Interface myInterface = workstation.GetInterfaces().Single(i => i.Name == "eth"+number);
-                workstation.RemoveInterface(myInterface);
+
+
+                //Interface myInterface = workstation.GetInterfaces().Single(i => i.Name == "eth"+number);
+                //workstation.RemoveInterface(myInterface);
+                
+                // new:
+                workstation.RemoveInterface(number);
+
             }
         }
 
@@ -198,9 +210,17 @@ namespace NSA.Controller
             if (null != workstation)
             {
                 // todo: we need following Methods in network:
+
+                // Network has no Routingtable. 
+                // methods are available via the workstation object directly
+
                 // make Routingtable in Network public
                 // or
                 // add "int GetRoutesCount()" and "Route GetRouteAt(int routeIndex)" to Network
+
+                // example code
+                workstation.GetRouteCount();
+                workstation.GetRouteAt(1);
             }
         }
 
@@ -238,7 +258,10 @@ namespace NSA.Controller
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                // todo: we need following Methods in network:
+                // todo: we need following Methods in network: 
+                // Network has no Routingtable. 
+                // methods are available via the workstation object directly
+
                 // make Routingtable in Network public
                 // or
                 // add "int GetRoutesCount()" and "Route GetRouteAt(int routeIndex)" to Network
@@ -357,6 +380,7 @@ namespace NSA.Controller
             //Connection connection = network.GetConnectionByName(name); // todo: misssing method in Network
             //NetworkViewController.Instance.RemoveConnection(connection);
             //network.RemoveConnection(name); // todo: misssing method in Network
+            // methoden vorhanden
         }
     }
 }

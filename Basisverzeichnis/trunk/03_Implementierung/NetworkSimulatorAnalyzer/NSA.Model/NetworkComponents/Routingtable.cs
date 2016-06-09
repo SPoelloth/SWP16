@@ -3,6 +3,8 @@ using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
+    // Kann komplett entfernt werden, wenn niemand etwas dagegen hat.
+
     public class Routingtable
     {
         private Dictionary<string, Route> routes = new Dictionary<string, Route>();

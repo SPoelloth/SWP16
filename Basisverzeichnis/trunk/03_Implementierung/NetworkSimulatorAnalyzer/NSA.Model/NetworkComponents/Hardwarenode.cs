@@ -6,7 +6,7 @@ namespace NSA.Model.NetworkComponents
 {
     public class Hardwarenode
     {
-        protected Layerstack layerstack = new Layerstack();
+        protected Layerstack Layerstack = new Layerstack();
         protected Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
@@ -24,9 +24,9 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a connection.
         /// </summary>
-        /// <param name="Con">The connection to be added.</param>
         /// <param name="IfaceName">Name of the interface where the connection should be added.</param>
-        public virtual void AddConnection(Connection Con, string IfaceName)
+        /// <param name="Con">The connection to be added.</param>
+        public void AddConnection(string IfaceName, Connection Con)
         {
             connections.Add(IfaceName, Con);
         }
@@ -46,7 +46,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Lay">The layer to be added.</param>
         public void AddLayer(ILayer Lay)
         {
-            layerstack.AddLayer(Lay);
+            Layerstack.AddLayer(Lay);
         }
 
         /// <summary>
@@ -55,15 +55,15 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Lay">The layer to be removed.</param>
         public void RemoveLayer(ILayer Lay)
         {
-            layerstack.RemoveLayer(Lay);
+            Layerstack.RemoveLayer(Lay);
         }
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
         /// </summary>
-        /// <param name="ip">The ip.</param>
+        /// <param name="Ip">The ip.</param>
         /// <returns>A bool</returns>
-        public virtual bool HasIP(IPAddress ip)
+        public virtual bool HasIP(IPAddress Ip)
         {
             return false;
         }
@@ -74,9 +74,9 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="Res">The Result of the simulation</param>
-        /// <param name="nextNodeIP">The IP of the next Node</param>
+        /// <param name="NextNodeIp">The IP of the next Node</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
+        public virtual Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
             return null;
         }
@@ -86,9 +86,9 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="Res">The Result of the simulation</param>
-        /// <param name="nextNodeIP"></param>
+        /// <param name="NextNodeIp"></param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
+        public virtual bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
             return true;
         }

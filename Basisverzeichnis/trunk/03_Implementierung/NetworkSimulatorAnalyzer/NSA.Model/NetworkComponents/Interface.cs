@@ -8,7 +8,7 @@ namespace NSA.Model.NetworkComponents
         public IPAddress IpAddress { get; set; }
         public IPAddress Subnetmask { get; set; }
 
-        public string NamePrefix { get; } = "eth";
+        public static string NamePrefix { get; } = "eth";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Interface" /> class.

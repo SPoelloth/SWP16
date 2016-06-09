@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 using NSA.Model.NetworkComponents.Layers;
@@ -9,9 +10,12 @@ namespace NSA.Model.NetworkComponents
     public class Workstation : Hardwarenode
     {
         private List<Interface> interfaces = new List<Interface>();
-        private Routingtable routingtable = new Routingtable();
+        // Warum nochmal Dictionary bzw. was ist der string ?
+        private Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
+        
+        private int nextInterface;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
@@ -20,16 +24,19 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Name">The Name.</param>
         public Workstation(string Name) : base(Name)
         {
-            layerstack.AddLayer(new PhysicalLayer());
-            layerstack.AddLayer(new DataLinkLayer());
-            layerstack.AddLayer(new NetworkLayer());
-            layerstack.AddLayer(new TransportLayer());
-            layerstack.AddLayer(new SessionLayer());
-            layerstack.AddLayer(new PresentationLayer());
-            layerstack.AddLayer(new ApplicationLayer());
+            Layerstack.AddLayer(new PhysicalLayer());
+            Layerstack.AddLayer(new DataLinkLayer());
+            Layerstack.AddLayer(new NetworkLayer());
+            Layerstack.AddLayer(new TransportLayer());
+            Layerstack.AddLayer(new SessionLayer());
+            Layerstack.AddLayer(new PresentationLayer());
+            Layerstack.AddLayer(new ApplicationLayer());
             StandardGateway = null;
         }
 
+
+        #region methods
+        #region interface methods
         /// <summary>
         /// Gets the interfaces.
         /// </summary>
@@ -42,22 +49,36 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
-        /// Adds a new interface to the workstation
+        /// Adds a new interface with the given IP and subnetmask
         /// </summary>
-        /// <param name="Iface">The iface.</param>
-        public void AddInterface(Interface Iface)
+        /// <param name="Ip">The IP of the interface.</param>
+        /// <param name="Subnetmask">The subnetmask.</param>
+        /// <returns>The newly added Interface</returns>
+        public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask)
         {
-            interfaces.Add(Iface);
+            //ToDo Mehrere Lücken, d.h. mehrere gelöschte Interfaces beachten!
+            Interface interfaceObj = new Interface(Ip, Subnetmask, nextInterface);
+
+            interfaces.Add(interfaceObj);
+
+            if (nextInterface == (interfaces.Count - 1))
+                nextInterface++;
+            else
+                nextInterface = interfaces.Count;
+
+            return interfaceObj;
         }
 
         /// <summary>
-        /// Removes the given interface.
+        /// Removes the interface with the given number.
         /// </summary>
-        /// <param name="Iface">The iface.</param>
-        public void RemoveInterface(Interface Iface)
+        /// <param name="number">The number.</param>
+        public void RemoveInterface(int number)
         {
-            RemoveConnection(Iface.Name);
-            interfaces.Remove(Iface);
+            string name = Interface.NamePrefix + number;
+            RemoveConnection(name);
+            interfaces.Remove(interfaces.Find(I => I.Name.Equals(name)));
+            nextInterface = int.Parse(name.Substring(Interface.NamePrefix.Length, name.Length - Interface.NamePrefix.Length));
         }
 
         /// <summary>
@@ -71,23 +92,35 @@ namespace NSA.Model.NetworkComponents
             return interfaces.Count;
         }
 
+        #endregion
+        #region routingtable methods
         /// <summary>
         /// Adds the route.
         /// </summary>
-        /// <param name="n">The name.</param>
+        /// <param name="N">The name.</param>
         /// <param name="Route">The route.</param>
-        public void AddRoute(string n, Route Route)
+        public void AddRoute(string N, Route Route)
         {
-            routingtable.AddRoute(n, Route);
+            routingtable.Add(N, Route);
         }
 
         /// <summary>
         /// Removes the route.
         /// </summary>
-        /// <param name="n">The name.</param>
-        public void RemoveRoute(string n)
+        /// <param name="N">The name.</param>
+        public void RemoveRoute(string N)
         {
-            routingtable.RemoveRoute(n);
+            routingtable.Remove(N);
+        }
+
+
+        /// <summary>
+        /// Gets the route count.
+        /// </summary>
+        /// <returns>int: number of routes in the routingtable</returns>
+        public int GetRouteCount()
+        {
+            return routingtable.Count;
         }
 
         /// <summary>
@@ -96,22 +129,38 @@ namespace NSA.Model.NetworkComponents
         /// <returns>The Routes</returns>
         public Dictionary<string, Route>.ValueCollection GetRoutes()
         {
-            return routingtable.GetRoutes();
+            return routingtable.Values;
+        }
+
+        /// <summary>
+        /// Gets the route at the given index.
+        /// </summary>
+        /// <param name="Index">The index.</param>
+        /// <returns></returns>
+        public Route GetRouteAt(int Index)
+        {
+            return routingtable.ElementAt(Index).Value;
         }
 
         /// <summary>
         /// Sets the route.
         /// </summary>
-        /// <param name="n">The name.</param>
-        /// <param name="d">The destination.</param>
-        /// <param name="s">The subnetmask.</param>
-        /// <param name="g">The gateway.</param>
-        /// <param name="i">The interface.</param>
-        /// <returns></returns>
-        public bool SetRoute(string n, IPAddress d, IPAddress s, IPAddress g, Interface i)
+        /// <param name="RouteName">The name of the route.</param>
+        /// <param name="Destination">The new destination.</param>
+        /// <param name="Subnetmask">The new subnetmask.</param>
+        /// <param name="Gateway">The new gateway.</param>
+        /// <param name="Iface">The new interface.</param>
+        /// <returns>bool: false if the route could not be found, otherwise true</returns>
+        public bool SetRoute(string RouteName, IPAddress Destination, IPAddress Subnetmask, IPAddress Gateway, Interface Iface)
         {
-            return routingtable.SetRoute(n, d, s, g, i);
+            if (routingtable.ContainsKey(RouteName))
+            {
+                routingtable[RouteName] = new Route(RouteName, Destination, Subnetmask, Gateway, Iface);
+                return true;
+            }
+            return false;
         }
+        #endregion
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
@@ -138,21 +187,21 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="Result">String representing the result</param>
-        /// <param name="nextNodeIP"></param>
+        /// <param name="NextNodeIp"></param>
         /// <returns>
         /// The Hardwarenode which received the package or null if an error occured
         /// </returns>
-        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Result, IPAddress nextNodeIP)
+        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Result, IPAddress NextNodeIp)
         {
             Hardwarenode nextNode = this;
             Interface iface = null;
-            for (int i = layerstack.GetSize() - 1; i >= 0; i--)
+            for (int i = Layerstack.GetSize() - 1; i >= 0; i--)
             {
                 if (nextNode != null)
                 {
                     Workstation dest = Destination as Workstation;
                     if(dest != null)
-                        layerstack.GetLayer(i).ValidateSend(nextNode, nextNodeIP, iface, dest, this, Result);
+                        Layerstack.GetLayer(i).ValidateSend(nextNode, NextNodeIp, iface, dest, this, Result);
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
@@ -167,19 +216,22 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="Res"></param>
-        /// <param name="nextNodeIP"></param>
+        /// <param name="NextNodeIp"></param>
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress nextNodeIP)
+        public override bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
             bool res = true;
-            for (int i = 0; i < layerstack.GetSize(); i++)
+            for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = layerstack.GetLayer(i).ValidateReceive(nextNodeIP, this, Res);
+                    res = Layerstack.GetLayer(i).ValidateReceive(NextNodeIp, this, Res);
             }
             return res;
         }
+
+        #endregion
     }
+    
 }
