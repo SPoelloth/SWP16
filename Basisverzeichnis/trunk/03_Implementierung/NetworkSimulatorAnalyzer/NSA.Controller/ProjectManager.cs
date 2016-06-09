@@ -189,6 +189,7 @@ namespace NSA.Controller
         private static void Form_Shown(object Sender, System.EventArgs E)
         {
             ToolbarController.Instance.Init();
+            NetworkViewController.Instance.Initialize();
         }
     }
 }

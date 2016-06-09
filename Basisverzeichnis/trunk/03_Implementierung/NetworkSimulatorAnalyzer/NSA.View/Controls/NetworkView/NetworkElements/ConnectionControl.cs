@@ -13,8 +13,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         Point Point1, Point2;
 
-        public ConnectionControl(Point point1, Point point2)
+        public ConnectionControl(string name, Point point1, Point point2)
         {
+            Name = name;
             Point1 = point1;
             Point2 = point2;
             DoubleBuffered = true;
@@ -44,6 +45,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            //base.OnMouseClick(e);
         }
     }
 }

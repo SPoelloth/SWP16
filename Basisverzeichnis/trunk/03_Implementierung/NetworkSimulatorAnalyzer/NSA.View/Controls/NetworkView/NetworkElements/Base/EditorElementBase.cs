@@ -9,6 +9,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         Image Image;
         string ControlName;
         public Action<EditorElementBase> Selected;
+        public Action RemovePressed;
 
         public static int ZIndexStart = 0;
         public int ZIndex;
@@ -86,5 +87,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         {
             throw new InvalidOperationException();
         }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete) RemovePressed?.Invoke();
+        }
+        
     }
 }

@@ -338,7 +338,6 @@ namespace NSA.Controller
             Hardwarenode node = network.GetHardwarenodeByName(name);
 
             network.RemoveHardwarnode(name);
-            NetworkViewController.Instance.RemoveHardwarenode(node);
 
             if (uniqueNodeNames.Contains(name))
             {
