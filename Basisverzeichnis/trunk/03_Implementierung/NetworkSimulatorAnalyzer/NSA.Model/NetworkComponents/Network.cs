@@ -96,7 +96,7 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="ip">The ip.</param>
         /// <returns></returns>
-        public Hardwarenode getWorkstationByIP(IPAddress ip)
+        public Hardwarenode GetWorkstationByIP(IPAddress ip)
         {
             foreach (Hardwarenode h in nodes)
             {
