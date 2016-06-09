@@ -74,42 +74,44 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds the route.
         /// </summary>
+        /// <param name="n">The name.</param>
         /// <param name="Route">The route.</param>
-        public void AddRoute(Route Route)
+        public void AddRoute(string n, Route Route)
         {
-            routingtable.AddRoute(Route);
+            routingtable.AddRoute(n, Route);
         }
 
         /// <summary>
         /// Removes the route.
         /// </summary>
-        /// <param name="Route">The route.</param>
-        public void RemoveRoute(Route Route)
+        /// <param name="n">The name.</param>
+        public void RemoveRoute(string n)
         {
-            routingtable.RemoveRoute(Route);
+            routingtable.RemoveRoute(n);
         }
 
         /// <summary>
-        /// Gets the routingtable entry at the given index.
+        /// Gets the routes.
         /// </summary>
-        /// <param name="Index">The index.</param>
-        /// <returns>
-        /// The <see cref="Route"/> object at the given index.
-        /// </returns>
-        public Route GetRouteAt(int Index)
+        /// <returns>The Routes</returns>
+        public Dictionary<string, Route>.ValueCollection GetRoutes()
         {
-            return routingtable.GetRouteAt(Index);
+            return routingtable.GetRoutes();
         }
 
         /// <summary>
-        /// Gets number of route entries in the routing table.
+        /// Sets the route.
         /// </summary>
-        /// <returns>int: Number of route entries</returns>
-        public int GetRouteCount()
+        /// <param name="n">The name.</param>
+        /// <param name="d">The destination.</param>
+        /// <param name="s">The subnetmask.</param>
+        /// <param name="g">The gateway.</param>
+        /// <param name="i">The interface.</param>
+        /// <returns></returns>
+        public bool SetRoute(string n, IPAddress d, IPAddress s, IPAddress g, Interface i)
         {
-            return routingtable.GetSize();
+            return routingtable.SetRoute(n, d, s, g, i);
         }
-
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP

@@ -16,9 +16,9 @@ namespace NSA.Model.NetworkComponents.Layers
             List<Interface> interfaces = destination.GetInterfaces();
             foreach (Interface i in interfaces)
             {
-                for (int j = 0; j < currentNode.GetRouteCount(); j++)
+                Dictionary<string, Route>.ValueCollection routes = currentNode.GetRoutes();
+                foreach(Route r in routes)
                 {
-                    Route r = currentNode.GetRouteAt(j);
                     if (iface.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
                     {
                         nextNodeIP = r.Gateway;

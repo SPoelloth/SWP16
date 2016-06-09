@@ -207,19 +207,20 @@ namespace NSA.Controller
         /// <summary>
         /// Adds a route to the routingtable of the workstation.
         /// </summary>
+        /// <param name="n">The name.</param>
         /// <param name="workstationName">The name of the workstation</param>
         /// <param name="destination">The destination address</param>
         /// <param name="subnetmask">The subnetmask</param>
         /// <param name="gateway">The gateway</param>
         /// <param name="iface">The interface</param>
-        public void AddRoute(string workstationName, IPAddress destination, IPAddress subnetmask,
+        public void AddRoute(string n, string workstationName, IPAddress destination, IPAddress subnetmask,
             IPAddress gateway, Interface iface)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                Route route = new Route(destination, subnetmask, gateway, iface);
-                workstation.AddRoute(route);
+                Route route = new Route(n, destination, subnetmask, gateway, iface);
+                workstation.AddRoute(n, route);
             }
         }
 
