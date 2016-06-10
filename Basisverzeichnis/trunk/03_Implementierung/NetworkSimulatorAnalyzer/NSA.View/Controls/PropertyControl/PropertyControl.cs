@@ -108,6 +108,38 @@ namespace NSA.View.Controls.PropertyControl
             }
         }
 
+        public void ClearControls()
+        {
+            foreach (Control c in flpContents.Controls)
+            {
+                if (c is InterfaceConfigControl)
+                {
+                    InterfaceConfigControl icc = c as InterfaceConfigControl;
+                    icc.InterfaceChanged -= InterfaceConfigControl_InterfaceChanged;
+                    icc.Closing -= ConfigControl_Closing;
+                } else if (c is RouteConfigControl)
+                {
+                    RouteConfigControl rcc = c as RouteConfigControl;
+                    rcc.RouteChanged -= RouteConfigControl_RouteChanged;
+                    rcc.Closing -= ConfigControl_Closing;
+                } else if (c is GWConfigControl)
+                {
+                    GWConfigControl gcc = c as GWConfigControl;
+                    gcc.GatewayChanged -= GWConfigControl_GatewayChanged;
+                    gcc.Closing -= ConfigControl_Closing;
+                } else if (c is LayerstackConfigControl)
+                {
+                    LayerstackConfigControl lscc = c as LayerstackConfigControl;
+                    // TODO: Implement once implemented (...)
+                    //lscc.LayerChanged -= LayerStackConfigControl_LayerChanged;
+                    lscc.Closing -= ConfigControl_Closing;
+                } else if (c is AddButton)
+                {
+                    // TODO: Handle AddRouteButton and AddInterfaceButton, unsubscribe from click event
+                }
+                flpContents.Controls.Remove(c);
+            }
+        }
         #endregion Methods
 
         #region Eventhandling
@@ -188,5 +220,6 @@ namespace NSA.View.Controls.PropertyControl
         }
 
         #endregion Eventhandling
+
     }
 }

@@ -89,6 +89,7 @@ namespace NSA.Controller.ViewControllers
         public void LoadElementProperties(string elementName)
         {
             var node = NetworkManager.Instance.GetHardwarenodeByName(elementName);
+            propertyControl.ClearControls();
             if (node != null)
             {
                 if (node is Workstation)
@@ -119,6 +120,7 @@ namespace NSA.Controller.ViewControllers
                         // load gateway config control
                         propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
                     }
+                    propertyControl.DisplayElements();
                 }
             }
         }
