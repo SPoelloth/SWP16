@@ -92,35 +92,15 @@ namespace NSA.Model.NetworkComponents
             return interfaces.Count;
         }
 
-        /// <summary>
-        /// Changes the interface.
-        /// </summary>
-        /// <param name="number">The number of the interface.</param>
-        /// <param name="ipAddress">The new IPAddress of the interface.</param>
-        /// <param name="subnetmask">The new subnetmask of the interface.</param>
-        public void SetInterface(int number, IPAddress ipAddress, IPAddress subnetmask)
-        {
-            // todo
-            // Vorschlag für diese Methode. 
-            // Grund: wenn im NetworkManager "InterfaceChanged(...)" aufgerufen wird, müsste ansonsten
-            // Workstation sowiese benachrigtigt werden. Und auch die Connections in Workstation, die ja 
-            // protected sind, müssten aktualisíert werden (?)
-            // s. a. das todo in "InterfaceChanged()" für mehr Details
-        }
-
         #endregion
         #region routingtable methods
         /// <summary>
         /// Adds the route.
         /// </summary>
-        /// <param name="N">The name.</param>
-        /// <param name="Route">The route.</param>
-        public void AddRoute(string N, Route Route)
+        /// <param name="route">The route.</param>
+        public void AddRoute(Route route)
         {
-            // todo: Route-Name wird offenbar doppelt abgespeichert (in der Route und in Dictionary)
-            // -> ein Mal sollte reichen, weil sonst könnte es passieren, dass man der methode 
-            // unterschiedliche Namen übergibt.
-            routingtable.Add(N, Route);
+            routingtable.Add(route.Name, route);
         }
 
         /// <summary>

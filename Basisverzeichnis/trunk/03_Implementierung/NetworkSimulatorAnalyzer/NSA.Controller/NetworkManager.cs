@@ -76,25 +76,18 @@ namespace NSA.Controller
         private NetworkManager()
         {
             network = new Network();
-            createConfigControls();
         }
 
-        public void createConfigControls()
-        {
-            // todo: klären, was genau hier passieren soll
-            // Ursprünglich war diese Funktion (eigentlich private) dafür gedacht,
-            // die zu den Elementen gehörenden ConfigControls zu erstellen.
-            // Bei der momentanen Situation denke ich ist diese Methode überflüssig (Tamara)
-        }
+        #region Workstation-related methods
 
         /// <summary>
         /// Searches and returns a workstation
         /// </summary>
         /// <param name="ip">The name of the workstation</param>
-        /// <returns>The found workstation</returns>
+        /// <returns>The found workstation or null if it could not be found.</returns>
         public Hardwarenode GetWorkstationByIP(IPAddress ip)
         {
-            return network.GetWorkstationByIP(ip);
+            return network.GetWorkstationByIP(ip) as Workstation;
         }
 
         /// <summary>
@@ -106,13 +99,9 @@ namespace NSA.Controller
             return network.GetAllWorkstations();
         }
 
-        public void HardwarenodeSelected()
-        {
-            // todo: klären, was die methode machen soll
-            // wohl auch überflüssig geworden
-        }
+        #endregion
 
-        // todo: in methoden exceptions werfen, wenn die workstations nicht existieren
+        #region Interface-related methods
 
         /// <summary>
         /// Changes the interface of the workstation.
@@ -121,6 +110,7 @@ namespace NSA.Controller
         /// <param name="number">The number of the interface(e.g. 0 for eth0).</param>
         /// <param name="ipAddress">The new IPAddress of the interface</param>
         /// <param name="subnetmask">The new subnetmask of the interface</param>
+        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
         public void InterfaceChanged(string workstationName, int number, IPAddress ipAddress, IPAddress subnetmask)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
@@ -129,14 +119,10 @@ namespace NSA.Controller
                 Interface myInterface = workstation.GetInterfaces().Single(i => i.Name == Interface.NamePrefix+number);
                 myInterface.IpAddress = ipAddress;
                 myInterface.Subnetmask = subnetmask;
-                // todo: Testen, dass diese methode sich wie gewünscht verhält.
-                // Weil: Wir haben nun zwar die eigenschaften vom Inteface geändert.
-                // Aber müssen wir auch die workstation benachrichtgigen, dass sich z.b. die ip-Adresse
-                // vom Interface verändert hat?
-                // Workstation hat auch die Connections für die Interfaces vom Hardwarenode geerbt.
-                // Sollen die Connections für die anderen Nodes, die mit diesem Inteface verbunden sind,
-                // nun entfernt werden? Denn die anderen Nodes erwarten wahrscheinlich nicht unbedingt,
-                // dass sich die IpAdresse vom Interface ihres Verbindungs-Nodes sich ändern (?)
+            }
+            else
+            {
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
             }
         }
 
@@ -146,12 +132,17 @@ namespace NSA.Controller
         /// <param name="workstationName">The name of the workstation</param>
         /// <param name="ipAddress">The ipAddress</param>
         /// <param name="subnetmask">The subnetmask</param>
+        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
         public void AddInterface(string workstationName, IPAddress ipAddress, IPAddress subnetmask)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
                 workstation.AddInterface(ipAddress, subnetmask);
+            }
+            else
+            {
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
             }
         }
 
@@ -160,6 +151,7 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="workstationName">The name of the workstation</param>
         /// <param name="number">The number of the interface(e.g. 0 for eth0).</param>
+        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
         public void RemoveInterface(string workstationName, int number)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
@@ -167,7 +159,15 @@ namespace NSA.Controller
             {
                 workstation.RemoveInterface(number);
             }
+            else
+            {
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
+            }
         }
+
+        #endregion
+
+        #region Route-related methods
 
         /// <summary>
         /// Updates the changed route with new values
@@ -178,13 +178,21 @@ namespace NSA.Controller
         /// <param name="subnetmask">The new subnetmask</param>
         /// <param name="gateway">The new gateway</param>
         /// <param name="iface">The new interface</param>
+        /// <exception cref="System.ArgumentException">Workstation or route could not be found</exception>
         public void RouteChanged(string workstationName, string routeName, IPAddress destination, IPAddress subnetmask,
             IPAddress gateway, Interface iface)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                workstation.SetRoute(routeName, destination, subnetmask, gateway, iface);
+                if (!workstation.SetRoute(routeName, destination, subnetmask, gateway, iface))
+                {
+                    throw new ArgumentException("Route with the name " + routeName + " could not be found");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
             }
         }
 
@@ -197,6 +205,7 @@ namespace NSA.Controller
         /// <param name="subnetmask">The subnetmask</param>
         /// <param name="gateway">The gateway</param>
         /// <param name="iface">The interface</param>
+        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
         public void AddRoute(string workstationName, string routeName, IPAddress destination, IPAddress subnetmask,
             IPAddress gateway, Interface iface)
         {
@@ -204,15 +213,21 @@ namespace NSA.Controller
             if (null != workstation)
             {
                 Route route = new Route(routeName, destination, subnetmask, gateway, iface);
-                workstation.AddRoute(routeName, route);
+                workstation.AddRoute(route);
+            }
+            else
+            {
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
             }
         }
+
 
         /// <summary>
         /// Removes a route from the routingtable of the workstation.
         /// </summary>
         /// <param name="workstationName">The name of the workstation</param>
         /// <param name="routeName">The name of the route</param>
+        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
         public void RemoveRoute(string workstationName, string routeName)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
@@ -220,27 +235,21 @@ namespace NSA.Controller
             {
                 workstation.RemoveRoute(routeName);
             }
-        }
-
-        /// <summary>
-        /// Changes the gateway of a workstation.
-        /// </summary>
-        /// <param name="workstationName">The name of the workstation</param>
-        /// <param name="gateway">The new gateway</param>
-        public void GatewayChanged(string workstationName, IPAddress gateway)
-        {
-            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
-            if (null != workstation)
+            else
             {
-                workstation.StandardGateway = gateway;
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
             }
         }
+
+        #endregion
+
+        #region Hardwarenode-related methods
 
         /// <summary>
         /// Returns a hardwarenode object.
         /// </summary>
         /// <param name="name">The name of the hardwarenode</param>
-        /// <returns>The hardwarenode object</returns>
+        /// <returns>The hardwarenode object or null if it does not exist</returns>
         public Hardwarenode GetHardwarenodeByName(string name)
         {
             return network.GetHardwarenodeByName(name);
@@ -293,29 +302,17 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Creates a new connection. Adds the connection to the Network and to the NetworkViewController.
-        /// </summary>
-        /// <param name="start">The start node of the connection</param>
-        /// <param name="StartNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the start node</param>
-        /// <param name="end">The end node of the connection</param>
-        /// <param name="EndNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the end node</param>
-        public void CreateConnection(string start, string StartNodeInterfaceName, string end, string EndNodeInterfaceName)
-        {
-            Hardwarenode A = GetHardwarenodeByName(start);
-            Hardwarenode B = GetHardwarenodeByName(end);
-            Connection newConnection = new Connection(A, B);
-
-            network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, newConnection);
-            NetworkViewController.Instance.AddConnection(newConnection);
-        }
-
-        /// <summary>
         /// Removes the hardwarenode from the Network and from the NetworkViewController.
         /// </summary>
         /// <param name="name">The name of the node to be removed</param>
+        /// <exception cref="System.ArgumentException">Hardwarenode could not be found</exception>
         public void RemoveHardwarenode(string name)
         {
             Hardwarenode node = network.GetHardwarenodeByName(name);
+            if (null == node)
+            {
+                throw new ArgumentException("Hardwarenode with name " + name + "could not be found");
+            }
 
             network.RemoveHardwarnode(name);
 
@@ -327,14 +324,72 @@ namespace NSA.Controller
             }
         }
 
+        #endregion
+
+        #region Connection-related methods
+
+        /// <summary>
+        /// Creates a new connection. Adds the connection to the Network and to the NetworkViewController.
+        /// </summary>
+        /// <param name="start">The start node of the connection</param>
+        /// <param name="StartNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the start node</param>
+        /// <param name="end">The end node of the connection</param>
+        /// <param name="EndNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the end node</param>
+        /// <exception cref="System.ArgumentException">Start or end node could not be found</exception>
+        public void CreateConnection(string start, string StartNodeInterfaceName, string end, string EndNodeInterfaceName)
+        {
+            Hardwarenode A = GetHardwarenodeByName(start);
+            if (null == A)
+            {
+                throw new ArgumentException("Hardwarenode with the name " + start + " could not be found");
+            }
+            Hardwarenode B = GetHardwarenodeByName(end);
+            if (null == B)
+            {
+                throw new ArgumentException("Hardwarenode with the name " + end + " could not be found");
+            }
+
+            Connection newConnection = new Connection(A, B);
+
+            network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, newConnection);
+            NetworkViewController.Instance.AddConnection(newConnection);
+        }
+
         /// <summary>
         /// Removes the connection from the Network and from the NetworkViewController.
         /// </summary>
         /// <param name="name">The name of the connection to be removed</param>
+        /// <exception cref="System.ArgumentException">Connection could not be found</exception>
         public void RemoveConnection(string name)
         {
             Connection connection = network.GetConnectionByName(name);
+            if (null == connection)
+            {
+                throw new ArgumentException("Connection with the name " + name + "could not be found");
+            }
+
             network.RemoveConnection(name);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Changes the gateway of a workstation.
+        /// </summary>
+        /// <param name="workstationName">The name of the workstation</param>
+        /// <param name="gateway">The new gateway</param>
+        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
+        public void GatewayChanged(string workstationName, IPAddress gateway)
+        {
+            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
+            if (null != workstation)
+            {
+                workstation.StandardGateway = gateway;
+            }
+            else
+            {
+                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
+            }
         }
     }
 }
