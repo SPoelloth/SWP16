@@ -60,23 +60,101 @@ namespace NSA.Model.NetworkComponents
             nextInterface = int.Parse(ifaceName.Substring(interfaceNamePrefix.Length, ifaceName.Length - interfaceNamePrefix.Length));
         }
 
-        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
+        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
+            List<Hardwarenode> nextNodes = new List<Hardwarenode>();
             foreach (Connection c in connections.Values)
             {
                 if (c.End.HasIP(NextNodeIp))
                 {
-                    return c.End;
+                    nextNodes.Add(c.End);
+                    return nextNodes;
                 }
                 if (c.Start.HasIP(NextNodeIp))
                 {
-                    return c.Start;
+                    nextNodes.Add(c.Start);
+                    return nextNodes;
+                }
+            }
+            //Check if the next switch can send it
+            foreach (Connection c in connections.Values)
+            {
+                if (c.Start.Equals(this))
+                {
+                    Switch s = c.End as Switch;
+                    if (s != null)
+                    {
+                        if (s.SendToIP(nextNodes, NextNodeIp))
+                        {
+                            nextNodes.Insert(0, s);
+                            return nextNodes;
+                        }
+                    }
+                }
+                else
+                {
+                    Switch s = c.Start as Switch;
+                    if (s != null)
+                    {
+                        if (s.SendToIP(nextNodes, NextNodeIp))
+                        {
+                            nextNodes.Insert(0, s);
+                            return nextNodes;
+                        }
+                    }
                 }
             }
             Res.ErrorID = 4;
             Res.Res = "There is no Connection for the next Hardwarenode.";
             Res.SendError = true;
             return null;
+        }
+
+        public bool SendToIP(List<Hardwarenode> NextNodes, IPAddress NextNodeIp)
+        {
+            foreach (Connection c in connections.Values)
+            {
+                if (c.End.HasIP(NextNodeIp))
+                {
+                    NextNodes.Add(c.End);
+                    return true;
+                }
+                if (c.Start.HasIP(NextNodeIp))
+                {
+                    NextNodes.Add(c.Start);
+                    return true;
+                }
+            }
+            //check if the next switch can send it
+            foreach (Connection c in connections.Values)
+            {
+                if (c.Start.Equals(this))
+                {
+                    Switch s = c.End as Switch;
+                    if (s != null)
+                    {
+                        if (s.SendToIP(NextNodes, NextNodeIp))
+                        {
+                            NextNodes.Insert(0, s);
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    Switch s = c.Start as Switch;
+                    if (s != null)
+                    {
+                        if (s.SendToIP(NextNodes, NextNodeIp))
+                        {
+                            NextNodes.Insert(0, s);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

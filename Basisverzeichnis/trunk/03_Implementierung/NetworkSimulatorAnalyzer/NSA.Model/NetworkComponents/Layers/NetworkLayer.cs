@@ -11,7 +11,7 @@ namespace NSA.Model.NetworkComponents.Layers
             return true;
         }
 
-        public void ValidateSend(Hardwarenode nextNode, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
+        public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {
             List<Interface> interfaces = destination.GetInterfaces();
             foreach (Interface i in interfaces)
@@ -37,7 +37,7 @@ namespace NSA.Model.NetworkComponents.Layers
                 Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
                 Res.LayerError = new NetworkLayer();
                 Res.SendError = true;
-                nextNode = null;
+                nextNodes = null;
             }
         }
     }

@@ -210,24 +210,24 @@ namespace NSA.Model.NetworkComponents
         /// <returns>
         /// The Hardwarenode which received the package or null if an error occured
         /// </returns>
-        public override Hardwarenode Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Result, IPAddress NextNodeIp)
+        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Result, IPAddress NextNodeIp)
         {
-            Hardwarenode nextNode = this;
+            List<Hardwarenode> nextNodes = new List<Hardwarenode>();
             Interface iface = null;
             for (int i = Layerstack.GetSize() - 1; i >= 0; i--)
             {
-                if (nextNode != null)
+                if (nextNodes != null)
                 {
                     Workstation dest = Destination as Workstation;
                     if(dest != null)
-                        Layerstack.GetLayer(i).ValidateSend(nextNode, NextNodeIp, iface, dest, this, Result);
+                        Layerstack.GetLayer(i).ValidateSend(nextNodes, NextNodeIp, iface, dest, this, Result);
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
                     }
                 }
             }
-            return nextNode.Equals(this) ? null : nextNode;
+            return nextNodes;
         }
 
         /// <summary>

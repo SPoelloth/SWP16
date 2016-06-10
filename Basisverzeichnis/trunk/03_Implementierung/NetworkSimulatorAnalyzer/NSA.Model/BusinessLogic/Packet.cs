@@ -32,16 +32,21 @@ namespace NSA.Model.BusinessLogic
         public Packet Send()
         {
             IPAddress nextNodeIP = null;
-            while (hops[hops.Count - 1] != destination && result.ErrorID == 0)
+            while (!hops[hops.Count - 1].Equals(destination) && result.ErrorID == 0)
             {
-                Hardwarenode nextNode = hops[hops.Count - 1].Send(destination, tags, result, nextNodeIP);
-                if (nextNode != null)
+                List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, result, nextNodeIP);
+                if (nextNodes != null)
                 {
-                    nextNode.Receive(tags, result, nextNodeIP);
-                    hops.Add(nextNode);
+                    nextNodes[nextNodes.Count - 1].Receive(tags, result, nextNodeIP);
+                    foreach (Hardwarenode n in nextNodes)
+                    {
+                        hops.Add(n);
+                    }
                 }
             }
-            return new Packet(destination, source, ttl, tags);
+            if(result.ErrorID == 0)
+                return new Packet(destination, source, ttl, tags);
+            return null;
         }
     }
 }
