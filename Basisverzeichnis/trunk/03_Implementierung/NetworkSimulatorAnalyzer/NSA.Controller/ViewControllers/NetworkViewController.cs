@@ -4,9 +4,7 @@ using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 using NSA.View.Forms;
 using System.Drawing;
-using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements;
-using System.Linq;
 
 namespace NSA.Controller.ViewControllers
 {

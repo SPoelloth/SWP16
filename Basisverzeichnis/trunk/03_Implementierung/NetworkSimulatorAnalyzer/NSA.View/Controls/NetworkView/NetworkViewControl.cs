@@ -18,6 +18,7 @@ namespace NSA.View.Controls.NetworkView
 
         public NetworkViewControl()
         {
+            // ReSharper disable once VirtualMemberCallInConstructor
             DoubleBuffered = true;
             InitializeComponent();
             //testcode
@@ -38,7 +39,6 @@ namespace NSA.View.Controls.NetworkView
             AddElement(new VisualConnection("e", (WorkstationControl)testElements[2], 2, (WorkstationControl)testElements[5], 1, this));
             AddElement(new VisualConnection("f", (WorkstationControl)testElements[2], 3, (WorkstationControl)testElements[6], 0, this));
             foreach (var e in testElements) AddElement(e);
-
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -53,7 +53,6 @@ namespace NSA.View.Controls.NetworkView
                 {
                     g.DrawString($"{c.GetType().Name + c.ZIndex} X:{c.Location.X} Y:{c.Location.Y} Selected:{c.IsSelected}", SystemFonts.DefaultFont, Brushes.Blue, 2, i++ * (SystemFonts.DefaultFont.Height + 2));
                 }
-
             }
         }
 

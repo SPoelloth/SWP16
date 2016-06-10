@@ -190,6 +190,7 @@ namespace NSA.Controller
         {
             ToolbarController.Instance.Init();
             NetworkViewController.Instance.Initialize();
+            InfoController.Instance.Initialize();
         }
     }
 }

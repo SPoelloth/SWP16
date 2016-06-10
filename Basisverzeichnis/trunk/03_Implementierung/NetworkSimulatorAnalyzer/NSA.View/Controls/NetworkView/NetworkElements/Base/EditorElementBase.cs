@@ -7,7 +7,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
     public partial class EditorElementBase : UserControl
     {
         Image Image;
-        string ControlName;
         public Action<EditorElementBase> Selected;
         public Action RemovePressed;
 
@@ -25,7 +24,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         public EditorElementBase(Point location, string name)
         {
             ZIndex = ZIndexStart++;
-            ControlName = name;
+            Name = name;
             Location = location;
             Size = new Size(100, 100);
             Image = new Bitmap(100, 100);
@@ -36,6 +35,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
                 g.DrawLine(Pens.Red, 100, 0, 0, 100);
             }
             InitializeComponent();
+            // ReSharper disable once VirtualMemberCallInConstructor
             DoubleBuffered = true;
         }
 
