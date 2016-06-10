@@ -120,45 +120,44 @@ namespace NSA.Model.NetworkComponents
             return false;
         }
 
-        /// <summary>
-        /// Implements the operator ==.
-        /// </summary>
-        /// <param name="a">a.</param>
-        /// <param name="b">The b.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">A or B is null</exception>
-        public static bool operator ==(Hardwarenode a, Hardwarenode b)
-        {
-            if (a == null || b == null)
-            {
-                throw new ArgumentException("A or B is null");
-            }
-            if(a.Name == b.Name)
-                return true;
-            return false;
-        }
+        // TODO: Wenn ihr die Operatoren unbedingt überladen wollt dann macht es so, dass man Referenzen noch auf null checken kann, und v.a. so dass es keine StackOverflows gibt
+        ///// <summary>
+        ///// Implements the operator ==.
+        ///// </summary>
+        ///// <param name="a">a.</param>
+        ///// <param name="b">The b.</param>
+        ///// <returns>
+        ///// The result of the operator.
+        ///// </returns>
+        ///// <exception cref="System.ArgumentException">A or B is null</exception>
+        //public static bool operator ==(Hardwarenode a, Hardwarenode b)
+        //{
+        //    if ((object)a == null || (object)b == null)
+        //    {
+        //        return false;
+        //    }
+        //    return a.Name == b.Name;
+        //}
 
-        /// <summary>
-        /// Implements the operator !=.
-        /// </summary>
-        /// <param name="a">a.</param>
-        /// <param name="b">The b.</param>
-        /// <returns>
-        /// The result of the operator.
-        /// </returns>
-        /// <exception cref="System.ArgumentException">A or B is null</exception>
-        public static bool operator !=(Hardwarenode a, Hardwarenode b)
-        {
-            if (a == null || b == null)
-            {
-                throw new ArgumentException("A or B is null");
-            }
-            if (a.Name == b.Name)
-                return false;
-            return true;
-        }
+        ///// <summary>
+        ///// Implements the operator !=.
+        ///// </summary>
+        ///// <param name="a">a.</param>
+        ///// <param name="b">The b.</param>
+        ///// <returns>
+        ///// The result of the operator.
+        ///// </returns>
+        ///// <exception cref="System.ArgumentException">A or B is null</exception>
+        //public static bool operator !=(Hardwarenode a, Hardwarenode b)
+        //{
+        //    if (a == null || b == null)
+        //    {
+        //        throw new ArgumentException("A or B is null");
+        //    }
+        //    if (a.Name == b.Name)
+        //        return false;
+        //    return true;
+        //}
 
         #endregion
     }
