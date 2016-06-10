@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
@@ -13,16 +10,19 @@ namespace NSA.View.Controls.NetworkView
     {
         private List<ConnectionControl> connectionControls = new List<ConnectionControl>();
         public Action<VisualConnection> Selected;
+        public Action<VisualConnection> RemovePressed;
         public EditorElementBase Element1, Element2;
         private int Port1;
         private int Port2;
         NetworkViewControl Parent;
+        public string Name;
 
         private bool isSelected = false;
         public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; if (!isSelected) Deselect(); else Select(); } } }
 
-        public VisualConnection(EditorElementBase element1, int port1, EditorElementBase element2, int port2, NetworkViewControl parent)
+        public VisualConnection(string name, EditorElementBase element1, int port1, EditorElementBase element2, int port2, NetworkViewControl parent)
         {
+            Name = name;
             Parent = parent;
             Element1 = element1;
             Element2 = element2;
@@ -30,15 +30,15 @@ namespace NSA.View.Controls.NetworkView
             Port2 = port2;
             Element1.LocationChanged += Element_LocationChanged;
             Element2.LocationChanged += Element_LocationChanged;
-            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
+            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
             CalculateLineParts();
             foreach (var c in connectionControls)
             {
-                Parent.Controls.Add(c);
+                Parent.AddElement(c);
                 c.Click += Connection_Click;
             }
             parent.SelectionChanged += Deselect;
@@ -69,6 +69,7 @@ namespace NSA.View.Controls.NetworkView
                 c.IsSelected = true;
             }
             Selected?.Invoke(this);
+            
         }
 
         private void Element_LocationChanged(object sender, EventArgs e)
@@ -122,6 +123,15 @@ namespace NSA.View.Controls.NetworkView
         {
             // TODO
             return true;
+        }
+
+        public void Dispose()
+        {
+            foreach(var c in connectionControls)
+            {
+                c.Parent.Controls.Remove(c);
+                c.Dispose();
+            }
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
 {
     public class Hardwarenode
     {
-        protected Layerstack layerstack = new Layerstack();
+        protected Layerstack Layerstack = new Layerstack();
         protected Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
@@ -23,9 +25,9 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a connection.
         /// </summary>
-        /// <param name="Con">The connection to be added.</param>
         /// <param name="IfaceName">Name of the interface where the connection should be added.</param>
-        public virtual void AddConnection(Connection Con, string IfaceName)
+        /// <param name="Con">The connection to be added.</param>
+        public void AddConnection(string IfaceName, Connection Con)
         {
             connections.Add(IfaceName, Con);
         }
@@ -45,7 +47,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Lay">The layer to be added.</param>
         public void AddLayer(ILayer Lay)
         {
-            layerstack.AddLayer(Lay);
+            Layerstack.AddLayer(Lay);
         }
 
         /// <summary>
@@ -54,15 +56,15 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Lay">The layer to be removed.</param>
         public void RemoveLayer(ILayer Lay)
         {
-            layerstack.RemoveLayer(Lay);
+            Layerstack.RemoveLayer(Lay);
         }
 
         /// <summary>
         /// Checks if the Hardwarenode has the IP
         /// </summary>
-        /// <param name="ip">The ip.</param>
+        /// <param name="Ip">The ip.</param>
         /// <returns>A bool</returns>
-        public virtual bool HasIP(IPAddress ip)
+        public virtual bool HasIP(IPAddress Ip)
         {
             return false;
         }
@@ -72,9 +74,10 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Result">String representing the result</param>
+        /// <param name="Res">The Result of the simulation</param>
+        /// <param name="NextNodeIp">The IP of the next Node</param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual Hardwarenode Send(Hardwarenode Destination, ref Dictionary<string, object> Tags, ref string Result)
+        public virtual List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
             return null;
         }
@@ -83,11 +86,78 @@ namespace NSA.Model.NetworkComponents
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Result">String representing the result</param>
+        /// <param name="Res">The Result of the simulation</param>
+        /// <param name="NextNodeIp"></param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(ref Dictionary<string, object> Tags, ref string Result)
+        public virtual bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the connections.
+        /// </summary>
+        /// <returns>Connections</returns>
+        public Dictionary<string, Connection> GetConnections()
+        {
+            return connections;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            Hardwarenode n = obj as Hardwarenode;
+            if (n == null)
+                return false;
+            if (n.Name == Name)
+                return true;
             return false;
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">A or B is null</exception>
+        public static bool operator ==(Hardwarenode a, Hardwarenode b)
+        {
+            if (a == null || b == null)
+            {
+                throw new ArgumentException("A or B is null");
+            }
+            if(a.Name == b.Name)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">A or B is null</exception>
+        public static bool operator !=(Hardwarenode a, Hardwarenode b)
+        {
+            if (a == null || b == null)
+            {
+                throw new ArgumentException("A or B is null");
+            }
+            if (a.Name == b.Name)
+                return false;
+            return true;
         }
 
         #endregion

@@ -29,6 +29,13 @@ namespace NSA.View.Controls.NetworkView
             textBox.Text = element.Name;
             Height = textBox.Height;
             Label1_TextChanged(parentElement, null);
+            element.Disposed += Element_Disposed;
+        }
+
+        private void Element_Disposed(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            Dispose();
         }
 
         private void TextBox1_LostFocus(object sender, EventArgs e)

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -10,7 +12,7 @@ namespace NSA.Model.BusinessLogic
         private Hardwarenode destination;
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
-        private string result = "";
+        private Result result;
         private Dictionary<string, object> tags;
 
         public Packet(Hardwarenode _source, Hardwarenode _destination,
@@ -29,16 +31,22 @@ namespace NSA.Model.BusinessLogic
         /// <returns>The Returnpacket if sending to destination was successfull</returns>
         public Packet Send()
         {
-            while (hops[hops.Count - 1] != destination && result == "")
+            IPAddress nextNodeIP = null;
+            while (!hops[hops.Count - 1].Equals(destination) && result.ErrorID == 0)
             {
-                Hardwarenode nextNode = hops[hops.Count - 1].Send(destination, ref tags, ref result);
-                if (nextNode != null)
+                List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, result, nextNodeIP);
+                if (nextNodes != null)
                 {
-                    nextNode.Receive(ref tags, ref result);
-                    hops.Add(nextNode);
+                    nextNodes[nextNodes.Count - 1].Receive(tags, result, nextNodeIP);
+                    foreach (Hardwarenode n in nextNodes)
+                    {
+                        hops.Add(n);
+                    }
                 }
             }
-            return new Packet(destination, source, ttl, tags);
+            if(result.ErrorID == 0)
+                return new Packet(destination, source, ttl, tags);
+            return null;
         }
     }
 }

@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
     class SessionLayer : ILayer
     {
-        public bool ValidateReceive()
+        public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
         {
             return true;
         }
 
-        public void ValidateSend(ref Hardwarenode nextNode, ref IPAddress nextNodeIP, ref string interfaceName, Workstation destination, Dictionary<string, Connection> connections, Routingtable routingtable)
+        public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {
-            nextNode = null;
+            
         }
     }
 }

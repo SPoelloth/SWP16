@@ -6,6 +6,7 @@ using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
+using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.Controller
 {
@@ -21,6 +22,16 @@ namespace NSA.Controller
         private ProjectManager()
         {
             CreateNewProject();
+        }
+
+        /// <summary>
+        /// Gets the NetworkRepresentation: the View nodes.
+        /// </summary>
+        /// <returns>Returns the Network Representation: the View nodes.</returns>
+        private List<EditorElementBase> GetNetworkRepresentation()
+        {
+            var networkRepresentation = new List<EditorElementBase>();
+            return networkRepresentation;
         }
 
         /// <summary>
@@ -53,10 +64,10 @@ namespace NSA.Controller
         /// </summary>
         public void SaveAs()
         {
-            var openFileDialog = new OpenFileDialog();
-            var result = openFileDialog.ShowDialog();
+            var saveFileDialog = new SaveFileDialog {Filter = "XML|*.xml"};
+            var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
-            var file = openFileDialog.FileName;
+            var file = saveFileDialog.FileName;
             try
             {
                 WriteToXmlFile(file, currentProject);
@@ -71,7 +82,7 @@ namespace NSA.Controller
         /// </summary>
         public void LoadProject()
         {
-            var openFileDialog = new OpenFileDialog();
+            var openFileDialog = new OpenFileDialog {Filter = "XML|*.xml"};
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
@@ -178,6 +189,8 @@ namespace NSA.Controller
         private static void Form_Shown(object Sender, System.EventArgs E)
         {
             ToolbarController.Instance.Init();
+            NetworkViewController.Instance.Initialize();
+            InfoController.Instance.Initialize();
         }
     }
 }

@@ -1,55 +1,59 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
+    // Kann komplett entfernt werden, wenn niemand etwas dagegen hat.
+
     public class Routingtable
     {
-        private List<Route> routes = new List<Route>();
+        private Dictionary<string, Route> routes = new Dictionary<string, Route>();
 
         /// <summary>
         /// Adds a route to the table.
         /// </summary>
+        /// <param name="n">The name.</param>
         /// <param name="Route">The route.</param>
-        public void AddRoute(Route Route)
+        public void AddRoute(string n, Route Route)
         {
-            routes.Add(Route);
+            routes.Add(n, Route);
         }
 
         /// <summary>
         /// Removes a route from the table.
         /// </summary>
-        /// <param name="Route">The route.</param>
-        public void RemoveRoute(Route Route)
+        /// <param name="n">The name.</param>
+        public void RemoveRoute(string n)
         {
-            routes.Remove(Route);
+            routes.Remove(n);
         }
 
         /// <summary>
-        /// Removes the route at the given index.
+        /// Gets the routes.
         /// </summary>
-        /// <param name="Index">The index.</param>
-        public void RemoveRouteAtIndex(int Index)
+        /// <returns>The Routes</returns>
+        public Dictionary<string, Route>.ValueCollection GetRoutes()
         {
-            routes.RemoveAt(Index);
+            return routes.Values;
         }
 
         /// <summary>
-        /// Gets the size of the routingtable.
+        /// Sets the route.
         /// </summary>
-        /// <returns>The size</returns>
-        public int GetSize()
+        /// <param name="n">The name.</param>
+        /// <param name="d">The destination.</param>
+        /// <param name="s">The subnetmask.</param>
+        /// <param name="g">The gateway.</param>
+        /// <param name="i">The interface.</param>
+        /// <returns></returns>
+        public bool SetRoute(string n, IPAddress d, IPAddress s, IPAddress g, Interface i)
         {
-            return routes.Count;
-        }
-
-        /// <summary>
-        /// Gets the route at the specified index.
-        /// </summary>
-        /// <param name="Index">The index.</param>
-        /// <returns>The route at the index</returns>
-        public Route GetRouteAt(int Index)
-        {
-            return routes[Index];
+            if (routes.ContainsKey(n))
+            {
+                routes[n] = new Route(n, d, s, g, i);
+                return true;
+            }
+            return false;
         }
     }
 }

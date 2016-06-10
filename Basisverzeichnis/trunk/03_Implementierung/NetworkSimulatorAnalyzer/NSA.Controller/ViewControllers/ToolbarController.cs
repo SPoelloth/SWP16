@@ -13,14 +13,16 @@ namespace NSA.Controller.ViewControllers
 
         #endregion Singleton
 
-        ToolbarControl flp;
-
         private ToolbarController()
         {
-            flp = MainForm.Instance.GetComponent("ToolbarControl") as ToolbarControl;
+            var flp = MainForm.Instance.GetComponent("ToolbarControl") as ToolbarControl;
             if (flp == null) throw new NullReferenceException("ToolbarControl darf nicht null sein");
 
-            var btn = new Button { Height = 40, Width = 80, Text = "Projekt öffnen" };
+            var btn = new Button { Height = 40, Width = 80, Text = "Neues Projekt" };
+            btn.Click += newProject_Click;
+            flp.AddButton(btn);
+
+            btn = new Button { Height = 40, Width = 80, Text = "Projekt öffnen" };
             btn.Click += OpenProject_Click;
             flp.AddButton(btn);
 
@@ -56,7 +58,12 @@ namespace NSA.Controller.ViewControllers
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
         }
-        
+
+        private void newProject_Click(object sender, EventArgs e)
+        {
+            ProjectManager.Instance.CreateNewProject();
+        }
+
         public void Init()
         {
             
@@ -64,31 +71,31 @@ namespace NSA.Controller.ViewControllers
 
         void AdvancedSimulation_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            AdvancedSimulationForm form = new AdvancedSimulationForm();
+            var dlgresult = form.ShowDialog();
+            if (dlgresult != DialogResult.OK) return;
+
+            //todo 
         }
 
         void QuickSimulation_Click(object sender, EventArgs e)
         {
             MessageBox.Show((sender as Button).Text + " clicked");
-
         }
 
         void CreateConnection_Click(object sender, EventArgs e)
         {
             MessageBox.Show((sender as Button).Text + " clicked");
-            
         }
 
         void AddSwitch_Click(object sender, EventArgs e)
         {
             MessageBox.Show((sender as Button).Text + " clicked");
-
         }
 
         void AddRouter_Click(object sender, EventArgs e)
         {
             MessageBox.Show((sender as Button).Text + " clicked");
-
         }
 
         void AddComputer_Click(object sender, EventArgs e)
@@ -99,17 +106,17 @@ namespace NSA.Controller.ViewControllers
 
         void SaveProjectAs_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            ProjectManager.Instance.SaveAs();
         }
 
         void SaveProject_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            ProjectManager.Instance.Save();
         }
 
         void OpenProject_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            ProjectManager.Instance.LoadProject();
         }
     }
 }

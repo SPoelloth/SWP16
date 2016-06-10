@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NSA.Model.NetworkComponents;
-using NSA.View.Controls.NetworkView;
+﻿using NSA.Model.NetworkComponents;
 using NSA.View.Controls.PropertyControl;
 using NSA.View.Forms;
 
@@ -14,28 +8,15 @@ namespace NSA.Controller.ViewControllers
     {
         #region Singleton
 
-        private static PropertyController instance = null;
-        private static readonly object padlock = new object();
+        public static PropertyController Instance = new PropertyController();
 
-        public static PropertyController Instance
-        {
-            get
-            {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new PropertyController();
-                    }
-                    return instance;
-                }
-            }
-        }
+
 
         #endregion Singleton
 
         private PropertyControl propertyControl;
-        PropertyController() {
+        PropertyController()
+        {
             propertyControl = MainForm.Instance.GetComponent("PropertyControl") as PropertyControl;
         }
 
@@ -55,12 +36,14 @@ namespace NSA.Controller.ViewControllers
                     }
                     // load workstation gateway config controls
                     // load workstation Layerstack controls
-                    if (node is Router) {
+                    if (node is Router)
+                    {
                         // load gateway config control
                     }
-                } else if (node is Switch)
+                }
+                else if (node is Switch)
                 {
-                    
+
                 }
             }
         }

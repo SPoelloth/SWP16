@@ -8,6 +8,8 @@ namespace NSA.Model.NetworkComponents
         public IPAddress IpAddress { get; set; }
         public IPAddress Subnetmask { get; set; }
 
+        public static string NamePrefix { get; } = "eth";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Interface" /> class.
         /// </summary>
@@ -16,7 +18,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Number">The number (e.g. 0 for eth0).</param>
         public Interface(IPAddress Ip, IPAddress Mask, int Number)
         {
-            Name = "eth"+Number;
+            Name = NamePrefix+Number;
             IpAddress = Ip;
             Subnetmask = Mask;
         }

@@ -17,7 +17,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             base.OnPaint(pe);
         }
 
-        private void buttonClose_Click(object sender, System.EventArgs e)
+        private void buttonClose_Click(object sender, EventArgs e)
         {
             Closing?.Invoke(this);
         }

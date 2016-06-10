@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
@@ -18,11 +19,11 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Returns the Hardwarenode with the name.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="Name">The name.</param>
         /// <returns>The Hardwarenode with this name or default value</returns>
-        public Hardwarenode GetHardwarenodeByName(string name)
+        public Hardwarenode GetHardwarenodeByName(string Name)
 	    {
-	        return nodes.FirstOrDefault(n => n.Name == name);
+	        return nodes.FirstOrDefault(N => N.Name == Name);
 	    }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="newConnection">The new connection.</param>
         /// <exception cref="System.InvalidOperationException">Connection already exists!</exception>
-        public void AddConnection(Connection newConnection)
+        public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection newConnection)
 	    {
 	        if (!nodes.Contains(newConnection.Start) || !nodes.Contains(newConnection.End)) return;
 	        if(connections.Count(c => c.Start == newConnection.Start && c.End == newConnection.End
@@ -49,6 +50,8 @@ namespace NSA.Model.NetworkComponents
 	            // there's already a connection between the two nodes
 	            throw new InvalidOperationException("Connection already exists!");
 	        }
+            newConnection.Start.AddConnection(StartNodeInterfaceName, newConnection);
+            newConnection.End.AddConnection(EndNodeInterfaceName, newConnection);
 	        connections.Add(newConnection);
 	    }
 
@@ -89,5 +92,45 @@ namespace NSA.Model.NetworkComponents
                 }
             }
 	    }
+
+        /// <summary>
+        /// Gets the workstation by ip.
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <returns></returns>
+        public Hardwarenode GetWorkstationByIP(IPAddress ip)
+        {
+            foreach (Hardwarenode h in nodes)
+            {
+                if (h.HasIP(ip) == true) return h;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets all workstations.
+        /// </summary>
+        /// <returns>all Workstations</returns>
+        public List<Workstation> GetAllWorkstations()
+        {
+            List<Workstation> workstation = new List<Workstation>();
+
+            foreach (Hardwarenode h in nodes)
+            {
+                if (h is Workstation) workstation.Add((Workstation)h);
+            }
+            return workstation;
+        }
+
+        /// <summary>
+        /// Gets the name of the connection by.
+        /// </summary>
+        /// <param name="Name">The name.</param>
+        /// <returns>the connection with its name</returns>
+        public Connection GetConnectionByName(string Name)
+        {
+            return connections.FirstOrDefault(N => N.Name == Name);
+        }
+
     }
 }

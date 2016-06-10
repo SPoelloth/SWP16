@@ -12,18 +12,32 @@ namespace NSA.Controller.ViewControllers
     {
         #region Singleton
 
-        public static NetworkViewController Instance= new NetworkViewController();
+        public static NetworkViewController Instance = new NetworkViewController();
 
         #endregion Singleton
 
         private NetworkViewControl networkViewControl;
 
 
-        NetworkViewController()
+        public void Initialize()
         {
             networkViewControl = MainForm.Instance.GetComponent("NetworkviewControl") as NetworkViewControl;
             if (networkViewControl == null) throw new NullReferenceException("NetworkviewControl is null");
             networkViewControl.SelectionChanged += EditorElement_Selected;
+            networkViewControl.RemoveConnectionPressed += RemoveConnection;
+            networkViewControl.RemoveElementPressed += RemoveHardwarenode;
+        }
+
+        private void RemoveHardwarenode(EditorElementBase e)
+        {
+            networkViewControl.RemoveElement(e);
+            NetworkManager.Instance.RemoveHardwarenode(e.Name);
+        }
+
+        private void RemoveConnection(VisualConnection c)
+        {
+            networkViewControl.RemoveConnection(c);
+            NetworkManager.Instance.RemoveConnection(c.Name);
         }
 
         public void EditorElement_Selected(EditorElementBase selectedElement)
@@ -48,24 +62,5 @@ namespace NSA.Controller.ViewControllers
             // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
         }
 
-        public void RemoveHardwarenode(Hardwarenode node)
-        {
-            // Get Hardwarenode from Networkmanager
-            // UnSubscribe to BL events
-
-            // Remove Hardwarenoderepresentation
-            // UnSubscribe from UI events
-            // Remove Representation from NetworkViewControl
-        }
-
-        public void RemoveConnection(Connection connection)
-        {
-            // Get new Connection from Networkmanager
-            // Subscribe to BL events
-
-            // Create Connectionrepresentation
-            // UnSubscribe from UI events
-            // Remove Representation from NetworkViewControl
-        }
     }
 }

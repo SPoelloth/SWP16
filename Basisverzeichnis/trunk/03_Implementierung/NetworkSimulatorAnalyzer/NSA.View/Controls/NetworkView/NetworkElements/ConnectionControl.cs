@@ -1,6 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
@@ -13,10 +11,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         Point Point1, Point2;
 
-        public ConnectionControl(Point point1, Point point2)
+        public ConnectionControl(string name, Point point1, Point point2)
         {
+            Name = name;
             Point1 = point1;
             Point2 = point2;
+            // ReSharper disable once VirtualMemberCallInConstructor
             DoubleBuffered = true;
             ZIndex = ZIndexStart++;
             CalculateSize();
@@ -43,6 +43,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
+        {
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
         {
         }
     }
