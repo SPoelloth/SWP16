@@ -28,9 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // labelName
+            // 
+            this.labelName.Size = new System.Drawing.Size(98, 24);
+            this.labelName.Text = "Layerstack";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(21, 47);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "To be implemented...";
+            // 
+            // LayerstackConfigControl
+            // 
+            this.Controls.Add(this.label1);
+            this.Name = "LayerstackConfigControl";
+            this.Size = new System.Drawing.Size(185, 92);
+            this.Controls.SetChildIndex(this.labelName, 0);
+            this.Controls.SetChildIndex(this.buttonClose, 0);
+            this.Controls.SetChildIndex(this.label1, 0);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label label1;
     }
 }

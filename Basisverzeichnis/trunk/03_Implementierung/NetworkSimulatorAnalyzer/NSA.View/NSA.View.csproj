@@ -196,8 +196,20 @@
     <EmbeddedResource Include="Controls\NetworkView\NetworkElements\WorkstationControl.resx">
       <DependentUpon>WorkstationControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\ConfigControlBase.resx">
+      <DependentUpon>ConfigControlBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\GWConfigControl.resx">
+      <DependentUpon>GWConfigControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\InterfaceConfigControl.resx">
       <DependentUpon>InterfaceConfigControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\LayerstackConfigControl.resx">
+      <DependentUpon>LayerstackConfigControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\RouteConfigControl.resx">
+      <DependentUpon>RouteConfigControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdvancedSimulationForm.resx">
       <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>
