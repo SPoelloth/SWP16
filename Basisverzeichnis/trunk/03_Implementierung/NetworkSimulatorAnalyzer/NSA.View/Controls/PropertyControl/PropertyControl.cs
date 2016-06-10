@@ -28,6 +28,12 @@ namespace NSA.View.Controls.PropertyControl
 
         #region Methods
 
+		/// <summary>
+		/// Creates an InterfaceConfigControl and adds it to the list of interfaces to be displayed.
+		/// </summary>
+		/// <param name="InterfaceName">The name of the interface</param>
+		/// <param name="IpAddress">The current IP address of the interface</param>
+		/// <param name="SubnetMask">The current subnet mask of the interface</param>
         public void AddInterfaceConfigControl(string InterfaceName, IPAddress IpAddress, IPAddress SubnetMask)
         {
             InterfaceConfigControl newControl = new InterfaceConfigControl(IpAddress, SubnetMask, InterfaceName);
@@ -36,13 +42,25 @@ namespace NSA.View.Controls.PropertyControl
             interfaceConfigControls.Add(newControl);
         }
 
-        public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress)
+		/// <summary>
+		/// Creates a GateWayConfigControl and adds it to the list of controls to be displayed.
+		/// </summary>
+		/// <param name="DefaultGatewayAddress">The IP adress of the default gateway</param>
+		/// <param name="AssignedInterfaceName">The name of the ethernet interface to be used for the default gateway</param>
+		public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName)
         {
             GWConfigControl newControl = new GWConfigControl(DefaultGatewayAddress);
             newControl.GatewayChanged += GWConfigControl_GatewayChanged;
             tempControls.Add(newControl);
         }
 
+		/// <summary>
+		/// Creates a RouteConfigControl and adds it to the list of routes to be displayed.
+		/// </summary>
+		/// <param name="Source">IP address of the route source</param>
+		/// <param name="Destination">IP address of the route destination</param>
+		/// <param name="Route">IP address of the route</param>
+		/// <param name="Parameters">Parameters for the route</param>
         public void AddRouteConfigControl(IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters)
         {
             RouteConfigControl newControl = new RouteConfigControl(Source, Destination, Route, Parameters);
@@ -51,6 +69,10 @@ namespace NSA.View.Controls.PropertyControl
             routeConfigControls.Add(newControl);
         }
 
+		/// <summary>
+		/// Puts the config controls in the flowlayoutpanel, where they are displayed for the user.
+		/// Is called after all elements have been created and added.
+		/// </summary>
         public void DisplayElements()
         {
             // Add InterfaceConfigControls first
@@ -86,18 +108,30 @@ namespace NSA.View.Controls.PropertyControl
         #endregion Methods
 
         #region Eventhandling
-
+		/// <summary>
+		/// Handler for the click of the "Add Interface" button
+		/// </summary>
+		/// <param name="Sender"></param>
+		/// <param name="E"></param>
         private void AddInterfaceButton_Click(object Sender, EventArgs E)
         {
             InterfaceAdded?.Invoke();
         }
 
-        private void AddRouteButton_Click(object Sender, EventArgs E)
+		/// <summary>
+		/// Handler for the click of the "Add Route" button
+		/// </summary>
+		/// <param name="Sender"></param>
+		/// <param name="E"></param>
+		private void AddRouteButton_Click(object Sender, EventArgs E)
         {
             RouteAdded?.Invoke();
         }
 
-
+		/// <summary>
+		/// Handler for the Closing event of a ConfigControl
+		/// </summary>
+		/// <param name="Control">The closing control</param>
         private void ConfigControl_Closing(ConfigControlBase Control)
         {
             var control = Control as InterfaceConfigControl;
@@ -114,15 +148,35 @@ namespace NSA.View.Controls.PropertyControl
             flpContents.Controls.Remove(Control);
         }
 
-        private void GWConfigControl_GatewayChanged(IPAddress Obj)
+		/// <summary>
+		/// Handler for the GateWayChanged event of a GWConfigControl
+		/// </summary>
+		/// <param name="GwAddress">The IP address of the default gateway</param>
+		/// <param name="InterfaceName">The name of the assigned interface</param>
+		private void GWConfigControl_GatewayChanged(IPAddress GwAddress, string InterfaceName)
         {
         }
 
-        private void InterfaceConfigControl_InterfaceChanged(string Arg1, IPAddress Arg2, IPAddress Arg3)
-        {
-        }
+	    /// <summary>
+	    /// Handler for the InterfaceChanged event of an InterfaceConfigControl
+	    /// </summary>
+	    /// <param name="InterfaceName">The name of the interface</param>
+	    /// <param name="IpAddress">The IP address of the interface</param>
+	    /// <param name="SubnetMask">The subnet mask of the interface</param>
+	    private void InterfaceConfigControl_InterfaceChanged(string InterfaceName, IPAddress IpAddress, IPAddress SubnetMask)
+		{
+		    
+	    }
+        
 
-        private void RouteConfigControl_RouteChanged(IPAddress Arg1, IPAddress Arg2, IPAddress Arg3, string Arg4)
+		/// <summary>
+		/// Handler for the RouteChanged event of a RouteConfigControl
+		/// </summary>
+		/// <param name="Source">IP address of the route source</param>
+		/// <param name="Destination">IP address of the route destination</param>
+		/// <param name="Route">IP address of the route</param>
+		/// <param name="Parameters">Parameters for the route</param>
+		private void RouteConfigControl_RouteChanged(IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters)
         {
         }
 

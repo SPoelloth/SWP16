@@ -6,7 +6,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
     public partial class GWConfigControl : ConfigControlBase
     {
-        public event Action<IPAddress> GatewayChanged;
+        public event Action<IPAddress, string> GatewayChanged;
 
         public GWConfigControl(IPAddress ip)
         {
