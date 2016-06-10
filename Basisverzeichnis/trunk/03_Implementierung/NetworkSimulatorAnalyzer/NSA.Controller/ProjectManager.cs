@@ -25,10 +25,10 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Gets the NetworkRepresentation.
+        /// Gets the NetworkRepresentation: the View nodes.
         /// </summary>
-        /// <returns>Returns the NetworkRepresentation.</returns>
-        public List<EditorElementBase> GetNetworkRepresentation()
+        /// <returns>Returns the Network Representation: the View nodes.</returns>
+        private List<EditorElementBase> GetNetworkRepresentation()
         {
             var networkRepresentation = new List<EditorElementBase>();
             return networkRepresentation;
