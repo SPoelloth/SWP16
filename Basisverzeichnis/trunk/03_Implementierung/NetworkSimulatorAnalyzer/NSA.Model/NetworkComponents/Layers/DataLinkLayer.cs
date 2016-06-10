@@ -10,7 +10,7 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             if (currentNode.GetConnections().ContainsKey(iface.Name))
             {
-                nextNodes.Add(currentNode.GetConnections()[iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[iface.Name].End : currentNode.GetConnections()[iface.Name].Start));
+                nextNodes.Add(currentNode.GetConnections()[iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[iface.Name].End : currentNode.GetConnections()[iface.Name].Start);
                 return;
             }
             Res.ErrorID = 2;

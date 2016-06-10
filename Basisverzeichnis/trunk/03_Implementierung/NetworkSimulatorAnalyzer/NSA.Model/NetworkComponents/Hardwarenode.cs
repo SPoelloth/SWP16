@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
@@ -117,6 +118,46 @@ namespace NSA.Model.NetworkComponents
             if (n.Name == Name)
                 return true;
             return false;
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">A or B is null</exception>
+        public static bool operator ==(Hardwarenode a, Hardwarenode b)
+        {
+            if (a == null || b == null)
+            {
+                throw new ArgumentException("A or B is null");
+            }
+            if(a.Name == b.Name)
+                return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="a">a.</param>
+        /// <param name="b">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">A or B is null</exception>
+        public static bool operator !=(Hardwarenode a, Hardwarenode b)
+        {
+            if (a == null || b == null)
+            {
+                throw new ArgumentException("A or B is null");
+            }
+            if (a.Name == b.Name)
+                return false;
+            return true;
         }
 
         #endregion

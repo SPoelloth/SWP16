@@ -40,7 +40,7 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="newConnection">The new connection.</param>
         /// <exception cref="System.InvalidOperationException">Connection already exists!</exception>
-        public void AddConnection(Connection newConnection)
+        public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection newConnection)
 	    {
 	        if (!nodes.Contains(newConnection.Start) || !nodes.Contains(newConnection.End)) return;
 	        if(connections.Count(c => c.Start == newConnection.Start && c.End == newConnection.End
@@ -50,6 +50,8 @@ namespace NSA.Model.NetworkComponents
 	            // there's already a connection between the two nodes
 	            throw new InvalidOperationException("Connection already exists!");
 	        }
+            newConnection.Start.AddConnection(StartNodeInterfaceName, newConnection);
+            newConnection.End.AddConnection(EndNodeInterfaceName, newConnection);
 	        connections.Add(newConnection);
 	    }
 

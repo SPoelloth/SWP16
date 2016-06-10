@@ -296,14 +296,16 @@ namespace NSA.Controller
         /// Creates a new connection. Adds the connection to the Network and to the NetworkViewController.
         /// </summary>
         /// <param name="start">The start node of the connection</param>
+        /// <param name="StartNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the start node</param>
         /// <param name="end">The end node of the connection</param>
-        public void CreateConnection(string start, string end)
+        /// <param name="EndNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the end node</param>
+        public void CreateConnection(string start, string StartNodeInterfaceName, string end, string EndNodeInterfaceName)
         {
             Hardwarenode A = GetHardwarenodeByName(start);
             Hardwarenode B = GetHardwarenodeByName(end);
             Connection newConnection = new Connection(A, B);
 
-            network.AddConnection(newConnection);
+            network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, newConnection);
             NetworkViewController.Instance.AddConnection(newConnection);
         }
 
