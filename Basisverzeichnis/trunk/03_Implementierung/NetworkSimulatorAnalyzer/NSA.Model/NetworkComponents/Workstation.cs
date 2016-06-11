@@ -10,7 +10,6 @@ namespace NSA.Model.NetworkComponents
     public class Workstation : Hardwarenode
     {
         private List<Interface> interfaces = new List<Interface>();
-        // Warum nochmal Dictionary bzw. was ist der string ?
         private Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
@@ -72,10 +71,10 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Removes the interface with the given number.
         /// </summary>
-        /// <param name="number">The number.</param>
-        public void RemoveInterface(int number)
+        /// <param name="Number">The number.</param>
+        public void RemoveInterface(int Number)
         {
-            string name = Interface.NamePrefix + number;
+            string name = Interface.NamePrefix + Number;
             RemoveConnection(name);
             interfaces.Remove(interfaces.Find(I => I.Name.Equals(name)));
             nextInterface = int.Parse(name.Substring(Interface.NamePrefix.Length, name.Length - Interface.NamePrefix.Length));
@@ -92,15 +91,30 @@ namespace NSA.Model.NetworkComponents
             return interfaces.Count;
         }
 
+        /// <summary>
+        /// Sets the interface.
+        /// </summary>
+        /// <param name="Ifacename">The name of the Interface.</param>
+        /// <param name="Ip">The new ip.</param>
+        /// <param name="Mask">The new subnetmask.</param>
+        /// <returns>bool: false if the route could not be found, otherwise true</returns>
+        public bool SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
+        {
+            if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))
+                return false;
+            interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
+            return true;
+        }
+
         #endregion
         #region routingtable methods
         /// <summary>
         /// Adds the route.
         /// </summary>
-        /// <param name="route">The route.</param>
-        public void AddRoute(Route route)
+        /// <param name="Route">The route.</param>
+        public void AddRoute(Route Route)
         {
-            routingtable.Add(route.Name, route);
+            routingtable.Add(Route.Name, Route);
         }
 
         /// <summary>
@@ -152,12 +166,9 @@ namespace NSA.Model.NetworkComponents
         /// <returns>bool: false if the route could not be found, otherwise true</returns>
         public bool SetRoute(string RouteName, IPAddress Destination, IPAddress Subnetmask, IPAddress Gateway, Interface Iface)
         {
-            if (routingtable.ContainsKey(RouteName))
-            {
-                routingtable[RouteName] = new Route(RouteName, Destination, Subnetmask, Gateway, Iface);
-                return true;
-            }
-            return false;
+            if (!routingtable.ContainsKey(RouteName)) return false;
+            routingtable[RouteName].SetRoute(Destination, Subnetmask, Gateway, Iface);
+            return true;
         }
         #endregion
 

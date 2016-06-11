@@ -36,7 +36,6 @@ namespace NSA.Controller
         {
             Switch,
             Workstation,
-            Computer,
             Router
         };
 
@@ -214,7 +213,7 @@ namespace NSA.Controller
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                Route route = new Route(routeName, destination, subnetmask, gateway, iface);
+                Route route = new Route(destination, subnetmask, gateway, iface);
                 workstation.AddRoute(route);
                 return route;
             }
@@ -270,6 +269,7 @@ namespace NSA.Controller
             Debug.Assert(!uniqueNodeNames.Contains(nextUniqueNodeName),
                 "Could not create a unique name for a node!");
 
+            // Computer and Workstation are the same (Computer class is deleted)
             switch (type)
             {
                 case HardwarenodeType.Switch:
@@ -277,9 +277,6 @@ namespace NSA.Controller
                     break;
                 case HardwarenodeType.Workstation:
                     node = new Workstation(nextUniqueNodeName);
-                    break;
-                case HardwarenodeType.Computer:
-                    node = new Computer(nextUniqueNodeName);
                     break;
                 case HardwarenodeType.Router:
                     node = new Router(nextUniqueNodeName);

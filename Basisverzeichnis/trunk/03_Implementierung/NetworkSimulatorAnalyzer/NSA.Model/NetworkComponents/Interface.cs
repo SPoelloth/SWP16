@@ -22,5 +22,16 @@ namespace NSA.Model.NetworkComponents
             IpAddress = Ip;
             Subnetmask = Mask;
         }
+
+        /// <summary>
+        /// Sets the interface.
+        /// </summary>
+        /// <param name="Ip">The new ip.</param>
+        /// <param name="Mask">The new subnetmask.</param>
+        public void SetInterface(IPAddress Ip, IPAddress Mask)
+        {
+            IpAddress = Ip;
+            Subnetmask = Mask;
+        }
     }
 }

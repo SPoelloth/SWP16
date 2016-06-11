@@ -47,7 +47,6 @@
     <Compile Include="BusinessLogic\Testscenario.cs" />
     <Compile Include="NetworkComponents\Helper Classes\Result.cs" />
     <Compile Include="NetworkComponents\Layers\ApplicationLayer.cs" />
-    <Compile Include="NetworkComponents\Computer.cs" />
     <Compile Include="NetworkComponents\Connection.cs" />
     <Compile Include="NetworkComponents\Layers\DataLinkLayer.cs" />
     <Compile Include="NetworkComponents\Hardwarenode.cs" />
@@ -61,7 +60,6 @@
     <Compile Include="NetworkComponents\Layers\PresentationLayer.cs" />
     <Compile Include="NetworkComponents\Route.cs" />
     <Compile Include="NetworkComponents\Router.cs" />
-    <Compile Include="NetworkComponents\Routingtable.cs" />
     <Compile Include="NetworkComponents\Layers\SessionLayer.cs" />
     <Compile Include="NetworkComponents\Switch.cs" />
     <Compile Include="NetworkComponents\Layers\TransportLayer.cs" />
