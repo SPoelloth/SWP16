@@ -132,13 +132,14 @@ namespace NSA.Controller
         /// <param name="workstationName">The name of the workstation</param>
         /// <param name="ipAddress">The ipAddress</param>
         /// <param name="subnetmask">The subnetmask</param>
+        /// <returns>The new created interface.</returns>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public void AddInterface(string workstationName, IPAddress ipAddress, IPAddress subnetmask)
+        public Interface AddInterface(string workstationName, IPAddress ipAddress, IPAddress subnetmask)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                workstation.AddInterface(ipAddress, subnetmask);
+                return workstation.AddInterface(ipAddress, subnetmask);
             }
             else
             {
@@ -205,8 +206,9 @@ namespace NSA.Controller
         /// <param name="subnetmask">The subnetmask</param>
         /// <param name="gateway">The gateway</param>
         /// <param name="iface">The interface</param>
+        /// <returns>The new created route.</returns>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public void AddRoute(string workstationName, string routeName, IPAddress destination, IPAddress subnetmask,
+        public Route AddRoute(string workstationName, string routeName, IPAddress destination, IPAddress subnetmask,
             IPAddress gateway, Interface iface)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
@@ -214,6 +216,7 @@ namespace NSA.Controller
             {
                 Route route = new Route(routeName, destination, subnetmask, gateway, iface);
                 workstation.AddRoute(route);
+                return route;
             }
             else
             {
@@ -259,14 +262,13 @@ namespace NSA.Controller
         /// Creates a hardwarenode and adds it to the Network and to the NetworkViewController.
         /// </summary>
         /// <param name="type">Type of the node</param>
-        public void CreateHardwareNode(HardwarenodeType type)
+        /// <returns>The new created hardwarenode.</returns>
+        public Hardwarenode CreateHardwareNode(HardwarenodeType type)
         {
             Hardwarenode node = null;
 
-            if (uniqueNodeNames.Contains(nextUniqueNodeName))
-            {
-                throw new InvalidOperationException("Could not create a unique name for a node!");
-            }
+            Debug.Assert(!uniqueNodeNames.Contains(nextUniqueNodeName),
+                "Could not create a unique name for a node!");
 
             switch (type)
             {
@@ -299,6 +301,8 @@ namespace NSA.Controller
                 letterRepeatTimes += 1;
             }
             nextUniqueNodeName = new string(nextLetter, letterRepeatTimes);
+
+            return node;
         }
 
         /// <summary>
@@ -335,8 +339,9 @@ namespace NSA.Controller
         /// <param name="StartNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the start node</param>
         /// <param name="end">The end node of the connection</param>
         /// <param name="EndNodeInterfaceName">The name of the Interface at which the Connection is pluged in at the end node</param>
+        /// <returns>The new created connection.</returns>
         /// <exception cref="System.ArgumentException">Start or end node could not be found</exception>
-        public void CreateConnection(string start, string StartNodeInterfaceName, string end, string EndNodeInterfaceName)
+        public Connection CreateConnection(string start, string StartNodeInterfaceName, string end, string EndNodeInterfaceName)
         {
             Hardwarenode A = GetHardwarenodeByName(start);
             if (null == A)
@@ -349,10 +354,12 @@ namespace NSA.Controller
                 throw new ArgumentException("Hardwarenode with the name " + end + " could not be found");
             }
 
-            Connection newConnection = new Connection(A, B);
+            Connection connection = new Connection(A, B);
 
-            network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, newConnection);
-            NetworkViewController.Instance.AddConnection(newConnection);
+            network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, connection);
+            NetworkViewController.Instance.AddConnection(connection);
+
+            return connection;
         }
 
         /// <summary>
