@@ -14,7 +14,6 @@ namespace NSA.Model.NetworkComponents
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
         
-        private int nextInterface;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
@@ -55,29 +54,20 @@ namespace NSA.Model.NetworkComponents
         /// <returns>The newly added Interface</returns>
         public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask)
         {
-            //ToDo Mehrere Lücken, d.h. mehrere gelöschte Interfaces beachten!
-            Interface interfaceObj = new Interface(Ip, Subnetmask, nextInterface);
 
+            Interface interfaceObj = new Interface(Ip, Subnetmask, GetNewInterfaceNumber());
             interfaces.Add(interfaceObj);
-
-            if (nextInterface == (interfaces.Count - 1))
-                nextInterface++;
-            else
-                nextInterface = interfaces.Count;
-
             return interfaceObj;
         }
 
         /// <summary>
-        /// Removes the interface with the given number.
+        /// Removes the interface with the given name.
         /// </summary>
-        /// <param name="Number">The number.</param>
-        public void RemoveInterface(int Number)
+        /// <param name="InterfaceName">The Interfacename.</param>
+        public void RemoveInterface(string InterfaceName)
         {
-            string name = Interface.NamePrefix + Number;
-            RemoveConnection(name);
-            interfaces.Remove(interfaces.Find(I => I.Name.Equals(name)));
-            nextInterface = int.Parse(name.Substring(Interface.NamePrefix.Length, name.Length - Interface.NamePrefix.Length));
+            RemoveConnection(InterfaceName);
+            interfaces.Remove(interfaces.Find(I => I.Name.Equals(InterfaceName)));
         }
 
         /// <summary>
@@ -104,6 +94,26 @@ namespace NSA.Model.NetworkComponents
                 return false;
             interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
             return true;
+        }
+
+        /// <summary>
+        /// Gets the new interface number.
+        /// </summary>
+        /// <returns>int: number for next interface</returns>
+        private int GetNewInterfaceNumber()
+        {
+            int newInterface = 0;
+            bool found = false;
+
+            while (!found)
+            {
+                if (interfaces.Exists(I => I.Name.Equals(Interface.NamePrefix + newInterface)))
+                    newInterface++;
+                else
+                    found = true;
+            }
+
+            return newInterface;
         }
 
         #endregion
@@ -179,7 +189,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>
         /// bool: true if workstation has the ip, otherwise false
         /// </returns>
-        public override bool HasIP(IPAddress Ip)
+        public override bool HasIp(IPAddress Ip)
         {
             bool hasIp = false;
 

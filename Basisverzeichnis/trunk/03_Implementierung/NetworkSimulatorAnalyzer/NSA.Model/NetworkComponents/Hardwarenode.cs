@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
@@ -8,7 +7,7 @@ namespace NSA.Model.NetworkComponents
     public class Hardwarenode
     {
         protected Layerstack Layerstack = new Layerstack();
-        protected Dictionary<string, Connection> connections = new Dictionary<string, Connection>();
+        protected Dictionary<string, Connection> Connections = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
         /// <summary>
@@ -29,7 +28,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Con">The connection to be added.</param>
         public void AddConnection(string IfaceName, Connection Con)
         {
-            connections.Add(IfaceName, Con);
+            Connections.Add(IfaceName, Con);
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="IfaceName">Name of the interface where the connection should be removed.</param>
         public virtual void RemoveConnection(string IfaceName)
         {
-            connections.Remove(IfaceName);
+            Connections.Remove(IfaceName);
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Ip">The ip.</param>
         /// <returns>A bool</returns>
-        public virtual bool HasIP(IPAddress Ip)
+        public virtual bool HasIp(IPAddress Ip)
         {
             return false;
         }
@@ -100,65 +99,100 @@ namespace NSA.Model.NetworkComponents
         /// <returns>Connections</returns>
         public Dictionary<string, Connection> GetConnections()
         {
-            return connections;
+            return Connections;
         }
+
+        #region Equality
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
         /// </summary>
-        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <param name="Obj">The <see cref="System.Object" /> to compare with this instance.</param>
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object Obj)
         {
-            Hardwarenode n = obj as Hardwarenode;
-            if (n == null)
+            // If parameter is null return false.
+            if (Obj == null)
+            {
                 return false;
-            if (n.Name == Name)
-                return true;
-            return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            Hardwarenode h = Obj as Hardwarenode;
+            if ((object)h == null)
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return string.Equals(Name, h.Name);
         }
 
-        // TODO: Wenn ihr die Operatoren unbedingt überladen wollt dann macht es so, dass man Referenzen noch auf null checken kann, und v.a. so dass es keine StackOverflows gibt
-        ///// <summary>
-        ///// Implements the operator ==.
-        ///// </summary>
-        ///// <param name="a">a.</param>
-        ///// <param name="b">The b.</param>
-        ///// <returns>
-        ///// The result of the operator.
-        ///// </returns>
-        ///// <exception cref="System.ArgumentException">A or B is null</exception>
-        //public static bool operator ==(Hardwarenode a, Hardwarenode b)
-        //{
-        //    if ((object)a == null || (object)b == null)
-        //    {
-        //        return false;
-        //    }
-        //    return a.Name == b.Name;
-        //}
+        /// <summary>
+        /// Equalses the specified other.
+        /// </summary>
+        /// <param name="Other">The other.</param>
+        /// <returns></returns>
+        protected bool Equals(Hardwarenode Other)
+        {
+            // auto-generated method
+            return string.Equals(Name, Other.Name);
+        }
 
-        ///// <summary>
-        ///// Implements the operator !=.
-        ///// </summary>
-        ///// <param name="a">a.</param>
-        ///// <param name="b">The b.</param>
-        ///// <returns>
-        ///// The result of the operator.
-        ///// </returns>
-        ///// <exception cref="System.ArgumentException">A or B is null</exception>
-        //public static bool operator !=(Hardwarenode a, Hardwarenode b)
-        //{
-        //    if (a == null || b == null)
-        //    {
-        //        throw new ArgumentException("A or B is null");
-        //    }
-        //    if (a.Name == b.Name)
-        //        return false;
-        //    return true;
-        //}
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            // auto-generated method
+            return (Name != null ? Name.GetHashCode() : 0);
+        }
 
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <param name="B">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator ==(Hardwarenode A, Hardwarenode B)
+        {
+            // If both are null, or both are same instance, return true.
+            if (ReferenceEquals(A, B))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)A == null) || ((object)B == null))
+            {
+                return false;
+            }
+
+            // Return true if the fields match:
+            return A.Name == B.Name;
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="A">a.</param>
+        /// <param name="B">The b.</param>
+        /// <returns>
+        /// The result of the operator.
+        /// </returns>
+        public static bool operator !=(Hardwarenode A, Hardwarenode B)
+        {
+            // auto-generated method
+            return !(A == B);
+        }
+        #endregion
         #endregion
     }
 }

@@ -102,7 +102,7 @@ namespace NSA.Model.NetworkComponents
         {
             foreach (Hardwarenode h in nodes)
             {
-                if (h.HasIP(ip) == true) return h;
+                if (h.HasIp(ip) == true) return h;
             }
             return null;
         }

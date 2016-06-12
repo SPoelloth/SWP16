@@ -6,9 +6,8 @@ namespace NSA.Model.NetworkComponents
 {
     public class Switch : Hardwarenode
     {
-        public List<string> Interfaces { get; private set; } = new List<string>();
+        public List<string> Interfaces { get; } = new List<string>();
         private readonly string interfaceNamePrefix = "eth";
-        private int nextInterface;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Switch"/> class.
@@ -36,55 +35,66 @@ namespace NSA.Model.NetworkComponents
         /// <returns>string: the name of the new interface</returns>
         public string AddInterface()
         {
-            //ToDo Mehrere Lücken, d.h. mehrer gelöschte Interfaces beachten!
-            string name = interfaceNamePrefix + nextInterface;
+            string name = interfaceNamePrefix + GetNewInterfaceNumber();
             Interfaces.Add(name);
-
-            if (nextInterface == (Interfaces.Count - 1))
-                nextInterface++;
-            else
-                nextInterface = Interfaces.Count;
-
             return name;
         }
 
         /// <summary>
-        /// Removes the interface with the given number.
+        /// Removes the interface with the given name.
         /// </summary>
-        /// <param name="number">The number.</param>
-        public void RemoveInterface(int number)
+        /// <param name="InterfaceName">The name.</param>
+        public void RemoveInterface(string InterfaceName)
         {
-            string ifaceName = interfaceNamePrefix + number;
-            RemoveConnection(ifaceName);
-            Interfaces.Remove(ifaceName);
-            nextInterface = int.Parse(ifaceName.Substring(interfaceNamePrefix.Length, ifaceName.Length - interfaceNamePrefix.Length));
+            RemoveConnection(InterfaceName);
+            Interfaces.Remove(InterfaceName);
+        }
+
+        /// <summary>
+        /// Gets the new interface number.
+        /// </summary>
+        /// <returns>int: number for next interface</returns>
+        private int GetNewInterfaceNumber()
+        {
+            int newInterface = 0;
+            bool found = false;
+
+            while (!found)
+            {
+                if (Interfaces.Exists(I => I.Equals(interfaceNamePrefix + newInterface)))
+                    newInterface++;
+                else
+                    found = true;
+            }
+
+            return newInterface;
         }
 
         public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
         {
             List<Hardwarenode> nextNodes = new List<Hardwarenode>();
-            foreach (Connection c in connections.Values)
+            foreach (Connection c in Connections.Values)
             {
-                if (c.End.HasIP(NextNodeIp))
+                if (c.End.HasIp(NextNodeIp))
                 {
                     nextNodes.Add(c.End);
                     return nextNodes;
                 }
-                if (c.Start.HasIP(NextNodeIp))
+                if (c.Start.HasIp(NextNodeIp))
                 {
                     nextNodes.Add(c.Start);
                     return nextNodes;
                 }
             }
             //Check if the next switch can send it
-            foreach (Connection c in connections.Values)
+            foreach (Connection c in Connections.Values)
             {
                 if (c.Start.Equals(this))
                 {
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIP(nextNodes, NextNodeIp))
+                        if (s.SendToIp(nextNodes, NextNodeIp))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -96,7 +106,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIP(nextNodes, NextNodeIp))
+                        if (s.SendToIp(nextNodes, NextNodeIp))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -110,30 +120,30 @@ namespace NSA.Model.NetworkComponents
             return null;
         }
 
-        public bool SendToIP(List<Hardwarenode> NextNodes, IPAddress NextNodeIp)
+        public bool SendToIp(List<Hardwarenode> NextNodes, IPAddress NextNodeIp)
         {
-            foreach (Connection c in connections.Values)
+            foreach (Connection c in Connections.Values)
             {
-                if (c.End.HasIP(NextNodeIp))
+                if (c.End.HasIp(NextNodeIp))
                 {
                     NextNodes.Add(c.End);
                     return true;
                 }
-                if (c.Start.HasIP(NextNodeIp))
+                if (c.Start.HasIp(NextNodeIp))
                 {
                     NextNodes.Add(c.Start);
                     return true;
                 }
             }
             //check if the next switch can send it
-            foreach (Connection c in connections.Values)
+            foreach (Connection c in Connections.Values)
             {
                 if (c.Start.Equals(this))
                 {
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIP(NextNodes, NextNodeIp))
+                        if (s.SendToIp(NextNodes, NextNodeIp))
                         {
                             NextNodes.Insert(0, s);
                             return true;
@@ -145,7 +155,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIP(NextNodes, NextNodeIp))
+                        if (s.SendToIp(NextNodes, NextNodeIp))
                         {
                             NextNodes.Insert(0, s);
                             return true;

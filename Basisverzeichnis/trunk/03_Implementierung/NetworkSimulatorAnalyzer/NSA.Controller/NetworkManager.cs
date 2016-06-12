@@ -150,14 +150,14 @@ namespace NSA.Controller
         /// Removes an interface from the workstation.
         /// </summary>
         /// <param name="workstationName">The name of the workstation</param>
-        /// <param name="number">The number of the interface(e.g. 0 for eth0).</param>
+        /// <param name="InterfaceName">The name of the interface.</param>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public void RemoveInterface(string workstationName, int number)
+        public void RemoveInterface(string workstationName, string InterfaceName)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                workstation.RemoveInterface(number);
+                workstation.RemoveInterface(InterfaceName);
             }
             else
             {

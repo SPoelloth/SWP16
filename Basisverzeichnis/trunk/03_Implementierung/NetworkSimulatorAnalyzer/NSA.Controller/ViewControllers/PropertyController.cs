@@ -52,7 +52,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControl_InterfaceRemoved(string name)
         {
             // TODO: Get actual name of the selected station from NetworkManager or sth.
-            NetworkManager.Instance.RemoveInterface("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", Convert.ToInt16(name.Remove(0, 3)));
+            NetworkManager.Instance.RemoveInterface("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", name);
         }
 
         private void PropertyControl_InterfaceAdded()
