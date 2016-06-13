@@ -62,7 +62,7 @@ namespace NSA.Controller.ViewControllers
             // propertyControl.AddInterfaceConfigControl(newInterface.Name, newInterface);
         }
 
-        private void PropertyControl_LayerStackChanged(List<System.Tuple<string, object>> obj)
+        private void PropertyControl_LayerStackChanged(List<Tuple<string, object>> obj)
         {
             // TODO: Implement Layerstack in UI first
         }
@@ -90,38 +90,35 @@ namespace NSA.Controller.ViewControllers
         {
             var node = NetworkManager.Instance.GetHardwarenodeByName(elementName);
             propertyControl.ClearControls();
-            if (node != null)
+            if (node is Workstation)
             {
-                if (node is Workstation)
+                var station = node as Workstation;
+
+                // load workstation ethernet interface config controls
+                foreach (var eth in station.GetInterfaces())
                 {
-                    var station = node as Workstation;
-
-                    // load workstation ethernet interface config controls
-                    foreach (var eth in station.GetInterfaces())
-                    {
-                        propertyControl.AddInterfaceConfigControl(eth.Name, eth.IpAddress, eth.Subnetmask);
-                    }
-                    // load workstation gateway config control
-                    // TODO: Does(n't) every workstation have a gw?
-                    // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
-
-                    // load route controls
-                    foreach (var route in station.GetRoutes())
-                    {
-                        propertyControl.AddRouteConfigControl(route.Destination, route.Gateway, route.Subnetmask, route.Iface.Name);
-                    }
-
-                    // load workstation Layerstack controls
-                    // TODO: Integrate once finished
-                    //propertyControl.AddLayerStackControl(station.GetLayers());
-
-                    if (node is Router)
-                    {
-                        // load gateway config control
-                        propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
-                    }
-                    propertyControl.DisplayElements();
+                    propertyControl.AddInterfaceConfigControl(eth.Name, eth.IpAddress, eth.Subnetmask);
                 }
+                // load workstation gateway config control
+                // TODO: Does(n't) every workstation have a gw?
+                // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
+
+                // load route controls
+                foreach (var route in station.GetRoutes())
+                {
+                    propertyControl.AddRouteConfigControl(route.Destination, route.Gateway, route.Subnetmask, route.Iface.Name);
+                }
+
+                // load workstation Layerstack controls
+                // TODO: Integrate once finished
+                //propertyControl.AddLayerStackControl(station.GetLayers());
+
+                if (node is Router)
+                {
+                    // load gateway config control
+                    propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
+                }
+                propertyControl.DisplayElements();
             }
         }
     }

@@ -43,6 +43,7 @@ namespace NSA.View.Forms
             this.propertyControl.Name = "propertyControl";
             this.propertyControl.Size = new System.Drawing.Size(191, 439);
             this.propertyControl.TabIndex = 3;
+            this.propertyControl.Tag = "PropertyControl";
             // 
             // ToolbarControl
             // 

@@ -14,7 +14,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         public int ZIndex;
 
         private bool isSelected = false;
-        public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value;  Invalidate(); } } }
+        public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; Invalidate(); } } }
 
         public EditorElementBase() : this(new Point(0, 0), "EditorElementBase")
         {
