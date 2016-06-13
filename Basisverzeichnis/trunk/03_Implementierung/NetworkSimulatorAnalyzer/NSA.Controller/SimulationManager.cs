@@ -93,12 +93,19 @@ namespace NSA.Controller
                     }
                     else
                     {
-                        IPAddress ifaceBroadcastAddress = IPAddressExtensions.GetBroadcastAddress(iface.IpAddress,
-                            iface.Subnetmask);
-                        if (destination.Equals(ifaceBroadcastAddress))
+                        if (!isBroadcast)
                         {
-                            // Our destination is a broadcast ip and the current workstation is in the same subnet.
-                            isBroadcast = true;
+                            IPAddress ifaceBroadcastAddress = IPAddressExtensions.GetBroadcastAddress(iface.IpAddress,
+                                iface.Subnetmask);
+                            if (destination.Equals(ifaceBroadcastAddress))
+                            {
+                                // Our destination is a broadcast ip
+                                isBroadcast = true;
+                            }
+                        }
+                        if (isBroadcast && IPAddressExtensions.IsInSameSubnet(destination, iface.IpAddress, iface.Subnetmask))
+                        {
+                            // Current workstation is in the destination broadcast subnet.
                             addWorkstationAsDestination = true;
                             break;
                         }
