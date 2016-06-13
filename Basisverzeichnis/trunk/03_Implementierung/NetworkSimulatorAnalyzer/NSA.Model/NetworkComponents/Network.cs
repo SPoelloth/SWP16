@@ -132,5 +132,21 @@ namespace NSA.Model.NetworkComponents
             return connections.FirstOrDefault(N => N.Name == Name);
         }
 
+        /// <summary>
+        /// Gets the routers with internetconnection.
+        /// </summary>
+        /// <returns>A List of routers</returns>
+        public List<Router> GetRouters()
+	    {
+	        List<Router> routers = new List<Router>();
+	        foreach (Hardwarenode n in nodes)
+	        {
+	            Router r = n as Router;
+                if(r != null && r.IsGateway)
+                    routers.Add(r);
+	        }
+	        return routers;
+	    }
+
     }
 }
