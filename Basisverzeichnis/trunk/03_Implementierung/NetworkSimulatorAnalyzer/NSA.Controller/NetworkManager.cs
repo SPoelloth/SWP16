@@ -106,18 +106,17 @@ namespace NSA.Controller
         /// Changes the interface of the workstation.
         /// </summary>
         /// <param name="workstationName">The name of the workstation</param>
-        /// <param name="number">The number of the interface(e.g. 0 for eth0).</param>
+        /// <param name="number">The name of the interface</param>
         /// <param name="ipAddress">The new IPAddress of the interface</param>
         /// <param name="subnetmask">The new subnetmask of the interface</param>
+        /// <returns>False if the interface could not be found, otherwise true</returns>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public void InterfaceChanged(string workstationName, int number, IPAddress ipAddress, IPAddress subnetmask)
+        public bool InterfaceChanged(string workstationName, string interfaceName, IPAddress ipAddress, IPAddress subnetmask)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
             {
-                Interface myInterface = workstation.GetInterfaces().Single(i => i.Name == Interface.NamePrefix+number);
-                myInterface.IpAddress = ipAddress;
-                myInterface.Subnetmask = subnetmask;
+                return workstation.SetInterface(interfaceName, ipAddress, subnetmask);
             }
             else
             {
@@ -200,14 +199,13 @@ namespace NSA.Controller
         /// Adds a route to the routingtable of the workstation.
         /// </summary>
         /// <param name="workstationName">The name of the workstation</param>
-        /// <param name="routeName">The name of the route</param>
         /// <param name="destination">The destination address</param>
         /// <param name="subnetmask">The subnetmask</param>
         /// <param name="gateway">The gateway</param>
         /// <param name="iface">The interface</param>
         /// <returns>The new created route.</returns>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public Route AddRoute(string workstationName, string routeName, IPAddress destination, IPAddress subnetmask,
+        public Route AddRoute(string workstationName, IPAddress destination, IPAddress subnetmask,
             IPAddress gateway, Interface iface)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;

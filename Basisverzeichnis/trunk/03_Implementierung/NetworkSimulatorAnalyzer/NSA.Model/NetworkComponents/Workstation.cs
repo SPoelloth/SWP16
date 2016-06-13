@@ -87,7 +87,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Ifacename">The name of the Interface.</param>
         /// <param name="Ip">The new ip.</param>
         /// <param name="Mask">The new subnetmask.</param>
-        /// <returns>bool: false if the route could not be found, otherwise true</returns>
+        /// <returns>bool: false if the interface could not be found, otherwise true</returns>
         public bool SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
         {
             if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))

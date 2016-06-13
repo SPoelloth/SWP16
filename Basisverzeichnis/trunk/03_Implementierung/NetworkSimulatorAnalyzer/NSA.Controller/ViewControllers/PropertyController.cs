@@ -82,7 +82,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControl_InterfaceChanged(string name, System.Net.IPAddress IpAddress, System.Net.IPAddress SubnetMask)
         {
             // TODO: Get actual name of the selected station from NetworkManager or sth.
-            NetworkManager.Instance.InterfaceChanged("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", Convert.ToInt16(name.Remove(0,3)), IpAddress, SubnetMask);
+            NetworkManager.Instance.InterfaceChanged("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", name, IpAddress, SubnetMask);
         }
         #endregion Event Handling
 
