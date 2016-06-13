@@ -3,6 +3,7 @@ using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
 using System.Net;
 using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Controller
 {
@@ -71,11 +72,73 @@ namespace NSA.Controller
         /// <param name="expectedResult">the expected result of the simulation.</param>
         public void CreateSimulation(IPAddress source, IPAddress destination, int ttl, Dictionary<string, Object> tags, bool expectedResult)
         {
-            Simulation sim = new Simulation(Simulations.Count);
-            //todo Check if destination is broadcast or multicast address hast to be added
-            sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source), NetworkManager.Instance.GetWorkstationByIP(destination), ttl, tags, expectedResult));
-            StartSimulation(sim);
-            AddSimulationToHistory(sim);
+            List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
+            List<Hardwarenode> destinationList = new List<Hardwarenode>();
+
+            bool isBroadcast = false;
+            bool addWorkstationAsDestination = false;
+            // Iterate through all workstations and add the destinations to te destinationList
+            for (int workstationIndex = 0; workstationIndex < allWorkstations.Count; workstationIndex++)
+            {
+                addWorkstationAsDestination = false;
+                List<Interface> ifaces = allWorkstations[workstationIndex].GetInterfaces();
+                // Iterate through all interfaces of the current workstation.
+                foreach (Interface iface in ifaces)
+                {
+                    if (!isBroadcast && destination.Equals(iface.IpAddress))
+                    {
+                        // We have found a workstation whose ip matches our destination ip
+                        addWorkstationAsDestination = true;
+                        break;
+                    }
+                    else
+                    {
+                        IPAddress ifaceBroadcastAddress = IPAddressExtensions.GetBroadcastAddress(iface.IpAddress,
+                            iface.Subnetmask);
+                        if (destination.Equals(ifaceBroadcastAddress))
+                        {
+                            // Our destination is a broadcast ip and the current workstation is in the same subnet.
+                            isBroadcast = true;
+                            addWorkstationAsDestination = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (addWorkstationAsDestination)
+                {
+                    // Add the current workstation to the destinationList.
+                    destinationList.Add(allWorkstations[workstationIndex]);
+
+                    if (!isBroadcast)
+                    {
+                        // Break because we already have found the single destination workstation.
+                        break;
+                    }
+                }
+            }
+
+            if (destinationList.Count < 1)
+            {
+                Simulation sim = new Simulation(Simulations.Count);
+                // Our destination list is empty. -> Create an error packet
+                sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source), null, ttl, tags, expectedResult));
+                StartSimulation(sim);
+                AddSimulationToHistory(sim);
+            }
+            else
+            {
+                // Create Packets for all destinations.
+                foreach (Hardwarenode destinationNode in destinationList)
+                {
+                    Simulation sim = new Simulation(Simulations.Count);
+                    sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source),
+                        destinationNode, ttl, tags, expectedResult));
+                    StartSimulation(sim);
+                    AddSimulationToHistory(sim);
+                }
+
+            }
         }
 
         /// <summary>

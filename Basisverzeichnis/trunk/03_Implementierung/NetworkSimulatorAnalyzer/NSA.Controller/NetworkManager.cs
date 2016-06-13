@@ -128,8 +128,6 @@ namespace NSA.Controller
             {
                 CreateUniqueNameForNextNode();
             }
-
-            // todo notify the views
         }
 
         #region Workstation-related methods
