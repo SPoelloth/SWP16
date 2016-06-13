@@ -43,8 +43,8 @@ namespace NSA.Model.NetworkComponents
                 return false;
             }
 
-            // Return true if the fields match:
-            return Start == c.Start && End == c.End;
+            // Return true if the fields match (same hardwarenodes):
+            return (Start == c.Start && End == c.End) || (Start == c.End && End == c.Start);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace NSA.Model.NetworkComponents
         protected bool Equals(Connection Other)
         {
             // auto-generated method
-            return Equals(Start, Other.Start) && Equals(End, Other.End);
+            return (Equals(Start, Other.Start) && Equals(End, Other.End)) || (Equals(Start, Other.End) && Equals(End, Other.Start));
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace NSA.Model.NetworkComponents
             }
 
             // Return true if the fields match:
-            return Equals(A.Start, B.Start) && Equals(A.End, B.End);
+            return (Equals(A.Start, B.Start) && Equals(A.End, B.End)) || (Equals(A.Start, B.End) && Equals(A.End, B.Start));
         }
 
         /// <summary>
