@@ -4,7 +4,7 @@ using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
-    class DataLinkLayer : ILayer
+    public class DataLinkLayer : ILayer
     {
         public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {

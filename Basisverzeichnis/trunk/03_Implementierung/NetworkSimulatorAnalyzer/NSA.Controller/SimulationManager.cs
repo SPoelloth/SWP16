@@ -38,7 +38,7 @@ namespace NSA.Controller
             sim.Execute();
         }
 
-        public void StartTestscenario()
+        public void StartTestscenario(Testscenario t)
         {
             // todo Dennis & Oleg
         }
