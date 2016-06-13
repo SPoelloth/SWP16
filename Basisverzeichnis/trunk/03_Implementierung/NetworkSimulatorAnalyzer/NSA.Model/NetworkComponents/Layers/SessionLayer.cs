@@ -4,7 +4,7 @@ using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
-    class SessionLayer : ILayer
+    public class SessionLayer : ILayer
     {
         public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
         {
