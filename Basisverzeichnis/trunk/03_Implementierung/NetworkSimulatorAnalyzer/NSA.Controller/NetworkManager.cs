@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Helper_Classes;
 using Switch = NSA.Model.NetworkComponents.Switch;
 
 namespace NSA.Controller
@@ -65,16 +66,70 @@ namespace NSA.Controller
             }
         }
 
-        private Network network;
+        private Network network; 
         // Unique names for each hardwarenode
-        private readonly SortedSet<string> uniqueNodeNames = new SortedSet<string>(new NodeNamesComparator());
+        private SortedSet<string> uniqueNodeNames;
         // If we remove a node we will reuse its name for future nodes
-        private string nextUniqueNodeName = "A";
+        private string nextUniqueNodeName;
 
         // Default constructor:
         private NetworkManager()
         {
-            network = new Network();
+            Reset();
+        }
+
+        /// <summary>
+        /// Helper method. Creates a unique node name for the node to be created next.
+        /// </summary>
+        private void CreateUniqueNameForNextNode()
+        {
+            // Create a unique name for the next hardwarenode that will be created.
+            // Sorting order: A B C ... Z AA BB ... AAA BBB
+            char nextLetter = (char)((int)uniqueNodeNames.Max[0] + 1);
+            int letterRepeatTimes = uniqueNodeNames.Max.Length;
+            if (nextLetter > 'Z')
+            {
+                nextLetter = 'A';
+                letterRepeatTimes += 1;
+            }
+            nextUniqueNodeName = new string(nextLetter, letterRepeatTimes);
+        }
+
+        /// <summary>
+        /// This method should be called if we want to reset the state of the NetworkManager, e.g.
+        /// after we have loaded a new project.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">Network contains nodes with the same name</exception>
+        public void Reset()
+        {
+            Network oldNetwork = network;
+            network = ProjectManager.Instance.currentProject.Network;
+            if (network == oldNetwork)
+            {
+                // Reset() has already been called with this network object
+                return;
+            }
+
+            uniqueNodeNames = new SortedSet<string>(new NodeNamesComparator());
+            nextUniqueNodeName = "A";
+
+            // Read in all the hardwarenode names
+            List<Hardwarenode> nodes = network.GetAllHardwarenodes();
+            foreach (Hardwarenode node in nodes)
+            {
+                if (uniqueNodeNames.Contains(nextUniqueNodeName))
+                {
+                    throw new InvalidOperationException("Network contains nodes with the same name!");
+                }
+                uniqueNodeNames.Add(node.Name);
+            }
+
+            if (uniqueNodeNames.Count > 0)
+            {
+                CreateUniqueNameForNextNode();
+            }
+
+            // todo notify the views
         }
 
         #region Workstation-related methods
@@ -132,7 +187,7 @@ namespace NSA.Controller
         /// <param name="subnetmask">The subnetmask</param>
         /// <returns>The new created interface.</returns>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public Interface AddInterface(string workstationName, IPAddress ipAddress, IPAddress subnetmask)
+        public Interface AddInterfaceToWorkstation(string workstationName, IPAddress ipAddress, IPAddress subnetmask)
         {
             Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
             if (null != workstation)
@@ -146,21 +201,50 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Removes an interface from the workstation.
+        /// Adds a new interface to the switch.
         /// </summary>
-        /// <param name="workstationName">The name of the workstation</param>
-        /// <param name="InterfaceName">The name of the interface.</param>
-        /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public void RemoveInterface(string workstationName, string InterfaceName)
+        /// <param name="switchName">The name of the switch</param>
+        /// <returns>The name of the new interface.</returns>
+        /// <exception cref="System.ArgumentException">Switch could not be found</exception>
+        public string AddInterfaceToSwitch(string switchName)
         {
-            Workstation workstation = network.GetHardwarenodeByName(workstationName) as Workstation;
-            if (null != workstation)
+            Switch nodeSwitch = network.GetHardwarenodeByName(switchName) as Switch;
+            if (null != nodeSwitch)
             {
-                workstation.RemoveInterface(InterfaceName);
+                return nodeSwitch.AddInterface();
             }
             else
             {
-                throw new ArgumentException("Workstation with the name " + workstationName + " could not be found");
+                throw new ArgumentException("Switch with the name " + switchName + " could not be found");
+            }
+        }
+
+        /// <summary>
+        /// Removes an interface from the workstation or as switch.
+        /// </summary>
+        /// <param name="nodeName">The name of the workstation or a switch</param>
+        /// <param name="interfaceName">The name of the interface.</param>
+        /// <exception cref="System.ArgumentException">Node could not be found</exception>
+        public void RemoveInterface(string nodeName, string interfaceName)
+        {
+            Hardwarenode node = network.GetHardwarenodeByName(nodeName);
+            if (null != node)
+            {
+                Workstation workstation;
+                Switch nodeSwitch;
+
+                if (null != (workstation = node as Workstation))
+                {
+                    workstation.RemoveInterface(interfaceName);
+                }
+                else if (null != (nodeSwitch = node as Switch))
+                {
+                    nodeSwitch.RemoveInterface(interfaceName);
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Node with the name " + nodeName + " could not be found");
             }
         }
 
@@ -267,7 +351,6 @@ namespace NSA.Controller
             Debug.Assert(!uniqueNodeNames.Contains(nextUniqueNodeName),
                 "Could not create a unique name for a node!");
 
-            // Computer and Workstation are the same (Computer class is deleted)
             switch (type)
             {
                 case HardwarenodeType.Switch:
@@ -286,16 +369,7 @@ namespace NSA.Controller
             network.AddHardwarenode(node);
             NetworkViewController.Instance.AddHardwarenode(node);
 
-            // Create a unique name for the next hardwarenode that will be created.
-            // Sorting order: A B C ... Z AA BB ... AAA BBB
-            char nextLetter = (char)((int)uniqueNodeNames.Max[0]+1);
-            int letterRepeatTimes = uniqueNodeNames.Max.Length;
-            if (nextLetter > 'Z')
-            {
-                nextLetter = 'A';
-                letterRepeatTimes += 1;
-            }
-            nextUniqueNodeName = new string(nextLetter, letterRepeatTimes);
+            CreateUniqueNameForNextNode();
 
             return node;
         }

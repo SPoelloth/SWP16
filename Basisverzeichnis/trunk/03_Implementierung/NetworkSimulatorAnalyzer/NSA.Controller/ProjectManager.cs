@@ -16,6 +16,7 @@ namespace NSA.Controller
         private List<Testscenario> testscenarios;
 
         public static ProjectManager Instance = new ProjectManager();
+        private bool instanceIsFullyCreated;
         /// <summary>
         /// Default Constructor.
         /// </summary>
@@ -40,7 +41,15 @@ namespace NSA.Controller
         public void CreateNewProject()
         {
             currentProject = new Project();
+            if (instanceIsFullyCreated)
+            {
+                // Do not call Networkmanager if the instance not fully created yet.
+                // (Because Networkmanager would try to access ProjectManager´s Properties)
+                NetworkManager.Instance.Reset();
+            }
             testscenarios = new List<Testscenario>();
+
+            instanceIsFullyCreated = true;
         }
 
         /// <summary>
@@ -89,6 +98,7 @@ namespace NSA.Controller
             try
             {
                 currentProject = ReadFromXmlFile<Project>(file);
+                NetworkManager.Instance.Reset();
             }
             catch (IOException)
             {

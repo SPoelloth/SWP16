@@ -108,6 +108,15 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
+        /// Gets all hardwarenodes.
+        /// </summary>
+        /// <returns>all Hardwarenodes</returns>
+        public List<Hardwarenode> GetAllHardwarenodes()
+        {
+            return nodes;
+        }
+
+        /// <summary>
         /// Gets all workstations.
         /// </summary>
         /// <returns>all Workstations</returns>
