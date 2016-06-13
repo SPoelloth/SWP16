@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using NSA.View.Controls.Toolbar;
 using NSA.View.Forms;
@@ -18,43 +19,47 @@ namespace NSA.Controller.ViewControllers
             var flp = MainForm.Instance.GetComponent("ToolbarControl") as ToolbarControl;
             if (flp == null) throw new NullReferenceException("ToolbarControl darf nicht null sein");
 
-            var btn = new Button { Height = 40, Width = 80, Text = "Neues Projekt" };
+            int btnWidth = 80;
+            int btnHeight = 40;
+            var btnColor = SystemColors.Control;
+
+            var btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Neues Projekt" };
             btn.Click += newProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Projekt öffnen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Projekt öffnen" };
             btn.Click += OpenProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Projekt speichern" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Projekt speichern" };
             btn.Click += SaveProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Speichern unter..." };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Speichern unter..." };
             btn.Click += SaveProjectAs_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Computer hinzufügen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Computer hinzufügen" };
             btn.Click += AddComputer_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Router hinzufügen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Router hinzufügen" };
             btn.Click += AddRouter_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Switch hinzufügen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Switch hinzufügen" };
             btn.Click += AddSwitch_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Verbindung erstellen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Verbindung erstellen" };
             btn.Click += CreateConnection_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Schnelle Simulation" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Schnelle Simulation" };
             btn.Click += QuickSimulation_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = 40, Width = 80, Text = "Erweiterte Simulation" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Erweiterte Simulation" };
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
         }
@@ -75,6 +80,7 @@ namespace NSA.Controller.ViewControllers
             var dlgresult = form.ShowDialog();
             if (dlgresult != DialogResult.OK) return;
 
+            //SimulationManager.Instance.CreateSimulation();
             //todo 
         }
 
@@ -85,7 +91,7 @@ namespace NSA.Controller.ViewControllers
 
         void CreateConnection_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            NetworkViewController.Instance.CreateHardwarenodeRequest();
         }
 
         void AddSwitch_Click(object sender, EventArgs e)
