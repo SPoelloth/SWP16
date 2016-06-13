@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using NSA.Logging;
 
 namespace NSA.View.Forms
 {
@@ -15,7 +14,6 @@ namespace NSA.View.Forms
 
         MainForm()
         {
-            LogManager.WriteToLog("MainForm Constructor");
             InitializeComponent();
             MainForm_Resize(null, null);
         }

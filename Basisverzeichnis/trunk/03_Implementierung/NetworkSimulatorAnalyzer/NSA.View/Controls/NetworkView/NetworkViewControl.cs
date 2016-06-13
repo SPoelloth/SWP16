@@ -143,5 +143,12 @@ namespace NSA.View.Controls.NetworkView
             Controls.Remove(element);
             element.Dispose();
         }
+
+        public void CreateNewConnection()
+        {
+            //throw new NotImplementedException();
+
+            Cursor = Cursors.Arrow;
+        }
     }
 }
