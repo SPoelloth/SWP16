@@ -206,29 +206,28 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Result">String representing the result</param>
-        /// <param name="NextNodeIp"></param>
+        /// <param name="valInfo"></param>
         /// <returns>
         /// The Hardwarenode which received the package or null if an error occured
         /// </returns>
-        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Result, IPAddress NextNodeIp)
+        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo valInfo)
         {
-            List<Hardwarenode> nextNodes = new List<Hardwarenode>();
-            Interface iface = null;
+            valInfo.NextNodes = new List<Hardwarenode>();
+            valInfo.Iface = null;
             for (int i = Layerstack.GetSize() - 1; i >= 0; i--)
             {
-                if (nextNodes != null)
+                if (valInfo.NextNodes != null)
                 {
                     Workstation dest = Destination as Workstation;
                     if(dest != null)
-                        Layerstack.GetLayer(i).ValidateSend(nextNodes, NextNodeIp, iface, dest, this, Result);
+                        Layerstack.GetLayer(i).ValidateSend(dest, this, valInfo);
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
                     }
                 }
             }
-            return nextNodes;
+            return valInfo.NextNodes;
         }
 
         /// <summary>

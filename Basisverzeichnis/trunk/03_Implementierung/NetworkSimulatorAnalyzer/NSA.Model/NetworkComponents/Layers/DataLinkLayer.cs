@@ -6,20 +6,20 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class DataLinkLayer : ILayer
     {
-        public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
+        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo)
         {
-            if (iface == null)
+            if (valInfo.Iface == null)
                 return;
-            if (currentNode.GetConnections().ContainsKey(iface.Name))
+            if (currentNode.GetConnections().ContainsKey(valInfo.Iface.Name))
             {
-                nextNodes.Add(currentNode.GetConnections()[iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[iface.Name].End : currentNode.GetConnections()[iface.Name].Start);
+                valInfo.NextNodes.Add(currentNode.GetConnections()[valInfo.Iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[valInfo.Iface.Name].End : currentNode.GetConnections()[valInfo.Iface.Name].Start);
                 return;
             }
-            Res.ErrorID = 2;
-            Res.Res = "There is no Connection at the Interface from choosen the Route.";
-            Res.LayerError = new DataLinkLayer();
-            Res.SendError = true;
-            nextNodes = null;
+            valInfo.Res.ErrorID = 2;
+            valInfo.Res.Res = "There is no Connection at the Interface from choosen the Route.";
+            valInfo.Res.LayerError = new DataLinkLayer();
+            valInfo.Res.SendError = true;
+            valInfo.NextNodes = null;
         }
 
         public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)

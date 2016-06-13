@@ -70,17 +70,17 @@ namespace NSA.Model.NetworkComponents
             return newInterface;
         }
 
-        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
+        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo valInfo)
         {
             List<Hardwarenode> nextNodes = new List<Hardwarenode>();
             foreach (Connection c in Connections.Values)
             {
-                if (c.End.HasIp(NextNodeIp))
+                if (c.End.HasIp(valInfo.NextNodeIP))
                 {
                     nextNodes.Add(c.End);
                     return nextNodes;
                 }
-                if (c.Start.HasIp(NextNodeIp))
+                if (c.Start.HasIp(valInfo.NextNodeIP))
                 {
                     nextNodes.Add(c.Start);
                     return nextNodes;
@@ -94,7 +94,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(nextNodes, NextNodeIp))
+                        if (s.SendToIp(valInfo))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -106,7 +106,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(nextNodes, NextNodeIp))
+                        if (s.SendToIp(valInfo))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -114,24 +114,24 @@ namespace NSA.Model.NetworkComponents
                     }
                 }
             }
-            Res.ErrorID = 4;
-            Res.Res = "There is no Connection for the next Hardwarenode.";
-            Res.SendError = true;
+            valInfo.Res.ErrorID = 4;
+            valInfo.Res.Res = "There is no Connection for the next Hardwarenode.";
+            valInfo.Res.SendError = true;
             return null;
         }
 
-        public bool SendToIp(List<Hardwarenode> NextNodes, IPAddress NextNodeIp)
+        public bool SendToIp(ValidationInfo valInfo)
         {
             foreach (Connection c in Connections.Values)
             {
-                if (c.End.HasIp(NextNodeIp))
+                if (c.End.HasIp(valInfo.NextNodeIP))
                 {
-                    NextNodes.Add(c.End);
+                    valInfo.NextNodes.Add(c.End);
                     return true;
                 }
-                if (c.Start.HasIp(NextNodeIp))
+                if (c.Start.HasIp(valInfo.NextNodeIP))
                 {
-                    NextNodes.Add(c.Start);
+                    valInfo.NextNodes.Add(c.Start);
                     return true;
                 }
             }
@@ -143,9 +143,9 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(NextNodes, NextNodeIp))
+                        if (s.SendToIp(valInfo))
                         {
-                            NextNodes.Insert(0, s);
+                            valInfo.NextNodes.Insert(0, s);
                             return true;
                         }
                     }
@@ -155,9 +155,9 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(NextNodes, NextNodeIp))
+                        if (s.SendToIp(valInfo))
                         {
-                            NextNodes.Insert(0, s);
+                            valInfo.NextNodes.Insert(0, s);
                             return true;
                         }
                     }

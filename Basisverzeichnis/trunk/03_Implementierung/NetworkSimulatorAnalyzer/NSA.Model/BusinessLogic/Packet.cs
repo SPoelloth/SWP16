@@ -12,7 +12,7 @@ namespace NSA.Model.BusinessLogic
         private Hardwarenode destination;
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
-        public Result result { get; }
+        public Result result { get; private set; }
         public bool expectedResult { get; }
         private Dictionary<string, object> tags;
 
@@ -39,13 +39,15 @@ namespace NSA.Model.BusinessLogic
         /// <returns>The Returnpacket if sending to destination was successfull</returns>
         public Packet Send()
         {
-            IPAddress nextNodeIP = null;
-            while (!hops[hops.Count - 1].Equals(destination) && result.ErrorID == 0 && ttl > 0)
+            ValidationInfo valInfo = new ValidationInfo();
+            valInfo.NextNodeIP = null;
+            valInfo.Res = result;
+            while (!hops[hops.Count - 1].Equals(destination) && valInfo.Res.ErrorID == 0 && ttl > 0)
             {
-                List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, result, nextNodeIP);
+                List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, valInfo);
                 if (nextNodes != null)
                 {
-                    if (nextNodes[nextNodes.Count - 1].Receive(tags, result, nextNodeIP))
+                    if (nextNodes[nextNodes.Count - 1].Receive(tags, result, valInfo.NextNodeIP)) //todo result zu valinfo
                         ttl--;
                     foreach (Hardwarenode n in nextNodes)
                     {
@@ -53,6 +55,7 @@ namespace NSA.Model.BusinessLogic
                     }
                 }
             }
+            result = valInfo.Res;
             if (!hops[hops.Count - 1].Equals(destination) && ttl == 0)
             {
                 //TTL Error

@@ -9,13 +9,10 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Validates the layer while sending a packet.
         /// </summary>
-        /// <param name="nextNodes">The next nodes</param>
-        /// <param name="nextNodeIP">The next node ip.</param>
-        /// <param name="iface">The interface of the connection to the next node.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="currentNode">The current node.</param>
-        /// <param name="Res">Result.</param>
-        void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res);
+        /// <param name="valInfo"></param>
+        void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo);
 
         /// <summary>
         /// Validates the layer while receiving a packet.

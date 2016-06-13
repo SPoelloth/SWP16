@@ -11,15 +11,15 @@ namespace NSA.Model.NetworkComponents.Layers
             return true;
         }
 
-        public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
+        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo)
         {
             //Wenn destination direkt dran ist an einer Verbindung
             foreach (Connection c in currentNode.GetConnections().Values)
             {
                 if (c.Start.Equals(destination) || c.End.Equals(destination))
                 {
-                    nextNodes.Add(destination);
-                    iface = null;
+                    valInfo.NextNodes.Add(destination);
+                    valInfo.Iface = null;
                     return;
                 }
             }
@@ -31,25 +31,25 @@ namespace NSA.Model.NetworkComponents.Layers
                 Dictionary<string, Route>.ValueCollection routes = currentNode.GetRoutes();
                 foreach(Route r in routes)
                 {
-                    if (iface.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
+                    if (valInfo.Iface.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
                     {
-                        nextNodeIP = r.Gateway;
-                        iface = r.Iface;
+                        valInfo.NextNodeIP = r.Gateway;
+                        valInfo.Iface = r.Iface;
                     }
                 }
             }
-            if (currentNode.StandardGateway != null && nextNodeIP == null)
+            if (currentNode.StandardGateway != null && valInfo.NextNodeIP == null)
             {
-                nextNodeIP = currentNode.StandardGateway;
-                iface = currentNode.StandardGatewayPort;
+                valInfo.NextNodeIP = currentNode.StandardGateway;
+                valInfo.Iface = currentNode.StandardGatewayPort;
             }
-            else if (nextNodeIP == null)
+            else if (valInfo.NextNodeIP == null)
             {
-                Res.ErrorID = 1;
-                Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
-                Res.LayerError = new NetworkLayer();
-                Res.SendError = true;
-                nextNodes = null;
+                valInfo.Res.ErrorID = 1;
+                valInfo.Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
+                valInfo.Res.LayerError = new NetworkLayer();
+                valInfo.Res.SendError = true;
+                valInfo.NextNodes = null;
             }
         }
     }

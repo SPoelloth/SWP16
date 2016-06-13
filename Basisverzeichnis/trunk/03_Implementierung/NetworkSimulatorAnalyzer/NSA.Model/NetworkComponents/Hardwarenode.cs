@@ -73,10 +73,9 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Res">The Result of the simulation</param>
-        /// <param name="NextNodeIp">The IP of the next Node</param>
+        /// <param name="valInfo"></param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
+        public virtual List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo valInfo)
         {
             return null;
         }
