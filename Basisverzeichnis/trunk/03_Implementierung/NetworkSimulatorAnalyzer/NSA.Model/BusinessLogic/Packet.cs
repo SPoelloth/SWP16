@@ -40,17 +40,25 @@ namespace NSA.Model.BusinessLogic
         public Packet Send()
         {
             IPAddress nextNodeIP = null;
-            while (!hops[hops.Count - 1].Equals(destination) && result.ErrorID == 0)
+            while (!hops[hops.Count - 1].Equals(destination) && result.ErrorID == 0 && ttl > 0)
             {
                 List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, result, nextNodeIP);
                 if (nextNodes != null)
                 {
-                    nextNodes[nextNodes.Count - 1].Receive(tags, result, nextNodeIP);
+                    if (nextNodes[nextNodes.Count - 1].Receive(tags, result, nextNodeIP))
+                        ttl--;
                     foreach (Hardwarenode n in nextNodes)
                     {
                         hops.Add(n);
                     }
                 }
+            }
+            if (!hops[hops.Count - 1].Equals(destination) && ttl == 0)
+            {
+                //TTL Error
+                result.ErrorID = 6;
+                result.Res = "TTL is 0 but the destination was not reached.";
+                result.SendError = true;
             }
             if(result.ErrorID == 0)
                 return new Packet(destination, source, ttl, tags, expectedResult);
