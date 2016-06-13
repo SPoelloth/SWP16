@@ -24,6 +24,8 @@ namespace NSA.Model.NetworkComponents.Layers
 
         public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
         {
+            if (nextNodeIP == null)
+                return true;
             List<Interface> ifaces = currentNode.GetInterfaces();
             foreach (Interface i in ifaces)
             {
