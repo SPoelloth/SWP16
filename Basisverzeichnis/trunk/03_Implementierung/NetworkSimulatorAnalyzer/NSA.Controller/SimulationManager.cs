@@ -71,9 +71,9 @@ namespace NSA.Controller
         /// <param name="expectedResult">the expected result of the simulation.</param>
         public void CreateSimulation(IPAddress source, IPAddress destination, int ttl, Dictionary<string, Object> tags, bool expectedResult)
         {
-            Simulation sim = new Simulation(Simulations.Count, expectedResult);
+            Simulation sim = new Simulation(Simulations.Count);
             //todo Check if destination is broadcast or multicast address hast to be added
-            sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source), NetworkManager.Instance.GetWorkstationByIP(destination), ttl, tags));
+            sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source), NetworkManager.Instance.GetWorkstationByIP(destination), ttl, tags, expectedResult));
             StartSimulation(sim);
             AddSimulationToHistory(sim);
         }
@@ -87,11 +87,11 @@ namespace NSA.Controller
         /// <param name="tags">The tags.</param>
         /// <returns>the packet</returns>
         /// <exception cref="System.ArgumentException">SimulationManager.createPacket: source or destination is null or ttl <= 0</exception>
-        private Packet createPacket(Hardwarenode source, Hardwarenode destination, int ttl, Dictionary<string, Object> tags)
+        private Packet createPacket(Hardwarenode source, Hardwarenode destination, int ttl, Dictionary<string, Object> tags, bool expectedResult)
         {
-            if(source == null || destination == null || ttl <= 0)
-                throw new ArgumentException("SimulationManager.createPacket: source or destination is null or ttl <= 0");
-            return new Packet(source, destination, ttl, tags);
+            if(ttl <= 0)
+                throw new ArgumentException("SimulationManager.createPacket: ttl <= 0");
+            return new Packet(source, destination, ttl, tags, expectedResult);
         }
     }
 }

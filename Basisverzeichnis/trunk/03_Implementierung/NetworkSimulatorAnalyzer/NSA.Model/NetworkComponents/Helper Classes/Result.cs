@@ -15,6 +15,7 @@ namespace NSA.Model.NetworkComponents.Helper_Classes
          * 2: DataLinkLayer: There is no Connection for the next Node.
          * 3: DataLinkLayer: The packet was not for this Node.
          * 4: Switch:        No Connection to the next Node.
+         * 5: Packet:        Source or Destination is null.
          */
         public int ErrorID { get; set; }
         public string Res { get; set; }

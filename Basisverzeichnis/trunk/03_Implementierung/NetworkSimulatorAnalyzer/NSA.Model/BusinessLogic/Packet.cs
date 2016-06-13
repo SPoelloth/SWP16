@@ -12,16 +12,24 @@ namespace NSA.Model.BusinessLogic
         private Hardwarenode destination;
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
-        private Result result;
+        public Result result { get; }
+        public bool expectedResult { get; }
         private Dictionary<string, object> tags;
 
         public Packet(Hardwarenode _source, Hardwarenode _destination,
-            int _ttl, Dictionary<string, object> _tags)
+            int _ttl, Dictionary<string, object> _tags, bool expRes)
         {
             source = _source;
             destination = _destination;
+            if (source == null || destination == null)
+            {
+                result.ErrorID = 5;
+                result.Res = "Source or destination node does not exist.";
+                result.SendError = true;
+            }
             ttl = _ttl;
             tags = _tags;
+            expectedResult = expRes;
             hops.Add(source);
         }
 
@@ -45,7 +53,7 @@ namespace NSA.Model.BusinessLogic
                 }
             }
             if(result.ErrorID == 0)
-                return new Packet(destination, source, ttl, tags);
+                return new Packet(destination, source, ttl, tags, expectedResult);
             return null;
         }
     }

@@ -7,12 +7,10 @@ namespace NSA.Model.BusinessLogic
         private List<Packet> packetsSend;
         private List<Packet> packetsReceived;
 	    private int id;
-	    private bool expectedResult;
 
-	    public Simulation(int _id, bool _result)
+	    public Simulation(int _id)
 	    {
 	        id = _id;
-	        expectedResult = _result;
 	    }
 
         /// <summary>
@@ -31,17 +29,21 @@ namespace NSA.Model.BusinessLogic
 	    {
             foreach (Packet sendpacket in packetsSend)
             {
-                Packet p = sendpacket.Send();
-
-                if (p != null)
+                if (sendpacket.result.ErrorID == 0)
                 {
-                    packetsReceived.Add(p);
+                    Packet p = sendpacket.Send();
+
+                    if (p != null)
+                    {
+                        packetsReceived.Add(p);
+                    }
                 }
             }
 
             foreach (Packet backpacket in packetsReceived)
             {
-                backpacket.Send();
+                if(backpacket.result.ErrorID == 0)
+                    backpacket.Send();
             }
         }
     }
