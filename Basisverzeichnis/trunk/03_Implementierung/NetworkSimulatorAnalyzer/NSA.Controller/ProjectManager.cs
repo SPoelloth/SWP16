@@ -12,7 +12,7 @@ namespace NSA.Controller
 {
     public class ProjectManager
     {
-        private Project currentProject;
+        public Project currentProject;
         private List<Testscenario> testscenarios;
 
         public static ProjectManager Instance = new ProjectManager();

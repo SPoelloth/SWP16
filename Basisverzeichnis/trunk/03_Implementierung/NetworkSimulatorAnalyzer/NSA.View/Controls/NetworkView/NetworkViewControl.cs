@@ -14,31 +14,12 @@ namespace NSA.View.Controls.NetworkView
         public event Action<VisualConnection> RemoveConnectionPressed;
         public event Action<EditorElementBase> RemoveElementPressed;
         public List<VisualConnection> connections = new List<VisualConnection>();
-        List<EditorElementBase> testElements = new List<EditorElementBase>();
 
         public NetworkViewControl()
         {
             // ReSharper disable once VirtualMemberCallInConstructor
             DoubleBuffered = true;
             InitializeComponent();
-            //testcode
-            testElements.Add(new ComputerControl(new Point(20, 20), "Computer 1"));
-            ((WorkstationControl)testElements[0]).NetworkPortCount = 4;
-            testElements.Add(new ComputerControl(new Point(200, 20), "Computer 2"));
-            testElements.Add(new ComputerControl(new Point(380, 20), "Computer 3"));
-            ((WorkstationControl)testElements[2]).NetworkPortCount = 4;
-            testElements.Add(new ComputerControl(new Point(200, 160), "Computer 4"));
-            testElements.Add(new ComputerControl(new Point(500, 20), "Computer 5"));
-            testElements.Add(new ComputerControl(new Point(280, 160), "Computer 6"));
-            testElements.Add(new ComputerControl(new Point(525, 160), "Computer 7"));
-
-            AddElement(new VisualConnection("a", (WorkstationControl)testElements[0], 1, (WorkstationControl)testElements[1], 0, this));
-            AddElement(new VisualConnection("b", (WorkstationControl)testElements[1], 1, (WorkstationControl)testElements[2], 0, this));
-            AddElement(new VisualConnection("c", (WorkstationControl)testElements[0], 3, (WorkstationControl)testElements[3], 0, this));
-            AddElement(new VisualConnection("d", (WorkstationControl)testElements[2], 1, (WorkstationControl)testElements[4], 0, this));
-            AddElement(new VisualConnection("e", (WorkstationControl)testElements[2], 2, (WorkstationControl)testElements[5], 1, this));
-            AddElement(new VisualConnection("f", (WorkstationControl)testElements[2], 3, (WorkstationControl)testElements[6], 0, this));
-            foreach (var e in testElements) AddElement(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
