@@ -67,5 +67,10 @@ namespace NSA.Controller.ViewControllers
             // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
         }
 
+        public void CreateHardwarenodeRequest()
+        {
+            networkViewControl.CreateNewConnection();
+
+        }
     }
 }
