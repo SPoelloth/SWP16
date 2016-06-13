@@ -8,6 +8,8 @@ namespace NSA.Model.NetworkComponents.Layers
     {
         public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {
+            if (iface == null)
+                return;
             if (currentNode.GetConnections().ContainsKey(iface.Name))
             {
                 nextNodes.Add(currentNode.GetConnections()[iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[iface.Name].End : currentNode.GetConnections()[iface.Name].Start);

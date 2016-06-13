@@ -13,6 +13,18 @@ namespace NSA.Model.NetworkComponents.Layers
 
         public void ValidateSend(List<Hardwarenode> nextNodes, IPAddress nextNodeIP, Interface iface, Workstation destination, Workstation currentNode, Result Res)
         {
+            //Wenn destination direkt dran ist an einer Verbindung
+            foreach (Connection c in currentNode.GetConnections().Values)
+            {
+                if (c.Start.Equals(destination) || c.End.Equals(destination))
+                {
+                    nextNodes.Add(destination);
+                    iface = null;
+                    return;
+                }
+            }
+
+            //In der Routingtabelle nachgucken
             List<Interface> interfaces = destination.GetInterfaces();
             foreach (Interface i in interfaces)
             {
