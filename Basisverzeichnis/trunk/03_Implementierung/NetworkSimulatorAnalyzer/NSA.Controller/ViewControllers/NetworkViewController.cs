@@ -5,6 +5,7 @@ using NSA.View.Controls.NetworkView.NetworkElements.Base;
 using NSA.View.Forms;
 using System.Drawing;
 using NSA.View.Controls.NetworkView.NetworkElements;
+using System.Linq;
 
 namespace NSA.Controller.ViewControllers
 {
@@ -26,6 +27,11 @@ namespace NSA.Controller.ViewControllers
             networkViewControl.SelectionChanged += EditorElement_Selected;
             networkViewControl.RemoveConnectionPressed += RemoveConnection;
             networkViewControl.RemoveElementPressed += RemoveHardwarenode;
+        }
+
+        public Point? GetLocationOfElementByName(string name)
+        {
+            return networkViewControl.Controls.OfType<EditorElementBase>().FirstOrDefault(s => s.Name == name)?.Location;
         }
 
         private void RemoveHardwarenode(EditorElementBase e)
