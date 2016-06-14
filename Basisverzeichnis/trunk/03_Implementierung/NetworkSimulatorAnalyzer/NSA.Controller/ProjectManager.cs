@@ -128,16 +128,18 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            var openFileDialog = new OpenFileDialog() { Filter = "Text|*.txt" };
-            var result = openFileDialog.ShowDialog();
-            if (result != DialogResult.OK) return;
-            var file = openFileDialog.FileName;
-            try
+            string directoryName = "Testscenarios";
+            DirectoryInfo d = new DirectoryInfo(currentProject.Path + "/" + directoryName);
+
+            foreach (var file in d.GetFiles("*.txt"))
             {
-                testscenarios.Add(ReadTestscenarioFromTxtFile(file));
-            }
-            catch (IOException)
-            {
+                try
+                {
+                    testscenarios.Add(ReadTestscenarioFromTxtFile(file.FullName));
+                }
+                catch (IOException)
+                {
+                }
             }
         }
 
@@ -219,34 +221,34 @@ namespace NSA.Controller
             4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
             ----------------------------------------------------------------------------*/
             string text = System.IO.File.ReadAllText(FilePath);
-            List<string> words = new List<string>();
+            List<string> elements = new List<string>();
             Testscenario testscenario = new Testscenario();
             int startTextLength = text.Length;
             int i = 0;
             while (i < startTextLength)
             {
                 int end = (text.IndexOf('|') < text.Length) ? text.IndexOf('|') : text.Length;
-                words.Add(text.Substring(i, end));
+                elements.Add(text.Substring(i, end));
                 i = text.IndexOf('|');
                 text = text.Substring(i, text.Length - 1);
                 i++;
             }
 
-            foreach (string word in words)
+            foreach (string element in elements)
             {
                 // 1. Rechner_Name
-                if (word[0] >= '0' && word[0] <= '9')
+                if (element[0] >= '0' && element[0] <= '9')
                 {
-                    int number = Int32.Parse(word.Substring(0, word.IndexOf('.')));
-                    string name = word.Substring(word.IndexOf('.'), word.Length - 1);
+                    int number = Int32.Parse(element.Substring(0, element.IndexOf('.')));
+                    string name = element.Substring(element.IndexOf('.'), element.Length - 1);
                 }
                 // ONLY([Rechner_Name, …])
-                else if (word.IndexOf("ONLY") >= 0)
+                else if (element.IndexOf("ONLY") >= 0)
                 {
 
                 }
                 // { TTL: 64, SSL: TRUE,…}}
-                if (word.IndexOf("TTL") >= 0)
+                if (element.IndexOf("TTL") >= 0)
                 {
 
                 }
