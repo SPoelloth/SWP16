@@ -103,7 +103,7 @@ namespace NSA.Controller
         public void Reset()
         {
             Network oldNetwork = network;
-            network = ProjectManager.Instance.currentProject.Network;
+            network = ProjectManager.Instance.CurrentProject.Network;
             if (network == oldNetwork)
             {
                 // Reset() has already been called with this network object

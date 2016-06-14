@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,9 +15,9 @@ namespace NSA.Controller
 {
     public class ProjectManager
     {
-        public Project currentProject;
+        public Project CurrentProject;
         private List<Testscenario> testscenarios;
-        private const string testscenorioDirectoryName = "Testscenarios";
+        private const string TestscenorioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
         private bool instanceIsFullyCreated;
@@ -29,21 +30,11 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Gets the NetworkRepresentation: the View nodes.
-        /// </summary>
-        /// <returns>Returns the Network Representation: the View nodes.</returns>
-        private List<EditorElementBase> GetNetworkRepresentation()
-        {
-            var networkRepresentation = new List<EditorElementBase>();
-            return networkRepresentation;
-        }
-
-        /// <summary>
         /// Creates a new Project.
         /// </summary>
         public void CreateNewProject()
         {
-            currentProject = new Project();
+            CurrentProject = new Project();
             if (instanceIsFullyCreated)
             {
                 // Do not call Networkmanager if the instance not fully created yet.
@@ -61,23 +52,13 @@ namespace NSA.Controller
         /// </summary>
         public void Save()
         {
-            /*
-            Beim Speichern muss sowohl das Model (Informationen über die Objekte) 
-            als auch die View (Positionen an denen gezeichenet wird) berücksichtigt werden.
-            
-            */
-            /* Zu speichernde Komponenten sind folgende:
-            -Positionen(Koordinaten) aller Elemente (Hardwarenodes)(sprich Informationen der View)
-            -Alle Verbindungen zwischen Hardwareknoten
-            - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
-            // NetworkViewController.Instance.GetLocationOfElementByName();
-            if (currentProject.Path == null)
+            if (CurrentProject.Path == null)
             {
                 SaveAs();
             }
             else
             {
-                WriteToXmlFile(currentProject.Path, currentProject);
+                SavingProcess(CurrentProject.Path);
             }
         }
 
@@ -90,16 +71,35 @@ namespace NSA.Controller
             var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
-            currentProject.Path = file;
-            try
-            {
-                WriteToXmlFile(file, currentProject);
-                // Directory anlegen
-                Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + testscenorioDirectoryName);
-            }
-            catch (IOException)
-            {
-            }
+            CurrentProject.Path = file;
+            SavingProcess(file);
+            // create Directory
+            Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + TestscenorioDirectoryName);
+        }
+
+        private void SavingProcess(string Path)
+        {
+            // Positionen(Koordinaten) aller Elemente (Hardwarenodes)(sprich Informationen der View)
+            // todo: irgendwie an Namen kommen
+            CurrentProject.NodeLocation.Add("", NetworkViewController.Instance.GetLocationOfElementByName(""));
+
+            /* 
+            -Alle Verbindungen zwischen Hardwareknoten
+            - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
+            // todo: irgendwie an Network kommen
+            // CurrentProject.Network = aktuelles Network
+
+            WriteToXmlFile(Path, CurrentProject);
+        }
+
+        /// <summary>
+        /// Gets the NetworkRepresentation: the View nodes.
+        /// </summary>
+        /// <returns>Returns the Network Representation: the View nodes.</returns>
+        private List<EditorElementBase> GetNetworkRepresentation()
+        {
+            var networkRepresentation = new List<EditorElementBase>();
+            return networkRepresentation;
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace NSA.Controller
             var file = openFileDialog.FileName;
             try
             {
-                currentProject = ReadFromXmlFile<Project>(file);
+                CurrentProject = ReadFromXmlFile<Project>(file);
                 NetworkManager.Instance.Reset();
             }
             catch (IOException)
@@ -126,7 +126,7 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            DirectoryInfo d = new DirectoryInfo(currentProject.Path + "/" + testscenorioDirectoryName);
+            DirectoryInfo d = new DirectoryInfo(CurrentProject.Path + "/" + TestscenorioDirectoryName);
 
             foreach (var file in d.GetFiles("*.txt"))
             {
@@ -217,14 +217,14 @@ namespace NSA.Controller
             …} | TRUE/FALSE
             4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
             ----------------------------------------------------------------------------*/
-            string text = System.IO.File.ReadAllText(FilePath);
-            List<string> elements = new List<string>();
-            Testscenario testscenario = new Testscenario();
-            int startTextLength = text.Length;
-            int i = 0;
+            string text = File.ReadAllText(FilePath);
+            var elements = new List<string>();
+            var testscenario = new Testscenario();
+            var startTextLength = text.Length;
+            var i = 0;
             while (i < startTextLength)
             {
-                int end = (text.IndexOf('|') < text.Length) ? text.IndexOf('|') : text.Length;
+                var end = (text.IndexOf('|') < text.Length) ? text.IndexOf('|') : text.Length;
                 elements.Add(text.Substring(i, end));
                 i = text.IndexOf('|');
                 text = text.Substring(i, text.Length - 1);
@@ -236,16 +236,16 @@ namespace NSA.Controller
                 // 1. Rechner_Name
                 if (element[0] >= '0' && element[0] <= '9')
                 {
-                    int number = Int32.Parse(element.Substring(0, element.IndexOf('.')));
-                    string name = element.Substring(element.IndexOf('.'), element.Length - 1);
+                    var number = int.Parse(element.Substring(0, element.IndexOf('.')));
+                    var name = element.Substring(element.IndexOf('.'), element.Length - 1);
                 }
                 // ONLY([Rechner_Name, …])
-                else if (element.IndexOf("ONLY") >= 0)
+                else if (element.IndexOf("ONLY", StringComparison.Ordinal) >= 0)
                 {
 
                 }
                 // { TTL: 64, SSL: TRUE,…}}
-                if (element.IndexOf("TTL") >= 0)
+                if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0)
                 {
 
                 }
