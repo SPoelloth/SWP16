@@ -218,24 +218,52 @@ namespace NSA.Controller
             4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
             ----------------------------------------------------------------------------*/
             string text = File.ReadAllText(FilePath);
-            var elements = new List<string>();
             var testscenario = new Testscenario();
-            var startTextLength = text.Length;
 
             foreach (string element in text.Split('|'))
             {
-                // 1. Rechner_Name & Rule Anfang
+                Rule rule = new Rule();
+                // 1. Rechner_Name & Rule Anfang (immer an erster Stelle)
                 if (element[0] >= '0' && element[0] <= '9')
                 {
                     var number = int.Parse(element.Substring(0, element.IndexOf('.')));
                     var name = element.Substring(element.IndexOf('.'), element.Length - 1);
+                    rule.Name = name;
                 }
-                // ONLY([Rechner_Name, …])
+                // ONLY([Rechner_Name, …]) (immer an zweiter Stelle)
                 else if (element.IndexOf("ONLY", StringComparison.Ordinal) >= 0)
                 {
-
+                    var onlyNodeNames = element.Remove('[').Remove(']').Remove(' ').Split(',');
+                    foreach (string onlyNodeName in onlyNodeNames)
+                    {
+                        rule.OnlyNodeNames.Add(onlyNodeName);
+                    }
                 }
-                // { TTL: 64, SSL: TRUE,…}}
+                // [Rechner_Name, …] (immer an zweiter Stelle)
+                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) < 0)
+                {
+                    var nodeNames = element.Remove('[').Remove(']').Remove(' ').Split(',');
+                    foreach (string nodeName in nodeNames)
+                    {
+                        rule.NodeNames.Add(nodeName);
+                    }
+                }
+                // [SUBNET(Subnet_Name), …] (immer an zweiter Stelle)
+                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) >= 0)
+                {
+                    var subnetNames = element.Remove('[').Remove(']').Remove(' ').Split(',');
+                    foreach (string subnetName in subnetNames)
+                    {
+                        rule.SubnetNames.Add(subnetName);
+                    }
+                }
+                // HAS_INTERNET (immer an zweiter Stelle)
+                if (element.IndexOf("HAS_INTERNET", StringComparison.Ordinal) >= 0)
+                {
+                    var hasInternet = true;
+                    rule.HasInternet = hasInternet;
+                }
+                // { TTL: 64, SSL: TRUE,…}} (immer an dritter Stelle)
                 if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0 || element.IndexOf("SSL", StringComparison.Ordinal) >= 0)
                 {
                     var TTL = 0;
@@ -252,27 +280,16 @@ namespace NSA.Controller
                             SSL = element.Substring(element.IndexOf(':'), element.Length - 1).Trim();
                         }
                     }
+                    rule.Ttl = TTL;
+                    rule.Ssl = (SSL.Equals("TRUE")) ? true : false;
                 }
-                // [Rechner_Name, …]
-                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) < 0)
-                {
-                    var attributes = element.Split(',');
-                }
-                // [SUBNET(Subnet_Name), …]
-                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) >= 0)
-                {
-                    var attributes = element.Split(',');
-                }
-                // HAS_INTERNET
-                if (element.IndexOf("HAS_INTERNET", StringComparison.Ordinal) >= 0)
-                {
-
-                }
-                // TRUE/FALSE
+                // TRUE/FALSE (immer an letzter Stelle) Ende
                 if (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0 || element.IndexOf("FALSE", StringComparison.Ordinal) >= 0)
                 {
-
+                    var applicable = (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0) ? true : false;
+                    rule.Applicable = applicable;
                 }
+                testscenario.Rules.Add(rule);
             }
             return testscenario;
         }
