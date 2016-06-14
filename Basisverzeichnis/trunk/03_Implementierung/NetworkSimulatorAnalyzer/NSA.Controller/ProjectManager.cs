@@ -58,6 +58,23 @@ namespace NSA.Controller
         /// </summary>
         public void Save()
         {
+            /*
+            Der Projectmanager ist ja unter anderem für das speichern zuständig.
+            Beim Speichern muss sowohl das Model (Informationen über die Objekte) als auch die View (Positionen an denen gezeichenet wird) berücksichtigt werden.
+
+            Bei der Erstellung des Klassendiagramms war noch nicht ganz klar, wie man an die Daten der View kommt. Irgendwann ist dann der Gedanke aufgekommen,
+            eine private Hilfsmethode names getNetworkRepresentation() einzuführen, über die man die entsprechenden Daten in Form einer Liste von EditorElementBase-Objekten bekommt. D.h. innerhalb der z.B. Speichern Methode wird getNetworkRepresentation() aufgerufen um an die EditorElementBase-Ojekte zu kommen, um dann deren Position etc. abzuspeichern.
+            Private deshalb, weil diese Methode wahrscheinlich nur als interne Hilfsmethode gebraucht wird und außerhalb nicht benötigt wird.
+
+            Falls du so eine Methode nicht brauchst, kann die Methode auch weggelassen werden.
+            
+            networkViewController.GetLocationOfElementByName();
+            */
+            /* Zu speichernde Komponenten sind folgende:
+            -Positionen(Koordinaten) aller Elemente (Hardwarenodes)(sprich Informationen der View)
+            -Alle Verbindungen zwischen Hardwareknoten
+            - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models)
+            -Nicht gespeichert werden muss der Projektpfad(dieser ergibt sich ja aus der gespeicherten Datei selbst wieder) */
             if (currentProject.Path == null)
             {
                 SaveAs();
@@ -110,13 +127,13 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            var openFileDialog = new OpenFileDialog();
+            var openFileDialog = new OpenFileDialog() { Filter = "Text|*.txt" };
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
             try
             {
-                testscenarios.Add(ReadFromXmlFile<Testscenario>(file));
+                testscenarios.Add(ReadTestscenarioFromTxtFile(file));
             }
             catch (IOException)
             {
@@ -178,6 +195,48 @@ namespace NSA.Controller
             {
                 reader?.Close();
             }
+        }
+
+        /// <summary>
+        /// Reads a Testscenario instance from a txt file.
+        /// <para>Object type must have a parameterless constructor.</para>
+        /// </summary>
+        /// <param name="FilePath">The file path to read the object instance from.</param>
+        /// <returns>Returns a Testscenario  from the txt file.</returns>
+        public static Testscenario ReadTestscenarioFromTxtFile(string FilePath)
+        {
+            /* ----------------------------- Skriptsprache -----------------------------
+             | - Separator, der das Parsen der Sprache erleichtert.
+            […] - Array von Elementen
+            {…} - Dictionary von Elementen
+            1. Rechner_Name | [Rechner_Name, …] | {TTL: 64, SSL: TRUE, …} |
+            TRUE/FALSE
+            2. Rechner_Name | [SUBNET(Subnet_Name), …] | {TTL: 64, SSL: TRUE,
+            …} | TRUE/FALSE
+            3. Rechner_Name | ONLY([Rechner_Name, …]) | {TTL: 64, SSL: TRUE,
+            …} | TRUE/FALSE
+            4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
+            ----------------------------------------------------------------------------*/
+            string text = System.IO.File.ReadAllText(FilePath);
+            Testscenario testscenario = new Testscenario();
+            List<int> computerIndexList = new List<int>();
+            List<int> seperatorIndexList = new List<int>();
+            int i = 0;
+            foreach (char character in text)
+            {
+                // 1. Rechner_Name
+                if (character >= '0' && character <= '9')
+                {
+                    computerIndexList.Add(i);
+                }
+                // | - Separator, der das Parsen der Sprache erleichtert.
+                if (character == '|')
+                {
+                    seperatorIndexList.Add(i);
+                }
+                i++;
+            }
+            return testscenario;
         }
 
         /// <summary>
