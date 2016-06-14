@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\NetworkView\MessageLoopFilter.cs" />
     <Compile Include="Controls\NetworkView\VisualConnection.cs" />
     <Compile Include="Controls\NetworkView\LabelControl.cs">
       <SubType>UserControl</SubType>
@@ -188,7 +189,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Controls\NetworkView\LabelControl.resx">
       <DependentUpon>LabelControl.cs</DependentUpon>

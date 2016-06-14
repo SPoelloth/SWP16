@@ -119,6 +119,15 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             base.OnMouseMove(e);
         }
 
+        public int GetPortIDByPoint(Point location)
+        {
+            for(int i = 0; i < portHitboxes.Count; i++)
+            {
+                if (portHitboxes[i].Contains(location)) return i;
+            }
+            return -1;
+        }
+
         public override Rectangle GetPortBoundsByID(int port)
         {
             return portHitboxes[port];

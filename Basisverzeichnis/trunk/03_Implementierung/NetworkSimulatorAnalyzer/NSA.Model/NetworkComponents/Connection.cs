@@ -17,7 +17,7 @@ namespace NSA.Model.NetworkComponents
         {
             Start = Source;
             End = Target;
-            Name = Guid.NewGuid().ToString("N");
+            Name = new Guid().ToString("N");
         }
 
         #region Equality

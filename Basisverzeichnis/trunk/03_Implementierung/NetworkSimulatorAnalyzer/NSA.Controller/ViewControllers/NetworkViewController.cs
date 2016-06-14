@@ -6,6 +6,7 @@ using NSA.View.Forms;
 using System.Drawing;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace NSA.Controller.ViewControllers
 {
@@ -27,6 +28,13 @@ namespace NSA.Controller.ViewControllers
             networkViewControl.SelectionChanged += EditorElement_Selected;
             networkViewControl.RemoveConnectionPressed += RemoveConnection;
             networkViewControl.RemoveElementPressed += RemoveHardwarenode;
+            networkViewControl.NewConnectionCreated += OnNewConnectionCreated;
+        }
+
+        private void OnNewConnectionCreated(Control c1, int port1, Control c2, int port2)
+        {
+            NetworkManager.Instance.CreateConnection(c1.Name, "eth" + port1, c2.Name, "eth" + port2);
+            
         }
 
         public Point? GetLocationOfElementByName(string name)
@@ -59,18 +67,21 @@ namespace NSA.Controller.ViewControllers
 
         public void AddConnection(Connection connection)
         {
-            // Get new Connection from Networkmanager
-            // Subscribe to BL events
-
-            // Create Connectionrepresentation
-            // Subscribe to UI events
-            // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
+            var node1 = GetControlByName(connection.Start.Name);
+            var node2 = GetControlByName(connection.End.Name);
+            if (node1 == null || node2 == null) throw new ArgumentNullException("referenced start or end of connection is null");
+         //   networkViewControl.AddElement(new VisualConnection(connection.Name, node1, hierFehltDerPortIndex, node2, PORTINDEX));
+         //TODO
         }
 
         public void CreateHardwarenodeRequest()
         {
             networkViewControl.CreateNewConnection();
+        }
 
+        private EditorElementBase GetControlByName(string name)
+        {
+            return networkViewControl.Controls.OfType<EditorElementBase>().First(s => s.Name == name);
         }
     }
 }
