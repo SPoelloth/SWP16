@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -218,23 +219,37 @@ namespace NSA.Controller
             4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
             ----------------------------------------------------------------------------*/
             string text = System.IO.File.ReadAllText(FilePath);
+            List<string> words = new List<string>();
             Testscenario testscenario = new Testscenario();
-            List<int> computerIndexList = new List<int>();
-            List<int> seperatorIndexList = new List<int>();
+            int startTextLength = text.Length;
             int i = 0;
-            foreach (char character in text)
+            while (i < startTextLength)
+            {
+                int end = (text.IndexOf('|') < text.Length) ? text.IndexOf('|') : text.Length;
+                words.Add(text.Substring(i, end));
+                i = text.IndexOf('|');
+                text = text.Substring(i, text.Length - 1);
+                i++;
+            }
+
+            foreach (string word in words)
             {
                 // 1. Rechner_Name
-                if (character >= '0' && character <= '9')
+                if (word[0] >= '0' && word[0] <= '9')
                 {
-                    computerIndexList.Add(i);
+                    int number = Int32.Parse(word.Substring(0, word.IndexOf('.')));
+                    string name = word.Substring(word.IndexOf('.'), word.Length - 1);
                 }
-                // | - Separator, der das Parsen der Sprache erleichtert.
-                if (character == '|')
+                // ONLY([Rechner_Name, …])
+                else if (word.IndexOf("ONLY") >= 0)
                 {
-                    seperatorIndexList.Add(i);
+
                 }
-                i++;
+                // { TTL: 64, SSL: TRUE,…}}
+                if (word.IndexOf("TTL") >= 0)
+                {
+
+                }
             }
             return testscenario;
         }
