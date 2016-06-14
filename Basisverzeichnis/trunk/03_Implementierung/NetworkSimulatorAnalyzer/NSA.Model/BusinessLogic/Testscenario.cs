@@ -13,6 +13,14 @@ namespace NSA.Model.BusinessLogic
             Id = Guid.NewGuid().ToString("N");
             Rules = new List<Rule>();
         }
+
+        public void ParseRules()
+        {
+            foreach (var rule in Rules)
+            {
+                // todo: parse rule
+            }
+        }
     }
 
     public class Rule
