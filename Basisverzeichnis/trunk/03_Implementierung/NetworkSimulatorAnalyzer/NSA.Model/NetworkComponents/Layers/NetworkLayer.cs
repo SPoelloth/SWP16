@@ -6,7 +6,7 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class NetworkLayer : ILayer
     {
-        public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
+        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo)
         {
             return true;
         }

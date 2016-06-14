@@ -84,10 +84,9 @@ namespace NSA.Model.NetworkComponents
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Res">The Result of the simulation</param>
-        /// <param name="NextNodeIp"></param>
+        /// <param name="valInfo">The validation Info</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
+        public virtual bool Receive(Dictionary<string, object> Tags, ValidationInfo valInfo)
         {
             return true;
         }

@@ -17,10 +17,9 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Validates the layer while receiving a packet.
         /// </summary>
-        /// <param name="nextNodeIP"></param>
         /// <param name="currentNode"></param>
-        /// <param name="Res"></param>
+        /// <param name="valInfo"></param>
         /// <returns>Boolean value indicating if the validation was successfull</returns>
-        bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res);
+        bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo);
     }
 }

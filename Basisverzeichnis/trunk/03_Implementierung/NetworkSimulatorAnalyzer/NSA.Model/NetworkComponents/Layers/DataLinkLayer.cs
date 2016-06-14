@@ -22,20 +22,20 @@ namespace NSA.Model.NetworkComponents.Layers
             valInfo.NextNodes = null;
         }
 
-        public bool ValidateReceive(IPAddress nextNodeIP, Workstation currentNode, Result Res)
+        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo)
         {
-            if (nextNodeIP == null)
+            if (valInfo.NextNodeIP == null)
                 return true;
             List<Interface> ifaces = currentNode.GetInterfaces();
             foreach (Interface i in ifaces)
             {
-                if (nextNodeIP.Equals(i.IpAddress))
+                if (valInfo.NextNodeIP.Equals(i.IpAddress))
                     return true;
             }
-            Res.ErrorID = 3;
-            Res.Res = "The Connection is to the wrong node.";
-            Res.LayerError = new DataLinkLayer();
-            Res.SendError = false;
+            valInfo.Res.ErrorID = 3;
+            valInfo.Res.Res = "The Connection is to the wrong node.";
+            valInfo.Res.LayerError = new DataLinkLayer();
+            valInfo.Res.SendError = false;
             return false;
         }
     }

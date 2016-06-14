@@ -239,13 +239,13 @@ namespace NSA.Model.NetworkComponents
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(Dictionary<string, object> Tags, Result Res, IPAddress NextNodeIp)
+        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo valInfo)
         {
             bool res = true;
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = Layerstack.GetLayer(i).ValidateReceive(NextNodeIp, this, Res);
+                    res = Layerstack.GetLayer(i).ValidateReceive(this, valInfo);
             }
             return res;
         }

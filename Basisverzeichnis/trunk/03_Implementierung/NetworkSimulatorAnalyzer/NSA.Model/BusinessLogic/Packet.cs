@@ -47,7 +47,7 @@ namespace NSA.Model.BusinessLogic
                 List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, valInfo);
                 if (nextNodes != null)
                 {
-                    if (nextNodes[nextNodes.Count - 1].Receive(tags, result, valInfo.NextNodeIP)) //todo result zu valinfo
+                    if (nextNodes[nextNodes.Count - 1].Receive(tags, valInfo))
                         ttl--;
                     foreach (Hardwarenode n in nextNodes)
                     {
