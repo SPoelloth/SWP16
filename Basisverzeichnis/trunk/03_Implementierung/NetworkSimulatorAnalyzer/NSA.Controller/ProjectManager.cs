@@ -95,7 +95,7 @@ namespace NSA.Controller
             {
                 WriteToXmlFile(file, currentProject);
                 // Directory anlegen
-                Directory.CreateDirectory(file + "/" + testscenorioDirectoryName);
+                Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + testscenorioDirectoryName);
             }
             catch (IOException)
             {
