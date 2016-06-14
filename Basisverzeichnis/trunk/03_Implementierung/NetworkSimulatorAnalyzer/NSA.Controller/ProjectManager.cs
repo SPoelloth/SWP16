@@ -17,7 +17,7 @@ namespace NSA.Controller
     {
         public Project CurrentProject;
         private List<Testscenario> testscenarios;
-        private const string TestscenorioDirectoryName = "Testscenarios";
+        private const string TestscenarioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
         private bool instanceIsFullyCreated;
@@ -74,7 +74,7 @@ namespace NSA.Controller
             CurrentProject.Path = file;
             SavingProcess(file);
             // create Directory
-            Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + TestscenorioDirectoryName);
+            Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + TestscenarioDirectoryName);
         }
 
         private void SavingProcess(string Path)
@@ -126,7 +126,7 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            DirectoryInfo d = new DirectoryInfo(CurrentProject.Path + "/" + TestscenorioDirectoryName);
+            DirectoryInfo d = new DirectoryInfo(CurrentProject.Path + "/" + TestscenarioDirectoryName);
 
             foreach (var file in d.GetFiles("*.txt"))
             {
@@ -221,19 +221,10 @@ namespace NSA.Controller
             var elements = new List<string>();
             var testscenario = new Testscenario();
             var startTextLength = text.Length;
-            var i = 0;
-            while (i < startTextLength)
-            {
-                var end = (text.IndexOf('|') < text.Length) ? text.IndexOf('|') : text.Length;
-                elements.Add(text.Substring(i, end));
-                i = text.IndexOf('|');
-                text = text.Substring(i, text.Length - 1);
-                i++;
-            }
 
-            foreach (string element in elements)
+            foreach (string element in text.Split('|'))
             {
-                // 1. Rechner_Name
+                // 1. Rechner_Name & Rule Anfang
                 if (element[0] >= '0' && element[0] <= '9')
                 {
                     var number = int.Parse(element.Substring(0, element.IndexOf('.')));
@@ -245,7 +236,40 @@ namespace NSA.Controller
 
                 }
                 // { TTL: 64, SSL: TRUE,…}}
-                if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0)
+                if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0 || element.IndexOf("SSL", StringComparison.Ordinal) >= 0)
+                {
+                    var TTL = 0;
+                    var SSL = "";
+                    var attributes = element.Split(',');
+                    foreach (string attribute in attributes)
+                    {
+                        if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0)
+                        {
+                            TTL = int.Parse(element.Substring(element.IndexOf(':'), element.Length-1).Trim());
+                        }
+                        if (element.IndexOf("SSL", StringComparison.Ordinal) >= 0)
+                        {
+                            SSL = element.Substring(element.IndexOf(':'), element.Length - 1).Trim();
+                        }
+                    }
+                }
+                // [Rechner_Name, …]
+                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) < 0)
+                {
+                    var attributes = element.Split(',');
+                }
+                // [SUBNET(Subnet_Name), …]
+                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) >= 0)
+                {
+                    var attributes = element.Split(',');
+                }
+                // HAS_INTERNET
+                if (element.IndexOf("HAS_INTERNET", StringComparison.Ordinal) >= 0)
+                {
+
+                }
+                // TRUE/FALSE
+                if (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0 || element.IndexOf("FALSE", StringComparison.Ordinal) >= 0)
                 {
 
                 }
