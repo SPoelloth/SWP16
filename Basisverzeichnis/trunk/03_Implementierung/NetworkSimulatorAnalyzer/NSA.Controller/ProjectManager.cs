@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,7 +8,6 @@ using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
-using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
@@ -226,8 +224,7 @@ namespace NSA.Controller
                 // 1. Rechner_Name & Rule Anfang (immer an erster Stelle)
                 if (element[0] >= '0' && element[0] <= '9')
                 {
-                    var number = int.Parse(element.Substring(0, element.IndexOf('.')));
-                    var name = element.Substring(element.IndexOf('.'), element.Length - 1);
+                    var name = element.Substring(element.IndexOf('.'), element.Length - 1).Trim();
                     rule.Name = name;
                 }
                 // ONLY([Rechner_Name, …]) (immer an zweiter Stelle)
@@ -260,33 +257,32 @@ namespace NSA.Controller
                 // HAS_INTERNET (immer an zweiter Stelle)
                 if (element.IndexOf("HAS_INTERNET", StringComparison.Ordinal) >= 0)
                 {
-                    var hasInternet = true;
-                    rule.HasInternet = hasInternet;
+                    rule.HasInternet = true;
                 }
                 // { TTL: 64, SSL: TRUE,…}} (immer an dritter Stelle)
                 if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0 || element.IndexOf("SSL", StringComparison.Ordinal) >= 0)
                 {
-                    var TTL = 0;
-                    var SSL = "";
+                    var ttl = 0;
+                    var ssl = "";
                     var attributes = element.Split(',');
                     foreach (string attribute in attributes)
                     {
-                        if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0)
+                        if (attribute.IndexOf("TTL", StringComparison.Ordinal) >= 0)
                         {
-                            TTL = int.Parse(element.Substring(element.IndexOf(':'), element.Length-1).Trim());
+                            ttl = int.Parse(attribute.Substring(attribute.IndexOf(':'), attribute.Length-1).Trim());
                         }
-                        if (element.IndexOf("SSL", StringComparison.Ordinal) >= 0)
+                        if (attribute.IndexOf("SSL", StringComparison.Ordinal) >= 0)
                         {
-                            SSL = element.Substring(element.IndexOf(':'), element.Length - 1).Trim();
+                            ssl = attribute.Substring(element.IndexOf(':'), attribute.Length - 1).Trim();
                         }
                     }
-                    rule.Ttl = TTL;
-                    rule.Ssl = (SSL.Equals("TRUE")) ? true : false;
+                    rule.Ttl = ttl;
+                    rule.Ssl = (ssl.Equals("TRUE"));
                 }
                 // TRUE/FALSE (immer an letzter Stelle) Ende
                 if (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0 || element.IndexOf("FALSE", StringComparison.Ordinal) >= 0)
                 {
-                    var applicable = (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0) ? true : false;
+                    var applicable = (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0);
                     rule.Applicable = applicable;
                 }
                 testscenario.Rules.Add(rule);
@@ -310,7 +306,7 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="Sender">The sender object.</param>
         /// <param name="E">The EventArgs.</param>
-        private static void Form_Shown(object Sender, System.EventArgs E)
+        private static void Form_Shown(object Sender, EventArgs E)
         {
             ToolbarController.Instance.Init();
             NetworkViewController.Instance.Initialize();
