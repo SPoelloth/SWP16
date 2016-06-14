@@ -15,6 +15,7 @@ namespace NSA.Controller
     {
         public Project currentProject;
         private List<Testscenario> testscenarios;
+        private const string testscenorioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
         private bool instanceIsFullyCreated;
@@ -95,9 +96,12 @@ namespace NSA.Controller
             var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
+            currentProject.Path = file;
             try
             {
                 WriteToXmlFile(file, currentProject);
+                // Directory anlegen
+                Directory.CreateDirectory(file + "/" + testscenorioDirectoryName);
             }
             catch (IOException)
             {
@@ -128,8 +132,7 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            string directoryName = "Testscenarios";
-            DirectoryInfo d = new DirectoryInfo(currentProject.Path + "/" + directoryName);
+            DirectoryInfo d = new DirectoryInfo(currentProject.Path + "/" + testscenorioDirectoryName);
 
             foreach (var file in d.GetFiles("*.txt"))
             {
