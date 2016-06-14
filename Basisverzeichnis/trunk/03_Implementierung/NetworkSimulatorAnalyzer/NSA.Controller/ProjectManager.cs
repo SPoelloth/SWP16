@@ -8,6 +8,7 @@ using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
@@ -61,22 +62,15 @@ namespace NSA.Controller
         public void Save()
         {
             /*
-            Der Projectmanager ist ja unter anderem für das speichern zuständig.
-            Beim Speichern muss sowohl das Model (Informationen über die Objekte) als auch die View (Positionen an denen gezeichenet wird) berücksichtigt werden.
-
-            Bei der Erstellung des Klassendiagramms war noch nicht ganz klar, wie man an die Daten der View kommt. Irgendwann ist dann der Gedanke aufgekommen,
-            eine private Hilfsmethode names getNetworkRepresentation() einzuführen, über die man die entsprechenden Daten in Form einer Liste von EditorElementBase-Objekten bekommt. D.h. innerhalb der z.B. Speichern Methode wird getNetworkRepresentation() aufgerufen um an die EditorElementBase-Ojekte zu kommen, um dann deren Position etc. abzuspeichern.
-            Private deshalb, weil diese Methode wahrscheinlich nur als interne Hilfsmethode gebraucht wird und außerhalb nicht benötigt wird.
-
-            Falls du so eine Methode nicht brauchst, kann die Methode auch weggelassen werden.
+            Beim Speichern muss sowohl das Model (Informationen über die Objekte) 
+            als auch die View (Positionen an denen gezeichenet wird) berücksichtigt werden.
             
-            networkViewController.GetLocationOfElementByName();
             */
             /* Zu speichernde Komponenten sind folgende:
             -Positionen(Koordinaten) aller Elemente (Hardwarenodes)(sprich Informationen der View)
             -Alle Verbindungen zwischen Hardwareknoten
-            - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models)
-            -Nicht gespeichert werden muss der Projektpfad(dieser ergibt sich ja aus der gespeicherten Datei selbst wieder) */
+            - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
+            // NetworkViewController.Instance.GetLocationOfElementByName();
             if (currentProject.Path == null)
             {
                 SaveAs();
