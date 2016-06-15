@@ -78,8 +78,7 @@ namespace NSA.Controller
         private void SavingProcess(string Path)
         {
             // Positionen(Koordinaten) aller Elemente (Hardwarenodes)(sprich Informationen der View)
-            // todo: irgendwie an Namen kommen
-            CurrentProject.NodeLocation.Add("", NetworkViewController.Instance.GetLocationOfElementByName(""));
+            CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
 
             /* 
             -Alle Verbindungen zwischen Hardwareknoten

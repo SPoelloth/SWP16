@@ -10,7 +10,7 @@ namespace NSA.Model.BusinessLogic
 	{
 	    public string Path { get; set; }
 	    public Network Network { get; set; }
-        public Dictionary<string, Point?> NodeLocation { get; set; }
+        public List<NodeLocation> NodeLocations { get; set; }
 
         // Default Konstruktor
         /// <summary>
@@ -20,7 +20,13 @@ namespace NSA.Model.BusinessLogic
         {
             Network = new Network();
             Path = null;
-            
+            NodeLocations = new List<NodeLocation>();
         }
+    }
+
+    public class NodeLocation
+    {
+        public string Name { get; set; }
+        public Point? Point { get; set; }
     }
 }

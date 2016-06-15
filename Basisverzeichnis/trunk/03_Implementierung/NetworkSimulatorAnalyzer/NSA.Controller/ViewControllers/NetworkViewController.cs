@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
@@ -7,6 +8,7 @@ using System.Drawing;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using System.Linq;
 using System.Windows.Forms;
+using NSA.Model.BusinessLogic;
 
 namespace NSA.Controller.ViewControllers
 {
@@ -40,6 +42,20 @@ namespace NSA.Controller.ViewControllers
         public Point? GetLocationOfElementByName(string name)
         {
             return networkViewControl.Controls.OfType<EditorElementBase>().FirstOrDefault(s => s.Name == name)?.Location;
+        }
+
+        public List<NodeLocation> GetAllLocationsWithName()
+        {
+            List<NodeLocation> NodeLocations = new List<NodeLocation>();
+            foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
+            {
+                string nodeName = element.AccessibleName;
+                NodeLocation nodeLocation = new NodeLocation();
+                nodeLocation.Name = nodeName;
+                nodeLocation.Point = GetLocationOfElementByName(nodeName);
+                NodeLocations.Add(nodeLocation);
+            }
+            return NodeLocations;
         }
 
         private void RemoveHardwarenode(EditorElementBase e)
