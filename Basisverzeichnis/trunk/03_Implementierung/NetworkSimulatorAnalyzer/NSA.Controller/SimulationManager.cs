@@ -75,6 +75,8 @@ namespace NSA.Controller
         /// <returns>Null, if there is no packet. The Hop-List kann have count == 0</returns>
         public List<Hardwarenode> GetHopsOfLastPacket(int index)
         {
+            if (index >= Simulations.Count)
+                return null;
             Packet p = Simulations[index].GetLastPacket();
             return p?.GetHops();
         }
