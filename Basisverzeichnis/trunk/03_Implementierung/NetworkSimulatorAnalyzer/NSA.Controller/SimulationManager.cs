@@ -34,9 +34,9 @@ namespace NSA.Controller
             // ebenfalls klären: Hop selektieren nur bei aktueller Simulation möglich (würde sagen JA)
         }
 
-        public void StartSimulation(Simulation Sim)
+        public Result StartSimulation(Simulation Sim)
         {
-            Sim.Execute();
+            return Sim.Execute();
         }
 
         public void StartTestscenario(Testscenario T)
@@ -70,7 +70,7 @@ namespace NSA.Controller
         /// <param name="Ttl">The TTL.</param>
         /// <param name="Tags">The tags.</param>
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
-        public void CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
+        public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
         {
             List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
             List<Hardwarenode> destinationList = new List<Hardwarenode>();
@@ -129,21 +129,22 @@ namespace NSA.Controller
                 Simulation sim = new Simulation(Simulations.Count);
                 // Our destination list is empty. -> Create an error packet
                 sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, Tags, ExpectedResult));
-                StartSimulation(sim);
+                Result res = StartSimulation(sim);
                 AddSimulationToHistory(sim);
+                return res;
             }
             else
             {
                 // Create Packets for all destinations.
+                Simulation sim = new Simulation(Simulations.Count);
                 foreach (Hardwarenode destinationNode in destinationList)
                 {
-                    Simulation sim = new Simulation(Simulations.Count);
                     sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source),
                         destinationNode, Ttl, Tags, ExpectedResult));
-                    StartSimulation(sim);
-                    AddSimulationToHistory(sim);
                 }
-
+                Result res = StartSimulation(sim);
+                AddSimulationToHistory(sim);
+                return res;
             }
         }
 
