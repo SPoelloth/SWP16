@@ -292,7 +292,6 @@ namespace NSA.Controller
             // Add node to the Network and to the NetworkViewController
             network.AddHardwarenode(node);
             NetworkViewController.Instance.AddHardwarenode(node);
-            
 
             return node;
         }
@@ -301,7 +300,7 @@ namespace NSA.Controller
         {
             for(int i = 1; ; i++)
             {
-                string name =  $"{type} {i}";
+                string name = $"{type} {i}";
                 if (GetAllHardwareNodes().All(n => n.Name != name)) return name;
             }
         }
@@ -374,7 +373,6 @@ namespace NSA.Controller
             {
                 throw new ArgumentException("Connection with the name " + Name + "could not be found");
             }
-
 
             network.RemoveConnection(Name);
             NetworkViewController.Instance.RemoveConnection(Name);

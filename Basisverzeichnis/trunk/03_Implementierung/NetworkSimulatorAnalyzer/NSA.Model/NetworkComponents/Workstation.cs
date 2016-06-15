@@ -52,11 +52,12 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Ip">The IP of the interface.</param>
         /// <param name="Subnetmask">The subnetmask.</param>
+        /// <param name="portNum">Number of port</param>
         /// <returns>The newly added Interface</returns>
-        public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask)
+        public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int portNum = -1)
         {
-
-            Interface interfaceObj = new Interface(Ip, Subnetmask, GetNewInterfaceNumber());
+            if (portNum == -1) portNum = GetNewInterfaceNumber();
+            Interface interfaceObj = new Interface(Ip, Subnetmask, portNum);
             interfaces.Add(interfaceObj);
             return interfaceObj;
         }
@@ -92,11 +93,11 @@ namespace NSA.Model.NetworkComponents
         public bool SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
         {
             if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))
-                return false;
+                AddInterface(Ip, Mask, int.Parse(Ifacename.Replace(Interface.NamePrefix, "")));
             interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
             return true;
         }
-
+        
         /// <summary>
         /// Gets the new interface number.
         /// </summary>

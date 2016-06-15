@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using NSA.Controller.ViewControllers;
@@ -75,21 +76,36 @@ namespace NSA.Controller
         private void SaveToFile(string file)
         {
             XDocument doc = new XDocument();
-            XElement root = new XElement("Root");
+            XElement root = new XElement("Project");
 
             XElement workstationsXML = new XElement("Workstations");
 
-            foreach (var h in NetworkManager.Instance.GetAllHardwareNodes().OfType<Workstation>())
+            foreach (var ws in NetworkManager.Instance.GetAllHardwareNodes().OfType<Workstation>())
             {
-                var loc = NetworkViewController.Instance.GetLocationOfElementByName(h.Name) ?? new Point();
+                var loc = NetworkViewController.Instance.GetLocationOfElementByName(ws.Name) ?? new Point();
+
+                var interfaces = ws.GetInterfaces();
+
+                XElement interfacesXML = new XElement("Interfaces");
+
+                foreach (var i in interfaces)
+                {
+                    interfacesXML.Add(new XElement("Interface",
+                                      new XAttribute("Name", i.Name),
+                                      new XAttribute("IPAddress", i.IpAddress.ToString()),
+                                      new XAttribute("SubnetMask", i.Subnetmask.ToString())
+
+
+                        ));
+                }
 
                 var xmlnode = new XElement("Workstation",
-                              new XAttribute("Name", h.Name),
+                              new XAttribute("Name", ws.Name),
                               new XAttribute("LocationX", loc.X),
                               new XAttribute("LocationY", loc.Y)
                               // TODO
                               );
-
+                xmlnode.Add(interfacesXML);
 
                 workstationsXML.Add(xmlnode);
             }
@@ -130,9 +146,20 @@ namespace NSA.Controller
                     var x = int.Parse(node.Attribute("LocationX").Value);
                     var y = int.Parse(node.Attribute("LocationY").Value);
 
-                    var hwNode = NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
+                    Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
                     hwNode.Name = name;
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
+
+                    var xElement = node.Element("Interfaces");
+                    if (xElement == null) throw new InvalidDataException();
+                    foreach (var iface in xElement.Elements())
+                    {
+                        var iname = iface.Attribute("Name").Value;
+                        var ip = iface.Attribute("IPAddress").Value;
+                        var subnet = iface.Attribute("SubnetMask").Value;
+
+                        hwNode.SetInterface(iname, IPAddress.Parse(ip), IPAddress.Parse(subnet));
+                    }
                 }
 
                 XElement connectionXML = root.Element("Connections");
