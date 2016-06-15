@@ -33,13 +33,15 @@ namespace NSA.Controller
         public void CreateNewProject()
         {
             CurrentProject = new Project();
+            testscenarios = new List<Testscenario>();
+
             if (instanceIsFullyCreated)
             {
                 // Do not call Networkmanager if the instance not fully created yet.
                 // (Because Networkmanager would try to access ProjectManager´s Properties)
                 NetworkManager.Instance.Reset();
+                NetworkViewController.Instance.ClearNodes();
             }
-            testscenarios = new List<Testscenario>();
 
             instanceIsFullyCreated = true;
         }
@@ -80,9 +82,11 @@ namespace NSA.Controller
         /// </summary>
         private void SavingProcess(string Path)
         {
+            /*********************** View ***********************/
             // Locations of Víew Elements
             CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
 
+            /*********************** Model ***********************/
             /* 
             -Alle Verbindungen zwischen Hardwareknoten
             - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */

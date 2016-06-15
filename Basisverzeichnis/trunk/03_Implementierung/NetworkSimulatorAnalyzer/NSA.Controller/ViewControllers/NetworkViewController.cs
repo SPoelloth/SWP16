@@ -58,6 +58,24 @@ namespace NSA.Controller.ViewControllers
             return NodeLocations;
         }
 
+        public void ClearNodes()
+        {
+            foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
+            {
+                if (element != null)
+                {
+                    try
+                    {
+                        networkViewControl.RemoveElement(element);
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                }
+            }
+        }
+
         private void RemoveHardwarenode(EditorElementBase e)
         {
             networkViewControl.RemoveElement(e);
