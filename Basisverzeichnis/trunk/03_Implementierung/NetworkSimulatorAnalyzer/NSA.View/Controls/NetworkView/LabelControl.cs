@@ -11,10 +11,11 @@ namespace NSA.View.Controls.NetworkView
 
         private EditorElementBase parentElement;
 
+        [Obsolete("Dont use this. This is for the Designer only.")]
         public LabelControl()
         {
             InitializeComponent();
-            textBox.Text = "Text";    
+            textBox.Text = "Text";
         }
 
         public LabelControl(EditorElementBase element)
@@ -27,9 +28,17 @@ namespace NSA.View.Controls.NetworkView
             textBox.KeyDown += TextBox1_KeyDown;
             textBox.LostFocus += TextBox1_LostFocus;
             textBox.Text = element.Name;
+            Click += LabelControl_Click;
             Height = textBox.Height;
             Label1_TextChanged(parentElement, null);
             element.Disposed += Element_Disposed;
+            Enabled = false;
+        }
+
+        private void LabelControl_Click(object sender, EventArgs e)
+        {
+            textBox.Enabled = true;
+            textBox.Focus();
         }
 
         private void Element_Disposed(object sender, EventArgs e)
@@ -56,13 +65,13 @@ namespace NSA.View.Controls.NetworkView
             parentElement.Name = textBox.Text;
             Element_LocationChanged(parentElement, null);
         }
+        
 
         private void TextBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Enabled = false;
-                Enabled = true;
+                textBox.Enabled = false;
                 //this is to remove focus from the textbox
             }
         }

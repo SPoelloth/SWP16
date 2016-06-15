@@ -29,6 +29,7 @@ namespace NSA.Model.NetworkComponents
             Layerstack.AddLayer(new SessionLayer());
             Layerstack.AddLayer(new PresentationLayer());
             Layerstack.AddLayer(new ApplicationLayer());
+            AddInterface(new IPAddress(new byte[] {192, 168, 0, 1}), new IPAddress(new byte[] {255, 255, 255, 0}));
             StandardGateway = null;
         }
 
@@ -206,46 +207,45 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="valInfo"></param>
+        /// <param name="ValInfo"></param>
         /// <returns>
         /// The Hardwarenode which received the package or null if an error occured
         /// </returns>
-        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo valInfo)
+        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
-            valInfo.NextNodes = new List<Hardwarenode>();
-            valInfo.Iface = null;
+            ValInfo.NextNodes = new List<Hardwarenode>();
+            ValInfo.Iface = null;
             for (int i = Layerstack.GetSize() - 1; i >= 0; i--)
             {
-                if (valInfo.NextNodes != null)
+                if (ValInfo.NextNodes != null)
                 {
                     Workstation dest = Destination as Workstation;
                     if(dest != null)
-                        Layerstack.GetLayer(i).ValidateSend(dest, this, valInfo);
+                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo);
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
                     }
                 }
             }
-            return valInfo.NextNodes;
+            return ValInfo.NextNodes;
         }
 
         /// <summary>
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="Res"></param>
-        /// <param name="NextNodeIp"></param>
+        /// <param name="ValInfo">The validation Info</param>
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo valInfo)
+        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
             bool res = true;
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = Layerstack.GetLayer(i).ValidateReceive(this, valInfo);
+                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo);
             }
             return res;
         }

@@ -7,7 +7,7 @@ namespace NSA.Model.BusinessLogic
 {
 	public class Project
 	{
-	    public string Path { get; set; }
+	    public string Path { get; set; } // todo: Pfad nicht speichern
 	    public Network Network { get; set; }
         // Locations of Víew Elements
         public List<NodeLocation> NodeLocations { get; set; }
@@ -24,6 +24,11 @@ namespace NSA.Model.BusinessLogic
             NodeLocations = new List<NodeLocation>();
             VisualConnections = new List<ViewConnection>();
         }
+
+	    public void parseProjectViewDataToViewControlls()
+	    {
+	        
+	    }
     }
 
     public class NodeLocation

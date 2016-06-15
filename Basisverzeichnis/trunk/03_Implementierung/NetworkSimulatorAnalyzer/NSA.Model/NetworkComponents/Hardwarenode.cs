@@ -75,9 +75,9 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="valInfo"></param>
+        /// <param name="ValInfo"></param>
         /// <returns>The Hardwarenode which received the package or null if an error occured</returns>
-        public virtual List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo valInfo)
+        public virtual List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
             return null;
         }
@@ -86,9 +86,9 @@ namespace NSA.Model.NetworkComponents
         /// Hardwarenode receives the package.
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
-        /// <param name="valInfo">The validation Info</param>
+        /// <param name="ValInfo">The validation Info</param>
         /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(Dictionary<string, object> Tags, ValidationInfo valInfo)
+        public virtual bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
             return true;
         }

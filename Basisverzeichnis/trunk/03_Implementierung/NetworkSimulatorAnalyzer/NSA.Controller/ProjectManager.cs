@@ -110,6 +110,7 @@ namespace NSA.Controller
             {
                 CurrentProject = ReadFromXmlFile<Project>(file);
                 NetworkManager.Instance.Reset();
+                CurrentProject.parseProjectViewDataToViewControlls();
             }
             catch (IOException)
             {
@@ -143,17 +144,6 @@ namespace NSA.Controller
         public Testscenario GetTestscenarioById(string Id)
         {
             return testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
-        }
-
-        /// <summary>
-        /// Activates a Testscenario by its id.
-        /// </summary>
-        /// <param name="Id">The id of the Testscenario.</param>
-        /// <returns>Returns the Testscenario.</returns>
-        public void ActivateTestscenarioById(string Id)
-        {
-            var testscenario = testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
-            CurrentProject.Network = testscenario?.ParseRulesToNetwork();
         }
 
         /// <summary>
@@ -209,92 +199,10 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="FilePath">The file path to read the object instance from.</param>
         /// <returns>Returns a Testscenario  from the txt file.</returns>
-        public static Testscenario ReadTestscenarioFromTxtFile(string FilePath)
+        public Testscenario ReadTestscenarioFromTxtFile(string FilePath)
         {
-            /* ----------------------------- Skriptsprache -----------------------------
-             | - Separator, der das Parsen der Sprache erleichtert.
-            […] - Array von Elementen
-            {…} - Dictionary von Elementen
-            1. Rechner_Name | [Rechner_Name, …] | {TTL: 64, SSL: TRUE, …} |
-            TRUE/FALSE
-            2. Rechner_Name | [SUBNET(Subnet_Name), …] | {TTL: 64, SSL: TRUE,
-            …} | TRUE/FALSE
-            3. Rechner_Name | ONLY([Rechner_Name, …]) | {TTL: 64, SSL: TRUE,
-            …} | TRUE/FALSE
-            4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
-            ----------------------------------------------------------------------------*/
             string text = File.ReadAllText(FilePath);
-            var testscenario = new Testscenario();
-
-            foreach (string element in text.Split('|'))
-            {
-                Rule rule = new Rule();
-                // 1. Rechner_Name & Rule Anfang (immer an erster Stelle)
-                if (element[0] >= '0' && element[0] <= '9')
-                {
-                    var name = element.Substring(element.IndexOf('.'), element.Length - 1).Trim();
-                    rule.Name = name;
-                }
-                // ONLY([Rechner_Name, …]) (immer an zweiter Stelle)
-                else if (element.IndexOf("ONLY", StringComparison.Ordinal) >= 0)
-                {
-                    var onlyNodeNames = element.Remove('[').Remove(']').Remove(' ').Split(',');
-                    foreach (string onlyNodeName in onlyNodeNames)
-                    {
-                        rule.OnlyNodeNames.Add(onlyNodeName);
-                    }
-                }
-                // [Rechner_Name, …] (immer an zweiter Stelle)
-                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) < 0)
-                {
-                    var nodeNames = element.Remove('[').Remove(']').Remove(' ').Split(',');
-                    foreach (string nodeName in nodeNames)
-                    {
-                        rule.NodeNames.Add(nodeName);
-                    }
-                }
-                // [SUBNET(Subnet_Name), …] (immer an zweiter Stelle)
-                if (element.IndexOf("[", StringComparison.Ordinal) >= 0 && element.IndexOf("SUBNET", StringComparison.Ordinal) >= 0)
-                {
-                    var subnetNames = element.Remove('[').Remove(']').Remove(' ').Split(',');
-                    foreach (string subnetName in subnetNames)
-                    {
-                        rule.SubnetNames.Add(subnetName);
-                    }
-                }
-                // HAS_INTERNET (immer an zweiter Stelle)
-                if (element.IndexOf("HAS_INTERNET", StringComparison.Ordinal) >= 0)
-                {
-                    rule.HasInternet = true;
-                }
-                // { TTL: 64, SSL: TRUE,…}} (immer an dritter Stelle)
-                if (element.IndexOf("TTL", StringComparison.Ordinal) >= 0 || element.IndexOf("SSL", StringComparison.Ordinal) >= 0)
-                {
-                    var ttl = 0;
-                    var ssl = "";
-                    var attributes = element.Split(',');
-                    foreach (string attribute in attributes)
-                    {
-                        if (attribute.IndexOf("TTL", StringComparison.Ordinal) >= 0)
-                        {
-                            ttl = int.Parse(attribute.Substring(attribute.IndexOf(':'), attribute.Length-1).Trim());
-                        }
-                        if (attribute.IndexOf("SSL", StringComparison.Ordinal) >= 0)
-                        {
-                            ssl = attribute.Substring(element.IndexOf(':'), attribute.Length - 1).Trim();
-                        }
-                    }
-                    rule.Ttl = ttl;
-                    rule.Ssl = (ssl.Equals("TRUE"));
-                }
-                // TRUE/FALSE (immer an letzter Stelle) Ende
-                if (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0 || element.IndexOf("FALSE", StringComparison.Ordinal) >= 0)
-                {
-                    var applicable = (element.IndexOf("TRUE", StringComparison.Ordinal) >= 0);
-                    rule.Applicable = applicable;
-                }
-                testscenario.Rules.Add(rule);
-            }
+            var testscenario = new Testscenario(text, CurrentProject.Network);
             return testscenario;
         }
 
