@@ -4,6 +4,7 @@ using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
 using System.Net;
 using NSA.Model.NetworkComponents;
+using NSA.Model.BusinessLogic.TestscenarioRunnables;
 
 
 namespace NSA.ModelTests.BusinessLogic
@@ -41,11 +42,24 @@ namespace NSA.ModelTests.BusinessLogic
         {
             Testscenario t = new Testscenario("A|(B,C)|{TTL:64}|TRUE", network);
 
-            List<NSA.Model.BusinessLogic.TestscenarioRunnables.ITestscenarioRunnable> runnables = t.GetRunnables();
+            List<ITestscenarioRunnable> runnables = t.GetRunnables();
 
             foreach (var runnable in runnables)
             {
                 Assert.IsTrue(runnable.Run().ErrorID == 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestSimulationShouldFail()
+        {
+            Testscenario t = new Testscenario("A|(D)|{TTL:64}|TRUE", network);
+
+            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+
+            foreach (var runnable in runnables)
+            {
+                Assert.IsFalse(runnable.Run().ErrorID == 0);
             }
         }
     }

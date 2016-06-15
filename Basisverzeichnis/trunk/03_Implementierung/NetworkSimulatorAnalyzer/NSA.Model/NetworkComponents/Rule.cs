@@ -48,7 +48,7 @@ namespace NSA.Model.BusinessLogic
                 return endNodes;
             }
         }
-        private Dictionary<string, int> options;
+        private Dictionary<string, int> options = new Dictionary<string, int>(){ { "TTL", 64 } };
         public Dictionary<string, int> Options
         {
             get
