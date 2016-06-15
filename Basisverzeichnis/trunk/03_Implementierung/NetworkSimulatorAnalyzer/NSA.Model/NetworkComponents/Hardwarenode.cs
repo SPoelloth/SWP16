@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
@@ -191,6 +193,21 @@ namespace NSA.Model.NetworkComponents
             return !(A == B);
         }
         #endregion
+
+        /// <summary>
+        /// Gets the port index of connection.
+        /// </summary>
+        /// <param name="c">The connection.</param>
+        /// <returns>Portindex</returns>
+        public int GetPortIndexOfConnection(Connection c)
+        {
+            KeyValuePair<string, Connection> pair = Connections.FirstOrDefault(s => s.Value == c);
+            if(pair.Equals(default(KeyValuePair<string, Connection>)))
+                return -1;
+            string str = pair.Key;
+            str = str.Remove(0, 3);
+            return Int32.Parse(str);
+        }
         #endregion
     }
 }

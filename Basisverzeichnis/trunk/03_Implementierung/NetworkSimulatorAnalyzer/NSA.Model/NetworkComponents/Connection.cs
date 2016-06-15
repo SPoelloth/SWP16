@@ -113,5 +113,15 @@ namespace NSA.Model.NetworkComponents
             return !(A == B);
         }
         #endregion
+
+        /// <summary>
+        /// Gets the index of the port.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns>Portindex</returns>
+        public int GetPortIndex(Hardwarenode node)
+        {
+            return node.GetPortIndexOfConnection(this);
+        }
     }
 }
