@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
@@ -15,7 +14,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Name">The name of the switch.</param>
         public Switch(string Name) : base(Name)
         {
-            
+            AddInterface();
         }
 
         /// <summary>
@@ -70,17 +69,17 @@ namespace NSA.Model.NetworkComponents
             return newInterface;
         }
 
-        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo valInfo)
+        public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
             List<Hardwarenode> nextNodes = new List<Hardwarenode>();
             foreach (Connection c in Connections.Values)
             {
-                if (c.End.HasIp(valInfo.NextNodeIP))
+                if (c.End.HasIp(ValInfo.NextNodeIP))
                 {
                     nextNodes.Add(c.End);
                     return nextNodes;
                 }
-                if (c.Start.HasIp(valInfo.NextNodeIP))
+                if (c.Start.HasIp(ValInfo.NextNodeIP))
                 {
                     nextNodes.Add(c.Start);
                     return nextNodes;
@@ -94,7 +93,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(valInfo))
+                        if (s.SendToIp(ValInfo))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -106,7 +105,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(valInfo))
+                        if (s.SendToIp(ValInfo))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -114,24 +113,29 @@ namespace NSA.Model.NetworkComponents
                     }
                 }
             }
-            valInfo.Res.ErrorID = 4;
-            valInfo.Res.Res = "There is no Connection for the next Hardwarenode.";
-            valInfo.Res.SendError = true;
+            ValInfo.Res.ErrorID = 4;
+            ValInfo.Res.Res = "There is no Connection for the next Hardwarenode.";
+            ValInfo.Res.SendError = true;
             return null;
         }
 
-        public bool SendToIp(ValidationInfo valInfo)
+        /// <summary>
+        /// Sends to ip.
+        /// </summary>
+        /// <param name="ValInfo">The value information.</param>
+        /// <returns></returns>
+        public bool SendToIp(ValidationInfo ValInfo)
         {
             foreach (Connection c in Connections.Values)
             {
-                if (c.End.HasIp(valInfo.NextNodeIP))
+                if (c.End.HasIp(ValInfo.NextNodeIP))
                 {
-                    valInfo.NextNodes.Add(c.End);
+                    ValInfo.NextNodes.Add(c.End);
                     return true;
                 }
-                if (c.Start.HasIp(valInfo.NextNodeIP))
+                if (c.Start.HasIp(ValInfo.NextNodeIP))
                 {
-                    valInfo.NextNodes.Add(c.Start);
+                    ValInfo.NextNodes.Add(c.Start);
                     return true;
                 }
             }
@@ -143,9 +147,9 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(valInfo))
+                        if (s.SendToIp(ValInfo))
                         {
-                            valInfo.NextNodes.Insert(0, s);
+                            ValInfo.NextNodes.Insert(0, s);
                             return true;
                         }
                     }
@@ -155,9 +159,9 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(valInfo))
+                        if (s.SendToIp(ValInfo))
                         {
-                            valInfo.NextNodes.Insert(0, s);
+                            ValInfo.NextNodes.Insert(0, s);
                             return true;
                         }
                     }
