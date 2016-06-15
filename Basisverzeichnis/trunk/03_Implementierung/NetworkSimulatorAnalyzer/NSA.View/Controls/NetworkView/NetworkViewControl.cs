@@ -24,7 +24,7 @@ namespace NSA.View.Controls.NetworkView
             // ReSharper disable once VirtualMemberCallInConstructor
             DoubleBuffered = true;
             InitializeComponent();
-            filter = new MessageLoopFilter(Handle);
+            filter = new MessageLoopFilter();
             Application.AddMessageFilter(filter);
             filter.NewConnection += OnNewConnection;
             filter.Canceled += OnActionCanceled;
@@ -32,6 +32,7 @@ namespace NSA.View.Controls.NetworkView
 
         private void OnNewConnection(Control control1, Point p1, Control control2, Point p2)
         {
+            Cursor = Cursors.Default;
             WorkstationControl ws1 = control1 as WorkstationControl;
             WorkstationControl ws2 = control2 as WorkstationControl;
             if (ws1 == null || ws2 == null) return;
@@ -41,7 +42,6 @@ namespace NSA.View.Controls.NetworkView
             if (port1 < 0 || port2 < 0) return;
 
             NewConnectionCreated?.Invoke(ws1, port1, ws2, port2);
-            Cursor = Cursors.Default;
         }
 
         private void OnActionCanceled()
@@ -128,9 +128,7 @@ namespace NSA.View.Controls.NetworkView
         }
 
         bool debug = false;
-
-        public object Properties { get; private set; }
-
+        
         protected override void OnClick(EventArgs e)
         {
             Element_Selected(null);

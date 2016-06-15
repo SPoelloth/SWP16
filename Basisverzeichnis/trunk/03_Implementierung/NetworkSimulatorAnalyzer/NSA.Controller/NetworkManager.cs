@@ -380,7 +380,7 @@ namespace NSA.Controller
         public void RemoveHardwarenode(string name)
         {
             Hardwarenode node = network.GetHardwarenodeByName(name);
-            if (null == node)
+            if (node == null)
             {
                 throw new ArgumentException("Hardwarenode with name " + name + "could not be found");
             }

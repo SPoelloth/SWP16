@@ -35,8 +35,11 @@ namespace NSA.Controller.ViewControllers
 
         private void OnNewConnectionCreated(Control c1, int port1, Control c2, int port2)
         {
-            NetworkManager.Instance.CreateConnection(c1.Name, "eth" + port1, c2.Name, "eth" + port2);
-            
+            try
+            {
+                NetworkManager.Instance.CreateConnection(c1.Name, "eth" + port1, c2.Name, "eth" + port2);
+            }
+            catch { }
         }
 
         public Point? GetLocationOfElementByName(string name)
@@ -117,8 +120,8 @@ namespace NSA.Controller.ViewControllers
             var node1 = GetControlByName(connection.Start.Name);
             var node2 = GetControlByName(connection.End.Name);
             if (node1 == null || node2 == null) throw new ArgumentNullException("referenced start or end of connection is null");
-         //   networkViewControl.AddElement(new VisualConnection(connection.Name, node1, hierFehltDerPortIndex, node2, PORTINDEX));
-         //TODO
+            networkViewControl.AddElement(new VisualConnection(connection.Name, node1, connection.GetPortIndex(connection.Start), node2, connection.GetPortIndex(connection.End), networkViewControl));
+         
         }
 
         public void CreateHardwarenodeRequest()
