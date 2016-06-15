@@ -39,6 +39,27 @@ namespace NSA.Controller
             return Sim.Execute();
         }
 
+        /// <summary>
+        /// Gets the simulation result.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>True if it worked, false if not</returns>
+        public bool GetSimulationResult(int index)
+        {
+            Simulation sim = Simulations[index];
+            bool result = false;
+            foreach (Packet p in sim.GetAllPackets())
+            {
+                if ((p.expectedResult && p.result.ErrorID == 0) || (!p.expectedResult && p.result.ErrorID != 0))
+                    result = true;
+                else
+                    result = false;
+                if (result = false)
+                    return result;
+            }
+            return result;
+        }
+
         public void StartTestscenario(Testscenario T)
         {
             // todo Dennis & Oleg

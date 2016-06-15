@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms.VisualStyles;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
@@ -52,6 +53,15 @@ namespace NSA.Model.BusinessLogic
             if(packetsReceived.Count > 0)
                 return packetsReceived[packetsReceived.Count - 1].result;
             return packetsSend[packetsSend.Count - 1].result;
+	    }
+
+        /// <summary>
+        /// Gets all packets.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Packet> GetAllPackets()
+	    {
+	        return packetsSend.Concat(packetsReceived);
 	    }
     }
 }
