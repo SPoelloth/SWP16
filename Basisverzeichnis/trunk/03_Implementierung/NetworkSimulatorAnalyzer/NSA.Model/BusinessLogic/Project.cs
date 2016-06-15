@@ -11,7 +11,6 @@ namespace NSA.Model.BusinessLogic
 	    public Network Network { get; set; }
         // Locations of Víew Elements
         public List<NodeLocation> NodeLocations { get; set; }
-        public List<ViewConnection> VisualConnections { get; set; }
 
         // Default Konstruktor
         /// <summary>
@@ -22,7 +21,6 @@ namespace NSA.Model.BusinessLogic
             Network = new Network();
             Path = null;
             NodeLocations = new List<NodeLocation>();
-            VisualConnections = new List<ViewConnection>();
         }
 
 	    public void parseProjectViewDataToViewControlls()
@@ -35,11 +33,5 @@ namespace NSA.Model.BusinessLogic
     {
         public string Name { get; set; }
         public Point Point { get; set; }
-    }
-
-    public class ViewConnection
-    {
-        public int Port1 { get; set; }
-        public int Port2 { get; set; }
     }
 }

@@ -28,7 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.flpLayers = new System.Windows.Forms.FlowLayoutPanel();
+            this.btUp = new System.Windows.Forms.Button();
+            this.btDown = new System.Windows.Forms.Button();
+            this.btAdd = new System.Windows.Forms.Button();
+            this.btDel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // labelName
@@ -36,23 +40,75 @@
             this.labelName.Size = new System.Drawing.Size(98, 24);
             this.labelName.Text = "Layerstack";
             // 
-            // label1
+            // buttonClose
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 47);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "To be implemented...";
+            this.buttonClose.TabIndex = 4;
+            // 
+            // flpLayers
+            // 
+            this.flpLayers.AutoScroll = true;
+            this.flpLayers.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpLayers.Location = new System.Drawing.Point(8, 40);
+            this.flpLayers.Name = "flpLayers";
+            this.flpLayers.Size = new System.Drawing.Size(121, 158);
+            this.flpLayers.TabIndex = 3;
+            // 
+            // btUp
+            // 
+            this.btUp.Location = new System.Drawing.Point(135, 40);
+            this.btUp.Name = "btUp";
+            this.btUp.Size = new System.Drawing.Size(46, 23);
+            this.btUp.TabIndex = 0;
+            this.btUp.Text = "Up";
+            this.btUp.UseVisualStyleBackColor = true;
+            this.btUp.Click += new System.EventHandler(this.btUp_Click);
+            // 
+            // btDown
+            // 
+            this.btDown.Location = new System.Drawing.Point(135, 69);
+            this.btDown.Name = "btDown";
+            this.btDown.Size = new System.Drawing.Size(46, 23);
+            this.btDown.TabIndex = 1;
+            this.btDown.Text = "Down";
+            this.btDown.UseVisualStyleBackColor = true;
+            this.btDown.Click += new System.EventHandler(this.btDown_Click);
+            // 
+            // btAdd
+            // 
+            this.btAdd.Location = new System.Drawing.Point(135, 146);
+            this.btAdd.Name = "btAdd";
+            this.btAdd.Size = new System.Drawing.Size(46, 23);
+            this.btAdd.TabIndex = 2;
+            this.btAdd.Text = "Add";
+            this.btAdd.UseVisualStyleBackColor = true;
+            this.btAdd.Click += new System.EventHandler(this.btAdd_Click);
+            // 
+            // btDel
+            // 
+            this.btDel.Location = new System.Drawing.Point(135, 175);
+            this.btDel.Name = "btDel";
+            this.btDel.Size = new System.Drawing.Size(46, 23);
+            this.btDel.TabIndex = 3;
+            this.btDel.Text = "Delete";
+            this.btDel.UseVisualStyleBackColor = true;
+            this.btDel.Click += new System.EventHandler(this.btDel_Click);
             // 
             // LayerstackConfigControl
             // 
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btDel);
+            this.Controls.Add(this.btAdd);
+            this.Controls.Add(this.btDown);
+            this.Controls.Add(this.btUp);
+            this.Controls.Add(this.flpLayers);
             this.Name = "LayerstackConfigControl";
-            this.Size = new System.Drawing.Size(185, 92);
+            this.Size = new System.Drawing.Size(185, 201);
             this.Controls.SetChildIndex(this.labelName, 0);
             this.Controls.SetChildIndex(this.buttonClose, 0);
-            this.Controls.SetChildIndex(this.label1, 0);
+            this.Controls.SetChildIndex(this.flpLayers, 0);
+            this.Controls.SetChildIndex(this.btUp, 0);
+            this.Controls.SetChildIndex(this.btDown, 0);
+            this.Controls.SetChildIndex(this.btAdd, 0);
+            this.Controls.SetChildIndex(this.btDel, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -60,6 +116,10 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.FlowLayoutPanel flpLayers;
+        private System.Windows.Forms.Button btUp;
+        private System.Windows.Forms.Button btDown;
+        private System.Windows.Forms.Button btAdd;
+        private System.Windows.Forms.Button btDel;
     }
 }

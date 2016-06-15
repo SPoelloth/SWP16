@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
-using NSA.Model.NetworkComponents.Helper_Classes;
+﻿using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
 {
 	public class Simulation
     {
-        private List<Packet> packetsSend;
-        private List<Packet> packetsReceived;
+        private List<Packet> packetsSend = new List<Packet>();
+        private List<Packet> packetsReceived = new List<Packet>();
 	    private int id;
 
 	    public Simulation(int _id)

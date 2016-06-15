@@ -59,7 +59,7 @@
             this.textBoxIpAddress.Location = new System.Drawing.Point(78, 35);
             this.textBoxIpAddress.Name = "textBoxIpAddress";
             this.textBoxIpAddress.Size = new System.Drawing.Size(95, 20);
-            this.textBoxIpAddress.TabIndex = 1;
+            this.textBoxIpAddress.TabIndex = 0;
             // 
             // labelIpAddress
             // 
@@ -76,7 +76,7 @@
             this.textBoxInterface.Location = new System.Drawing.Point(78, 61);
             this.textBoxInterface.Name = "textBoxInterface";
             this.textBoxInterface.Size = new System.Drawing.Size(95, 20);
-            this.textBoxInterface.TabIndex = 3;
+            this.textBoxInterface.TabIndex = 1;
             this.textBoxInterface.TextChanged += new System.EventHandler(this.textBoxInterface_TextChanged);
             // 
             // GWConfigControl

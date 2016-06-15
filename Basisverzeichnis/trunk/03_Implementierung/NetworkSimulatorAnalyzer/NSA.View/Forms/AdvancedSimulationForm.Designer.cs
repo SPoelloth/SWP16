@@ -126,9 +126,9 @@
             // 
             // resultCombo
             // 
+            this.resultCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.resultCombo.FormattingEnabled = true;
             this.resultCombo.Items.AddRange(new object[] {
-            "Bitte Auswählen",
             "Erfolgreich",
             "Timeout",
             "Ziel nicht erreichbar",
