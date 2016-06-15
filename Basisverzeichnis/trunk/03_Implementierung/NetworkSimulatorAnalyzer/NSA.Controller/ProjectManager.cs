@@ -93,16 +93,16 @@ namespace NSA.Controller
                     interfacesXML.Add(new XElement("Interface",
                                       new XAttribute("Name", i.Name),
                                       new XAttribute("IPAddress", i.IpAddress.ToString()),
-                                      new XAttribute("SubnetMask", i.Subnetmask.ToString())
-
-
-                        ));
+                                      new XAttribute("SubnetMask", i.Subnetmask.ToString())));
                 }
-
+                
                 var xmlnode = new XElement("Workstation",
                               new XAttribute("Name", ws.Name),
                               new XAttribute("LocationX", loc.X),
-                              new XAttribute("LocationY", loc.Y)
+                              new XAttribute("LocationY", loc.Y),
+                              new XAttribute("DefaultGW", ws.StandardGateway),
+                              new XAttribute("DefaultGWPort", ws.StandardGatewayPort.Name)
+
                               // TODO
                               );
                 xmlnode.Add(interfacesXML);
@@ -146,8 +146,12 @@ namespace NSA.Controller
                     var x = int.Parse(node.Attribute("LocationX").Value);
                     var y = int.Parse(node.Attribute("LocationY").Value);
 
+                    var defaultgw = IPAddress.Parse(node.Attribute("DefaultGW").Value);
+                    var defaultgwport = node.Attribute("DefaultGWPort").Value;
+                    
                     Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
                     hwNode.Name = name;
+                    hwNode.StandardGateway = defaultgw;
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
 
                     var xElement = node.Element("Interfaces");
@@ -160,6 +164,8 @@ namespace NSA.Controller
 
                         hwNode.SetInterface(iname, IPAddress.Parse(ip), IPAddress.Parse(subnet));
                     }
+
+                    hwNode.StandardGatewayPort = hwNode.GetInterfaces().First(i => i.Name == defaultgwport);
                 }
 
                 XElement connectionXML = root.Element("Connections");
