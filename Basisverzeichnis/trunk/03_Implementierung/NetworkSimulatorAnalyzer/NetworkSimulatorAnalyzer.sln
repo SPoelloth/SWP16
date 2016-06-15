@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSA.View", "NSA.View\NSA.Vi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSA.Controller", "NSA.Controller\NSA.Controller.csproj", "{703DCF0D-38E1-411F-972E-E9581F0F58D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSA.ModelTests", "NSA.ModelTests\NSA.ModelTests.csproj", "{344116AA-FB27-4463-8713-A68E87FB1C4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{703DCF0D-38E1-411F-972E-E9581F0F58D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{703DCF0D-38E1-411F-972E-E9581F0F58D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{703DCF0D-38E1-411F-972E-E9581F0F58D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344116AA-FB27-4463-8713-A68E87FB1C4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344116AA-FB27-4463-8713-A68E87FB1C4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344116AA-FB27-4463-8713-A68E87FB1C4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344116AA-FB27-4463-8713-A68E87FB1C4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
