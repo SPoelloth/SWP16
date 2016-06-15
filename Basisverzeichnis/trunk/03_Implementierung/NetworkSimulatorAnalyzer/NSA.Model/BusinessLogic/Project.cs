@@ -27,6 +27,6 @@ namespace NSA.Model.BusinessLogic
     public class NodeLocation
     {
         public string Name { get; set; }
-        public Point? Point { get; set; }
+        public Point Point { get; set; }
     }
 }

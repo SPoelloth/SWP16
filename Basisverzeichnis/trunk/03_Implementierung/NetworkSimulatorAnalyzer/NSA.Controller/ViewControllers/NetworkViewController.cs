@@ -52,7 +52,7 @@ namespace NSA.Controller.ViewControllers
                 string nodeName = element.AccessibleName;
                 NodeLocation nodeLocation = new NodeLocation();
                 nodeLocation.Name = nodeName;
-                nodeLocation.Point = GetLocationOfElementByName(nodeName);
+                nodeLocation.Point = element.Location;
                 NodeLocations.Add(nodeLocation);
             }
             return NodeLocations;
