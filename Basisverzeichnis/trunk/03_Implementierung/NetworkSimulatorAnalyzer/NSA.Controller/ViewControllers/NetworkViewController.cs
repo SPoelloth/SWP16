@@ -39,6 +39,11 @@ namespace NSA.Controller.ViewControllers
             
         }
 
+        public Point? GetLocationOfElementByName(string name)
+        {
+            return networkViewControl.Controls.OfType<EditorElementBase>().FirstOrDefault(s => s.Name == name)?.Location;
+        }
+
         public List<NodeLocation> GetAllLocationsWithName()
         {
             List<NodeLocation> NodeLocations = new List<NodeLocation>();
