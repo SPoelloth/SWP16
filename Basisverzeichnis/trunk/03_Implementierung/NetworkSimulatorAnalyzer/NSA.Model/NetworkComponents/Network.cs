@@ -7,13 +7,13 @@ namespace NSA.Model.NetworkComponents
 {
 	public class Network
     {
-	    public List<Hardwarenode> Nodes { get; set; }
-        public List<Connection> Connections { get; set; }
+        private List<Hardwarenode> nodes;
+        private List<Connection> connections;
 
-        public Network()
+	    public Network()
 	    {
-            Nodes = new List<Hardwarenode>();
-            Connections = new List<Connection>();
+            nodes = new List<Hardwarenode>();
+            connections = new List<Connection>();
 	    }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>The Hardwarenode with this name or default value</returns>
         public Hardwarenode GetHardwarenodeByName(string Name)
 	    {
-	        return Nodes.FirstOrDefault(N => N.Name == Name);
+	        return nodes.FirstOrDefault(N => N.Name == Name);
 	    }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="newNode">The new node.</param>
         public void AddHardwarenode(Hardwarenode newNode)
 	    {
-	        Nodes.Add(newNode);
+	        nodes.Add(newNode);
 	    }
 
         /// <summary>
@@ -42,17 +42,17 @@ namespace NSA.Model.NetworkComponents
         /// <exception cref="System.InvalidOperationException">Connection already exists!</exception>
         public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection newConnection)
 	    {
-	        if (!Nodes.Contains(newConnection.Start) || !Nodes.Contains(newConnection.End)) return;
-	        if(Connections.Count(c => c.Start == newConnection.Start && c.End == newConnection.End
+	        if (!nodes.Contains(newConnection.Start) || !nodes.Contains(newConnection.End)) return;
+	        if(connections.Count(c => c.Start == newConnection.Start && c.End == newConnection.End
 	           || c.Start == newConnection.End && c.End == newConnection.Start) > 0
-	           || Connections.Contains(newConnection))
+	           || connections.Contains(newConnection))
 	        {
 	            // there's already a connection between the two nodes
 	            throw new InvalidOperationException("Connection already exists!");
 	        }
             newConnection.Start.AddConnection(StartNodeInterfaceName, newConnection);
             newConnection.End.AddConnection(EndNodeInterfaceName, newConnection);
-	        Connections.Add(newConnection);
+	        connections.Add(newConnection);
 	    }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="name">The name.</param>
         public void RemoveHardwarnode(string name)
         {
-            Nodes.RemoveAll(s => s.Name == name);
+            nodes.RemoveAll(s => s.Name == name);
 
             // das ist das gleiche:
             //foreach (Hardwarenode h in nodes)
@@ -82,12 +82,12 @@ namespace NSA.Model.NetworkComponents
         /// <param name="ConnectionName">Name of the connection.</param>
         public void RemoveConnection(string ConnectionName)
 	    {
-            foreach (Connection c in Connections)
+            foreach (Connection c in connections)
             {
                 // This loop is cancelled as soon as the connection which should be removed is reached. 
                 if (c.Name == ConnectionName)
                 {
-                    Connections.Remove(c);
+                    connections.Remove(c);
                     return;
                 }
             }
@@ -100,7 +100,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns></returns>
         public Hardwarenode GetWorkstationByIP(IPAddress ip)
         {
-            foreach (Hardwarenode h in Nodes)
+            foreach (Hardwarenode h in nodes)
             {
                 if (h.HasIp(ip) == true) return h;
             }
@@ -113,7 +113,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>all Hardwarenodes</returns>
         public List<Hardwarenode> GetAllHardwarenodes()
         {
-            return Nodes;
+            return nodes;
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace NSA.Model.NetworkComponents
         {
             List<Workstation> workstation = new List<Workstation>();
 
-            foreach (Hardwarenode h in Nodes)
+            foreach (Hardwarenode h in nodes)
             {
                 if (h is Workstation) workstation.Add((Workstation)h);
             }
@@ -138,7 +138,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>the connection with its name</returns>
         public Connection GetConnectionByName(string Name)
         {
-            return Connections.FirstOrDefault(N => N.Name == Name);
+            return connections.FirstOrDefault(N => N.Name == Name);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace NSA.Model.NetworkComponents
         public List<Router> GetRouters()
 	    {
 	        List<Router> routers = new List<Router>();
-	        foreach (Hardwarenode n in Nodes)
+	        foreach (Hardwarenode n in nodes)
 	        {
 	            Router r = n as Router;
                 if(r != null && r.IsGateway)
