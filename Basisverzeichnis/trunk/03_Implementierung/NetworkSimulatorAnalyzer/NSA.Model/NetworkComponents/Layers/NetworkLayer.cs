@@ -31,7 +31,7 @@ namespace NSA.Model.NetworkComponents.Layers
                 Dictionary<string, Route>.ValueCollection routes = currentNode.GetRoutes();
                 foreach(Route r in routes)
                 {
-                    if (valInfo.Iface.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
+                    if (i.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
                     {
                         valInfo.NextNodeIP = r.Gateway;
                         valInfo.Iface = r.Iface;
