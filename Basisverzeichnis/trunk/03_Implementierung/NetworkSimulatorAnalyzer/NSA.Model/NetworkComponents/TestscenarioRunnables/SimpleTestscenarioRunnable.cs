@@ -20,6 +20,8 @@ namespace NSA.Model.BusinessLogic
   
         public Result Run()
         {
+            //TODO: add endNodes for subnets
+
             foreach (var endNode in endNodes)
             {
                 Simulation sim = new Simulation(Testscenario.SimulationId++);
@@ -27,7 +29,8 @@ namespace NSA.Model.BusinessLogic
                 sim.AddPacketSend(p);
 
                 Result r = sim.Execute();
-                if (r.ErrorID != 0) return r;
+                if (rule.ExpectedResult) if (r.ErrorID != 0) return r;
+                else                     if (r.ErrorID == 0) return r;
             }
 
             return new Result();
