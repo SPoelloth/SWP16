@@ -7,7 +7,6 @@ using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
-using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.Controller
 {
@@ -85,11 +84,14 @@ namespace NSA.Controller
             /*********************** View ***********************/
             // Locations of Víew Elements
             CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
+            /* Alle Verbindungen zwischen Hardwareknoten */
+            CurrentProject.visualConnections = NetworkViewController.Instance.GetAllConnections();
 
             /*********************** Model ***********************/
-            /* 
-            -Alle Verbindungen zwischen Hardwareknoten
-            - Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
+            /* Alle Verbindungen zwischen Hardwareknoten */
+            NetworkViewController.Instance.GetAllConnections();
+
+            //- Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
             // todo: irgendwie an Network kommen
             // CurrentProject.Network = aktuelles Network
 

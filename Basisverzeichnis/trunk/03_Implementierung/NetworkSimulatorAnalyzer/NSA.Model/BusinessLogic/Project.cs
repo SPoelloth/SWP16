@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Runtime.Remoting.Messaging;
 using NSA.Model.NetworkComponents;
 
+
 namespace NSA.Model.BusinessLogic
 {
 	public class Project
@@ -12,6 +13,7 @@ namespace NSA.Model.BusinessLogic
 	    public Network Network { get; set; }
         // Locations of Víew Elements
         public List<NodeLocation> NodeLocations { get; set; }
+        public List<ViewConnection> visualConnections { get; set; }
 
         // Default Konstruktor
         /// <summary>
@@ -22,6 +24,7 @@ namespace NSA.Model.BusinessLogic
             Network = new Network();
             Path = null;
             NodeLocations = new List<NodeLocation>();
+            visualConnections = new List<ViewConnection>();
         }
     }
 
@@ -29,5 +32,11 @@ namespace NSA.Model.BusinessLogic
     {
         public string Name { get; set; }
         public Point Point { get; set; }
+    }
+
+    public class ViewConnection
+    {
+        public int port1 { get; set; }
+        public int port2 { get; set; }
     }
 }

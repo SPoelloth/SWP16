@@ -58,6 +58,19 @@ namespace NSA.Controller.ViewControllers
             return NodeLocations;
         }
 
+        public List<ViewConnection> GetAllConnections()
+        {
+            List<ViewConnection> ViewConnections = new List<ViewConnection>();
+            foreach (VisualConnection element in networkViewControl.connections)
+            {
+                ViewConnection viewConnection = new ViewConnection();
+                viewConnection.port1 = element.Port1;
+                viewConnection.port2 = element.Port2;
+                ViewConnections.Add(viewConnection);
+            }
+            return ViewConnections;
+        }
+
         public void ClearNodes()
         {
             foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
