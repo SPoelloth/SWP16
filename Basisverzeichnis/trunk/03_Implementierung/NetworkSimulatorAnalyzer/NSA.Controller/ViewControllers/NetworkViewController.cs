@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
@@ -8,7 +7,6 @@ using System.Drawing;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using System.Linq;
 using System.Windows.Forms;
-using NSA.Model.BusinessLogic;
 
 namespace NSA.Controller.ViewControllers
 {
@@ -47,18 +45,10 @@ namespace NSA.Controller.ViewControllers
             return networkViewControl.Controls.OfType<EditorElementBase>().FirstOrDefault(s => s.Name == name)?.Location;
         }
 
-        public List<NodeLocation> GetAllLocationsWithName()
+        public void MoveElementToLocation(string name, Point loc)
         {
-            List<NodeLocation> NodeLocations = new List<NodeLocation>();
-            foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
-            {
-                string nodeName = element.AccessibleName;
-                NodeLocation nodeLocation = new NodeLocation();
-                nodeLocation.Name = nodeName;
-                nodeLocation.Point = element.Location;
-                NodeLocations.Add(nodeLocation);
-            }
-            return NodeLocations;
+            var element = networkViewControl.Controls.OfType<EditorElementBase>().FirstOrDefault(s => s.Name == name);
+            if (element != null) element.Location = loc;
         }
 
         private void RemoveHardwarenodeRequest(EditorElementBase e)
@@ -96,6 +86,7 @@ namespace NSA.Controller.ViewControllers
         {
             var node1 = GetControlByName(connection.Start.Name);
             var node2 = GetControlByName(connection.End.Name);
+            // ReSharper disable once NotResolvedInText
             if (node1 == null || node2 == null) throw new ArgumentNullException("referenced start or end of connection is null");
             networkViewControl.AddElement(new VisualConnection(connection.Name, node1, connection.GetPortIndex(connection.Start), node2, connection.GetPortIndex(connection.End), networkViewControl));
         }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
@@ -38,94 +38,12 @@ namespace NSA.Controller
             Router
         };
 
-        /// <summary>
-        /// Comparer for sorting the node names.
-        /// Sorting order: A B C ... Z AA BB ... AAA BBB
-        /// </summary>
-        private class NodeNamesComparator : IComparer<string>
-        {
-
-            public int Compare(string X, string Y)
-            {
-                if (X.Length < Y.Length)
-                {
-                    // A < AA
-                    return -1;
-                }
-                else if (X.Length > Y.Length)
-                {
-                    // AA > A
-                    return 1;
-                }
-                else
-                {
-                    return String.Compare(X, Y, StringComparison.Ordinal);
-                }
-            }
-        }
-
         private Network network; 
-        // Unique names for each hardwarenode
-        private SortedSet<string> uniqueNodeNames;
-        // If we remove a node we will reuse its name for future nodes
-        private string nextUniqueNodeName;
 
         // Default constructor:
         private NetworkManager()
         {
-            Reset();
-        }
-
-        /// <summary>
-        /// Helper method. Creates a unique node name for the node to be created next.
-        /// </summary>
-        private void CreateUniqueNameForNextNode()
-        {
-            // Create a unique name for the next hardwarenode that will be created.
-            // Sorting order: A B C ... Z AA BB ... AAA BBB
-            char nextLetter = (char)(uniqueNodeNames.Max[0] + 1);
-            int letterRepeatTimes = uniqueNodeNames.Max.Length;
-            if (nextLetter > 'Z')
-            {
-                nextLetter = 'A';
-                letterRepeatTimes += 1;
-            }
-            nextUniqueNodeName = new string(nextLetter, letterRepeatTimes);
-        }
-
-        /// <summary>
-        /// This method should be called if we want to reset the state of the NetworkManager, e.g.
-        /// after we have loaded a new project.
-        /// </summary>
-        /// <exception cref="System.InvalidOperationException">Network contains nodes with the same name</exception>
-        public void Reset()
-        {
-            Network oldNetwork = network;
             network = ProjectManager.Instance.CurrentProject.Network;
-            if (network == oldNetwork)
-            {
-                // Reset() has already been called with this network object
-                return;
-            }
-
-            uniqueNodeNames = new SortedSet<string>(new NodeNamesComparator());
-            nextUniqueNodeName = "A";
-
-            // Read in all the hardwarenode names
-            List<Hardwarenode> nodes = network.GetAllHardwarenodes();
-            foreach (Hardwarenode node in nodes)
-            {
-                if (uniqueNodeNames.Contains(nextUniqueNodeName))
-                {
-                    throw new InvalidOperationException("Network contains nodes with the same name!");
-                }
-                uniqueNodeNames.Add(node.Name);
-            }
-
-            if (uniqueNodeNames.Count > 0)
-            {
-                CreateUniqueNameForNextNode();
-            }
         }
 
         #region Workstation-related methods
@@ -354,31 +272,38 @@ namespace NSA.Controller
         public Hardwarenode CreateHardwareNode(HardwarenodeType Type)
         {
             Hardwarenode node = null;
+            
 
-            Debug.Assert(!uniqueNodeNames.Contains(nextUniqueNodeName),
-                "Could not create a unique name for a node!");
 
             switch (Type)
             {
                 case HardwarenodeType.Switch:
-                    node = new Switch(nextUniqueNodeName);
+
+                    node = new Switch(CreateUniqueName(Type));
                     break;
                 case HardwarenodeType.Workstation:
-                    node = new Workstation(nextUniqueNodeName);
+                    node = new Workstation(CreateUniqueName(Type));
                     break;
                 case HardwarenodeType.Router:
-                    node = new Router(nextUniqueNodeName);
+                    node = new Router(CreateUniqueName(Type));
                     break;
             }
-
-            uniqueNodeNames.Add(nextUniqueNodeName);
+            
             // Add node to the Network and to the NetworkViewController
             network.AddHardwarenode(node);
             NetworkViewController.Instance.AddHardwarenode(node);
-
-            CreateUniqueNameForNextNode();
+            
 
             return node;
+        }
+
+        private string CreateUniqueName(HardwarenodeType type)
+        {
+            for(int i = 1; ; i++)
+            {
+                string name =  $"{type} {i}";
+                if (GetAllHardwareNodes().All(n => n.Name != name)) return name;
+            }
         }
 
         /// <summary>
@@ -397,13 +322,6 @@ namespace NSA.Controller
             network.RemoveHardwarnode(Name);
 
             NetworkViewController.Instance.RemoveHardwarenode(Name);
-
-            if (uniqueNodeNames.Contains(Name))
-            {
-                uniqueNodeNames.Remove(Name);
-                // Reuse the name for a future node.
-                nextUniqueNodeName = Name;
-            }
         }
 
         #endregion

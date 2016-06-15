@@ -4,8 +4,8 @@ namespace NSA.Model.NetworkComponents
 {
     public class Connection
     {
-        public Hardwarenode Start { get; private set; }
-        public Hardwarenode End { get; private set; }
+        public Hardwarenode Start { get; }
+        public Hardwarenode End { get; }
         public string Name { get; private set; }
 
         /// <summary>
@@ -17,7 +17,7 @@ namespace NSA.Model.NetworkComponents
         {
             Start = Source;
             End = Target;
-            Name = new Guid().ToString("N");
+            Name = Guid.NewGuid().ToString("N");
         }
 
         #region Equality
@@ -30,12 +30,6 @@ namespace NSA.Model.NetworkComponents
         /// </returns>
         public override bool Equals(object Obj)
         {
-            // If parameter is null return false.
-            if (Obj == null)
-            {
-                return false;
-            }
-
             // If parameter cannot be cast to Point return false.
             Connection c = Obj as Connection;
             if ((object)c == null)
@@ -69,7 +63,7 @@ namespace NSA.Model.NetworkComponents
             // auto-generated method
             unchecked
             {
-                return ((Start != null ? Start.GetHashCode() : 0) * 397) ^ (End != null ? End.GetHashCode() : 0);
+                return ((Start?.GetHashCode() ?? 0) * 397) ^ (End?.GetHashCode() ?? 0);
             }
         }
 

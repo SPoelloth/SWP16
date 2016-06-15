@@ -5,7 +5,7 @@ using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
-	public class Network
+    public class Network
     {
         private List<Hardwarenode> nodes;
         private List<Connection> connections;
