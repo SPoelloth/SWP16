@@ -420,6 +420,10 @@ namespace NSA.Controller
             {
                 throw new ArgumentException("Hardwarenode with the name " + end + " could not be found");
             }
+            if (A == B)
+            {
+                throw new ArgumentException("CreateConnection: start equals end");
+            }
 
             Connection connection = new Connection(A, B);
 
