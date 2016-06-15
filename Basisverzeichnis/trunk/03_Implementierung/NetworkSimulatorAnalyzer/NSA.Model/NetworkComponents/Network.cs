@@ -113,7 +113,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>all Hardwarenodes</returns>
         public List<Hardwarenode> GetAllHardwarenodes()
         {
-            return nodes;
+            return nodes.ToList();
         }
 
         /// <summary>
@@ -157,5 +157,9 @@ namespace NSA.Model.NetworkComponents
 	        return routers;
 	    }
 
+	    public List<Connection> GetAllConnections()
+	    {
+            return connections.ToList();
+	    }
     }
 }

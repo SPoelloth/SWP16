@@ -12,8 +12,8 @@ namespace NSA.Controller
 {
     public class ProjectManager
     {
-        public Project CurrentProject;
-        private List<Testscenario> testscenarios;
+        public Project CurrentProject = new Project();
+        private List<Testscenario> testscenarios = new List<Testscenario>();
         private const string TestscenarioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
@@ -21,7 +21,7 @@ namespace NSA.Controller
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        private ProjectManager()
+        private void  Initialize()
         {
             CreateNewProject();
         }
@@ -31,18 +31,15 @@ namespace NSA.Controller
         /// </summary>
         public void CreateNewProject()
         {
-            CurrentProject = new Project();
-            testscenarios = new List<Testscenario>();
-
-            if (instanceIsFullyCreated)
+            foreach(var c in NetworkManager.Instance.GetAllConnections())
             {
-                // Do not call Networkmanager if the instance not fully created yet.
-                // (Because Networkmanager would try to access ProjectManager´s Properties)
-                NetworkManager.Instance.Reset();
-                NetworkViewController.Instance.ClearNodes();
+                NetworkManager.Instance.RemoveConnection(c.Name);
             }
 
-            instanceIsFullyCreated = true;
+            foreach (var h in NetworkManager.Instance.GetAllHardwareNodes())
+            {
+                NetworkManager.Instance.RemoveHardwarenode(h.Name);
+            }
         }
 
         /// <summary>
@@ -108,8 +105,8 @@ namespace NSA.Controller
             var file = openFileDialog.FileName;
             try
             {
+                CreateNewProject();
                 CurrentProject = ReadFromXmlFile<Project>(file);
-                NetworkManager.Instance.Reset();
                 CurrentProject.parseProjectViewDataToViewControlls();
             }
             catch (IOException)
@@ -224,6 +221,7 @@ namespace NSA.Controller
         /// <param name="E">The EventArgs.</param>
         private static void Form_Shown(object Sender, EventArgs E)
         {
+            ProjectManager.Instance.Initialize();
             ToolbarController.Instance.Init();
             NetworkViewController.Instance.Initialize();
             InfoController.Instance.Initialize();

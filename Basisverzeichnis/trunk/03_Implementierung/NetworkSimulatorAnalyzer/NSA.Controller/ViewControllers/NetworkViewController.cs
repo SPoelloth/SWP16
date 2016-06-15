@@ -28,8 +28,8 @@ namespace NSA.Controller.ViewControllers
             networkViewControl = MainForm.Instance.GetComponent("NetworkviewControl") as NetworkViewControl;
             if (networkViewControl == null) throw new NullReferenceException("NetworkviewControl is null");
             networkViewControl.SelectionChanged += EditorElement_Selected;
-            networkViewControl.RemoveConnectionPressed += RemoveConnection;
-            networkViewControl.RemoveElementPressed += RemoveHardwarenode;
+            networkViewControl.RemoveConnectionPressed += RemoveConnectionRequest;
+            networkViewControl.RemoveElementPressed += RemoveHardwarenodeRequest;
             networkViewControl.NewConnectionCreated += OnNewConnectionCreated;
         }
 
@@ -61,21 +61,24 @@ namespace NSA.Controller.ViewControllers
             return NodeLocations;
         }
 
-        public void ClearNodes()
+        private void RemoveHardwarenodeRequest(EditorElementBase e)
         {
-
-        }
-
-        private void RemoveHardwarenode(EditorElementBase e)
-        {
-            networkViewControl.RemoveElement(e);
             NetworkManager.Instance.RemoveHardwarenode(e.Name);
         }
 
-        private void RemoveConnection(VisualConnection c)
+        public void RemoveHardwarenode(string name)
         {
-            networkViewControl.RemoveConnection(c);
+            networkViewControl.RemoveElement(networkViewControl.Controls.OfType<EditorElementBase>().First(n => n.Name == name));
+        }
+
+        private void RemoveConnectionRequest(VisualConnection c)
+        {
             NetworkManager.Instance.RemoveConnection(c.Name);
+        }
+
+        public void RemoveConnection(string name)
+        {
+            networkViewControl.RemoveConnection(networkViewControl.connections.First(c => c.Name == name));
         }
 
         public void EditorElement_Selected(EditorElementBase selectedElement)

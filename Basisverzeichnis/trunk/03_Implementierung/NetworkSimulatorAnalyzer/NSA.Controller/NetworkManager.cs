@@ -149,6 +149,16 @@ namespace NSA.Controller
             return network.GetAllWorkstations();
         }
 
+        public List<Hardwarenode> GetAllHardwareNodes()
+        {
+            return network.GetAllHardwarenodes();
+        }
+
+        public List<Connection> GetAllConnections()
+        {
+            return network.GetAllConnections();
+        }
+
         #endregion
 
         #region Interface-related methods
@@ -386,6 +396,8 @@ namespace NSA.Controller
 
             network.RemoveHardwarnode(Name);
 
+            NetworkViewController.Instance.RemoveHardwarenode(Name);
+
             if (uniqueNodeNames.Contains(Name))
             {
                 uniqueNodeNames.Remove(Name);
@@ -445,7 +457,9 @@ namespace NSA.Controller
                 throw new ArgumentException("Connection with the name " + Name + "could not be found");
             }
 
+
             network.RemoveConnection(Name);
+            NetworkViewController.Instance.RemoveConnection(Name);
         }
 
         #endregion
