@@ -40,9 +40,8 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private List<Rectangle> portHitboxes = new List<Rectangle>();
 
-        int portcount = 2;
+        int portcount = 1;
         public int NetworkPortCount { get { return portcount; } set { portcount = value; calculateDimension(); calculateHitboxes(); } }
-        private ToolTip tooltip;
 
         [Obsolete("Do not use! For Designer only!")]
         public WorkstationControl() : this(new Point(10, 10), "WorkstationControl")
@@ -63,8 +62,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             Name = name;
             calculateDimension();
             calculateHitboxes();
-            tooltip = new ToolTip();
-
         }
 
         private void calculateDimension()
@@ -108,10 +105,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                     g.DrawLine(portPins, new PointF(x, y), new PointF(x + portPinsLength, y));
                 }
                 g.FillRectangle(portRectangle.Contains(mouseLocation) ? portHighlightBrush : portOverlayBrush, portRectangle);
-                if(portRectangle.Contains(mouseLocation))
-                {
-                    tooltip.Show(" Interface: eth" + i, this);
-                }
                 g.DrawRectangle(borderPen, portRectangle);
             }
             g.DrawRectangle(IsSelected ? selectedPen : borderPen, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));

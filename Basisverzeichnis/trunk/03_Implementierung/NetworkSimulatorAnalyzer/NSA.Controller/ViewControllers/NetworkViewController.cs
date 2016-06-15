@@ -61,35 +61,9 @@ namespace NSA.Controller.ViewControllers
             return NodeLocations;
         }
 
-        public List<ViewConnection> GetAllConnections()
-        {
-            List<ViewConnection> ViewConnections = new List<ViewConnection>();
-            foreach (VisualConnection element in networkViewControl.connections)
-            {
-                ViewConnection viewConnection = new ViewConnection();
-                viewConnection.Port1 = element.Port1;
-                viewConnection.Port2 = element.Port2;
-                ViewConnections.Add(viewConnection);
-            }
-            return ViewConnections;
-        }
-
         public void ClearNodes()
         {
-            foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
-            {
-                if (element != null)
-                {
-                    try
-                    {
-                        networkViewControl.RemoveElement(element);
-                    }
-                    catch (Exception e)
-                    {
-                        
-                    }
-                }
-            }
+
         }
 
         private void RemoveHardwarenode(EditorElementBase e)
@@ -121,7 +95,6 @@ namespace NSA.Controller.ViewControllers
             var node2 = GetControlByName(connection.End.Name);
             if (node1 == null || node2 == null) throw new ArgumentNullException("referenced start or end of connection is null");
             networkViewControl.AddElement(new VisualConnection(connection.Name, node1, connection.GetPortIndex(connection.Start), node2, connection.GetPortIndex(connection.End), networkViewControl));
-         
         }
 
         public void CreateHardwarenodeRequest()

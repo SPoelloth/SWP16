@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.View.Controls.NetworkView
 {
-
     public class MessageLoopFilter : IMessageFilter
     {
         #region IMessageFilter Members
@@ -24,11 +19,9 @@ namespace NSA.View.Controls.NetworkView
 
         Point? firstConnectionPoint = null;
         Control firstConnectionControl = null;
+        
+        public Action OnDeletePressed;
 
-        public MessageLoopFilter()
-        {
-
-        }
 
         public bool PreFilterMessage(ref Message m)
         {
@@ -37,8 +30,11 @@ namespace NSA.View.Controls.NetworkView
                 Keys kc = (Keys)m.WParam.ToInt64() & Keys.KeyCode;
                 if (m.Msg == WM_KEYDOWN && kc == Keys.Delete)
                 {
-                    // todo blub
-
+                    if (!(Control.FromHandle(m.HWnd) is TextBox))
+                    {
+                        OnDeletePressed?.Invoke();
+                        return true;
+                    }
                 }
 
                 return false;

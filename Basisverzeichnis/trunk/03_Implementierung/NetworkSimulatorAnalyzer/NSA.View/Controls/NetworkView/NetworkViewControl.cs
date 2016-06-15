@@ -28,11 +28,13 @@ namespace NSA.View.Controls.NetworkView
             Application.AddMessageFilter(filter);
             filter.NewConnection += OnNewConnection;
             filter.Canceled += OnActionCanceled;
+            filter.OnDeletePressed += Element_Delete;
         }
 
         private void OnNewConnection(Control control1, Point p1, Control control2, Point p2)
         {
             Cursor = Cursors.Default;
+            foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
             WorkstationControl ws1 = control1 as WorkstationControl;
             WorkstationControl ws2 = control2 as WorkstationControl;
             if (ws1 == null || ws2 == null) return;
@@ -47,6 +49,7 @@ namespace NSA.View.Controls.NetworkView
         private void OnActionCanceled()
         {
             Cursor = Cursors.Default;
+            foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -85,7 +88,6 @@ namespace NSA.View.Controls.NetworkView
             }
             Controls.Add(element);
             element.Selected += Element_Selected;
-            element.RemovePressed += Element_Delete;
 
             //Controls neu sortieren von hinten nach vorne
             // SetChildIndex(..) funktioniert nicht auf linux! :(
@@ -170,13 +172,14 @@ namespace NSA.View.Controls.NetworkView
             }
             Controls.Remove(element);
             element.Dispose();
+            Element_Selected(null);
         }
 
         public void CreateNewConnection()
         {
             filter.ChangeStateNewConnection();
             Cursor = Cursors.Cross;
-
+            foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
         }
     }
 }
