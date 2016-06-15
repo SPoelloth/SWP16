@@ -156,7 +156,7 @@ namespace NSA.Controller
         public void ActivateTestscenarioById(string Id)
         {
             var testscenario = testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
-            testscenario?.ParseRules();
+            CurrentProject.Network = testscenario?.ParseRulesToNetwork();
         }
 
         /// <summary>

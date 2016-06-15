@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -14,12 +15,14 @@ namespace NSA.Model.BusinessLogic
             Rules = new List<Rule>();
         }
 
-        public void ParseRules()
+        public Network ParseRulesToNetwork()
         {
+            Network network = new Network();
             foreach (var rule in Rules)
             {
                 // todo: parse rule
             }
+            return network;
         }
     }
 
