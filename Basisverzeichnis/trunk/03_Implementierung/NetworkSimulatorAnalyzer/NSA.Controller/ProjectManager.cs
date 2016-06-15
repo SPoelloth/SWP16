@@ -40,6 +40,8 @@ namespace NSA.Controller
             {
                 NetworkManager.Instance.RemoveHardwarenode(h.Name);
             }
+
+            CurrentProject.Path = null;
         }
 
         /// <summary>
@@ -78,6 +80,8 @@ namespace NSA.Controller
             XDocument doc = new XDocument();
             XElement root = new XElement("Project");
 
+            #region Workstation
+
             XElement workstationsXML = new XElement("Workstations");
 
             foreach (var ws in NetworkManager.Instance.GetAllHardwareNodes().OfType<Workstation>())
@@ -85,9 +89,7 @@ namespace NSA.Controller
                 var loc = NetworkViewController.Instance.GetLocationOfElementByName(ws.Name) ?? new Point();
 
                 var interfaces = ws.GetInterfaces();
-
                 XElement interfacesXML = new XElement("Interfaces");
-
                 foreach (var i in interfaces)
                 {
                     interfacesXML.Add(new XElement("Interface",
@@ -95,20 +97,42 @@ namespace NSA.Controller
                                       new XAttribute("IPAddress", i.IpAddress.ToString()),
                                       new XAttribute("SubnetMask", i.Subnetmask.ToString())));
                 }
-                
+
+                var routen = ws.GetRoutes();
+                XElement routesinterfacesXML = new XElement("Routes");
+                foreach (var r in routen)
+                {
+                    routesinterfacesXML.Add(new XElement("Route",
+                                      new XAttribute("Destination", r.Destination.ToString()),
+                                      new XAttribute("Gateway", r.Gateway.ToString()),
+                                      new XAttribute("SubnetMask", r.Subnetmask.ToString()),
+                                      new XAttribute("Iface", r.Iface.Name)));
+                }
+
                 var xmlnode = new XElement("Workstation",
                               new XAttribute("Name", ws.Name),
                               new XAttribute("LocationX", loc.X),
-                              new XAttribute("LocationY", loc.Y),
-                              new XAttribute("DefaultGW", ws.StandardGateway),
-                              new XAttribute("DefaultGWPort", ws.StandardGatewayPort.Name)
-
-                              // TODO
+                              new XAttribute("LocationY", loc.Y)
+                              
+                              // TODO LAYERSTACK
                               );
+
+                if(ws.StandardGateway != null)
+                {
+                    xmlnode.Add(new XAttribute("DefaultGW", ws.StandardGateway));
+                    xmlnode.Add(new XAttribute("DefaultGWPort", ws.StandardGatewayPort.Name));
+                }
+
                 xmlnode.Add(interfacesXML);
+                xmlnode.Add(routesinterfacesXML);
 
                 workstationsXML.Add(xmlnode);
             }
+
+            #endregion Workstation
+
+            #region Connections
+
             XElement connectionsXML = new XElement("Connections");
 
             foreach (var c in NetworkManager.Instance.GetAllConnections())
@@ -122,6 +146,8 @@ namespace NSA.Controller
 
                 connectionsXML.Add(xmlcon);
             }
+
+            #endregion Connections
 
             root.Add(workstationsXML);
             root.Add(connectionsXML);
@@ -137,6 +163,8 @@ namespace NSA.Controller
                 XElement root = document.Root;
                 if (root == null) throw new InvalidDataException();
 
+                #region Workstation
+
                 XElement hwNodesXML = root.Element("Workstations");
                 if (hwNodesXML == null) throw new InvalidDataException();
 
@@ -145,18 +173,20 @@ namespace NSA.Controller
                     var name = node.Attribute("Name").Value;
                     var x = int.Parse(node.Attribute("LocationX").Value);
                     var y = int.Parse(node.Attribute("LocationY").Value);
+                    bool hasDefaultGW = node.Attribute("DefaultGW") != null;
 
-                    var defaultgw = IPAddress.Parse(node.Attribute("DefaultGW").Value);
-                    var defaultgwport = node.Attribute("DefaultGWPort").Value;
-                    
                     Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
                     hwNode.Name = name;
-                    hwNode.StandardGateway = defaultgw;
+                    if (hasDefaultGW)
+                    {
+                        var defaultgw = IPAddress.Parse(node.Attribute("DefaultGW").Value);
+                        hwNode.StandardGateway = defaultgw;
+                    }
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
 
-                    var xElement = node.Element("Interfaces");
-                    if (xElement == null) throw new InvalidDataException();
-                    foreach (var iface in xElement.Elements())
+                    var interfaceXML = node.Element("Interfaces");
+                    if (interfaceXML == null) throw new InvalidDataException();
+                    foreach (var iface in interfaceXML.Elements())
                     {
                         var iname = iface.Attribute("Name").Value;
                         var ip = iface.Attribute("IPAddress").Value;
@@ -165,8 +195,28 @@ namespace NSA.Controller
                         hwNode.SetInterface(iname, IPAddress.Parse(ip), IPAddress.Parse(subnet));
                     }
 
-                    hwNode.StandardGatewayPort = hwNode.GetInterfaces().First(i => i.Name == defaultgwport);
+                    var routenXML = node.Element("Routes");
+                    if (routenXML == null) throw new InvalidDataException();
+                    foreach (var route in routenXML.Elements())
+                    {
+                        var rDest = route.Attribute("IPAddress").Value;
+                        var rgateway = route.Attribute("Gateway").Value;
+                        var rsubnet = route.Attribute("SubnetMask").Value;
+                        var rinterface = route.Attribute("SubnetMask").Value;
+
+                        hwNode.AddRoute(new Route(IPAddress.Parse(rDest), IPAddress.Parse(rsubnet), IPAddress.Parse(rgateway), hwNode.GetInterfaces().First(i => i.Name == rinterface)));
+                    }
+
+                    if (hasDefaultGW)
+                    {
+                        var defaultgwport = node.Attribute("DefaultGWPort").Value;
+                        hwNode.StandardGatewayPort = hwNode.GetInterfaces().First(i => i.Name == defaultgwport);
+                    }
                 }
+
+                #endregion Workstation
+
+                #region Connection
 
                 XElement connectionXML = root.Element("Connections");
                 if (connectionXML == null) throw new InvalidDataException();
@@ -180,6 +230,9 @@ namespace NSA.Controller
 
                     NetworkManager.Instance.CreateConnection(hwNode1, "eth" + hwNode1Port, hwNode2, "eth" + hwNode2Port);
                 }
+
+                #endregion Connection
+
             }
             // ReSharper disable once UnusedVariable
             catch (Exception e)
