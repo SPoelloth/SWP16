@@ -34,7 +34,7 @@ namespace NSA.View.Controls.NetworkView
         {
             if (currentState == State.Normal)
             {
-                Keys kc = (Keys)(int)m.WParam & Keys.KeyCode;
+                Keys kc = (Keys)m.WParam.ToInt64() & Keys.KeyCode;
                 if (m.Msg == WM_KEYDOWN && kc == Keys.Delete)
                 {
                     // todo blub
