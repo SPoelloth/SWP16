@@ -21,12 +21,12 @@ namespace NSA.Controller
         }
 
         // Constructor:
-        public SimulationManager(List<Simulation> simulations)
+        public SimulationManager(List<Simulation> Simulations)
         {
-            Simulations = simulations;
+            this.Simulations = Simulations;
         }
 
-        public void HopSelected(int indexOfHop)
+        public void HopSelected(int IndexOfHop)
         {
             // todo
             // Jeremy: zu einem Hop gehören immer zwei Rechner, indexOfHop identifiziert den ersten Rechner in der Liste an Hops
@@ -34,22 +34,22 @@ namespace NSA.Controller
             // ebenfalls klären: Hop selektieren nur bei aktueller Simulation möglich (würde sagen JA)
         }
 
-        public void StartSimulation(Simulation sim)
+        public Result StartSimulation(Simulation Sim)
         {
-            sim.Execute();
+            return Sim.Execute();
         }
 
-        public void StartTestscenario(Testscenario t)
+        public void StartTestscenario(Testscenario T)
         {
             // todo Dennis & Oleg
         }
 
-        public void AddSimulationToHistory(Simulation sim)
+        public void AddSimulationToHistory(Simulation Sim)
         {
-            Simulations.Add(sim);
+            Simulations.Add(Sim);
         }
 
-        public void RunSimulationFromHistory(int index)
+        public void RunSimulationFromHistory(int Index)
         {
             // todo create a new Simulation Object with the same parameters as the simulation with the index
             // Jeremy: i don't know if we should add this simulation to the History... i would say yes
@@ -65,27 +65,26 @@ namespace NSA.Controller
         /// <summary>
         /// Creates the simulation and starts it.
         /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="ttl">The TTL.</param>
-        /// <param name="tags">The tags.</param>
-        /// <param name="expectedResult">the expected result of the simulation.</param>
-        public void CreateSimulation(IPAddress source, IPAddress destination, int ttl, Dictionary<string, Object> tags, bool expectedResult)
+        /// <param name="Source">The source.</param>
+        /// <param name="Destination">The destination.</param>
+        /// <param name="Ttl">The TTL.</param>
+        /// <param name="Tags">The tags.</param>
+        /// <param name="ExpectedResult">the expected result of the simulation.</param>
+        public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
         {
             List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
             List<Hardwarenode> destinationList = new List<Hardwarenode>();
 
             bool isBroadcast = false;
-            bool addWorkstationAsDestination = false;
             // Iterate through all workstations and add the destinations to te destinationList
             for (int workstationIndex = 0; workstationIndex < allWorkstations.Count; workstationIndex++)
             {
-                addWorkstationAsDestination = false;
+                var addWorkstationAsDestination = false;
                 List<Interface> ifaces = allWorkstations[workstationIndex].GetInterfaces();
                 // Iterate through all interfaces of the current workstation.
                 foreach (Interface iface in ifaces)
                 {
-                    if (!isBroadcast && destination.Equals(iface.IpAddress))
+                    if (!isBroadcast && Destination.Equals(iface.IpAddress))
                     {
                         // We have found a workstation whose ip matches our destination ip
                         addWorkstationAsDestination = true;
@@ -97,13 +96,13 @@ namespace NSA.Controller
                         {
                             IPAddress ifaceBroadcastAddress = IPAddressExtensions.GetBroadcastAddress(iface.IpAddress,
                                 iface.Subnetmask);
-                            if (destination.Equals(ifaceBroadcastAddress))
+                            if (Destination.Equals(ifaceBroadcastAddress))
                             {
                                 // Our destination is a broadcast ip
                                 isBroadcast = true;
                             }
                         }
-                        if (isBroadcast && IPAddressExtensions.IsInSameSubnet(destination, iface.IpAddress, iface.Subnetmask))
+                        if (isBroadcast && IPAddressExtensions.IsInSameSubnet(Destination, iface.IpAddress, iface.Subnetmask))
                         {
                             // Current workstation is in the destination broadcast subnet.
                             addWorkstationAsDestination = true;
@@ -129,39 +128,41 @@ namespace NSA.Controller
             {
                 Simulation sim = new Simulation(Simulations.Count);
                 // Our destination list is empty. -> Create an error packet
-                sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source), null, ttl, tags, expectedResult));
-                StartSimulation(sim);
+                sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, Tags, ExpectedResult));
+                Result res = StartSimulation(sim);
                 AddSimulationToHistory(sim);
+                return res;
             }
             else
             {
                 // Create Packets for all destinations.
+                Simulation sim = new Simulation(Simulations.Count);
                 foreach (Hardwarenode destinationNode in destinationList)
                 {
-                    Simulation sim = new Simulation(Simulations.Count);
-                    sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIP(source),
-                        destinationNode, ttl, tags, expectedResult));
-                    StartSimulation(sim);
-                    AddSimulationToHistory(sim);
+                    sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source),
+                        destinationNode, Ttl, Tags, ExpectedResult));
                 }
-
+                Result res = StartSimulation(sim);
+                AddSimulationToHistory(sim);
+                return res;
             }
         }
 
         /// <summary>
         /// Creates the packet.
         /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="destination">The destination.</param>
-        /// <param name="ttl">The TTL.</param>
-        /// <param name="tags">The tags.</param>
+        /// <param name="Source">The source.</param>
+        /// <param name="Destination">The destination.</param>
+        /// <param name="Ttl">The TTL.</param>
+        /// <param name="Tags">The tags.</param>
+        /// <param name="ExpectedResult"></param>
         /// <returns>the packet</returns>
-        /// <exception cref="System.ArgumentException">SimulationManager.createPacket: source or destination is null or ttl <= 0</exception>
-        private Packet createPacket(Hardwarenode source, Hardwarenode destination, int ttl, Dictionary<string, Object> tags, bool expectedResult)
+        /// <exception cref="ArgumentException">SimulationManager.createPacket: source or destination is null or ttl 0</exception>
+        private Packet createPacket(Hardwarenode Source, Hardwarenode Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
         {
-            if(ttl <= 0)
+            if(Ttl <= 0)
                 throw new ArgumentException("SimulationManager.createPacket: ttl <= 0");
-            return new Packet(source, destination, ttl, tags, expectedResult);
+            return new Packet(Source, Destination, Ttl, Tags, ExpectedResult);
         }
     }
 }

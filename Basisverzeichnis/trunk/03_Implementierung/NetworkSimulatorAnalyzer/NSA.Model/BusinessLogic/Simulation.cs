@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Windows.Forms.VisualStyles;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
@@ -38,6 +39,8 @@ namespace NSA.Model.BusinessLogic
                     {
                         packetsReceived.Add(p);
                     }
+                    else
+                        return sendpacket.result;
                 }
             }
 
@@ -46,9 +49,9 @@ namespace NSA.Model.BusinessLogic
                 if(backpacket.result.ErrorID == 0)
                     backpacket.Send();
             }
-
-            //TODO: implement the right logic
-            return new Result();
-        }
+            if(packetsReceived.Count > 0)
+                return packetsReceived[packetsReceived.Count - 1].result;
+            return packetsSend[packetsSend.Count - 1].result;
+	    }
     }
 }
