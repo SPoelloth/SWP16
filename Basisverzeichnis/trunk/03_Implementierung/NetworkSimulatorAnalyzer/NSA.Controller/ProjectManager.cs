@@ -85,14 +85,13 @@ namespace NSA.Controller
             // Locations of Víew Elements
             CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
             /* Alle Verbindungen zwischen Hardwareknoten */
-            CurrentProject.visualConnections = NetworkViewController.Instance.GetAllConnections();
+            CurrentProject.VisualConnections = NetworkViewController.Instance.GetAllConnections();
 
             /*********************** Model ***********************/
             /* Alle Verbindungen zwischen Hardwareknoten */
-            NetworkViewController.Instance.GetAllConnections();
-
             //- Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
-            // todo: irgendwie an Network kommen
+            // --> sind im network im Project
+            // network wird vom Networkmanager verarbeitet
             // CurrentProject.Network = aktuelles Network
 
             WriteToXmlFile(Path, CurrentProject);
