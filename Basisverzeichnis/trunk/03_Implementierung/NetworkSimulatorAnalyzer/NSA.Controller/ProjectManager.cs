@@ -7,6 +7,7 @@ using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
+using Xml.Net;
 
 namespace NSA.Controller
 {
@@ -93,6 +94,9 @@ namespace NSA.Controller
             // --> sind im network im Project
             // network wird vom Networkmanager verarbeitet
             // CurrentProject.Network = aktuelles Network
+            // todo: Network ist da, wird aber nicht gespeichert
+
+            // todo: Pfad nicht speichern
 
             WriteToXmlFile(Path, CurrentProject);
         }
@@ -161,9 +165,9 @@ namespace NSA.Controller
             TextWriter writer = null;
             try
             {
-                var serializer = new XmlSerializer(typeof(T));
+
                 writer = new StreamWriter(FilePath, Append);
-                serializer.Serialize(writer, ObjectToWrite);
+                writer.Write(XmlConvert.SerializeObject(ObjectToWrite));
             }
             finally
             {
@@ -183,9 +187,8 @@ namespace NSA.Controller
             TextReader reader = null;
             try
             {
-                var serializer = new XmlSerializer(typeof(T));
                 reader = new StreamReader(FilePath);
-                return (T)serializer.Deserialize(reader);
+                return (T)XmlConvert.DeserializeObject<T>(reader.ReadToEnd());
             }
             finally
             {
