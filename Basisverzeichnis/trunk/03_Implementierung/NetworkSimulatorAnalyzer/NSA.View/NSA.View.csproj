@@ -160,7 +160,10 @@
     <Compile Include="Controls\NetworkView\NetworkElements\Base\EditorElementBase.Designer.cs">
       <DependentUpon>EditorElementBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PropertyControl\Misc\AddButton.cs">
+    <Compile Include="Controls\PropertyControl\Misc\AddRouteButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\Misc\AddInterfaceButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\AdvancedSimulationForm.cs">

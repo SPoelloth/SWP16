@@ -1,12 +1,11 @@
 ﻿using System.Windows.Forms;
 
 namespace NSA.View.Controls.PropertyControl.Misc {
-    public class AddButton : Button {
-        public AddButton()
+    public class AddInterfaceButton : Button {
+        public AddInterfaceButton()
         {
-            Height = 25;
-            Width = 25;
-            Text = "+";
+            AutoSize = true;
+            Text = "Add Interface";
             FontHeight = 12;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using NSA.Model.NetworkComponents;
 using NSA.View.Controls.PropertyControl;
 using NSA.View.Forms;
@@ -15,11 +16,16 @@ namespace NSA.Controller.ViewControllers
         #endregion Singleton
 
         private readonly PropertyControl propertyControl;
+        private Hardwarenode selectedNode;
 
         private PropertyController()
         {
             propertyControl = MainForm.Instance.GetComponent("PropertyControl") as PropertyControl;
-            if (propertyControl != null)
+            if (propertyControl == null)
+            {
+                throw new InvalidOperationException("PropertyControl was null/not found");
+            }
+            else
             {
                 propertyControl.InterfaceChanged += PropertyControl_InterfaceChanged;
                 propertyControl.GatewayChanged += PropertyControl_GatewayChanged;
@@ -31,35 +37,33 @@ namespace NSA.Controller.ViewControllers
                 propertyControl.RouteAdded += PropertyControl_RouteAdded;
                 propertyControl.RouteRemoved += PropertyControl_RouteRemoved;
             }
-            else
-            {
-                throw new InvalidOperationException("PropertyControl was null/not found");
-            }
         }
 
         #region Event Handling
         private void PropertyControl_RouteRemoved(string routeName)
         {
-            // TODO: 
-            NetworkManager.Instance.RemoveRoute("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", "routeName");
+            NetworkManager.Instance.RemoveRoute(selectedNode.Name, routeName);
         }
 
         private void PropertyControl_RouteAdded()
         {
-            // TODO: Get route from somewhere and add to propertyControl
+            Workstation station = (Workstation)selectedNode;
+            //Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, null);
+            // propertyControl.AddInterfaceConfigControl(newInterface.Name, newInterface.IpAddress, newInterface.Subnetmask);
+            LoadElementProperties(selectedNode.Name);
         }
 
         private void PropertyControl_InterfaceRemoved(string name)
         {
-            // TODO: Get actual name of the selected station from NetworkManager or sth.
-            NetworkManager.Instance.RemoveInterface("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", name);
+            NetworkManager.Instance.RemoveInterface(selectedNode.Name, name);
         }
 
         private void PropertyControl_InterfaceAdded()
         {
-            // TODO: Get interface
-            // Interface newInterface = NetworkManager.GetNewInterface(); 
-            // propertyControl.AddInterfaceConfigControl(newInterface.Name, newInterface);
+            Workstation station = (Workstation) selectedNode;
+            Interface newInterface = NetworkManager.Instance.AddInterfaceToWorkstation(station.Name, IPAddress.None, IPAddress.None); 
+            // propertyControl.AddInterfaceConfigControl(newInterface.Name, newInterface.IpAddress, newInterface.Subnetmask);
+            LoadElementProperties(selectedNode.Name);
         }
 
         private void PropertyControl_LayerStackChanged(List<Tuple<string, object>> obj)
@@ -70,29 +74,27 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControl_RouteChanged(System.Net.IPAddress Destination, System.Net.IPAddress Gateway, System.Net.IPAddress SubnetMask, string interfaceName)
         {
             // TODO: Get interface by name
-            // NetworkManager.Instance.RouteChanged("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", Destination, Gateway, SubnetMask, interfaceName);
+            // NetworkManager.Instance.RouteChanged(selectedNode.Name, Destination, Gateway, SubnetMask, interfaceName);
         }
 
         private void PropertyControl_GatewayChanged(System.Net.IPAddress GatewayAddress, string InterfaceName)
         {
-            // TODO: Get actual name of the selected station from NetworkManager or sth., what about InterfaceName?
-            NetworkManager.Instance.GatewayChanged("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", GatewayAddress);
+            NetworkManager.Instance.GatewayChanged(selectedNode.Name, GatewayAddress);
         }
 
         private void PropertyControl_InterfaceChanged(string name, System.Net.IPAddress IpAddress, System.Net.IPAddress SubnetMask)
         {
-            // TODO: Get actual name of the selected station from NetworkManager or sth.
-            NetworkManager.Instance.InterfaceChanged("IrgendwerSagtMirSicherWoIchDenNamenHerkrieg", name, IpAddress, SubnetMask);
+            NetworkManager.Instance.InterfaceChanged(selectedNode.Name, name, IpAddress, SubnetMask);
         }
         #endregion Event Handling
 
         public void LoadElementProperties(string elementName)
         {
-            var node = NetworkManager.Instance.GetHardwarenodeByName(elementName);
+            selectedNode = NetworkManager.Instance.GetHardwarenodeByName(elementName);
             propertyControl.ClearControls();
-            if (node is Workstation)
+            if (selectedNode is Workstation)
             {
-                var station = node as Workstation;
+                var station = selectedNode as Workstation;
 
                 // load workstation ethernet interface config controls
                 foreach (var eth in station.GetInterfaces())
@@ -113,7 +115,7 @@ namespace NSA.Controller.ViewControllers
                 // TODO: Integrate once finished
                 //propertyControl.AddLayerStackControl(station.GetLayers());
 
-                if (node is Router)
+                if (selectedNode is Router)
                 {
                     // load gateway config control
                     propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);

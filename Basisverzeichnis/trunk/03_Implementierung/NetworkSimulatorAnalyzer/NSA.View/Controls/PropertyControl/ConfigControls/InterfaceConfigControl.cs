@@ -9,11 +9,12 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
     {
         private bool ipValidInput = false, subnetMaskValidInput = false;
         public event Action<string, IPAddress, IPAddress> InterfaceChanged;
+        public string interfaceName;
 
         public InterfaceConfigControl(IPAddress ip, IPAddress subnetmask, string name)
         {
             InitializeComponent();
-            labelName.Text = name;
+            labelName.Text = interfaceName = name;
             textBoxIpAddress.Text = ip.ToString();
             textBoxSubnetMask.Text = subnetmask.ToString();
             initialized = true;
@@ -44,7 +45,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             if (IsValidIP(textBoxSubnetMask.Text))
             {
                 textBoxSubnetMask.BackColor = SystemColors.Window;
-                ipValidInput = true;
+                subnetMaskValidInput = true;
                 OnDataChanged();
             } else {
                 textBoxSubnetMask.BackColor = Color.Red;
