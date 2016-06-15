@@ -10,6 +10,7 @@ namespace NSA.Model.BusinessLogic
 	{
 	    public string Path { get; set; }
 	    public Network Network { get; set; }
+        // Locations of Víew Elements
         public List<NodeLocation> NodeLocations { get; set; }
 
         // Default Konstruktor

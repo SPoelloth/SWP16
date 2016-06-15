@@ -75,9 +75,12 @@ namespace NSA.Controller
             Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + TestscenarioDirectoryName);
         }
 
+        /// <summary>
+        /// Processes the saving
+        /// </summary>
         private void SavingProcess(string Path)
         {
-            // Positionen(Koordinaten) aller Elemente (Hardwarenodes)(sprich Informationen der View)
+            // Locations of Víew Elements
             CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
 
             /* 
@@ -87,16 +90,6 @@ namespace NSA.Controller
             // CurrentProject.Network = aktuelles Network
 
             WriteToXmlFile(Path, CurrentProject);
-        }
-
-        /// <summary>
-        /// Gets the NetworkRepresentation: the View nodes.
-        /// </summary>
-        /// <returns>Returns the Network Representation: the View nodes.</returns>
-        private List<EditorElementBase> GetNetworkRepresentation()
-        {
-            var networkRepresentation = new List<EditorElementBase>();
-            return networkRepresentation;
         }
 
         /// <summary>
