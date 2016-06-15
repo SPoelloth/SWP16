@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 using NSA.Model.BusinessLogic.TestscenarioRunnables;

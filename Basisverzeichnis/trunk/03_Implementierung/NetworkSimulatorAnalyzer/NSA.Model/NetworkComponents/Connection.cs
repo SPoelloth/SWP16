@@ -17,7 +17,7 @@ namespace NSA.Model.NetworkComponents
         {
             Start = Source;
             End = Target;
-            Name = Guid.NewGuid().ToString("N");
+            Name = new Guid().ToString("N");
         }
 
         #region Equality
@@ -113,5 +113,15 @@ namespace NSA.Model.NetworkComponents
             return !(A == B);
         }
         #endregion
+
+        /// <summary>
+        /// Gets the index of the port.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns>Portindex</returns>
+        public int GetPortIndex(Hardwarenode node)
+        {
+            return node.GetPortIndexOfConnection(this);
+        }
     }
 }

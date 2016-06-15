@@ -13,13 +13,40 @@ namespace NSA.View.Controls.NetworkView
         public event Action<EditorElementBase> SelectionChanged;
         public event Action<VisualConnection> RemoveConnectionPressed;
         public event Action<EditorElementBase> RemoveElementPressed;
+        public event Action<Control, int, Control, int> NewConnectionCreated;
         public List<VisualConnection> connections = new List<VisualConnection>();
+
+        private MessageLoopFilter filter;
+
 
         public NetworkViewControl()
         {
             // ReSharper disable once VirtualMemberCallInConstructor
             DoubleBuffered = true;
             InitializeComponent();
+            filter = new MessageLoopFilter();
+            Application.AddMessageFilter(filter);
+            filter.NewConnection += OnNewConnection;
+            filter.Canceled += OnActionCanceled;
+        }
+
+        private void OnNewConnection(Control control1, Point p1, Control control2, Point p2)
+        {
+            Cursor = Cursors.Default;
+            WorkstationControl ws1 = control1 as WorkstationControl;
+            WorkstationControl ws2 = control2 as WorkstationControl;
+            if (ws1 == null || ws2 == null) return;
+            int port1 = ws1.GetPortIDByPoint(p1);
+            int port2 = ws2.GetPortIDByPoint(p2);
+
+            if (port1 < 0 || port2 < 0) return;
+
+            NewConnectionCreated?.Invoke(ws1, port1, ws2, port2);
+        }
+
+        private void OnActionCanceled()
+        {
+            Cursor = Cursors.Default;
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -101,6 +128,7 @@ namespace NSA.View.Controls.NetworkView
         }
 
         bool debug = false;
+        
         protected override void OnClick(EventArgs e)
         {
             Element_Selected(null);
@@ -136,7 +164,7 @@ namespace NSA.View.Controls.NetworkView
 
         public void RemoveElement(EditorElementBase element)
         {
-            foreach(var c in connections.Where(con => con.Element1 == element || con.Element2 == element).ToArray())
+            foreach (var c in connections.Where(con => con.Element1 == element || con.Element2 == element).ToArray())
             {
                 RemoveConnectionPressed?.Invoke(c);
             }
@@ -146,9 +174,9 @@ namespace NSA.View.Controls.NetworkView
 
         public void CreateNewConnection()
         {
-            //throw new NotImplementedException();
+            filter.ChangeStateNewConnection();
+            Cursor = Cursors.Cross;
 
-            Cursor = Cursors.Arrow;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,14 +7,14 @@ using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using System.Xml.Serialization;
-using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.Controller
 {
     public class ProjectManager
     {
-        public Project currentProject;
+        public Project CurrentProject;
         private List<Testscenario> testscenarios;
+        private const string TestscenarioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
         private bool instanceIsFullyCreated;
@@ -26,28 +27,20 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Gets the NetworkRepresentation: the View nodes.
-        /// </summary>
-        /// <returns>Returns the Network Representation: the View nodes.</returns>
-        private List<EditorElementBase> GetNetworkRepresentation()
-        {
-            var networkRepresentation = new List<EditorElementBase>();
-            return networkRepresentation;
-        }
-
-        /// <summary>
         /// Creates a new Project.
         /// </summary>
         public void CreateNewProject()
         {
-            currentProject = new Project();
+            CurrentProject = new Project();
+            testscenarios = new List<Testscenario>();
+
             if (instanceIsFullyCreated)
             {
                 // Do not call Networkmanager if the instance not fully created yet.
                 // (Because Networkmanager would try to access ProjectManager´s Properties)
                 NetworkManager.Instance.Reset();
+                NetworkViewController.Instance.ClearNodes();
             }
-            testscenarios = new List<Testscenario>();
 
             instanceIsFullyCreated = true;
         }
@@ -58,13 +51,13 @@ namespace NSA.Controller
         /// </summary>
         public void Save()
         {
-            if (currentProject.Path == null)
+            if (CurrentProject.Path == null)
             {
                 SaveAs();
             }
             else
             {
-                WriteToXmlFile(currentProject.Path, currentProject);
+                SavingProcess(CurrentProject.Path);
             }
         }
 
@@ -77,13 +70,31 @@ namespace NSA.Controller
             var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
-            try
-            {
-                WriteToXmlFile(file, currentProject);
-            }
-            catch (IOException)
-            {
-            }
+            CurrentProject.Path = file;
+            SavingProcess(file);
+            // create Directory
+            Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + TestscenarioDirectoryName);
+        }
+
+        /// <summary>
+        /// Processes the saving
+        /// </summary>
+        private void SavingProcess(string Path)
+        {
+            /*********************** View ***********************/
+            // Locations of Víew Elements
+            CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
+            /* Alle Verbindungen zwischen Hardwareknoten */
+            CurrentProject.VisualConnections = NetworkViewController.Instance.GetAllConnections();
+
+            /*********************** Model ***********************/
+            /* Alle Verbindungen zwischen Hardwareknoten */
+            //- Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
+            // --> sind im network im Project
+            // network wird vom Networkmanager verarbeitet
+            // CurrentProject.Network = aktuelles Network
+
+            WriteToXmlFile(Path, CurrentProject);
         }
 
         /// <summary>
@@ -97,8 +108,9 @@ namespace NSA.Controller
             var file = openFileDialog.FileName;
             try
             {
-                currentProject = ReadFromXmlFile<Project>(file);
+                CurrentProject = ReadFromXmlFile<Project>(file);
                 NetworkManager.Instance.Reset();
+                CurrentProject.parseProjectViewDataToViewControlls();
             }
             catch (IOException)
             {
@@ -110,16 +122,17 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            var openFileDialog = new OpenFileDialog();
-            var result = openFileDialog.ShowDialog();
-            if (result != DialogResult.OK) return;
-            var file = openFileDialog.FileName;
-            try
+            DirectoryInfo d = new DirectoryInfo(CurrentProject.Path + "/" + TestscenarioDirectoryName);
+
+            foreach (var file in d.GetFiles("*.txt"))
             {
-                testscenarios.Add(ReadFromXmlFile<Testscenario>(file));
-            }
-            catch (IOException)
-            {
+                try
+                {
+                    testscenarios.Add(ReadTestscenarioFromTxtFile(file.FullName));
+                }
+                catch (IOException)
+                {
+                }
             }
         }
 
@@ -131,6 +144,17 @@ namespace NSA.Controller
         public Testscenario GetTestscenarioById(string Id)
         {
             return testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
+        }
+
+        /// <summary>
+        /// Activates a Testscenario by its id.
+        /// </summary>
+        /// <param name="Id">The id of the Testscenario.</param>
+        /// <returns>Returns the Testscenario.</returns>
+        public void ActivateTestscenarioById(string Id)
+        {
+            var testscenario = testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
+            CurrentProject.Network = testscenario?.ParseRulesToNetwork();
         }
 
         /// <summary>
@@ -181,6 +205,19 @@ namespace NSA.Controller
         }
 
         /// <summary>
+        /// Reads a Testscenario instance from a txt file.
+        /// <para>Object type must have a parameterless constructor.</para>
+        /// </summary>
+        /// <param name="FilePath">The file path to read the object instance from.</param>
+        /// <returns>Returns a Testscenario  from the txt file.</returns>
+        public Testscenario ReadTestscenarioFromTxtFile(string FilePath)
+        {
+            string text = File.ReadAllText(FilePath);
+            var testscenario = new Testscenario(text, CurrentProject.Network);
+            return testscenario;
+        }
+
+        /// <summary>
         /// Creates a Window.
         /// </summary>
         /// <returns>Returns a form.</returns>
@@ -196,7 +233,7 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="Sender">The sender object.</param>
         /// <param name="E">The EventArgs.</param>
-        private static void Form_Shown(object Sender, System.EventArgs E)
+        private static void Form_Shown(object Sender, EventArgs E)
         {
             ToolbarController.Instance.Init();
             NetworkViewController.Instance.Initialize();

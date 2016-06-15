@@ -103,7 +103,7 @@ namespace NSA.Controller
         public void Reset()
         {
             Network oldNetwork = network;
-            network = ProjectManager.Instance.currentProject.Network;
+            network = ProjectManager.Instance.CurrentProject.Network;
             if (network == oldNetwork)
             {
                 // Reset() has already been called with this network object
@@ -380,7 +380,7 @@ namespace NSA.Controller
         public void RemoveHardwarenode(string name)
         {
             Hardwarenode node = network.GetHardwarenodeByName(name);
-            if (null == node)
+            if (node == null)
             {
                 throw new ArgumentException("Hardwarenode with name " + name + "could not be found");
             }
@@ -419,6 +419,10 @@ namespace NSA.Controller
             if (null == B)
             {
                 throw new ArgumentException("Hardwarenode with the name " + end + " could not be found");
+            }
+            if (A == B)
+            {
+                throw new ArgumentException("CreateConnection: start equals end");
             }
 
             Connection connection = new Connection(A, B);

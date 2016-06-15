@@ -12,8 +12,8 @@ namespace NSA.View.Controls.NetworkView
         public Action<VisualConnection> Selected;
         public Action<VisualConnection> RemovePressed;
         public EditorElementBase Element1, Element2;
-        private int Port1;
-        private int Port2;
+        public int Port1;
+        public int Port2;
         NetworkViewControl Parent;
         public string Name;
 

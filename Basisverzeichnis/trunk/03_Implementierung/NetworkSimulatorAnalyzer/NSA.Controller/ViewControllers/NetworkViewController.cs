@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
@@ -6,6 +7,8 @@ using NSA.View.Forms;
 using System.Drawing;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using System.Linq;
+using System.Windows.Forms;
+using NSA.Model.BusinessLogic;
 
 namespace NSA.Controller.ViewControllers
 {
@@ -27,11 +30,66 @@ namespace NSA.Controller.ViewControllers
             networkViewControl.SelectionChanged += EditorElement_Selected;
             networkViewControl.RemoveConnectionPressed += RemoveConnection;
             networkViewControl.RemoveElementPressed += RemoveHardwarenode;
+            networkViewControl.NewConnectionCreated += OnNewConnectionCreated;
+        }
+
+        private void OnNewConnectionCreated(Control c1, int port1, Control c2, int port2)
+        {
+            try
+            {
+                NetworkManager.Instance.CreateConnection(c1.Name, "eth" + port1, c2.Name, "eth" + port2);
+            }
+            catch { }
         }
 
         public Point? GetLocationOfElementByName(string name)
         {
             return networkViewControl.Controls.OfType<EditorElementBase>().FirstOrDefault(s => s.Name == name)?.Location;
+        }
+
+        public List<NodeLocation> GetAllLocationsWithName()
+        {
+            List<NodeLocation> NodeLocations = new List<NodeLocation>();
+            foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
+            {
+                string nodeName = element.AccessibleName;
+                NodeLocation nodeLocation = new NodeLocation();
+                nodeLocation.Name = nodeName;
+                nodeLocation.Point = element.Location;
+                NodeLocations.Add(nodeLocation);
+            }
+            return NodeLocations;
+        }
+
+        public List<ViewConnection> GetAllConnections()
+        {
+            List<ViewConnection> ViewConnections = new List<ViewConnection>();
+            foreach (VisualConnection element in networkViewControl.connections)
+            {
+                ViewConnection viewConnection = new ViewConnection();
+                viewConnection.Port1 = element.Port1;
+                viewConnection.Port2 = element.Port2;
+                ViewConnections.Add(viewConnection);
+            }
+            return ViewConnections;
+        }
+
+        public void ClearNodes()
+        {
+            foreach (EditorElementBase element in networkViewControl.Controls.OfType<EditorElementBase>())
+            {
+                if (element != null)
+                {
+                    try
+                    {
+                        networkViewControl.RemoveElement(element);
+                    }
+                    catch (Exception e)
+                    {
+                        
+                    }
+                }
+            }
         }
 
         private void RemoveHardwarenode(EditorElementBase e)
@@ -59,18 +117,21 @@ namespace NSA.Controller.ViewControllers
 
         public void AddConnection(Connection connection)
         {
-            // Get new Connection from Networkmanager
-            // Subscribe to BL events
-
-            // Create Connectionrepresentation
-            // Subscribe to UI events
-            // Give Representation to NetworkViewControl.AddElement(EditorElementbase newElement)
+            var node1 = GetControlByName(connection.Start.Name);
+            var node2 = GetControlByName(connection.End.Name);
+            if (node1 == null || node2 == null) throw new ArgumentNullException("referenced start or end of connection is null");
+            networkViewControl.AddElement(new VisualConnection(connection.Name, node1, connection.GetPortIndex(connection.Start), node2, connection.GetPortIndex(connection.End), networkViewControl));
+         
         }
 
         public void CreateHardwarenodeRequest()
         {
             networkViewControl.CreateNewConnection();
+        }
 
+        private EditorElementBase GetControlByName(string name)
+        {
+            return networkViewControl.Controls.OfType<EditorElementBase>().First(s => s.Name == name);
         }
     }
 }
