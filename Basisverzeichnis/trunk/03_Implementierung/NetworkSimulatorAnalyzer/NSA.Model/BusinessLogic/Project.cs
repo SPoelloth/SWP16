@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.Remoting.Messaging;
 using NSA.Model.NetworkComponents;
-using NSA.View.Controls.NetworkView;
-using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 
 namespace NSA.Model.BusinessLogic
@@ -38,7 +34,7 @@ namespace NSA.Model.BusinessLogic
 
     public class ViewConnection
     {
-        public int port1 { get; set; }
-        public int port2 { get; set; }
+        public int Port1 { get; set; }
+        public int Port2 { get; set; }
     }
 }

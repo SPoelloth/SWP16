@@ -64,8 +64,8 @@ namespace NSA.Controller.ViewControllers
             foreach (VisualConnection element in networkViewControl.connections)
             {
                 ViewConnection viewConnection = new ViewConnection();
-                viewConnection.port1 = element.Port1;
-                viewConnection.port2 = element.Port2;
+                viewConnection.Port1 = element.Port1;
+                viewConnection.Port2 = element.Port2;
                 ViewConnections.Add(viewConnection);
             }
             return ViewConnections;
