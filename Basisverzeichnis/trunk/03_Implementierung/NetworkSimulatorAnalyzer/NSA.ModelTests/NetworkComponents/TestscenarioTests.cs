@@ -10,7 +10,7 @@ using NSA.Model.BusinessLogic.TestscenarioRunnables;
 namespace NSA.ModelTests.BusinessLogic
 {
     [TestClass]
-    public class UnitTest1
+    public class TestscenarioTests
     {
         private Network network;
         [TestInitialize]
