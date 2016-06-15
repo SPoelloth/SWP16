@@ -24,6 +24,11 @@ namespace NSA.Model.BusinessLogic
             NodeLocations = new List<NodeLocation>();
             VisualConnections = new List<ViewConnection>();
         }
+
+	    public void parseProjectViewDataToViewControlls()
+	    {
+	        
+	    }
     }
 
     public class NodeLocation

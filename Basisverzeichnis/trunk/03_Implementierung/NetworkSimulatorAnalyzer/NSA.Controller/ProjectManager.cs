@@ -110,6 +110,7 @@ namespace NSA.Controller
             {
                 CurrentProject = ReadFromXmlFile<Project>(file);
                 NetworkManager.Instance.Reset();
+                CurrentProject.parseProjectViewDataToViewControlls();
             }
             catch (IOException)
             {
@@ -209,23 +210,10 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="FilePath">The file path to read the object instance from.</param>
         /// <returns>Returns a Testscenario  from the txt file.</returns>
-        public static Testscenario ReadTestscenarioFromTxtFile(string FilePath)
+        public Testscenario ReadTestscenarioFromTxtFile(string FilePath)
         {
-            /* ----------------------------- Skriptsprache -----------------------------
-             | - Separator, der das Parsen der Sprache erleichtert.
-            […] - Array von Elementen
-            {…} - Dictionary von Elementen
-            1. Rechner_Name | [Rechner_Name, …] | {TTL: 64, SSL: TRUE, …} |
-            TRUE/FALSE
-            2. Rechner_Name | [SUBNET(Subnet_Name), …] | {TTL: 64, SSL: TRUE,
-            …} | TRUE/FALSE
-            3. Rechner_Name | ONLY([Rechner_Name, …]) | {TTL: 64, SSL: TRUE,
-            …} | TRUE/FALSE
-            4. Rechner_Name | HAS_INTERNET | TRUE/FALSE
-            ----------------------------------------------------------------------------*/
             string text = File.ReadAllText(FilePath);
-            var testscenario = new Testscenario();
-
+            var testscenario = new Testscenario(text, CurrentProject.Network);
             foreach (string element in text.Split('|'))
             {
                 Rule rule = new Rule();
