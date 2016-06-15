@@ -22,19 +22,27 @@ namespace NSA.View.Controls.NetworkView
         public Action<Control, Point, Control, Point> NewConnection;
         public Action Canceled;
 
-        IntPtr ownerWindow;
-
         Point? firstConnectionPoint = null;
         Control firstConnectionControl = null;
 
-        public MessageLoopFilter(IntPtr handle)
+        public MessageLoopFilter()
         {
-            ownerWindow = handle;
+
         }
 
         public bool PreFilterMessage(ref Message m)
         {
-            if (currentState == State.Normal) return false;
+            if (currentState == State.Normal)
+            {
+                Keys kc = (Keys)(int)m.WParam & Keys.KeyCode;
+                if (m.Msg == WM_KEYDOWN && kc == Keys.Delete)
+                {
+                    // todo blub
+
+                }
+
+                return false;
+            }
 
             if (currentState == State.Connection)
             {
@@ -43,6 +51,7 @@ namespace NSA.View.Controls.NetworkView
                 {
                     currentState = State.Normal;
                     Canceled?.Invoke();
+                    return true;
                 }
 
                 if (m.Msg == WM_LBUTTONDOWN)
@@ -55,7 +64,7 @@ namespace NSA.View.Controls.NetworkView
                     return true;
                 }
 
-                if (m.Msg == WM_LBUTTONUP)
+                if (m.Msg == WM_LBUTTONUP && firstConnectionPoint != null)
                 {
                     var upPoint = new Point(m.LParam.ToInt32() & 0xffff, (m.LParam.ToInt32() >> 16) & 0xffff);
                     if (upPoint == firstConnectionPoint)
@@ -69,6 +78,11 @@ namespace NSA.View.Controls.NetworkView
                     }
                     return true;
                 }
+            }
+
+            if (currentState == State.QuickSimulation)
+            {
+
             }
             return false;
         }
@@ -85,7 +99,8 @@ namespace NSA.View.Controls.NetworkView
     public enum State
     {
         Normal,
-        Connection
+        Connection,
+        QuickSimulation
     }
 }
 
