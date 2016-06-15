@@ -62,5 +62,18 @@ namespace NSA.ModelTests.BusinessLogic
                 Assert.IsFalse(runnable.Run().ErrorID == 0);
             }
         }
+
+        [TestMethod]
+        public void TestTTLShouldFail()
+        {
+            Testscenario t = new Testscenario("A|(B)|{TTL:0}|TRUE", network);
+
+            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+
+            foreach (var runnable in runnables)
+            {
+                Assert.IsTrue(runnable.Run().ErrorID == 6);
+            }
+        }
     }
 }
