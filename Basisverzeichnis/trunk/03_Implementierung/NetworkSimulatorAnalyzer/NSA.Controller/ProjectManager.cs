@@ -147,17 +147,6 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Activates a Testscenario by its id.
-        /// </summary>
-        /// <param name="Id">The id of the Testscenario.</param>
-        /// <returns>Returns the Testscenario.</returns>
-        public void ActivateTestscenarioById(string Id)
-        {
-            var testscenario = testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
-            CurrentProject.Network = testscenario?.ParseRulesToNetwork();
-        }
-
-        /// <summary>
         /// Writes the given object instance to an XML file.
         /// <para>Only Public properties and variables will be written to the file. These can be any type though, even other classes.</para>
         /// <para>If there are public properties/variables that you do not want written to the file, decorate them with the [XmlIgnore] attribute.</para>
