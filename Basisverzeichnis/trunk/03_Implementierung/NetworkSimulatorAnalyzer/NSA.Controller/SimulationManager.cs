@@ -26,14 +26,64 @@ namespace NSA.Controller
             this.Simulations = Simulations;
         }
 
-        public void HopSelected(int IndexOfHop)
+        /// <summary>
+        /// Gets the result for the selected Hop. Only use with NodeNames of the Last Simulation!
+        /// </summary>
+        /// <param name="NodeOneName">Name of the node one of the hop.</param>
+        /// <param name="NodeTwoName">Name of the node two of the hop.</param>
+        /// <returns>Null if any error occured. If not: res[0] == result of node one & res[1] == result of node two</returns>
+        public List<Result> HopSelected(string NodeOneName, string NodeTwoName)
         {
-            // todo
-            // Jeremy: zu einem Hop gehören immer zwei Rechner, indexOfHop identifiziert den ersten Rechner in der Liste an Hops
-            // klären: zweiter Rechner der davor oder der danach?
-            // ebenfalls klären: Hop selektieren nur bei aktueller Simulation möglich (würde sagen JA)
+            Hardwarenode nodeOne = NetworkManager.Instance.GetHardwarenodeByName(NodeOneName);
+            Hardwarenode nodeTwo = NetworkManager.Instance.GetHardwarenodeByName(NodeTwoName);
+            if (nodeOne == null || nodeTwo == null)
+                return null;
+            if (Simulations.Count == 0)
+                return null;
+            List<Hardwarenode> hops = GetHopsOfLastPacket(Simulations.Count - 1);
+            if(hops == null)
+                return null;
+            List<Result> res = new List<Result>();
+            if (hops[hops.Count - 1].Equals(nodeOne))
+            {
+                Packet p = Simulations[Simulations.Count - 1].GetLastPacket();
+                if (p == null)
+                    return null;
+                res.Add(p.result);
+                res.Add(new Result());
+            }
+            else if (hops[hops.Count - 1].Equals(nodeTwo))
+            {
+                res.Add(new Result());
+                Packet p = Simulations[Simulations.Count - 1].GetLastPacket();
+                if (p == null)
+                    return null;
+                res.Add(p.result);
+            }
+            else
+            {
+                res.Add(new Result());
+                res.Add(new Result());
+            }
+            return res;
         }
 
+        /// <summary>
+        /// Gets the hops of last packet.
+        /// </summary>
+        /// <param name="index">The index of the simulation in the history.</param>
+        /// <returns>Null, if there is no packet. The Hop-List kann have count == 0</returns>
+        public List<Hardwarenode> GetHopsOfLastPacket(int index)
+        {
+            Packet p = Simulations[index].GetLastPacket();
+            return p?.GetHops();
+        }
+
+        /// <summary>
+        /// Starts the simulation.
+        /// </summary>
+        /// <param name="Sim">The sim.</param>
+        /// <returns>Result of the last packet</returns>
         public Result StartSimulation(Simulation Sim)
         {
             return Sim.Execute();

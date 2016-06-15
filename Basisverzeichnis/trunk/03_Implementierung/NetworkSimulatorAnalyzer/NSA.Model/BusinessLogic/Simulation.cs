@@ -62,5 +62,18 @@ namespace NSA.Model.BusinessLogic
 	    {
 	        return packetsSend.Concat(packetsReceived);
 	    }
+
+        /// <summary>
+        /// Gets the last packet.
+        /// </summary>
+        /// <returns>Null if there is no packet.</returns>
+        public Packet GetLastPacket()
+	    {
+	        if (packetsReceived.Count == 0 && packetsSend.Count == 0)
+	            return null;
+	        if (packetsReceived.Count == 0)
+	            return packetsSend[packetsSend.Count - 1];
+	        return packetsReceived[packetsReceived.Count - 1];
+	    }
     }
 }

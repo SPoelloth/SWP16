@@ -34,6 +34,15 @@ namespace NSA.Model.BusinessLogic
         }
 
         /// <summary>
+        /// Gets the hops.
+        /// </summary>
+        /// <returns></returns>
+        public List<Hardwarenode> GetHops()
+        {
+            return hops;
+        }
+
+        /// <summary>
         /// Sends this packet to the destination.
         /// </summary>
         /// <returns>The Returnpacket if sending to destination was successfull</returns>
