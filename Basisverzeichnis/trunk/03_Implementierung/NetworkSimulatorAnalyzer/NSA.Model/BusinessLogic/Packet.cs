@@ -12,7 +12,7 @@ namespace NSA.Model.BusinessLogic
         private Hardwarenode destination;
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
-        public Result result { get; private set; }
+        public Result result { get; private set; } = new Result();
         public bool expectedResult { get; }
         private Dictionary<string, object> tags;
 

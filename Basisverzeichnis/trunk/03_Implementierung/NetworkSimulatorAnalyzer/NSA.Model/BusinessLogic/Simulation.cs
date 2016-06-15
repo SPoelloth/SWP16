@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
 {
 	public class Simulation
     {
-        private List<Packet> packetsSend;
-        private List<Packet> packetsReceived;
+        private List<Packet> packetsSend = new List<Packet>();
+        private List<Packet> packetsReceived = new List<Packet>();
 	    private int id;
 
 	    public Simulation(int _id)
@@ -25,7 +26,7 @@ namespace NSA.Model.BusinessLogic
         /// <summary>
         /// Executes this instance.
         /// </summary>
-        public void Execute()
+        public Result Execute()
 	    {
             foreach (Packet sendpacket in packetsSend)
             {
@@ -45,6 +46,9 @@ namespace NSA.Model.BusinessLogic
                 if(backpacket.result.ErrorID == 0)
                     backpacket.Send();
             }
+
+            //TODO: implement the right logic
+            return new Result();
         }
     }
 }
