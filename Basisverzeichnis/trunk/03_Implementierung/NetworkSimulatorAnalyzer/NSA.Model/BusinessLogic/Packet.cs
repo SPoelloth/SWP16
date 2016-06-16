@@ -73,7 +73,7 @@ namespace NSA.Model.BusinessLogic
                 result.Res = "TTL is 0 but the destination was not reached.";
                 result.SendError = true;
             }
-            if (tags.Count != 0)
+            if (result.ErrorID == 0 && tags.Count != 0)
             {
                 //Layer Error
                 result.ErrorID = 7;
