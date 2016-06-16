@@ -29,5 +29,11 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             return name;
         }
+
+        public bool SetLayerName(string newName)
+        {
+            name = newName;
+            return true;
+        }
     }
 }

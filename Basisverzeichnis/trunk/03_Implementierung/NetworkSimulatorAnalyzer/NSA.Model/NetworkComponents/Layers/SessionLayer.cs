@@ -16,6 +16,11 @@ namespace NSA.Model.NetworkComponents.Layers
             return "Kommunikationsschicht";
         }
 
+        public bool SetLayerName(string newName)
+        {
+            return false;
+        }
+
         public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
         {
             

@@ -30,5 +30,11 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <returns>The Layername</returns>
         string GetLayerName();
+
+        /// <summary>
+        /// Sets the name of the layer.
+        /// </summary>
+        /// <returns></returns>
+        bool SetLayerName(string newName);
     }
 }

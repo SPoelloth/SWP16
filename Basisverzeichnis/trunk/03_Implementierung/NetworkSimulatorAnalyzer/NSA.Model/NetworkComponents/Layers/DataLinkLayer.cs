@@ -43,5 +43,10 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             return "Sicherungsschicht";
         }
+
+        public bool SetLayerName(string newName)
+        {
+            return false;
+        }
     }
 }

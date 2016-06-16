@@ -84,5 +84,28 @@ namespace NSA.Model.NetworkComponents
                 InsertAt(newIndex, layer);
             }
         }
+
+        /// <summary>
+        /// Sets the name.
+        /// </summary>
+        /// <param name="oldName">The old name.</param>
+        /// <param name="newName">The new name.</param>
+        /// <returns>True if it worked. False if the newName is already taken by another layer or when there is no layer with the old name</returns>
+        public bool SetName(string oldName, string newName)
+        {
+            foreach (ILayer l in layers)
+            {
+                if (l.GetLayerName() == newName)
+                    return false;
+            }
+            foreach (ILayer l in layers)
+            {
+                if (l.GetLayerName() == oldName)
+                {
+                    return l.SetLayerName(newName);
+                }
+            }
+            return false;
+        }
     }
 }
