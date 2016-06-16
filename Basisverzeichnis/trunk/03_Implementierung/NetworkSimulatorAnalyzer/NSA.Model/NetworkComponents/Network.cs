@@ -36,10 +36,18 @@ namespace NSA.Model.NetworkComponents
 	    }
 
         /// <summary>
-        /// Adds a connection.
+        /// Adds the connection.
         /// </summary>
+        /// <param name="StartNodeInterfaceName">Start name of the node interface.</param>
+        /// <param name="EndNodeInterfaceName">End name of the node interface.</param>
         /// <param name="newConnection">The new connection.</param>
-        /// <exception cref="System.InvalidOperationException">Connection already exists!</exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// Connection already exists!
+        /// or
+        /// Interface of startnode is already used!
+        /// or
+        /// Interface of endnode is already used!
+        /// </exception>
         public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection newConnection)
 	    {
 	        if (!nodes.Contains(newConnection.Start) || !nodes.Contains(newConnection.End)) return;
