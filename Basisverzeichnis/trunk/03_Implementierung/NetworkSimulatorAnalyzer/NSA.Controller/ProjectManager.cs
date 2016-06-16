@@ -1,48 +1,47 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
-using System.Xml.Serialization;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Controller
 {
     public class ProjectManager
     {
-        public Project CurrentProject;
-        private List<Testscenario> testscenarios;
+        public Project CurrentProject = new Project();
+        private List<Testscenario> testscenarios = new List<Testscenario>();
         private const string TestscenarioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
-        private bool instanceIsFullyCreated;
-        /// <summary>
-        /// Default Constructor.
-        /// </summary>
-        private ProjectManager()
+
+        private void Initialize()
         {
             CreateNewProject();
         }
 
         /// <summary>
-        /// Creates a new Project.
+        /// Clears the Project.
         /// </summary>
         public void CreateNewProject()
         {
-            CurrentProject = new Project();
-            testscenarios = new List<Testscenario>();
-
-            if (instanceIsFullyCreated)
+            foreach (var c in NetworkManager.Instance.GetAllConnections())
             {
-                // Do not call Networkmanager if the instance not fully created yet.
-                // (Because Networkmanager would try to access ProjectManager´s Properties)
-                NetworkManager.Instance.Reset();
-                NetworkViewController.Instance.ClearNodes();
+                NetworkManager.Instance.RemoveConnection(c.Name);
             }
 
-            instanceIsFullyCreated = true;
+            foreach (var h in NetworkManager.Instance.GetAllHardwareNodes())
+            {
+                NetworkManager.Instance.RemoveHardwarenode(h.Name);
+            }
+
+            CurrentProject.Path = null;
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace NSA.Controller
             }
             else
             {
-                SavingProcess(CurrentProject.Path);
+                SaveToFile(CurrentProject.Path);
             }
         }
 
@@ -66,35 +65,181 @@ namespace NSA.Controller
         /// </summary>
         public void SaveAs()
         {
-            var saveFileDialog = new SaveFileDialog {Filter = "XML|*.xml"};
+            var saveFileDialog = new SaveFileDialog { Filter = "XML|*.xml" };
             var result = saveFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
             CurrentProject.Path = file;
-            SavingProcess(file);
+            SaveToFile(file);
             // create Directory
-            Directory.CreateDirectory(file.Substring(0 ,file.LastIndexOf('\\')) + "\\" + TestscenarioDirectoryName);
+            Directory.CreateDirectory(file.Substring(0, file.LastIndexOf('\\')) + "\\" + TestscenarioDirectoryName);
         }
 
-        /// <summary>
-        /// Processes the saving
-        /// </summary>
-        private void SavingProcess(string Path)
+        private void SaveToFile(string file)
         {
-            /*********************** View ***********************/
-            // Locations of Víew Elements
-            CurrentProject.NodeLocations = NetworkViewController.Instance.GetAllLocationsWithName();
-            /* Alle Verbindungen zwischen Hardwareknoten */
-            CurrentProject.VisualConnections = NetworkViewController.Instance.GetAllConnections();
+            XDocument doc = new XDocument();
+            XElement root = new XElement("Project");
 
-            /*********************** Model ***********************/
-            /* Alle Verbindungen zwischen Hardwareknoten */
-            //- Alle Eigenschaften der einzelnen Hardwareknoten (sprich Informationen des Models) */
-            // --> sind im network im Project
-            // network wird vom Networkmanager verarbeitet
-            // CurrentProject.Network = aktuelles Network
+            #region Workstation
 
-            WriteToXmlFile(Path, CurrentProject);
+            XElement workstationsXML = new XElement("Workstations");
+
+            foreach (var ws in NetworkManager.Instance.GetAllHardwareNodes().OfType<Workstation>())
+            {
+                var loc = NetworkViewController.Instance.GetLocationOfElementByName(ws.Name) ?? new Point();
+
+                var interfaces = ws.GetInterfaces();
+                XElement interfacesXML = new XElement("Interfaces");
+                foreach (var i in interfaces)
+                {
+                    interfacesXML.Add(new XElement("Interface",
+                                      new XAttribute("Name", i.Name),
+                                      new XAttribute("IPAddress", i.IpAddress.ToString()),
+                                      new XAttribute("SubnetMask", i.Subnetmask.ToString())));
+                }
+
+                var routen = ws.GetRoutes();
+                XElement routesinterfacesXML = new XElement("Routes");
+                foreach (var r in routen)
+                {
+                    routesinterfacesXML.Add(new XElement("Route",
+                                      new XAttribute("Destination", r.Destination.ToString()),
+                                      new XAttribute("Gateway", r.Gateway.ToString()),
+                                      new XAttribute("SubnetMask", r.Subnetmask.ToString()),
+                                      new XAttribute("Iface", r.Iface.Name)));
+                }
+
+                var xmlnode = new XElement("Workstation",
+                              new XAttribute("Name", ws.Name),
+                              new XAttribute("LocationX", loc.X),
+                              new XAttribute("LocationY", loc.Y)
+                              
+                              // TODO LAYERSTACK
+                              );
+
+                if(ws.StandardGateway != null)
+                {
+                    xmlnode.Add(new XAttribute("DefaultGW", ws.StandardGateway));
+                    xmlnode.Add(new XAttribute("DefaultGWPort", ws.StandardGatewayPort.Name));
+                }
+
+                xmlnode.Add(interfacesXML);
+                xmlnode.Add(routesinterfacesXML);
+
+                workstationsXML.Add(xmlnode);
+            }
+
+            #endregion Workstation
+
+            #region Connections
+
+            XElement connectionsXML = new XElement("Connections");
+
+            foreach (var c in NetworkManager.Instance.GetAllConnections())
+            {
+                var xmlcon = new XElement("Connection",
+                             new XAttribute("HWNode1", c.Start.Name),
+                             new XAttribute("HWNode1Port", c.GetPortIndex(c.Start)),
+                             new XAttribute("HWNode2", c.End.Name),
+                             new XAttribute("HWNode2Port", c.GetPortIndex(c.End)));
+
+
+                connectionsXML.Add(xmlcon);
+            }
+
+            #endregion Connections
+
+            root.Add(workstationsXML);
+            root.Add(connectionsXML);
+            doc.Add(root);
+            doc.Save(file);
+        }
+
+        private void LoadFromFile(string file)
+        {
+            try
+            {
+                XDocument document = XDocument.Load(file);
+                XElement root = document.Root;
+                if (root == null) throw new InvalidDataException();
+
+                #region Workstation
+
+                XElement hwNodesXML = root.Element("Workstations");
+                if (hwNodesXML == null) throw new InvalidDataException();
+
+                foreach (var node in hwNodesXML.Elements())
+                {
+                    var name = node.Attribute("Name").Value;
+                    var x = int.Parse(node.Attribute("LocationX").Value);
+                    var y = int.Parse(node.Attribute("LocationY").Value);
+                    bool hasDefaultGW = node.Attribute("DefaultGW") != null;
+
+                    Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
+                    hwNode.Name = name;
+                    if (hasDefaultGW)
+                    {
+                        var defaultgw = IPAddress.Parse(node.Attribute("DefaultGW").Value);
+                        hwNode.StandardGateway = defaultgw;
+                    }
+                    NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
+
+                    var interfaceXML = node.Element("Interfaces");
+                    if (interfaceXML == null) throw new InvalidDataException();
+                    foreach (var iface in interfaceXML.Elements())
+                    {
+                        var iname = iface.Attribute("Name").Value;
+                        var ip = iface.Attribute("IPAddress").Value;
+                        var subnet = iface.Attribute("SubnetMask").Value;
+
+                        hwNode.SetInterface(iname, IPAddress.Parse(ip), IPAddress.Parse(subnet));
+                    }
+
+                    var routenXML = node.Element("Routes");
+                    if (routenXML == null) throw new InvalidDataException();
+                    foreach (var route in routenXML.Elements())
+                    {
+                        var rDest = route.Attribute("IPAddress").Value;
+                        var rgateway = route.Attribute("Gateway").Value;
+                        var rsubnet = route.Attribute("SubnetMask").Value;
+                        var rinterface = route.Attribute("SubnetMask").Value;
+
+                        hwNode.AddRoute(new Route(IPAddress.Parse(rDest), IPAddress.Parse(rsubnet), IPAddress.Parse(rgateway), hwNode.GetInterfaces().First(i => i.Name == rinterface)));
+                    }
+
+                    if (hasDefaultGW)
+                    {
+                        var defaultgwport = node.Attribute("DefaultGWPort").Value;
+                        hwNode.StandardGatewayPort = hwNode.GetInterfaces().First(i => i.Name == defaultgwport);
+                    }
+                }
+
+                #endregion Workstation
+
+                #region Connection
+
+                XElement connectionXML = root.Element("Connections");
+                if (connectionXML == null) throw new InvalidDataException();
+
+                foreach (var node in connectionXML.Elements())
+                {
+                    var hwNode1 = node.Attribute("HWNode1").Value;
+                    var hwNode1Port = int.Parse(node.Attribute("HWNode1Port").Value);
+                    var hwNode2 = node.Attribute("HWNode2").Value;
+                    var hwNode2Port = int.Parse(node.Attribute("HWNode2Port").Value);
+
+                    NetworkManager.Instance.CreateConnection(hwNode1, "eth" + hwNode1Port, hwNode2, "eth" + hwNode2Port);
+                }
+
+                #endregion Connection
+
+            }
+            // ReSharper disable once UnusedVariable
+            catch (Exception e)
+            {
+                CreateNewProject();
+                MessageBox.Show("Laden des Projekts fehlgeschlagen");
+            }
         }
 
         /// <summary>
@@ -102,15 +247,14 @@ namespace NSA.Controller
         /// </summary>
         public void LoadProject()
         {
-            var openFileDialog = new OpenFileDialog {Filter = "XML|*.xml"};
+            var openFileDialog = new OpenFileDialog { Filter = "XML|*.xml" };
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
             try
             {
-                CurrentProject = ReadFromXmlFile<Project>(file);
-                NetworkManager.Instance.Reset();
-                CurrentProject.parseProjectViewDataToViewControlls();
+                CreateNewProject();
+                LoadFromFile(file);
             }
             catch (IOException)
             {
@@ -128,7 +272,7 @@ namespace NSA.Controller
             {
                 try
                 {
-                    testscenarios.Add(ReadTestscenarioFromTxtFile(file.FullName));
+                    testscenarios.Add(new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network));
                 }
                 catch (IOException)
                 {
@@ -144,66 +288,6 @@ namespace NSA.Controller
         public Testscenario GetTestscenarioById(string Id)
         {
             return testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
-        }
-
-        /// <summary>
-        /// Writes the given object instance to an XML file.
-        /// <para>Only Public properties and variables will be written to the file. These can be any type though, even other classes.</para>
-        /// <para>If there are public properties/variables that you do not want written to the file, decorate them with the [XmlIgnore] attribute.</para>
-        /// <para>Object type must have a parameterless constructor.</para>
-        /// </summary>
-        /// <typeparam name="T">The type of object being written to the file.</typeparam>
-        /// <param name="FilePath">The file path to write the object instance to.</param>
-        /// <param name="ObjectToWrite">The object instance to write to the file.</param>
-        /// <param name="Append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToXmlFile<T>(string FilePath, T ObjectToWrite, bool Append = false) where T : new()
-        {
-            TextWriter writer = null;
-            try
-            {
-                var serializer = new XmlSerializer(typeof(T));
-                writer = new StreamWriter(FilePath, Append);
-                serializer.Serialize(writer, ObjectToWrite);
-            }
-            finally
-            {
-                writer?.Close();
-            }
-        }
-
-        /// <summary>
-        /// Reads an object instance from an XML file.
-        /// <para>Object type must have a parameterless constructor.</para>
-        /// </summary>
-        /// <typeparam name="T">The type of object to read from the file.</typeparam>
-        /// <param name="FilePath">The file path to read the object instance from.</param>
-        /// <returns>Returns a new instance of the object read from the XML file.</returns>
-        public static T ReadFromXmlFile<T>(string FilePath) where T : new()
-        {
-            TextReader reader = null;
-            try
-            {
-                var serializer = new XmlSerializer(typeof(T));
-                reader = new StreamReader(FilePath);
-                return (T)serializer.Deserialize(reader);
-            }
-            finally
-            {
-                reader?.Close();
-            }
-        }
-
-        /// <summary>
-        /// Reads a Testscenario instance from a txt file.
-        /// <para>Object type must have a parameterless constructor.</para>
-        /// </summary>
-        /// <param name="FilePath">The file path to read the object instance from.</param>
-        /// <returns>Returns a Testscenario  from the txt file.</returns>
-        public Testscenario ReadTestscenarioFromTxtFile(string FilePath)
-        {
-            string text = File.ReadAllText(FilePath);
-            var testscenario = new Testscenario(text, CurrentProject.Network);
-            return testscenario;
         }
 
         /// <summary>
@@ -224,6 +308,7 @@ namespace NSA.Controller
         /// <param name="E">The EventArgs.</param>
         private static void Form_Shown(object Sender, EventArgs E)
         {
+            Instance.Initialize();
             ToolbarController.Instance.Init();
             NetworkViewController.Instance.Initialize();
             InfoController.Instance.Initialize();

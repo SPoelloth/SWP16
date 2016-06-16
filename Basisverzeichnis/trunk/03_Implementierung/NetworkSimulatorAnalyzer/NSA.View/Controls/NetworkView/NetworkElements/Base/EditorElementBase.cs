@@ -8,7 +8,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
     {
         Image Image;
         public Action<EditorElementBase> Selected;
-        public Action RemovePressed;
 
         public static int ZIndexStart = 0;
         public int ZIndex;
@@ -55,7 +54,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
                 lastMouseLocation = e.Location;
             }
         }
-        
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (!dragging) return;
@@ -73,8 +72,14 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
 
         protected override void OnMouseHover(EventArgs e)
         {
-            Cursor = Cursors.Hand;
+            Cursor = Cursor == Cursors.Default ? Cursors.Hand : Cursor;
             base.OnMouseHover(e);
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            Cursor = Cursor == Cursors.Hand ? Cursors.Default : Cursor;
+            base.OnMouseLeave(e);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
@@ -87,11 +92,5 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         {
             throw new InvalidOperationException();
         }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Delete) RemovePressed?.Invoke();
-        }
-        
     }
 }

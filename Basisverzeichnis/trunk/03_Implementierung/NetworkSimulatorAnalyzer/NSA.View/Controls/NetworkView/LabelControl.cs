@@ -32,7 +32,8 @@ namespace NSA.View.Controls.NetworkView
             Height = textBox.Height;
             Label1_TextChanged(parentElement, null);
             element.Disposed += Element_Disposed;
-            Enabled = false;
+            textBox.Enabled = false;
+            textBox.ForeColor = Color.Red;
         }
 
         private void LabelControl_Click(object sender, EventArgs e)

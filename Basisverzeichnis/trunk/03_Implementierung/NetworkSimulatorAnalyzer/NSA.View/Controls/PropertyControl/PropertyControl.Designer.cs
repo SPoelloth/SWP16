@@ -33,13 +33,15 @@
             // 
             // flpContents
             // 
+            this.flpContents.AutoScroll = true;
             this.flpContents.BackColor = System.Drawing.SystemColors.Control;
             this.flpContents.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpContents.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flpContents.Location = new System.Drawing.Point(0, 0);
             this.flpContents.Name = "flpContents";
-            this.flpContents.Size = new System.Drawing.Size(220, 384);
+            this.flpContents.Size = new System.Drawing.Size(235, 384);
             this.flpContents.TabIndex = 0;
+            this.flpContents.WrapContents = false;
             // 
             // PropertyControl
             // 
@@ -47,7 +49,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.flpContents);
             this.Name = "PropertyControl";
-            this.Size = new System.Drawing.Size(220, 384);
+            this.Size = new System.Drawing.Size(235, 384);
             this.ResumeLayout(false);
 
         }

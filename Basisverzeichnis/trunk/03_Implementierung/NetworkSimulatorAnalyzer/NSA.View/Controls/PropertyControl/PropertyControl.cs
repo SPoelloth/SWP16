@@ -26,7 +26,6 @@ namespace NSA.View.Controls.PropertyControl
         public PropertyControl()
         {
             InitializeComponent();
-            DisplayElements();
         }
 
         #region Methods
@@ -83,13 +82,10 @@ namespace NSA.View.Controls.PropertyControl
             {
                 flpContents.Controls.Add(icc);
             }
-            // If the target HardwareNode has at least one networkInterface, add an AddButton for additional interfaces
-            if (interfaceConfigControls.Count > 0)
-            {
-                var addInterfaceButton = new AddButton();
-                addInterfaceButton.Click += AddInterfaceButton_Click;
-                flpContents.Controls.Add(addInterfaceButton);
-            }
+            var addInterfaceButton = new AddInterfaceButton();
+            addInterfaceButton.Click += AddInterfaceButton_Click;
+            flpContents.Controls.Add(addInterfaceButton);
+
             // Add various singular controls
             foreach (var c in tempControls)
             {
@@ -100,12 +96,9 @@ namespace NSA.View.Controls.PropertyControl
             {
                 flpContents.Controls.Add(rcc);
             }
-            if (routeConfigControls.Count > 0)
-            {
-                var addRouteButton = new AddButton();
-                addRouteButton.Click += AddRouteButton_Click;
-                flpContents.Controls.Add(addRouteButton);
-            }
+            var addRouteButton = new AddRouteButton();
+            addRouteButton.Click += AddRouteButton_Click;
+            flpContents.Controls.Add(addRouteButton);
         }
 
         public void ClearControls()
@@ -133,12 +126,20 @@ namespace NSA.View.Controls.PropertyControl
                     // TODO: Implement once implemented (...)
                     //lscc.LayerChanged -= LayerStackConfigControl_LayerChanged;
                     lscc.Closing -= ConfigControl_Closing;
-                } else if (c is AddButton)
+                } else if (c is AddInterfaceButton)
                 {
-                    // TODO: Handle AddRouteButton and AddInterfaceButton, unsubscribe from click event
+                    AddInterfaceButton aib = c as AddInterfaceButton;
+                    aib.Click -= AddInterfaceButton_Click;
+                } else if (c is AddRouteButton)
+                {
+                    AddRouteButton arb = c as AddRouteButton;
+                    arb.Click -= AddRouteButton_Click;
                 }
-                flpContents.Controls.Remove(c);
             }
+            flpContents.Controls.Clear();
+            interfaceConfigControls.Clear();
+            routeConfigControls.Clear();
+            tempControls.Clear();
         }
         #endregion Methods
 
@@ -174,7 +175,7 @@ namespace NSA.View.Controls.PropertyControl
             if (control != null)
             {
                 control.InterfaceChanged -= InterfaceConfigControl_InterfaceChanged;
-                InterfaceRemoved?.Invoke(control.Name);
+                InterfaceRemoved?.Invoke(control.interfaceName);
             }
             else if (Control is RouteConfigControl)
             {

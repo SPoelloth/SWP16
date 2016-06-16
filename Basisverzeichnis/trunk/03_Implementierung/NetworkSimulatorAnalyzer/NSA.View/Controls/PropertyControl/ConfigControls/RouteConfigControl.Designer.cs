@@ -38,6 +38,10 @@
             this.textBoxSubnetMask = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
+            // buttonClose
+            // 
+            this.buttonClose.TabIndex = 4;
+            // 
             // labelDestination
             // 
             this.labelDestination.AutoSize = true;
@@ -53,7 +57,7 @@
             this.textBoxDestination.Location = new System.Drawing.Point(78, 35);
             this.textBoxDestination.Name = "textBoxDestination";
             this.textBoxDestination.Size = new System.Drawing.Size(95, 20);
-            this.textBoxDestination.TabIndex = 10;
+            this.textBoxDestination.TabIndex = 0;
             this.textBoxDestination.TextChanged += new System.EventHandler(this.textBoxDestination_TextChanged);
             this.textBoxDestination.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 
@@ -62,7 +66,7 @@
             this.textBoxRoute.Location = new System.Drawing.Point(78, 61);
             this.textBoxRoute.Name = "textBoxRoute";
             this.textBoxRoute.Size = new System.Drawing.Size(95, 20);
-            this.textBoxRoute.TabIndex = 13;
+            this.textBoxRoute.TabIndex = 1;
             this.textBoxRoute.TextChanged += new System.EventHandler(this.textBoxRoute_TextChanged);
             this.textBoxRoute.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 
@@ -91,7 +95,7 @@
             this.textBoxInterface.Location = new System.Drawing.Point(78, 113);
             this.textBoxInterface.Name = "textBoxInterface";
             this.textBoxInterface.Size = new System.Drawing.Size(95, 20);
-            this.textBoxInterface.TabIndex = 14;
+            this.textBoxInterface.TabIndex = 3;
             this.textBoxInterface.TextChanged += new System.EventHandler(this.textBoxInterface_TextChanged);
             // 
             // labelSubnetMask
@@ -109,7 +113,7 @@
             this.textBoxSubnetMask.Location = new System.Drawing.Point(78, 87);
             this.textBoxSubnetMask.Name = "textBoxSubnetMask";
             this.textBoxSubnetMask.Size = new System.Drawing.Size(95, 20);
-            this.textBoxSubnetMask.TabIndex = 17;
+            this.textBoxSubnetMask.TabIndex = 2;
             this.textBoxSubnetMask.TextChanged += new System.EventHandler(this.textBoxSubnetMask_TextChanged);
             this.textBoxSubnetMask.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 

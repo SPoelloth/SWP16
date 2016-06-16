@@ -26,17 +26,90 @@ namespace NSA.Controller
             this.Simulations = Simulations;
         }
 
-        public void HopSelected(int IndexOfHop)
+        /// <summary>
+        /// Gets the result for the selected Hop. Only use with NodeNames of the Last Simulation!
+        /// </summary>
+        /// <param name="NodeOneName">Name of the node one of the hop.</param>
+        /// <param name="NodeTwoName">Name of the node two of the hop.</param>
+        /// <returns>Null if any error occured. If not: res[0] == result of node one & res[1] == result of node two</returns>
+        public List<Result> HopSelected(string NodeOneName, string NodeTwoName)
         {
-            // todo
-            // Jeremy: zu einem Hop gehören immer zwei Rechner, indexOfHop identifiziert den ersten Rechner in der Liste an Hops
-            // klären: zweiter Rechner der davor oder der danach?
-            // ebenfalls klären: Hop selektieren nur bei aktueller Simulation möglich (würde sagen JA)
+            Hardwarenode nodeOne = NetworkManager.Instance.GetHardwarenodeByName(NodeOneName);
+            Hardwarenode nodeTwo = NetworkManager.Instance.GetHardwarenodeByName(NodeTwoName);
+            if (nodeOne == null || nodeTwo == null)
+                return null;
+            if (Simulations.Count == 0)
+                return null;
+            List<Hardwarenode> hops = GetHopsOfLastPacket(Simulations.Count - 1);
+            if(hops == null)
+                return null;
+            List<Result> res = new List<Result>();
+            if (hops[hops.Count - 1].Equals(nodeOne))
+            {
+                Packet p = Simulations[Simulations.Count - 1].GetLastPacket();
+                if (p == null)
+                    return null;
+                res.Add(p.result);
+                res.Add(new Result());
+            }
+            else if (hops[hops.Count - 1].Equals(nodeTwo))
+            {
+                res.Add(new Result());
+                Packet p = Simulations[Simulations.Count - 1].GetLastPacket();
+                if (p == null)
+                    return null;
+                res.Add(p.result);
+            }
+            else
+            {
+                res.Add(new Result());
+                res.Add(new Result());
+            }
+            return res;
         }
 
-        public void StartSimulation(Simulation Sim)
+        /// <summary>
+        /// Gets the hops of last packet.
+        /// </summary>
+        /// <param name="index">The index of the simulation in the history.</param>
+        /// <returns>Null, if there is no packet. The Hop-List kann have count == 0</returns>
+        public List<Hardwarenode> GetHopsOfLastPacket(int index)
         {
-            Sim.Execute();
+            if (index >= Simulations.Count)
+                return null;
+            Packet p = Simulations[index].GetLastPacket();
+            return p?.GetHops();
+        }
+
+        /// <summary>
+        /// Starts the simulation.
+        /// </summary>
+        /// <param name="Sim">The sim.</param>
+        /// <returns>Result of the last packet</returns>
+        public Result StartSimulation(Simulation Sim)
+        {
+            return Sim.Execute();
+        }
+
+        /// <summary>
+        /// Gets the simulation result.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>True if it worked, false if not</returns>
+        public bool GetSimulationResult(int index)
+        {
+            Simulation sim = Simulations[index];
+            bool result = false;
+            foreach (Packet p in sim.GetAllPackets())
+            {
+                if ((p.expectedResult && p.result.ErrorID == 0) || (!p.expectedResult && p.result.ErrorID != 0))
+                    result = true;
+                else
+                    result = false;
+                if (result = false)
+                    return result;
+            }
+            return result;
         }
 
         public void StartTestscenario(Testscenario T)
@@ -70,7 +143,7 @@ namespace NSA.Controller
         /// <param name="Ttl">The TTL.</param>
         /// <param name="Tags">The tags.</param>
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
-        public void CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
+        public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
         {
             List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
             List<Hardwarenode> destinationList = new List<Hardwarenode>();
@@ -129,21 +202,22 @@ namespace NSA.Controller
                 Simulation sim = new Simulation(Simulations.Count);
                 // Our destination list is empty. -> Create an error packet
                 sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, Tags, ExpectedResult));
-                StartSimulation(sim);
+                Result res = StartSimulation(sim);
                 AddSimulationToHistory(sim);
+                return res;
             }
             else
             {
                 // Create Packets for all destinations.
+                Simulation sim = new Simulation(Simulations.Count);
                 foreach (Hardwarenode destinationNode in destinationList)
                 {
-                    Simulation sim = new Simulation(Simulations.Count);
                     sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source),
                         destinationNode, Ttl, Tags, ExpectedResult));
-                    StartSimulation(sim);
-                    AddSimulationToHistory(sim);
                 }
-
+                Result res = StartSimulation(sim);
+                AddSimulationToHistory(sim);
+                return res;
             }
         }
 

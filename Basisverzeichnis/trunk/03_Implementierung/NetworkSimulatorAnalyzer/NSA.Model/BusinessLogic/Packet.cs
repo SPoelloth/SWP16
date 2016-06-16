@@ -12,7 +12,7 @@ namespace NSA.Model.BusinessLogic
         private Hardwarenode destination;
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         private int ttl;
-        public Result result { get; private set; }
+        public Result result { get; private set; } = new Result();
         public bool expectedResult { get; }
         private Dictionary<string, object> tags;
 
@@ -31,6 +31,15 @@ namespace NSA.Model.BusinessLogic
             tags = _tags;
             expectedResult = expRes;
             hops.Add(source);
+        }
+
+        /// <summary>
+        /// Gets the hops.
+        /// </summary>
+        /// <returns></returns>
+        public List<Hardwarenode> GetHops()
+        {
+            return hops;
         }
 
         /// <summary>
