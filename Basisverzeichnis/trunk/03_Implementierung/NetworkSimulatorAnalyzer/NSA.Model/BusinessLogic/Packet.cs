@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -14,10 +15,10 @@ namespace NSA.Model.BusinessLogic
         private int ttl;
         public Result result { get; private set; } = new Result();
         public bool expectedResult { get; }
-        private Dictionary<string, object> tags;
+        private Dictionary<string, object> tags = new Dictionary<string, object>();
 
         public Packet(Hardwarenode _source, Hardwarenode _destination,
-            int _ttl, Dictionary<string, object> _tags, bool expRes)
+            int _ttl, bool expRes)
         {
             source = _source;
             destination = _destination;
@@ -28,7 +29,6 @@ namespace NSA.Model.BusinessLogic
                 result.SendError = true;
             }
             ttl = _ttl;
-            tags = _tags;
             expectedResult = expRes;
             hops.Add(source);
         }
@@ -51,12 +51,13 @@ namespace NSA.Model.BusinessLogic
             ValidationInfo valInfo = new ValidationInfo();
             valInfo.NextNodeIP = null;
             valInfo.Res = result;
+            valInfo.Source = source as Workstation;
             while (!hops[hops.Count - 1].Equals(destination) && valInfo.Res.ErrorID == 0 && ttl > 0)
             {
                 List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(destination, tags, valInfo);
                 if (nextNodes != null)
                 {
-                    if (nextNodes[nextNodes.Count - 1].Receive(tags, valInfo))
+                    if (nextNodes[nextNodes.Count - 1].Receive(tags, valInfo, destination))
                         ttl--;
                     foreach (Hardwarenode n in nextNodes)
                     {
@@ -72,8 +73,15 @@ namespace NSA.Model.BusinessLogic
                 result.Res = "TTL is 0 but the destination was not reached.";
                 result.SendError = true;
             }
+            if (tags.Count != 0)
+            {
+                //Layer Error
+                result.ErrorID = 7;
+                result.Res = "No Layer " + tags.Keys.First() + " at the destination.";
+                result.SendError = false;
+            }
             if(result.ErrorID == 0)
-                return new Packet(destination, source, ttl, tags, expectedResult);
+                return new Packet(destination, source, ttl, expectedResult);
             return null;
         }
     }

@@ -9,5 +9,6 @@ namespace NSA.Model.NetworkComponents.Helper_Classes
         public IPAddress NextNodeIP { get; set; }
         public Interface Iface { get; set; }
         public Result Res { get; set; }
+        public Workstation Source { get; set; }
     }
 }

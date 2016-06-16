@@ -17,6 +17,7 @@ namespace NSA.Model.NetworkComponents.Helper_Classes
          * 4: Switch:        No Connection to the next Node.
          * 5: Packet:        Source or Destination is null.
          * 6: Packet:        TTL is 0 but the destination was not reached
+         * 7: Tags:          CustomLayer at source but not at destination
          */
         public int ErrorID { get; set; }
         public string Res { get; set; }

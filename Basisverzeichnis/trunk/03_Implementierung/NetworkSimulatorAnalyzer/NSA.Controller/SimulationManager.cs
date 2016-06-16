@@ -143,7 +143,7 @@ namespace NSA.Controller
         /// <param name="Ttl">The TTL.</param>
         /// <param name="Tags">The tags.</param>
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
-        public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
+        public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, bool ExpectedResult)
         {
             List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
             List<Hardwarenode> destinationList = new List<Hardwarenode>();
@@ -201,7 +201,7 @@ namespace NSA.Controller
             {
                 Simulation sim = new Simulation(Simulations.Count);
                 // Our destination list is empty. -> Create an error packet
-                sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, Tags, ExpectedResult));
+                sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, ExpectedResult));
                 Result res = StartSimulation(sim);
                 AddSimulationToHistory(sim);
                 return res;
@@ -213,7 +213,7 @@ namespace NSA.Controller
                 foreach (Hardwarenode destinationNode in destinationList)
                 {
                     sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source),
-                        destinationNode, Ttl, Tags, ExpectedResult));
+                        destinationNode, Ttl, ExpectedResult));
                 }
                 Result res = StartSimulation(sim);
                 AddSimulationToHistory(sim);
@@ -231,11 +231,11 @@ namespace NSA.Controller
         /// <param name="ExpectedResult"></param>
         /// <returns>the packet</returns>
         /// <exception cref="ArgumentException">SimulationManager.createPacket: source or destination is null or ttl 0</exception>
-        private Packet createPacket(Hardwarenode Source, Hardwarenode Destination, int Ttl, Dictionary<string, Object> Tags, bool ExpectedResult)
+        private Packet createPacket(Hardwarenode Source, Hardwarenode Destination, int Ttl, bool ExpectedResult)
         {
             if(Ttl <= 0)
                 throw new ArgumentException("SimulationManager.createPacket: ttl <= 0");
-            return new Packet(Source, Destination, Ttl, Tags, ExpectedResult);
+            return new Packet(Source, Destination, Ttl, ExpectedResult);
         }
     }
 }

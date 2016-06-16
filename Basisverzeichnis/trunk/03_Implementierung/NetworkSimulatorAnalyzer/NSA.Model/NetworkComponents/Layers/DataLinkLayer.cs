@@ -6,7 +6,7 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class DataLinkLayer : ILayer
     {
-        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo)
+        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
         {
             if (valInfo.Iface == null)
                 return;
@@ -22,7 +22,7 @@ namespace NSA.Model.NetworkComponents.Layers
             valInfo.NextNodes = null;
         }
 
-        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo)
+        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination)
         {
             if (valInfo.NextNodeIP == null)
                 return true;
@@ -37,6 +37,11 @@ namespace NSA.Model.NetworkComponents.Layers
             valInfo.Res.LayerError = new DataLinkLayer();
             valInfo.Res.SendError = false;
             return false;
+        }
+
+        public string GetLayerName()
+        {
+            return "Sicherungsschicht";
         }
     }
 }

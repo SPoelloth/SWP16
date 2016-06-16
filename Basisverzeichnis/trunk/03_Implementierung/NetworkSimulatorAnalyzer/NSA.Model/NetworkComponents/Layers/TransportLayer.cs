@@ -6,12 +6,17 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class TransportLayer : ILayer
     {
-        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo)
+        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination)
         {
             return true;
         }
 
-        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo)
+        public string GetLayerName()
+        {
+            return "Transportschicht";
+        }
+
+        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
         {
             
         }

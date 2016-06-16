@@ -51,6 +51,7 @@
     <Compile Include="NetworkComponents\Helper Classes\ValidationInfo.cs" />
     <Compile Include="NetworkComponents\Layers\ApplicationLayer.cs" />
     <Compile Include="NetworkComponents\Connection.cs" />
+    <Compile Include="NetworkComponents\Layers\CustomLayer.cs" />
     <Compile Include="NetworkComponents\Layers\DataLinkLayer.cs" />
     <Compile Include="NetworkComponents\Hardwarenode.cs" />
     <Compile Include="NetworkComponents\ILayer.cs" />

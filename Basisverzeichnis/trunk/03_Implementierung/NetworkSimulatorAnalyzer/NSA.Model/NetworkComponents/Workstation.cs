@@ -225,7 +225,7 @@ namespace NSA.Model.NetworkComponents
                 {
                     Workstation dest = Destination as Workstation;
                     if(dest != null)
-                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo);
+                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags);
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
@@ -240,18 +240,28 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="ValInfo">The validation Info</param>
+        /// <param name="destination">The destination</param>
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo)
+        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo, Hardwarenode destination)
         {
             bool res = true;
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo);
+                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, destination);
             }
             return res;
+        }
+
+        /// <summary>
+        /// Gets the layerstack.
+        /// </summary>
+        /// <returns></returns>
+        public Layerstack GetLayerstack()
+        {
+            return Layerstack;
         }
 
         #endregion
