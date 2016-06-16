@@ -43,6 +43,18 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
+        /// Interfaces the is used.
+        /// </summary>
+        /// <param name="InterfaceName">Name of the interface.</param>
+        /// <returns></returns>
+        public bool InterfaceIsUsed(string InterfaceName)
+        {
+            if (Connections.ContainsKey(InterfaceName))
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// Adds a layer to the layerstack.
         /// </summary>
         /// <param name="Lay">The layer to be added.</param>
