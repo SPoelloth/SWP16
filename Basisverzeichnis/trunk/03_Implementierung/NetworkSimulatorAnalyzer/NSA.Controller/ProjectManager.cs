@@ -72,7 +72,7 @@ namespace NSA.Controller
             CurrentProject.Path = file;
             SaveToFile(file);
             // create Directory
-            Directory.CreateDirectory(file.Substring(0, file.LastIndexOf('\\')) + "\\" + TestscenarioDirectoryName);
+            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", TestscenarioDirectoryName));
         }
 
         private void SaveToFile(string file)
@@ -113,11 +113,11 @@ namespace NSA.Controller
                               new XAttribute("Name", ws.Name),
                               new XAttribute("LocationX", loc.X),
                               new XAttribute("LocationY", loc.Y)
-                              
+
                               // TODO LAYERSTACK
                               );
 
-                if(ws.StandardGateway != null)
+                if (ws.StandardGateway != null)
                 {
                     xmlnode.Add(new XAttribute("DefaultGW", ws.StandardGateway));
                     xmlnode.Add(new XAttribute("DefaultGWPort", ws.StandardGatewayPort.Name));
@@ -240,6 +240,7 @@ namespace NSA.Controller
                 CreateNewProject();
                 MessageBox.Show("Laden des Projekts fehlgeschlagen");
             }
+            CurrentProject.Path = file;
         }
 
         /// <summary>
