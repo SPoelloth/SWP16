@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Dynamic;
 
 namespace NSA.Model.NetworkComponents
 {
@@ -49,6 +50,39 @@ namespace NSA.Model.NetworkComponents
         public ILayer GetLayer(int index)
         {
             return layers[index];
+        }
+
+        /// <summary>
+        /// Inserts at.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="layer">The layer.</param>
+        public void InsertAt(int index, ILayer layer)
+        {
+            layers.Insert(index, layer);
+        }
+
+        /// <summary>
+        /// Sets the index.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="newIndex">The new index.</param>
+        public void SetIndex(string name, int newIndex)
+        {
+            ILayer layer = null;
+            foreach (ILayer l in layers)
+            {
+                if (l.GetLayerName() == name)
+                {
+                    layer = l;
+                    break;
+                }
+            }
+            if (layer != null)
+            {
+                layers.Remove(layer);
+                InsertAt(newIndex, layer);
+            }
         }
     }
 }
