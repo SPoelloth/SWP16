@@ -50,9 +50,15 @@ namespace NSA.Model.NetworkComponents
 	            // there's already a connection between the two nodes
 	            throw new InvalidOperationException("Connection already exists!");
 	        }
+            
+            if(newConnection.Start.InterfaceIsUsed(StartNodeInterfaceName))
+                throw new InvalidOperationException("Interface of startnode is already used!");
+            if (newConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
+                throw new InvalidOperationException("Interface of endnode is already used!");
+
             newConnection.Start.AddConnection(StartNodeInterfaceName, newConnection);
             newConnection.End.AddConnection(EndNodeInterfaceName, newConnection);
-	        connections.Add(newConnection);
+            connections.Add(newConnection);
 	    }
 
         /// <summary>
