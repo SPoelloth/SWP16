@@ -93,7 +93,10 @@ namespace NSA.Model.NetworkComponents
         public bool SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
         {
             if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))
+            {
                 AddInterface(Ip, Mask, int.Parse(Ifacename.Replace(Interface.NamePrefix, "")));
+                return true;
+            }
             interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
             return true;
         }
