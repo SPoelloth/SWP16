@@ -385,9 +385,11 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="WorkstationName">The name of the workstation</param>
         /// <param name="Gateway">The new gateway</param>
+        /// <param name="HasInternetAccess">Indicates whether this node has internet access</param>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public void GatewayChanged(string WorkstationName, IPAddress Gateway)
+        public void GatewayChanged(string WorkstationName, IPAddress Gateway, bool HasInternetAccess)
         {
+            // TODO: Do something with HasInternetAccess
             Workstation workstation = network.GetHardwarenodeByName(WorkstationName) as Workstation;
             if (null != workstation)
             {

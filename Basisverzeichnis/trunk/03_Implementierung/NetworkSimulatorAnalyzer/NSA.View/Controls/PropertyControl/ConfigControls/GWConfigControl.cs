@@ -1,32 +1,49 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
-    public partial class GWConfigControl : ConfigControlBase
+    public partial class GwConfigControl : ConfigControlBase
     {
-        private bool ipValidInput, interfaceValidInput;
-        public event Action<IPAddress, string> GatewayChanged;
+        private static List<string> interfaceList;
+        private bool ipValidInput;
+        public event Action<IPAddress, string, bool> GatewayChanged;
 
-        public GWConfigControl(IPAddress ip, string interfaceName)
+        public GwConfigControl(IPAddress Ip, string InterfaceName, bool IsRouter, bool HasInternetAccess = false)
         {
             InitializeComponent();
-            textBoxIpAddress.Text = ip.ToString();
-            textBoxInterface.Text = interfaceName;
+            if (interfaceList == null) {
+                throw new InvalidDataException();
+            } else {
+                this.comboBoxInterfaces.Items.AddRange(interfaceList.ToArray());
+            }
+            if (IsRouter)
+            {
+                checkBoxInternetAccess.Enabled = true;
+                checkBoxInternetAccess.Checked = HasInternetAccess;
+            }
+            textBoxIpAddress.Text = Ip.ToString();
+            comboBoxInterfaces.SelectedIndex = comboBoxInterfaces.FindStringExact(InterfaceName);
             initialized = true;
+        }
+
+        public static void SetInterfaces(List<string> Interfaces) {
+            interfaceList = Interfaces;
         }
 
         private void OnDataChanged()
         {
-            if (initialized && ipValidInput && interfaceValidInput)
+            if (initialized && ipValidInput)
             {
-                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), textBoxInterface.Text);
+                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
             }
         }
 
-        private void textBoxIpAddress_TextChanged(object sender, EventArgs e)
+        private void textBoxIpAddress_TextChanged(object Sender, EventArgs E)
         {
             if (IsValidIP(textBoxIpAddress.Text))
             {
@@ -41,27 +58,25 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        private void textBoxInterface_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(textBoxInterface.Text))
+        private void checkBoxInternetAccess_CheckedChanged(object Sender, EventArgs E) {
+            if (initialized)
             {
-                textBoxInterface.BackColor = SystemColors.Window;
-                interfaceValidInput = true;
-                OnDataChanged();
-            }
-            else
-            {
-                textBoxIpAddress.BackColor = Color.Red;
-                interfaceValidInput = false;
+                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
             }
         }
 
-        protected void ipInput_TextboxKeyPress(object sender, KeyPressEventArgs e)
+        private void comboBoxInterfaces_SelectedIndexChanged(object Sender, EventArgs E) {
+            if (initialized) {
+                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
+            }
+        }
+
+        protected void ipInput_TextboxKeyPress(object Sender, KeyPressEventArgs E)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
+            if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar) &&
+                (E.KeyChar != '.'))
             {
-                e.Handled = true;
+                E.Handled = true;
             }
         }
     }

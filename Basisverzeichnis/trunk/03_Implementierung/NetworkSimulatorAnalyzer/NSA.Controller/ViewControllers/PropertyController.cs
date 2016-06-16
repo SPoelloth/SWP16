@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents;
 using NSA.View.Controls.PropertyControl;
+using NSA.View.Controls.PropertyControl.ConfigControls;
 using NSA.View.Forms;
 
 namespace NSA.Controller.ViewControllers
@@ -27,70 +29,82 @@ namespace NSA.Controller.ViewControllers
             }
             else
             {
-                propertyControl.InterfaceChanged += PropertyControl_InterfaceChanged;
-                propertyControl.GatewayChanged += PropertyControl_GatewayChanged;
-                propertyControl.RouteChanged += PropertyControl_RouteChanged;
-                propertyControl.LayerStackChanged += PropertyControl_LayerStackChanged;
-
                 propertyControl.InterfaceAdded += PropertyControl_InterfaceAdded;
                 propertyControl.InterfaceRemoved += PropertyControl_InterfaceRemoved;
-                propertyControl.RouteAdded += PropertyControl_RouteAdded;
-                propertyControl.RouteRemoved += PropertyControl_RouteRemoved;
+                propertyControl.InterfaceChanged += PropertyControl_InterfaceChanged;
+
+                propertyControl.GatewayChanged += PropertyControl_GatewayChanged;
+
+                propertyControl.AddRoute += PropertyControlAddRoute;
+                propertyControl.RemoveRoute += PropertyControlRemoveRoute;
+                propertyControl.RouteChanged += PropertyControl_RouteChanged;
+
+                propertyControl.LayerChanged += PropertyControl_LayerChanged;
             }
         }
 
         #region Event Handling
-        private void PropertyControl_RouteRemoved(string routeName)
-        {
-            NetworkManager.Instance.RemoveRoute(selectedNode.Name, routeName);
-        }
 
-        private void PropertyControl_RouteAdded()
-        {
+        #region Interfaces
+        private void PropertyControl_InterfaceAdded() {
             Workstation station = (Workstation)selectedNode;
-            //Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, null);
-            // propertyControl.AddInterfaceConfigControl(newInterface.Name, newInterface.IpAddress, newInterface.Subnetmask);
+            NetworkManager.Instance.AddInterfaceToWorkstation(station.Name, IPAddress.None, IPAddress.None);
             LoadElementProperties(selectedNode.Name);
         }
 
-        private void PropertyControl_InterfaceRemoved(string name)
-        {
-            NetworkManager.Instance.RemoveInterface(selectedNode.Name, name);
+        private void PropertyControl_InterfaceRemoved(string Name) {
+            NetworkManager.Instance.RemoveInterface(selectedNode.Name, Name);
         }
 
-        private void PropertyControl_InterfaceAdded()
-        {
-            Workstation station = (Workstation) selectedNode;
-            Interface newInterface = NetworkManager.Instance.AddInterfaceToWorkstation(station.Name, IPAddress.None, IPAddress.None); 
-            // propertyControl.AddInterfaceConfigControl(newInterface.Name, newInterface.IpAddress, newInterface.Subnetmask);
+        private void PropertyControl_InterfaceChanged(string Name, IPAddress IpAddress, IPAddress SubnetMask) {
+            NetworkManager.Instance.InterfaceChanged(selectedNode.Name, Name, IpAddress, SubnetMask);
+        }
+        #endregion Interfaces
+
+        #region Routes
+        private void PropertyControlAddRoute() {
+            Workstation station = (Workstation)selectedNode;
+            Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.GetInterfaces()[0]);
             LoadElementProperties(selectedNode.Name);
         }
 
-        private void PropertyControl_LayerStackChanged(List<Tuple<string, object>> obj)
-        {
-            // TODO: Implement Layerstack in UI first
+        private void PropertyControlRemoveRoute(string RouteName) {
+            NetworkManager.Instance.RemoveRoute(selectedNode.Name, RouteName);
         }
 
-        private void PropertyControl_RouteChanged(System.Net.IPAddress Destination, System.Net.IPAddress Gateway, System.Net.IPAddress SubnetMask, string interfaceName)
-        {
-            // TODO: Get interface by name
-            // NetworkManager.Instance.RouteChanged(selectedNode.Name, Destination, Gateway, SubnetMask, interfaceName);
+        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress SubnetMask, string InterfaceName) {
+            Workstation station = (Workstation)selectedNode;
+            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask, station.GetInterfaces().Find(i => i.Name == InterfaceName));
         }
+        #endregion Routes
 
-        private void PropertyControl_GatewayChanged(System.Net.IPAddress GatewayAddress, string InterfaceName)
-        {
-            NetworkManager.Instance.GatewayChanged(selectedNode.Name, GatewayAddress);
-        }
+        #region Gateway
 
-        private void PropertyControl_InterfaceChanged(string name, System.Net.IPAddress IpAddress, System.Net.IPAddress SubnetMask)
-        {
-            NetworkManager.Instance.InterfaceChanged(selectedNode.Name, name, IpAddress, SubnetMask);
+        private void PropertyControl_GatewayChanged(IPAddress GatewayAddress, string InterfaceName, bool HasInternetAccess) {
+            NetworkManager.Instance.GatewayChanged(selectedNode.Name, GatewayAddress, HasInternetAccess);
         }
+        #endregion Gateway
+
+        #region Layers
+
+        private void PropertyControl_LayerChanged(string LayerName, string LayerTag, int Index)
+        {
+            var selectedStation = selectedNode as Workstation;
+            Layerstack layers = selectedStation.GetLayerstack();
+            // TODO: So oder so aehnlich
+            // ILayer layer = layers.GetLayerByName(LayerName);
+            // layer.Name = LayerName;
+            // layer.Tag = LayerTag;
+            // layers.SetIndex(LayerName, Index);
+        }
+        #endregion Layers
+
         #endregion Event Handling
 
-        public void LoadElementProperties(string elementName)
+        #region Methods
+        public void LoadElementProperties(string ElementName)
         {
-            selectedNode = NetworkManager.Instance.GetHardwarenodeByName(elementName);
+            selectedNode = NetworkManager.Instance.GetHardwarenodeByName(ElementName);
             propertyControl.ClearControls();
             if (selectedNode is Workstation)
             {
@@ -101,27 +115,30 @@ namespace NSA.Controller.ViewControllers
                 {
                     propertyControl.AddInterfaceConfigControl(eth.Name, eth.IpAddress, eth.Subnetmask);
                 }
-                // load workstation gateway config control
-                // TODO: Does(n't) every workstation have a gw?
-                // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
 
+                // Set InterfaceList in RouteConfigControl
+                RouteConfigControl.SetInterfaces(station.GetInterfaces().Select(i => i.Name).ToList());
                 // load route controls
                 foreach (var route in station.GetRoutes())
                 {
-                    propertyControl.AddRouteConfigControl(route.Destination, route.Gateway, route.Subnetmask, route.Iface.Name);
+                    propertyControl.AddRouteConfigControl(route.Name, route.Destination, route.Gateway, route.Subnetmask, route.Iface.Name);
                 }
 
                 // load workstation Layerstack controls
-                // TODO: Integrate once finished
-                //propertyControl.AddLayerStackControl(station.GetLayers());
+                // propertyControl.AddLayerStackControl(station.GetLayers());
 
                 if (selectedNode is Router)
                 {
                     // load gateway config control
-                    propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name);
+                    // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name, true, (selectedNode as Router).IsGateway);
+                }
+                else
+                {
+                    // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name, true);
                 }
                 propertyControl.DisplayElements();
             }
         }
+        #endregion Methods
     }
 }

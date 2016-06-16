@@ -6,8 +6,9 @@ namespace NSA.View.Controls.PropertyControl.Misc {
     public partial class LayerControl : UserControl {
         public bool IsCustomLayer = false;
         public event Action<LayerControl> Selected;
-        public event Action<string, string> NameChanged;
-        public event Action<string, string> TagChanged;
+        public event Action<string> NameChanged;
+        public event Action<string> TagChanged;
+        public string FormerName = "";
 
         public string LayerName
         {
@@ -39,6 +40,7 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             if (CustomLayer)
             {
                 labelTag.Visible = textBoxTag.Visible = textBoxTag.Enabled = false;
+                FormerName = LayerName;
             }
         }
 
@@ -56,13 +58,11 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e) {
-            NameChanged?.Invoke(LayerName, textBoxName.Text);
-            LayerName = textBoxName.Text;
+            NameChanged?.Invoke(textBoxName.Text);
         }
 
         private void textBoxTag_TextChanged(object sender, EventArgs e) {
-            TagChanged?.Invoke(LayerName, textBoxTag.Text);
-            LayerTag = textBoxTag.Text;
+            TagChanged?.Invoke(textBoxTag.Text);
         }
 
         protected override void OnPaint(PaintEventArgs e)

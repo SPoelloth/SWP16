@@ -1,6 +1,6 @@
 ﻿namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
-    partial class GWConfigControl
+    partial class GwConfigControl
     {
         /// <summary>
         /// Erforderliche Designervariable.
@@ -31,18 +31,20 @@
             this.labelInterface = new System.Windows.Forms.Label();
             this.textBoxIpAddress = new System.Windows.Forms.TextBox();
             this.labelIpAddress = new System.Windows.Forms.Label();
-            this.textBoxInterface = new System.Windows.Forms.TextBox();
+            this.checkBoxInternetAccess = new System.Windows.Forms.CheckBox();
+            this.comboBoxInterfaces = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(153, 4);
+            this.buttonClose.TabIndex = 3;
+            this.buttonClose.Visible = false;
             // 
             // labelName
             // 
             this.labelName.Size = new System.Drawing.Size(144, 24);
             this.labelName.Text = "Default Gateway";
-            // 
-            // buttonClose
-            // 
-            this.buttonClose.Location = new System.Drawing.Point(153, 4);
-            this.buttonClose.Visible = false;
             // 
             // labelInterface
             // 
@@ -60,6 +62,7 @@
             this.textBoxIpAddress.Name = "textBoxIpAddress";
             this.textBoxIpAddress.Size = new System.Drawing.Size(95, 20);
             this.textBoxIpAddress.TabIndex = 0;
+            this.textBoxIpAddress.TextChanged += new System.EventHandler(this.textBoxIpAddress_TextChanged);
             // 
             // labelIpAddress
             // 
@@ -71,28 +74,45 @@
             this.labelIpAddress.Text = "IP-Address";
             this.labelIpAddress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // textBoxInterface
+            // checkBoxInternetAccess
             // 
-            this.textBoxInterface.Location = new System.Drawing.Point(78, 61);
-            this.textBoxInterface.Name = "textBoxInterface";
-            this.textBoxInterface.Size = new System.Drawing.Size(95, 20);
-            this.textBoxInterface.TabIndex = 1;
-            this.textBoxInterface.TextChanged += new System.EventHandler(this.textBoxInterface_TextChanged);
+            this.checkBoxInternetAccess.AutoSize = true;
+            this.checkBoxInternetAccess.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkBoxInternetAccess.Enabled = false;
+            this.checkBoxInternetAccess.Location = new System.Drawing.Point(8, 87);
+            this.checkBoxInternetAccess.Name = "checkBoxInternetAccess";
+            this.checkBoxInternetAccess.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxInternetAccess.TabIndex = 2;
+            this.checkBoxInternetAccess.Text = "Internet Access";
+            this.checkBoxInternetAccess.UseVisualStyleBackColor = true;
+            this.checkBoxInternetAccess.CheckedChanged += new System.EventHandler(this.checkBoxInternetAccess_CheckedChanged);
+            // 
+            // comboBoxInterfaces
+            // 
+            this.comboBoxInterfaces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxInterfaces.FormattingEnabled = true;
+            this.comboBoxInterfaces.Location = new System.Drawing.Point(78, 61);
+            this.comboBoxInterfaces.Name = "comboBoxInterfaces";
+            this.comboBoxInterfaces.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxInterfaces.TabIndex = 2;
+            this.comboBoxInterfaces.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterfaces_SelectedIndexChanged);
             // 
             // GWConfigControl
             // 
+            this.Controls.Add(this.comboBoxInterfaces);
+            this.Controls.Add(this.checkBoxInternetAccess);
             this.Controls.Add(this.labelIpAddress);
             this.Controls.Add(this.labelInterface);
-            this.Controls.Add(this.textBoxInterface);
             this.Controls.Add(this.textBoxIpAddress);
-            this.Name = "GWConfigControl";
-            this.Size = new System.Drawing.Size(176, 90);
+            this.Name = "GwConfigControl";
+            this.Size = new System.Drawing.Size(176, 107);
             this.Controls.SetChildIndex(this.buttonClose, 0);
             this.Controls.SetChildIndex(this.labelName, 0);
             this.Controls.SetChildIndex(this.textBoxIpAddress, 0);
-            this.Controls.SetChildIndex(this.textBoxInterface, 0);
             this.Controls.SetChildIndex(this.labelInterface, 0);
             this.Controls.SetChildIndex(this.labelIpAddress, 0);
+            this.Controls.SetChildIndex(this.checkBoxInternetAccess, 0);
+            this.Controls.SetChildIndex(this.comboBoxInterfaces, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -102,6 +122,7 @@
         private System.Windows.Forms.Label labelInterface;
         private System.Windows.Forms.TextBox textBoxIpAddress;
         private System.Windows.Forms.Label labelIpAddress;
-        private System.Windows.Forms.TextBox textBoxInterface;
+        private System.Windows.Forms.CheckBox checkBoxInternetAccess;
+        private System.Windows.Forms.ComboBox comboBoxInterfaces;
     }
 }

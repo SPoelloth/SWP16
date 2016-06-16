@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using NSA.View.Controls.PropertyControl.ConfigControls;
@@ -13,15 +14,20 @@ namespace NSA.View.Controls.PropertyControl
         private readonly List<RouteConfigControl> routeConfigControls = new List<RouteConfigControl>();
         private readonly List<Control> tempControls = new List<Control>();
 
-        public event Action<string, IPAddress, IPAddress> InterfaceChanged;
-        public event Action<IPAddress, string> GatewayChanged;
-        public event Action<IPAddress, IPAddress, IPAddress, string> RouteChanged;
-        public event Action<List<Tuple<string, object>>> LayerStackChanged;
-
         public event Action InterfaceAdded;
         public event Action<string> InterfaceRemoved;
-        public event Action RouteAdded;
-        public event Action<string> RouteRemoved;
+        public event Action<string, IPAddress, IPAddress> InterfaceChanged;
+
+        public event Action<IPAddress, string, bool> GatewayChanged;
+
+        public event Action AddRoute;
+        public event Action<string> RemoveRoute;
+        public event Action<string, IPAddress, IPAddress, IPAddress, string> RouteChanged;
+
+        public event Action AddLayer;
+        public event Action<string> RemoveLayer;
+        public event Action<string, string, int> LayerChanged;
+        public event Action<string, string> LayerRenamed;
 
         public PropertyControl()
         {
@@ -49,9 +55,9 @@ namespace NSA.View.Controls.PropertyControl
         /// </summary>
         /// <param name="DefaultGatewayAddress">The IP adress of the default gateway</param>
         /// <param name="AssignedInterfaceName">The name of the ethernet interface to be used for the default gateway</param>
-        public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName)
+        public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName, bool IsRouter, bool HasInternetAccess = true)
         {
-            var newControl = new GWConfigControl(DefaultGatewayAddress, AssignedInterfaceName);
+            var newControl = new GwConfigControl(DefaultGatewayAddress, AssignedInterfaceName, IsRouter, HasInternetAccess);
             newControl.GatewayChanged += GWConfigControl_GatewayChanged;
             tempControls.Add(newControl);
         }
@@ -63,12 +69,34 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="Destination">IP address of the route destination</param>
         /// <param name="Route">IP address of the route</param>
         /// <param name="Parameters">Parameters for the route</param>
-        public void AddRouteConfigControl(IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters)
+        public void AddRouteConfigControl(string RouteName, IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters)
         {
-            var newControl = new RouteConfigControl(Source, Destination, Route, Parameters);
+            var newControl = new RouteConfigControl(RouteName, Source, Destination, Route, Parameters);
             newControl.Closing += ConfigControl_Closing;
             newControl.RouteChanged += RouteConfigControl_RouteChanged;
             routeConfigControls.Add(newControl);
+        }
+
+        public void AddLayerStackConfigControl()
+        {
+            var layerStackConfigControl = new LayerstackConfigControl();
+            layerStackConfigControl.LayerAdded += LayerStackConfigControl_LayerAdded;
+            layerStackConfigControl.LayerRemoved += LayerStackConfigControl_LayerRemoved;
+            layerStackConfigControl.LayerNameChanged += LayerStackConfigControl_LayerNameChanged;
+            layerStackConfigControl.LayerChanged += LayerStackConfigControl_LayerChanged;
+        }
+
+        public void AddLayerToLayerConfigControl(string LayerName, string LayerTag, int Index)
+        {
+            var lscc = Controls.OfType<LayerstackConfigControl>().FirstOrDefault();
+            if (lscc == null)
+            {
+                throw new InvalidOperationException();
+            }
+            else
+            {
+                lscc.AddCustomLayer(LayerName, LayerTag, Index);
+            }
         }
 
         /// <summary>
@@ -115,16 +143,18 @@ namespace NSA.View.Controls.PropertyControl
                     RouteConfigControl rcc = c as RouteConfigControl;
                     rcc.RouteChanged -= RouteConfigControl_RouteChanged;
                     rcc.Closing -= ConfigControl_Closing;
-                } else if (c is GWConfigControl)
+                } else if (c is GwConfigControl)
                 {
-                    GWConfigControl gcc = c as GWConfigControl;
+                    GwConfigControl gcc = c as GwConfigControl;
                     gcc.GatewayChanged -= GWConfigControl_GatewayChanged;
                     gcc.Closing -= ConfigControl_Closing;
                 } else if (c is LayerstackConfigControl)
                 {
                     LayerstackConfigControl lscc = c as LayerstackConfigControl;
-                    // TODO: Implement once implemented (...)
-                    //lscc.LayerChanged -= LayerStackConfigControl_LayerChanged;
+                    lscc.LayerAdded -= LayerStackConfigControl_LayerAdded;
+                    lscc.LayerRemoved -= LayerStackConfigControl_LayerRemoved;
+                    lscc.LayerNameChanged -= LayerStackConfigControl_LayerNameChanged;
+                    lscc.LayerChanged -= LayerStackConfigControl_LayerChanged;
                     lscc.Closing -= ConfigControl_Closing;
                 } else if (c is AddInterfaceButton)
                 {
@@ -162,7 +192,7 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="E"></param>
         private void AddRouteButton_Click(object Sender, EventArgs E)
         {
-            RouteAdded?.Invoke();
+            AddRoute?.Invoke();
         }
 
         /// <summary>
@@ -171,15 +201,17 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="Control">The closing control</param>
         private void ConfigControl_Closing(ConfigControlBase Control)
         {
-            var control = Control as InterfaceConfigControl;
-            if (control != null)
+            if (Control is InterfaceConfigControl)
             {
+                var control = Control as InterfaceConfigControl;
                 control.InterfaceChanged -= InterfaceConfigControl_InterfaceChanged;
                 InterfaceRemoved?.Invoke(control.interfaceName);
             }
             else if (Control is RouteConfigControl)
             {
+                var rcc = Control as RouteConfigControl;
                 ((RouteConfigControl) Control).RouteChanged -= RouteConfigControl_RouteChanged;
+                RemoveRoute?.Invoke(rcc.RouteName);
             }
             Control.Closing -= ConfigControl_Closing;
             flpContents.Controls.Remove(Control);
@@ -190,9 +222,10 @@ namespace NSA.View.Controls.PropertyControl
         /// </summary>
         /// <param name="GwAddress">The IP address of the default gateway</param>
         /// <param name="InterfaceName">The name of the assigned interface</param>
-        private void GWConfigControl_GatewayChanged(IPAddress GwAddress, string InterfaceName)
+        /// <param name="HasInternetAccess">Flag indicating whether the workstation has internet access</param>
+        private void GWConfigControl_GatewayChanged(IPAddress GwAddress, string InterfaceName, bool HasInternetAccess)
         {
-            GatewayChanged?.Invoke(GwAddress, InterfaceName);
+            GatewayChanged?.Invoke(GwAddress, InterfaceName, HasInternetAccess);
         }
 
         /// <summary>
@@ -210,17 +243,34 @@ namespace NSA.View.Controls.PropertyControl
         /// <summary>
         ///     Handler for the RouteChanged event of a RouteConfigControl
         /// </summary>
+        /// <param name="RouteName">The name of the route</param>
         /// <param name="Source">IP address of the route source</param>
         /// <param name="Destination">IP address of the route destination</param>
         /// <param name="Route">IP address of the route</param>
         /// <param name="Parameters">Parameters for the route</param>
-        private void RouteConfigControl_RouteChanged(IPAddress Source, IPAddress Destination, IPAddress Route,
+        private void RouteConfigControl_RouteChanged(string RouteName, IPAddress Source, IPAddress Destination, IPAddress Route,
             string Parameters)
         {
-            RouteChanged?.Invoke(Source, Destination, Route, Parameters);
+            RouteChanged?.Invoke(RouteName, Source, Destination, Route, Parameters);
         }
 
-        #endregion Eventhandling
+        #region Layers
+        private void LayerStackConfigControl_LayerAdded() {
+            AddLayer?.Invoke();
+        }
 
+        private void LayerStackConfigControl_LayerRemoved(LayerControl layerControl) {
+            RemoveLayer?.Invoke(layerControl.LayerName);
+        }
+
+        private void LayerStackConfigControl_LayerNameChanged(string FormerName, string NewName) {
+            LayerRenamed?.Invoke(FormerName, NewName);
+        }
+
+        private void LayerStackConfigControl_LayerChanged(string LayerName, string LayerTag, int LayerIndex) {
+            LayerChanged?.Invoke(LayerName, LayerTag, LayerIndex);
+        }
+        #endregion Layers
+        #endregion Eventhandling
     }
 }

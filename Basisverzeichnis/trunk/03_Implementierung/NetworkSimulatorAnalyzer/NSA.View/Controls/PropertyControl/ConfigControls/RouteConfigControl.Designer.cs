@@ -33,9 +33,9 @@
             this.textBoxRoute = new System.Windows.Forms.TextBox();
             this.labelInterface = new System.Windows.Forms.Label();
             this.labelRoute = new System.Windows.Forms.Label();
-            this.textBoxInterface = new System.Windows.Forms.TextBox();
             this.labelSubnetMask = new System.Windows.Forms.Label();
             this.textBoxSubnetMask = new System.Windows.Forms.TextBox();
+            this.comboBoxInterfaces = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // buttonClose
@@ -90,14 +90,6 @@
             this.labelRoute.Text = "Route";
             this.labelRoute.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // textBoxInterface
-            // 
-            this.textBoxInterface.Location = new System.Drawing.Point(78, 113);
-            this.textBoxInterface.Name = "textBoxInterface";
-            this.textBoxInterface.Size = new System.Drawing.Size(95, 20);
-            this.textBoxInterface.TabIndex = 3;
-            this.textBoxInterface.TextChanged += new System.EventHandler(this.textBoxInterface_TextChanged);
-            // 
             // labelSubnetMask
             // 
             this.labelSubnetMask.AutoSize = true;
@@ -117,14 +109,24 @@
             this.textBoxSubnetMask.TextChanged += new System.EventHandler(this.textBoxSubnetMask_TextChanged);
             this.textBoxSubnetMask.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 
+            // comboBoxInterfaces
+            // 
+            this.comboBoxInterfaces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxInterfaces.FormattingEnabled = true;
+            this.comboBoxInterfaces.Location = new System.Drawing.Point(78, 113);
+            this.comboBoxInterfaces.Name = "comboBoxInterfaces";
+            this.comboBoxInterfaces.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxInterfaces.TabIndex = 3;
+            this.comboBoxInterfaces.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterfaces_SelectedIndexChanged);
+            // 
             // RouteConfigControl
             // 
+            this.Controls.Add(this.comboBoxInterfaces);
             this.Controls.Add(this.labelSubnetMask);
             this.Controls.Add(this.textBoxSubnetMask);
             this.Controls.Add(this.textBoxRoute);
             this.Controls.Add(this.labelInterface);
             this.Controls.Add(this.labelRoute);
-            this.Controls.Add(this.textBoxInterface);
             this.Controls.Add(this.labelDestination);
             this.Controls.Add(this.textBoxDestination);
             this.Name = "RouteConfigControl";
@@ -133,12 +135,12 @@
             this.Controls.SetChildIndex(this.buttonClose, 0);
             this.Controls.SetChildIndex(this.textBoxDestination, 0);
             this.Controls.SetChildIndex(this.labelDestination, 0);
-            this.Controls.SetChildIndex(this.textBoxInterface, 0);
             this.Controls.SetChildIndex(this.labelRoute, 0);
             this.Controls.SetChildIndex(this.labelInterface, 0);
             this.Controls.SetChildIndex(this.textBoxRoute, 0);
             this.Controls.SetChildIndex(this.textBoxSubnetMask, 0);
             this.Controls.SetChildIndex(this.labelSubnetMask, 0);
+            this.Controls.SetChildIndex(this.comboBoxInterfaces, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -150,8 +152,8 @@
         private System.Windows.Forms.TextBox textBoxRoute;
         private System.Windows.Forms.Label labelInterface;
         private System.Windows.Forms.Label labelRoute;
-        private System.Windows.Forms.TextBox textBoxInterface;
         private System.Windows.Forms.Label labelSubnetMask;
         private System.Windows.Forms.TextBox textBoxSubnetMask;
+        private System.Windows.Forms.ComboBox comboBoxInterfaces;
     }
 }
