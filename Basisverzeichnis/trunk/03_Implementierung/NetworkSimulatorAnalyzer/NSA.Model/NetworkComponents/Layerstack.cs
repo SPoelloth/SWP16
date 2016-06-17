@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 
 namespace NSA.Model.NetworkComponents
 {
@@ -106,6 +107,15 @@ namespace NSA.Model.NetworkComponents
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Gets all layers.
+        /// </summary>
+        /// <returns></returns>
+        public List<ILayer> GetAllLayers()
+        {
+            return layers.ToList();
         }
     }
 }
