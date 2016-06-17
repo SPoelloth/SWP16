@@ -41,7 +41,7 @@ namespace NSA.Controller
             if (Simulations.Count == 0)
                 return null;
             List<Hardwarenode> hops = GetHopsOfLastPacket(Simulations.Count - 1);
-            if(hops == null)
+            if (hops == null)
                 return null;
             List<Result> res = new List<Result>();
             if (hops[hops.Count - 1].Equals(nodeOne))
@@ -71,13 +71,13 @@ namespace NSA.Controller
         /// <summary>
         /// Gets the hops of last packet.
         /// </summary>
-        /// <param name="index">The index of the simulation in the history.</param>
+        /// <param name="Index">The index of the simulation in the history.</param>
         /// <returns>Null, if there is no packet. The Hop-List kann have count == 0</returns>
-        public List<Hardwarenode> GetHopsOfLastPacket(int index)
+        public List<Hardwarenode> GetHopsOfLastPacket(int Index)
         {
-            if (index >= Simulations.Count)
+            if (Index >= Simulations.Count)
                 return null;
-            Packet p = Simulations[index].GetLastPacket();
+            Packet p = Simulations[Index].GetLastPacket();
             return p?.GetHops();
         }
 
@@ -94,20 +94,18 @@ namespace NSA.Controller
         /// <summary>
         /// Gets the simulation result.
         /// </summary>
-        /// <param name="index">The index.</param>
+        /// <param name="Index">The index.</param>
         /// <returns>True if it worked, false if not</returns>
-        public bool GetSimulationResult(int index)
+        public bool GetSimulationResult(int Index)
         {
-            Simulation sim = Simulations[index];
+            Simulation sim = Simulations[Index];
             bool result = false;
             foreach (Packet p in sim.GetAllPackets())
             {
-                if ((p.expectedResult && p.result.ErrorID == 0) || (!p.expectedResult && p.result.ErrorID != 0))
+                if ((p.ExpectedResult && p.result.ErrorID == 0) || (!p.ExpectedResult && p.result.ErrorID != 0))
                     result = true;
                 else
-                    result = false;
-                if (result = false)
-                    return result;
+                    return false;
             }
             return result;
         }
@@ -122,17 +120,30 @@ namespace NSA.Controller
             Simulations.Add(Sim);
         }
 
-        public void RunSimulationFromHistory(int Index)
+        /// <summary>
+        /// Runs the simulation from history.
+        /// </summary>
+        /// <param name="Index">The index of the simulation.</param>
+        /// <returns></returns>
+        public Result RunSimulationFromHistory(int Index)
         {
-            // todo create a new Simulation Object with the same parameters as the simulation with the index
-            // Jeremy: i don't know if we should add this simulation to the History... i would say yes
-            // Beispiel: Google Chrome/Firefox nimmt eine Seite, die man aus dem Verlauf/Chronik aus aufruft auch wieder in die Chronik auf
+            Simulation sim = new Simulation(Simulations.Count, Simulations[Index].Source, Simulations[Index].Destination);
+            foreach (Packet p in Simulations[Index].GetSendPackets())
+            {
+                sim.AddPacketSend(createPacket(p.Source, p.Destination, p.Ttl, p.ExpectedResult));
+            }
+            Result res = sim.Execute();
+            AddSimulationToHistory(sim);
+            return res;
         }
 
-        public void RunLastSimulation()
+        /// <summary>
+        /// Runs the last simulation.
+        /// </summary>
+        /// <returns></returns>
+        public Result RunLastSimulation()
         {
-            // todo create a new Simulation Object with the same parameters as the Last simulation
-            // Jeremy: i don't know if we should add this simulation to the History... i would say yes
+            return RunSimulationFromHistory(Simulations.Count - 1);
         }
 
         /// <summary>
@@ -141,8 +152,8 @@ namespace NSA.Controller
         /// <param name="Source">The source.</param>
         /// <param name="Destination">The destination.</param>
         /// <param name="Ttl">The TTL.</param>
-        /// <param name="Tags">The tags.</param>
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
+        /// <returns></returns>
         public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, bool ExpectedResult)
         {
             List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
@@ -150,10 +161,10 @@ namespace NSA.Controller
 
             bool isBroadcast = false;
             // Iterate through all workstations and add the destinations to te destinationList
-            for (int workstationIndex = 0; workstationIndex < allWorkstations.Count; workstationIndex++)
+            foreach (Workstation w in allWorkstations)
             {
                 var addWorkstationAsDestination = false;
-                List<Interface> ifaces = allWorkstations[workstationIndex].GetInterfaces();
+                List<Interface> ifaces = w.GetInterfaces();
                 // Iterate through all interfaces of the current workstation.
                 foreach (Interface iface in ifaces)
                 {
@@ -163,31 +174,28 @@ namespace NSA.Controller
                         addWorkstationAsDestination = true;
                         break;
                     }
-                    else
+                    if (!isBroadcast)
                     {
-                        if (!isBroadcast)
+                        IPAddress ifaceBroadcastAddress = iface.IpAddress.GetBroadcastAddress(iface.Subnetmask);
+                        if (Destination.Equals(ifaceBroadcastAddress))
                         {
-                            IPAddress ifaceBroadcastAddress = IPAddressExtensions.GetBroadcastAddress(iface.IpAddress,
-                                iface.Subnetmask);
-                            if (Destination.Equals(ifaceBroadcastAddress))
-                            {
-                                // Our destination is a broadcast ip
-                                isBroadcast = true;
-                            }
-                        }
-                        if (isBroadcast && IPAddressExtensions.IsInSameSubnet(Destination, iface.IpAddress, iface.Subnetmask))
-                        {
-                            // Current workstation is in the destination broadcast subnet.
-                            addWorkstationAsDestination = true;
-                            break;
+                            // Our destination is a broadcast ip
+                            isBroadcast = true;
                         }
                     }
+                    if (isBroadcast && Destination.IsInSameSubnet(iface.IpAddress, iface.Subnetmask))
+                    {
+                        // Current workstation is in the destination broadcast subnet.
+                        addWorkstationAsDestination = true;
+                        break;
+                    }
+
                 }
 
                 if (addWorkstationAsDestination)
                 {
                     // Add the current workstation to the destinationList.
-                    destinationList.Add(allWorkstations[workstationIndex]);
+                    destinationList.Add(w);
 
                     if (!isBroadcast)
                     {
@@ -199,7 +207,7 @@ namespace NSA.Controller
 
             if (destinationList.Count < 1)
             {
-                Simulation sim = new Simulation(Simulations.Count);
+                Simulation sim = new Simulation(Simulations.Count, Source, Destination);
                 // Our destination list is empty. -> Create an error packet
                 sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, ExpectedResult));
                 Result res = StartSimulation(sim);
@@ -209,7 +217,7 @@ namespace NSA.Controller
             else
             {
                 // Create Packets for all destinations.
-                Simulation sim = new Simulation(Simulations.Count);
+                Simulation sim = new Simulation(Simulations.Count, Source, Destination);
                 foreach (Hardwarenode destinationNode in destinationList)
                 {
                     sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source),
@@ -227,13 +235,15 @@ namespace NSA.Controller
         /// <param name="Source">The source.</param>
         /// <param name="Destination">The destination.</param>
         /// <param name="Ttl">The TTL.</param>
-        /// <param name="Tags">The tags.</param>
-        /// <param name="ExpectedResult"></param>
-        /// <returns>the packet</returns>
+        /// <param name="ExpectedResult">if set to <c>true</c> [expected result].</param>
+        /// <returns>
+        /// the packet
+        /// </returns>
+        /// <exception cref="System.ArgumentException">SimulationManager.createPacket: ttl kleiner-gleich 0</exception>
         /// <exception cref="ArgumentException">SimulationManager.createPacket: source or destination is null or ttl 0</exception>
         private Packet createPacket(Hardwarenode Source, Hardwarenode Destination, int Ttl, bool ExpectedResult)
         {
-            if(Ttl <= 0)
+            if (Ttl <= 0)
                 throw new ArgumentException("SimulationManager.createPacket: ttl <= 0");
             return new Packet(Source, Destination, Ttl, ExpectedResult);
         }

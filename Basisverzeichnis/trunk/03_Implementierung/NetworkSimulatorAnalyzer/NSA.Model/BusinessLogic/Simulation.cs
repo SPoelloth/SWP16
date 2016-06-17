@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-﻿using NSA.Model.NetworkComponents.Helper_Classes;
+using System.Net;
+using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -8,21 +9,41 @@ namespace NSA.Model.BusinessLogic
     {
         private List<Packet> packetsSend = new List<Packet>();
         private List<Packet> packetsReceived = new List<Packet>();
-	    private int id;
+        public IPAddress Source { get; private set; }
+        public IPAddress Destination { get; private set; }
+	    public int Id { get; private set; }
 
-	    public Simulation(int _id)
+        public Simulation(int I)
+        {
+            Id = I;
+            Source = null;
+            Destination = null;
+        }
+
+        public Simulation(int I, IPAddress S, IPAddress D)
 	    {
-	        id = _id;
+	        Id = I;
+	        Source = S;
+	        Destination = D;
 	    }
 
         /// <summary>
         /// Adds the packet send.
         /// </summary>
-        /// <param name="packet">The packet.</param>
-        public void AddPacketSend(Packet packet)
+        /// <param name="Packet">The packet.</param>
+        public void AddPacketSend(Packet Packet)
 	    {
-            packetsSend.Add(packet);
+            packetsSend.Add(Packet);
         }
+
+        /// <summary>
+        /// Gets the send packets.
+        /// </summary>
+        /// <returns></returns>
+        public List<Packet> GetSendPackets()
+	    {
+	        return packetsSend;
+	    }
 
         /// <summary>
         /// Executes this instance.
