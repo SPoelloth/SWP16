@@ -39,6 +39,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private List<Rectangle> portHitboxes = new List<Rectangle>();
 
+        int portcount = 5;
         public int NetworkPortCount { get { return portcount; } set { portcount = value; calculateDimension(); calculateHitboxes(); } }
 
         [Obsolete("Do not use! For Designer only!")]
