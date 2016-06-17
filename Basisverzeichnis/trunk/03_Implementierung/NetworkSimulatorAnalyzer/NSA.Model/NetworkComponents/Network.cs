@@ -96,16 +96,14 @@ namespace NSA.Model.NetworkComponents
         /// <param name="ConnectionName">Name of the connection.</param>
         public void RemoveConnection(string ConnectionName)
 	    {
-            foreach (Connection c in connections)
-            {
-                // This loop is cancelled as soon as the connection which should be removed is reached. 
-                if (c.Name == ConnectionName)
-                {
-                    connections.Remove(c);
-                    return;
-                }
-            }
-	    }
+            var connection = connections.FirstOrDefault(c => c.Name == ConnectionName);
+
+            if (connection == null) return;
+
+            connections.Remove(connection);
+            connection.Start.RemoveConnection(Interface.NamePrefix + connection.GetPortIndex(connection.Start));
+            connection.End.RemoveConnection(Interface.NamePrefix + connection.GetPortIndex(connection.End));
+        }
 
         /// <summary>
         /// Gets the workstation by ip.
