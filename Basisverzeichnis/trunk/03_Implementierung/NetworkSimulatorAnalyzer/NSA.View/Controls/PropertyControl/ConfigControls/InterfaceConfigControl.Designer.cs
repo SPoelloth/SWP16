@@ -59,21 +59,21 @@
             // labelIpAddress
             // 
             this.labelIpAddress.AutoSize = true;
-            this.labelIpAddress.Location = new System.Drawing.Point(14, 38);
+            this.labelIpAddress.Location = new System.Drawing.Point(25, 38);
             this.labelIpAddress.Name = "labelIpAddress";
-            this.labelIpAddress.Size = new System.Drawing.Size(58, 13);
+            this.labelIpAddress.Size = new System.Drawing.Size(64, 13);
             this.labelIpAddress.TabIndex = 4;
-            this.labelIpAddress.Text = "IP-Address";
+            this.labelIpAddress.Text = "IP-Addresse";
             this.labelIpAddress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelSubnetMask
             // 
             this.labelSubnetMask.AutoSize = true;
-            this.labelSubnetMask.Location = new System.Drawing.Point(5, 64);
+            this.labelSubnetMask.Location = new System.Drawing.Point(8, 64);
             this.labelSubnetMask.Name = "labelSubnetMask";
-            this.labelSubnetMask.Size = new System.Drawing.Size(70, 13);
+            this.labelSubnetMask.Size = new System.Drawing.Size(81, 13);
             this.labelSubnetMask.TabIndex = 8;
-            this.labelSubnetMask.Text = "Subnet Mask";
+            this.labelSubnetMask.Text = "Subnetz Maske";
             this.labelSubnetMask.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // InterfaceConfigControl

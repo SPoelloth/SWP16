@@ -37,8 +37,8 @@
             // 
             // labelName
             // 
-            this.labelName.Size = new System.Drawing.Size(144, 24);
-            this.labelName.Text = "Default Gateway";
+            this.labelName.Size = new System.Drawing.Size(162, 24);
+            this.labelName.Text = "Standard Gateway";
             // 
             // buttonClose
             // 
@@ -49,11 +49,11 @@
             // labelInterface
             // 
             this.labelInterface.AutoSize = true;
-            this.labelInterface.Location = new System.Drawing.Point(23, 64);
+            this.labelInterface.Location = new System.Drawing.Point(14, 63);
             this.labelInterface.Name = "labelInterface";
-            this.labelInterface.Size = new System.Drawing.Size(49, 13);
+            this.labelInterface.Size = new System.Drawing.Size(64, 13);
             this.labelInterface.TabIndex = 2;
-            this.labelInterface.Text = "Interface";
+            this.labelInterface.Text = "Schnittstelle";
             this.labelInterface.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBoxIpAddress
@@ -69,9 +69,9 @@
             this.labelIpAddress.AutoSize = true;
             this.labelIpAddress.Location = new System.Drawing.Point(14, 38);
             this.labelIpAddress.Name = "labelIpAddress";
-            this.labelIpAddress.Size = new System.Drawing.Size(58, 13);
+            this.labelIpAddress.Size = new System.Drawing.Size(64, 13);
             this.labelIpAddress.TabIndex = 0;
-            this.labelIpAddress.Text = "IP-Address";
+            this.labelIpAddress.Text = "IP-Addresse";
             this.labelIpAddress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // checkBoxInternetAccess
@@ -81,9 +81,9 @@
             this.checkBoxInternetAccess.Enabled = false;
             this.checkBoxInternetAccess.Location = new System.Drawing.Point(8, 87);
             this.checkBoxInternetAccess.Name = "checkBoxInternetAccess";
-            this.checkBoxInternetAccess.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxInternetAccess.Size = new System.Drawing.Size(102, 17);
             this.checkBoxInternetAccess.TabIndex = 2;
-            this.checkBoxInternetAccess.Text = "Internet Access";
+            this.checkBoxInternetAccess.Text = "Internet Zugang";
             this.checkBoxInternetAccess.UseVisualStyleBackColor = true;
             this.checkBoxInternetAccess.CheckedChanged += new System.EventHandler(this.checkBoxInternetAccess_CheckedChanged);
             // 

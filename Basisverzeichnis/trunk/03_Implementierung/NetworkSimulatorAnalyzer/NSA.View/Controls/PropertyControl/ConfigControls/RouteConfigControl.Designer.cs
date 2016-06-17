@@ -51,27 +51,27 @@
             // labelDestination
             // 
             this.labelDestination.AutoSize = true;
-            this.labelDestination.Location = new System.Drawing.Point(14, 38);
+            this.labelDestination.Location = new System.Drawing.Point(47, 38);
             this.labelDestination.Name = "labelDestination";
-            this.labelDestination.Size = new System.Drawing.Size(60, 13);
+            this.labelDestination.Size = new System.Drawing.Size(37, 13);
             this.labelDestination.TabIndex = 12;
-            this.labelDestination.Text = "Destination";
+            this.labelDestination.Text = "Ziel IP";
             this.labelDestination.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBoxDestination
             // 
-            this.textBoxDestination.Location = new System.Drawing.Point(93, 35);
+            this.textBoxDestination.Location = new System.Drawing.Point(95, 35);
             this.textBoxDestination.Name = "textBoxDestination";
-            this.textBoxDestination.Size = new System.Drawing.Size(118, 20);
+            this.textBoxDestination.Size = new System.Drawing.Size(116, 20);
             this.textBoxDestination.TabIndex = 0;
             this.textBoxDestination.TextChanged += new System.EventHandler(this.textBoxDestination_TextChanged);
             this.textBoxDestination.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 
             // textBoxRoute
             // 
-            this.textBoxRoute.Location = new System.Drawing.Point(93, 61);
+            this.textBoxRoute.Location = new System.Drawing.Point(95, 61);
             this.textBoxRoute.Name = "textBoxRoute";
-            this.textBoxRoute.Size = new System.Drawing.Size(118, 20);
+            this.textBoxRoute.Size = new System.Drawing.Size(116, 20);
             this.textBoxRoute.TabIndex = 1;
             this.textBoxRoute.TextChanged += new System.EventHandler(this.textBoxRoute_TextChanged);
             this.textBoxRoute.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
@@ -79,38 +79,38 @@
             // labelInterface
             // 
             this.labelInterface.AutoSize = true;
-            this.labelInterface.Location = new System.Drawing.Point(23, 116);
+            this.labelInterface.Location = new System.Drawing.Point(20, 116);
             this.labelInterface.Name = "labelInterface";
-            this.labelInterface.Size = new System.Drawing.Size(49, 13);
+            this.labelInterface.Size = new System.Drawing.Size(64, 13);
             this.labelInterface.TabIndex = 16;
-            this.labelInterface.Text = "Interface";
+            this.labelInterface.Text = "Schnittstelle";
             this.labelInterface.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelRoute
             // 
             this.labelRoute.AutoSize = true;
-            this.labelRoute.Location = new System.Drawing.Point(36, 64);
+            this.labelRoute.Location = new System.Drawing.Point(22, 64);
             this.labelRoute.Name = "labelRoute";
-            this.labelRoute.Size = new System.Drawing.Size(36, 13);
+            this.labelRoute.Size = new System.Drawing.Size(62, 13);
             this.labelRoute.TabIndex = 15;
-            this.labelRoute.Text = "Route";
+            this.labelRoute.Text = "Gateway IP";
             this.labelRoute.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelSubnetMask
             // 
             this.labelSubnetMask.AutoSize = true;
-            this.labelSubnetMask.Location = new System.Drawing.Point(5, 90);
+            this.labelSubnetMask.Location = new System.Drawing.Point(3, 90);
             this.labelSubnetMask.Name = "labelSubnetMask";
-            this.labelSubnetMask.Size = new System.Drawing.Size(70, 13);
+            this.labelSubnetMask.Size = new System.Drawing.Size(81, 13);
             this.labelSubnetMask.TabIndex = 18;
-            this.labelSubnetMask.Text = "Subnet Mask";
+            this.labelSubnetMask.Text = "Subnetz Maske";
             this.labelSubnetMask.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBoxSubnetMask
             // 
-            this.textBoxSubnetMask.Location = new System.Drawing.Point(93, 87);
+            this.textBoxSubnetMask.Location = new System.Drawing.Point(95, 87);
             this.textBoxSubnetMask.Name = "textBoxSubnetMask";
-            this.textBoxSubnetMask.Size = new System.Drawing.Size(118, 20);
+            this.textBoxSubnetMask.Size = new System.Drawing.Size(116, 20);
             this.textBoxSubnetMask.TabIndex = 2;
             this.textBoxSubnetMask.TextChanged += new System.EventHandler(this.textBoxSubnetMask_TextChanged);
             this.textBoxSubnetMask.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
@@ -119,9 +119,9 @@
             // 
             this.comboBoxInterfaces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterfaces.FormattingEnabled = true;
-            this.comboBoxInterfaces.Location = new System.Drawing.Point(93, 113);
+            this.comboBoxInterfaces.Location = new System.Drawing.Point(95, 113);
             this.comboBoxInterfaces.Name = "comboBoxInterfaces";
-            this.comboBoxInterfaces.Size = new System.Drawing.Size(118, 21);
+            this.comboBoxInterfaces.Size = new System.Drawing.Size(116, 21);
             this.comboBoxInterfaces.TabIndex = 3;
             this.comboBoxInterfaces.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterfaces_SelectedIndexChanged);
             // 

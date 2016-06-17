@@ -37,8 +37,8 @@
             // 
             // labelName
             // 
-            this.labelName.Size = new System.Drawing.Size(98, 24);
-            this.labelName.Text = "Layerstack";
+            this.labelName.Size = new System.Drawing.Size(121, 24);
+            this.labelName.Text = "Schichtstapel";
             // 
             // buttonClose
             // 
@@ -49,7 +49,7 @@
             // flpLayers
             // 
             this.flpLayers.AutoScroll = true;
-            this.flpLayers.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpLayers.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
             this.flpLayers.Location = new System.Drawing.Point(0, 40);
             this.flpLayers.Name = "flpLayers";
             this.flpLayers.Padding = new System.Windows.Forms.Padding(1);
@@ -59,21 +59,21 @@
             // 
             // btUp
             // 
-            this.btUp.Location = new System.Drawing.Point(191, 40);
+            this.btUp.Location = new System.Drawing.Point(191, 69);
             this.btUp.Name = "btUp";
             this.btUp.Size = new System.Drawing.Size(19, 23);
             this.btUp.TabIndex = 0;
-            this.btUp.Text = "↑";
+            this.btUp.Text = "↓";
             this.btUp.UseVisualStyleBackColor = true;
             this.btUp.Click += new System.EventHandler(this.btUp_Click);
             // 
             // btDown
             // 
-            this.btDown.Location = new System.Drawing.Point(191, 69);
+            this.btDown.Location = new System.Drawing.Point(191, 40);
             this.btDown.Name = "btDown";
             this.btDown.Size = new System.Drawing.Size(19, 23);
             this.btDown.TabIndex = 1;
-            this.btDown.Text = "↓";
+            this.btDown.Text = "↑";
             this.btDown.UseVisualStyleBackColor = true;
             this.btDown.Click += new System.EventHandler(this.btDown_Click);
             // 

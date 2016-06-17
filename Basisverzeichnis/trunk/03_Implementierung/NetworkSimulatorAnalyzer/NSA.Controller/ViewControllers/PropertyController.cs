@@ -160,7 +160,7 @@ namespace NSA.Controller.ViewControllers
                 if (selectedNode is Router)
                 {
                     // load gateway config control
-                    propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name, true, (selectedNode as Router).IsGateway);
+                    propertyControl.AddGatewayConfigControl(station.StandardGateway ?? IPAddress.None, station.StandardGatewayPort?.Name, true, (selectedNode as Router).IsGateway);
                 }
                 else
                 {
