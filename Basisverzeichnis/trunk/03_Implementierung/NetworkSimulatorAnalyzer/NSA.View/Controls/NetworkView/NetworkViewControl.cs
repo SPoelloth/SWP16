@@ -18,7 +18,6 @@ namespace NSA.View.Controls.NetworkView
 
         private MessageLoopFilter filter;
 
-
         public NetworkViewControl()
         {
             // ReSharper disable once VirtualMemberCallInConstructor
@@ -35,15 +34,13 @@ namespace NSA.View.Controls.NetworkView
         {
             Cursor = Cursors.Default;
             foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
-            WorkstationControl ws1 = control1 as WorkstationControl;
-            WorkstationControl ws2 = control2 as WorkstationControl;
+            IConfigurable ws1 = control1 as IConfigurable;
+            IConfigurable ws2 = control2 as IConfigurable;
             if (ws1 == null || ws2 == null) return;
             int port1 = ws1.GetPortIDByPoint(p1);
             int port2 = ws2.GetPortIDByPoint(p2);
-
             if (port1 < 0 || port2 < 0) return;
-
-            NewConnectionCreated?.Invoke(ws1, port1, ws2, port2);
+            NewConnectionCreated?.Invoke((Control)ws1, port1, (Control)ws2, port2);
         }
 
         private void OnActionCanceled()

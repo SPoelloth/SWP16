@@ -272,8 +272,6 @@ namespace NSA.Controller
         public Hardwarenode CreateHardwareNode(HardwarenodeType Type)
         {
             Hardwarenode node = null;
-            
-
 
             switch (Type)
             {

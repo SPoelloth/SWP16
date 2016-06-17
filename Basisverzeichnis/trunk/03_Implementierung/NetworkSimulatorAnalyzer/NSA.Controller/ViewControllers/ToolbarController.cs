@@ -96,12 +96,12 @@ namespace NSA.Controller.ViewControllers
 
         void AddSwitch_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Switch);
         }
 
         void AddRouter_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Router);
         }
 
         void AddComputer_Click(object sender, EventArgs e)

@@ -78,8 +78,9 @@ namespace NSA.Controller.ViewControllers
 
         public void AddHardwarenode(Hardwarenode node)
         {
-            if (node is Workstation) networkViewControl.AddElement(new WorkstationControl(new Point(100, 100), node.Name));
+            if (node is Workstation && !(node is Router)) networkViewControl.AddElement(new WorkstationControl(new Point(100, 100), node.Name));
             if (node is Switch) networkViewControl.AddElement(new SwitchControl(new Point(100, 100), node.Name));
+            if (node is Router) networkViewControl.AddElement(new RouterControl(new Point(100, 100), node.Name));
         }
 
         public void AddConnection(Connection connection)
