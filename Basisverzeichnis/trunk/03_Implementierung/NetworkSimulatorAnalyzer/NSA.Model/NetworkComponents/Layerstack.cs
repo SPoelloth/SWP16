@@ -148,7 +148,7 @@ namespace NSA.Model.NetworkComponents
         {
             for (int i = 1; ; i++)
             {
-                string name = $"Neues Layer {i}";
+                string name = $"Neue Schicht {i}";
                 if (layers.All(L => L.GetLayerName() != name)) return name;
             }
         }

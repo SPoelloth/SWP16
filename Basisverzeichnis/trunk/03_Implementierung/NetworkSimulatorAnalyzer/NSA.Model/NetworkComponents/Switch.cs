@@ -15,6 +15,10 @@ namespace NSA.Model.NetworkComponents
         public Switch(string Name) : base(Name)
         {
             AddInterface();
+            AddInterface();
+            AddInterface();
+            AddInterface();
+            AddInterface();
         }
 
         /// <summary>
@@ -45,7 +49,6 @@ namespace NSA.Model.NetworkComponents
         /// <param name="InterfaceName">The name.</param>
         public void RemoveInterface(string InterfaceName)
         {
-            RemoveConnection(InterfaceName);
             Interfaces.Remove(InterfaceName);
         }
 

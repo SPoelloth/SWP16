@@ -44,6 +44,18 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
+        /// Gets the connection at port.
+        /// </summary>
+        /// <param name="IfaceName">Name of the port.</param>
+        /// <returns></returns>
+        public Connection GetConnectionAtPort(string IfaceName)
+        {
+            if (!Connections.ContainsKey(IfaceName))
+                return null;
+            return Connections[IfaceName];
+        }
+
+        /// <summary>
         /// Interfaces the is used.
         /// </summary>
         /// <param name="InterfaceName">Name of the interface.</param>

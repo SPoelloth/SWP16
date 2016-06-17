@@ -46,10 +46,12 @@ namespace NSA.Model.BusinessLogic
         /// <returns>The Returnpacket if sending to destination was successfull</returns>
         public Packet Send()
         {
-            ValidationInfo valInfo = new ValidationInfo();
-            valInfo.NextNodeIp = null;
-            valInfo.Res = Result;
-            valInfo.Source = Source as Workstation;
+            ValidationInfo valInfo = new ValidationInfo
+            {
+                NextNodeIp = null,
+                Res = Result,
+                Source = Source as Workstation
+            };
             while (!hops[hops.Count - 1].Equals(Destination) && valInfo.Res.ErrorId == 0 && Ttl > 0)
             {
                 List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(Destination, tags, valInfo);

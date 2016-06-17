@@ -161,16 +161,66 @@ namespace NSA.Controller
                 if (null != (workstation = node as Workstation))
                 {
                     workstation.RemoveInterface(InterfaceName);
+                    Connection c = workstation.GetConnectionAtPort(InterfaceName);
+                    if(c != null)
+                        RemoveConnection(c.Name);
                 }
                 else if (null != (nodeSwitch = node as Switch))
                 {
                     nodeSwitch.RemoveInterface(InterfaceName);
+                    Connection c = nodeSwitch.GetConnectionAtPort(InterfaceName);
+                    if (c != null)
+                        RemoveConnection(c.Name);
                 }
             }
             else
             {
                 throw new ArgumentException("Node with the name " + NodeName + " could not be found");
             }
+        }
+
+        /// <summary>
+        /// Sets the switch interface count.
+        /// </summary>
+        /// <param name="NodeName">Name of the node.</param>
+        /// <param name="NewCount">The new count.</param>
+        /// <exception cref="System.ArgumentException">
+        /// Node with the name  + NodeName +  is no switch
+        /// or
+        /// Node with the name  + NodeName +  could not be found
+        /// </exception>
+        public void SetSwitchInterfaceCount(string NodeName, int NewCount)
+        {
+            Hardwarenode node = network.GetHardwarenodeByName(NodeName);
+            if (null != node)
+            {
+                Switch nodeSwitch;
+
+                if (null != (nodeSwitch = node as Switch))
+                {
+                    if (NewCount > nodeSwitch.GetInterfaceCount())
+                    {
+                        for (int i = nodeSwitch.GetInterfaceCount(); i < NewCount; i++)
+                            nodeSwitch.AddInterface();
+                        NetworkViewController.Instance.NodeChanged(nodeSwitch);
+                    }
+                    else if (NewCount < nodeSwitch.GetInterfaceCount())
+                    {
+                        for(int i = nodeSwitch.GetInterfaceCount(); i > NewCount; i--)
+                            nodeSwitch.RemoveInterface("eth" + (i - 1));
+                        NetworkViewController.Instance.NodeChanged(nodeSwitch);
+                    }
+                }
+                else
+                {
+                    throw new ArgumentException("Node with the name " + NodeName + " is no switch");
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Node with the name " + NodeName + " could not be found");
+            }
+
         }
 
         #endregion
@@ -371,7 +421,8 @@ namespace NSA.Controller
             {
                 throw new ArgumentException("Connection with the name " + Name + "could not be found");
             }
-
+            connection.End.RemoveConnection(Name);
+            connection.Start.RemoveConnection(Name);
             network.RemoveConnection(Name);
             NetworkViewController.Instance.RemoveConnection(Name);
         }

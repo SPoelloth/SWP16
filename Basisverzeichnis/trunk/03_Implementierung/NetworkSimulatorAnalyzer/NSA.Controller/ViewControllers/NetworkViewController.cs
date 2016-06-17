@@ -101,5 +101,10 @@ namespace NSA.Controller.ViewControllers
         {
             return networkViewControl.Controls.OfType<EditorElementBase>().First(s => s.Name == name);
         }
+
+        public void NodeChanged(Hardwarenode node)
+        {
+            //TODO den Node neu zeichnen, da er sich geändert ha (Portanzahl); musst gucken um was es sich handelt (Switch, etc).
+        }
     }
 }

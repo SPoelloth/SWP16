@@ -68,7 +68,6 @@ namespace NSA.Model.NetworkComponents
         /// <param name="InterfaceName">The Interfacename.</param>
         public void RemoveInterface(string InterfaceName)
         {
-            RemoveConnection(InterfaceName);
             interfaces.Remove(interfaces.Find(I => I.Name.Equals(InterfaceName)));
         }
 
