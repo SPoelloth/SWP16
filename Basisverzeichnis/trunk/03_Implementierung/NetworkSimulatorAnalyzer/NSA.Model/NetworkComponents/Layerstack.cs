@@ -117,5 +117,33 @@ namespace NSA.Model.NetworkComponents
         {
             return layers.ToList();
         }
+
+        /// <summary>
+        /// Determines whether the name is taken or not.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public bool IsNameTaken(string name)
+        {
+            foreach (ILayer l in layers)
+            {
+                if (l.GetLayerName() == name)
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Creates a new unique name.
+        /// </summary>
+        /// <returns></returns>
+        public string CreateUniqueName()
+        {
+            for (int i = 1; ; i++)
+            {
+                string name = $"Neues Layer {i}";
+                if (layers.All(l => l.GetLayerName() != name)) return name;
+            }
+        }
     }
 }
