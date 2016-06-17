@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 
@@ -28,10 +29,17 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Removes a layer from the stack.
         /// </summary>
-        /// <param name="lay">The layer to be removed.</param>
-        public void RemoveLayer(ILayer lay)
+        /// <param name="name">The name.</param>
+        /// <exception cref="System.InvalidOperationException">Layer with the name:  + name +  does not exist.</exception>
+        public void RemoveLayer(string name)
         {
-            layers.Remove(lay);
+            foreach (ILayer l in layers)
+            {
+                if (l.GetLayerName() != name) continue;
+                layers.Remove(l);
+                return;
+            }
+            throw new InvalidOperationException("Layer with the name: " + name + " does not exist.");
         }
 
         /// <summary>
