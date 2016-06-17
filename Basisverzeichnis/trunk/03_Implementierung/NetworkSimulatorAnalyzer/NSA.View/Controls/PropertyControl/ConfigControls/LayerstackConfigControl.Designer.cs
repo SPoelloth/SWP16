@@ -59,9 +59,10 @@
             // 
             // btUp
             // 
-            this.btUp.Location = new System.Drawing.Point(191, 69);
+            this.btUp.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.btUp.Location = new System.Drawing.Point(188, 69);
             this.btUp.Name = "btUp";
-            this.btUp.Size = new System.Drawing.Size(19, 23);
+            this.btUp.Size = new System.Drawing.Size(20, 23);
             this.btUp.TabIndex = 0;
             this.btUp.Text = "↓";
             this.btUp.UseVisualStyleBackColor = true;
@@ -69,9 +70,10 @@
             // 
             // btDown
             // 
-            this.btDown.Location = new System.Drawing.Point(191, 40);
+            this.btDown.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold);
+            this.btDown.Location = new System.Drawing.Point(188, 40);
             this.btDown.Name = "btDown";
-            this.btDown.Size = new System.Drawing.Size(19, 23);
+            this.btDown.Size = new System.Drawing.Size(20, 23);
             this.btDown.TabIndex = 1;
             this.btDown.Text = "↑";
             this.btDown.UseVisualStyleBackColor = true;
@@ -79,9 +81,10 @@
             // 
             // btAdd
             // 
-            this.btAdd.Location = new System.Drawing.Point(191, 146);
+            this.btAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btAdd.Location = new System.Drawing.Point(188, 146);
             this.btAdd.Name = "btAdd";
-            this.btAdd.Size = new System.Drawing.Size(19, 23);
+            this.btAdd.Size = new System.Drawing.Size(23, 23);
             this.btAdd.TabIndex = 2;
             this.btAdd.Text = "+";
             this.btAdd.UseVisualStyleBackColor = true;
@@ -89,9 +92,10 @@
             // 
             // btDel
             // 
-            this.btDel.Location = new System.Drawing.Point(191, 175);
+            this.btDel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btDel.Location = new System.Drawing.Point(188, 175);
             this.btDel.Name = "btDel";
-            this.btDel.Size = new System.Drawing.Size(19, 23);
+            this.btDel.Size = new System.Drawing.Size(23, 23);
             this.btDel.TabIndex = 3;
             this.btDel.Text = "-";
             this.btDel.UseVisualStyleBackColor = true;
