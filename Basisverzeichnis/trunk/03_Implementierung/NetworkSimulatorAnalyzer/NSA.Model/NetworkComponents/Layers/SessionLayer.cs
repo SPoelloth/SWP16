@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
     public class SessionLayer : ILayer
     {
-        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
         {
             return true;
         }
@@ -16,7 +15,12 @@ namespace NSA.Model.NetworkComponents.Layers
             return "Kommunikationsschicht";
         }
 
-        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
+        public bool SetLayerName(string NewName)
+        {
+            return false;
+        }
+
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
         {
             
         }

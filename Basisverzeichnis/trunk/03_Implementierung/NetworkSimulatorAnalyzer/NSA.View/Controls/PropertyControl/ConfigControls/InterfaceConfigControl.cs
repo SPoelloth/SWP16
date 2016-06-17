@@ -9,14 +9,14 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
     {
         private bool ipValidInput = false, subnetMaskValidInput = false;
         public event Action<string, IPAddress, IPAddress> InterfaceChanged;
-        public string interfaceName;
+        public string InterfaceName;
 
-        public InterfaceConfigControl(IPAddress ip, IPAddress subnetmask, string name)
+        public InterfaceConfigControl(IPAddress Ip, IPAddress Subnetmask, string name)
         {
             InitializeComponent();
-            labelName.Text = interfaceName = name;
-            textBoxIpAddress.Text = ip.ToString();
-            textBoxSubnetMask.Text = subnetmask.ToString();
+            labelName.Text = InterfaceName = name;
+            textBoxIpAddress.Text = Ip.ToString();
+            textBoxSubnetMask.Text = Subnetmask.ToString();
             initialized = true;
         }
 
@@ -28,7 +28,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        private void textBoxIpAddress_TextChanged(object sender, EventArgs e) {
+        private void textBoxIpAddress_TextChanged(object sender, EventArgs E) {
             if (IsValidIP(textBoxIpAddress.Text)) {
                 textBoxIpAddress.BackColor = SystemColors.Window;
                 ipValidInput = true;
@@ -40,7 +40,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        private void textBoxSubnetMask_TextChanged(object sender, EventArgs e)
+        private void textBoxSubnetMask_TextChanged(object sender, EventArgs E)
         {
             if (IsValidIP(textBoxSubnetMask.Text))
             {
@@ -53,10 +53,10 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        protected void ipInput_TextboxKeyPress(object sender, KeyPressEventArgs e) {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.')) {
-                e.Handled = true;
+        protected void ipInput_TextboxKeyPress(object sender, KeyPressEventArgs E) {
+            if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar) &&
+                (E.KeyChar != '.')) {
+                E.Handled = true;
             }
         }
     }

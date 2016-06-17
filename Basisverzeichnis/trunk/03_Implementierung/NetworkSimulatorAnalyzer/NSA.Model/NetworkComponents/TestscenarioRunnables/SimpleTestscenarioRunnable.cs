@@ -29,8 +29,8 @@ namespace NSA.Model.BusinessLogic
                 sim.AddPacketSend(p);
 
                 Result r = sim.Execute();
-                if (rule.ExpectedResult) if (r.ErrorID != 0) return r;
-                else                     if (r.ErrorID == 0) return r;
+                if (rule.ExpectedResult) if (r.ErrorId != 0) return r;
+                else                     if (r.ErrorId == 0) return r;
             }
 
             return new Result();

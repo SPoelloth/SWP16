@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NSA.Model.NetworkComponents.Helper_Classes
+﻿namespace NSA.Model.NetworkComponents.Helper_Classes
 {
     public class Result
     {
@@ -19,14 +13,14 @@ namespace NSA.Model.NetworkComponents.Helper_Classes
          * 6: Packet:        TTL is 0 but the destination was not reached
          * 7: Tags:          CustomLayer at source but not at destination
          */
-        public int ErrorID { get; set; }
+        public int ErrorId { get; set; }
         public string Res { get; set; }
         public ILayer LayerError { get; set; }
         public bool SendError { get; set; }
 
         public Result()
         {
-            ErrorID = 0;
+            ErrorId = 0;
             Res = "";
             LayerError = null;
         }

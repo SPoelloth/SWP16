@@ -1,47 +1,51 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
     public class DataLinkLayer : ILayer
     {
-        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
         {
-            if (valInfo.Iface == null)
+            if (ValInfo.Iface == null)
                 return;
-            if (currentNode.GetConnections().ContainsKey(valInfo.Iface.Name))
+            if (CurrentNode.GetConnections().ContainsKey(ValInfo.Iface.Name))
             {
-                valInfo.NextNodes.Add(currentNode.GetConnections()[valInfo.Iface.Name].Start.Equals(currentNode) ? currentNode.GetConnections()[valInfo.Iface.Name].End : currentNode.GetConnections()[valInfo.Iface.Name].Start);
+                ValInfo.NextNodes.Add(CurrentNode.GetConnections()[ValInfo.Iface.Name].Start.Equals(CurrentNode) ? CurrentNode.GetConnections()[ValInfo.Iface.Name].End : CurrentNode.GetConnections()[ValInfo.Iface.Name].Start);
                 return;
             }
-            valInfo.Res.ErrorID = 2;
-            valInfo.Res.Res = "There is no Connection at the Interface from choosen the Route.";
-            valInfo.Res.LayerError = new DataLinkLayer();
-            valInfo.Res.SendError = true;
-            valInfo.NextNodes = null;
+            ValInfo.Res.ErrorId = 2;
+            ValInfo.Res.Res = "There is no Connection at the Interface from choosen the Route.";
+            ValInfo.Res.LayerError = new DataLinkLayer();
+            ValInfo.Res.SendError = true;
+            ValInfo.NextNodes = null;
         }
 
-        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
         {
-            if (valInfo.NextNodeIP == null)
+            if (ValInfo.NextNodeIp == null)
                 return true;
-            List<Interface> ifaces = currentNode.GetInterfaces();
+            List<Interface> ifaces = CurrentNode.GetInterfaces();
             foreach (Interface i in ifaces)
             {
-                if (valInfo.NextNodeIP.Equals(i.IpAddress))
+                if (ValInfo.NextNodeIp.Equals(i.IpAddress))
                     return true;
             }
-            valInfo.Res.ErrorID = 3;
-            valInfo.Res.Res = "The Connection is to the wrong node.";
-            valInfo.Res.LayerError = new DataLinkLayer();
-            valInfo.Res.SendError = false;
+            ValInfo.Res.ErrorId = 3;
+            ValInfo.Res.Res = "The Connection is to the wrong node.";
+            ValInfo.Res.LayerError = new DataLinkLayer();
+            ValInfo.Res.SendError = false;
             return false;
         }
 
         public string GetLayerName()
         {
             return "Sicherungsschicht";
+        }
+
+        public bool SetLayerName(string NewName)
+        {
+            return false;
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
     public class NetworkLayer : ILayer
     {
-        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
         {
             return true;
         }
@@ -16,45 +15,50 @@ namespace NSA.Model.NetworkComponents.Layers
             return "Vermittlungsschicht";
         }
 
-        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
+        public bool SetLayerName(string NewName)
+        {
+            return false;
+        }
+
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
         {
             //Wenn destination direkt dran ist an einer Verbindung
-            foreach (Connection c in currentNode.GetConnections().Values)
+            foreach (Connection c in CurrentNode.GetConnections().Values)
             {
-                if (c.Start.Equals(destination) || c.End.Equals(destination))
+                if (c.Start.Equals(Destination) || c.End.Equals(Destination))
                 {
-                    valInfo.NextNodes.Add(destination);
-                    valInfo.Iface = null;
+                    ValInfo.NextNodes.Add(Destination);
+                    ValInfo.Iface = null;
                     return;
                 }
             }
 
             //In der Routingtabelle nachgucken
-            List<Interface> interfaces = destination.GetInterfaces();
+            List<Interface> interfaces = Destination.GetInterfaces();
             foreach (Interface i in interfaces)
             {
-                Dictionary<string, Route>.ValueCollection routes = currentNode.GetRoutes();
+                Dictionary<string, Route>.ValueCollection routes = CurrentNode.GetRoutes();
                 foreach(Route r in routes)
                 {
                     if (i.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
                     {
-                        valInfo.NextNodeIP = r.Gateway;
-                        valInfo.Iface = r.Iface;
+                        ValInfo.NextNodeIp = r.Gateway;
+                        ValInfo.Iface = r.Iface;
                     }
                 }
             }
-            if (currentNode.StandardGateway != null && valInfo.NextNodeIP == null)
+            if (CurrentNode.StandardGateway != null && ValInfo.NextNodeIp == null)
             {
-                valInfo.NextNodeIP = currentNode.StandardGateway;
-                valInfo.Iface = currentNode.StandardGatewayPort;
+                ValInfo.NextNodeIp = CurrentNode.StandardGateway;
+                ValInfo.Iface = CurrentNode.StandardGatewayPort;
             }
-            else if (valInfo.NextNodeIP == null)
+            else if (ValInfo.NextNodeIp == null)
             {
-                valInfo.Res.ErrorID = 1;
-                valInfo.Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
-                valInfo.Res.LayerError = new NetworkLayer();
-                valInfo.Res.SendError = true;
-                valInfo.NextNodes = null;
+                ValInfo.Res.ErrorId = 1;
+                ValInfo.Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
+                ValInfo.Res.LayerError = new NetworkLayer();
+                ValInfo.Res.SendError = true;
+                ValInfo.NextNodes = null;
             }
         }
     }

@@ -52,12 +52,12 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Ip">The IP of the interface.</param>
         /// <param name="Subnetmask">The subnetmask.</param>
-        /// <param name="portNum">Number of port</param>
+        /// <param name="PortNum">Number of port</param>
         /// <returns>The newly added Interface</returns>
-        public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int portNum = -1)
+        public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int PortNum = -1)
         {
-            if (portNum == -1) portNum = GetNewInterfaceNumber();
-            Interface interfaceObj = new Interface(Ip, Subnetmask, portNum);
+            if (PortNum == -1) PortNum = GetNewInterfaceNumber();
+            Interface interfaceObj = new Interface(Ip, Subnetmask, PortNum);
             interfaces.Add(interfaceObj);
             return interfaceObj;
         }
@@ -240,17 +240,17 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="ValInfo">The validation Info</param>
-        /// <param name="destination">The destination</param>
+        /// <param name="Destination">The destination</param>
         /// <returns>
         /// bool that indicates if the Hardwarenode received the package
         /// </returns>
-        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo, Hardwarenode destination)
+        public override bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo, Hardwarenode Destination)
         {
             bool res = true;
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, destination);
+                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination);
             }
             return res;
         }

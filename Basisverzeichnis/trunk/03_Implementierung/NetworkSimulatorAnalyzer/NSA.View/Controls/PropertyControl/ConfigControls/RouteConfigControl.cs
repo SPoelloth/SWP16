@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Windows.Forms;
 
@@ -7,29 +9,47 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
     public partial class RouteConfigControl : ConfigControlBase
     {
-        private bool netMaskValidInput = false, destinationValidInput = false, routeValidInput = false, interfaceValidInput = false;
+        private static List<string> interfaceList;
+        private bool netMaskValidInput = false, destinationValidInput = false, routeValidInput = false;
+        public readonly string RouteName;
+        public event Action<string, IPAddress, IPAddress, IPAddress, string> RouteChanged;
 
-        public event Action<IPAddress, IPAddress, IPAddress, string> RouteChanged;
-
-        public RouteConfigControl(IPAddress destination, IPAddress route, IPAddress subnetMask, string interfaceName)
+        public RouteConfigControl(string RouteName, IPAddress Destination, IPAddress Route, IPAddress SubnetMask, string InterfaceName)
         {
+            this.RouteName = RouteName;
             InitializeComponent();
-            textBoxDestination.Text = destination.ToString();
-            textBoxRoute.Text = route.ToString();
-            textBoxSubnetMask.Text = subnetMask.ToString();
-            textBoxInterface.Text = interfaceName;
+            if (interfaceList == null)
+            {
+                throw new InvalidDataException();
+            }
+            else
+            {
+                this.comboBoxInterfaces.Items.AddRange(interfaceList.ToArray());
+
+            }
+            textBoxDestination.Text = Destination.ToString();
+            textBoxRoute.Text = Route.ToString();
+            textBoxSubnetMask.Text = SubnetMask.ToString();
+            comboBoxInterfaces.SelectedIndex = comboBoxInterfaces.FindStringExact(InterfaceName);
             initialized = true;
         }
 
-        private void OnDataChanged()
+        public static void SetInterfaces(List<string> Interfaces)
         {
-            if (initialized && destinationValidInput && netMaskValidInput && routeValidInput && interfaceValidInput)
-            {
-                RouteChanged?.Invoke(IPAddress.Parse(textBoxDestination.Text), IPAddress.Parse(textBoxRoute.Text), IPAddress.Parse(textBoxSubnetMask.Text), textBoxInterface.Text);
+            interfaceList = Interfaces;
+        }
+
+        private void OnDataChanged() {
+            if (initialized && destinationValidInput && netMaskValidInput && routeValidInput) {
+                RouteChanged?.Invoke(RouteName, IPAddress.Parse(textBoxDestination.Text), IPAddress.Parse(textBoxRoute.Text), IPAddress.Parse(textBoxSubnetMask.Text), comboBoxInterfaces.SelectedText);
             }
         }
 
-        private void textBoxDestination_TextChanged(object sender, EventArgs e)
+        private void comboBoxInterfaces_SelectedIndexChanged(object Sender, EventArgs E) {
+            OnDataChanged();
+        }
+
+        private void textBoxDestination_TextChanged(object Sender, EventArgs E)
         {
             if (IsValidIP(textBoxDestination.Text))
             {
@@ -42,7 +62,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        private void textBoxRoute_TextChanged(object sender, EventArgs e)
+        private void textBoxRoute_TextChanged(object Sender, EventArgs E)
         {
             if (IsValidIP(textBoxRoute.Text))
             {
@@ -55,7 +75,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        private void textBoxSubnetMask_TextChanged(object sender, EventArgs e)
+        private void textBoxSubnetMask_TextChanged(object Sender, EventArgs E)
         {
             if (IsValidIP(textBoxSubnetMask.Text))
             {
@@ -68,25 +88,12 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        private void textBoxInterface_TextChanged(object sender, EventArgs e)
+        protected void ipInput_TextboxKeyPress(object Sender, KeyPressEventArgs E)
         {
-            if (!String.IsNullOrEmpty(textBoxInterface.Text))
+            if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar) &&
+                (E.KeyChar != '.'))
             {
-                textBoxInterface.BackColor = SystemColors.Window;
-                interfaceValidInput = true;
-                OnDataChanged();
-            } else {
-                textBoxInterface.BackColor = Color.Red;
-                interfaceValidInput = false;
-            }
-        }
-
-        protected void ipInput_TextboxKeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-                (e.KeyChar != '.'))
-            {
-                e.Handled = true;
+                E.Handled = true;
             }
         }
     }

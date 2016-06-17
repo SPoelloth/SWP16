@@ -42,54 +42,58 @@
             // 
             // buttonClose
             // 
+            this.buttonClose.Location = new System.Drawing.Point(191, 4);
             this.buttonClose.TabIndex = 4;
+            this.buttonClose.Visible = false;
             // 
             // flpLayers
             // 
             this.flpLayers.AutoScroll = true;
             this.flpLayers.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpLayers.Location = new System.Drawing.Point(8, 40);
+            this.flpLayers.Location = new System.Drawing.Point(0, 40);
             this.flpLayers.Name = "flpLayers";
-            this.flpLayers.Size = new System.Drawing.Size(121, 158);
+            this.flpLayers.Padding = new System.Windows.Forms.Padding(1);
+            this.flpLayers.Size = new System.Drawing.Size(186, 158);
             this.flpLayers.TabIndex = 3;
+            this.flpLayers.WrapContents = false;
             // 
             // btUp
             // 
-            this.btUp.Location = new System.Drawing.Point(135, 40);
+            this.btUp.Location = new System.Drawing.Point(191, 40);
             this.btUp.Name = "btUp";
-            this.btUp.Size = new System.Drawing.Size(46, 23);
+            this.btUp.Size = new System.Drawing.Size(19, 23);
             this.btUp.TabIndex = 0;
-            this.btUp.Text = "Up";
+            this.btUp.Text = "↑";
             this.btUp.UseVisualStyleBackColor = true;
             this.btUp.Click += new System.EventHandler(this.btUp_Click);
             // 
             // btDown
             // 
-            this.btDown.Location = new System.Drawing.Point(135, 69);
+            this.btDown.Location = new System.Drawing.Point(191, 69);
             this.btDown.Name = "btDown";
-            this.btDown.Size = new System.Drawing.Size(46, 23);
+            this.btDown.Size = new System.Drawing.Size(19, 23);
             this.btDown.TabIndex = 1;
-            this.btDown.Text = "Down";
+            this.btDown.Text = "↓";
             this.btDown.UseVisualStyleBackColor = true;
             this.btDown.Click += new System.EventHandler(this.btDown_Click);
             // 
             // btAdd
             // 
-            this.btAdd.Location = new System.Drawing.Point(135, 146);
+            this.btAdd.Location = new System.Drawing.Point(191, 146);
             this.btAdd.Name = "btAdd";
-            this.btAdd.Size = new System.Drawing.Size(46, 23);
+            this.btAdd.Size = new System.Drawing.Size(19, 23);
             this.btAdd.TabIndex = 2;
-            this.btAdd.Text = "Add";
+            this.btAdd.Text = "+";
             this.btAdd.UseVisualStyleBackColor = true;
             this.btAdd.Click += new System.EventHandler(this.btAdd_Click);
             // 
             // btDel
             // 
-            this.btDel.Location = new System.Drawing.Point(135, 175);
+            this.btDel.Location = new System.Drawing.Point(191, 175);
             this.btDel.Name = "btDel";
-            this.btDel.Size = new System.Drawing.Size(46, 23);
+            this.btDel.Size = new System.Drawing.Size(19, 23);
             this.btDel.TabIndex = 3;
-            this.btDel.Text = "Delete";
+            this.btDel.Text = "-";
             this.btDel.UseVisualStyleBackColor = true;
             this.btDel.Click += new System.EventHandler(this.btDel_Click);
             // 
@@ -101,7 +105,7 @@
             this.Controls.Add(this.btUp);
             this.Controls.Add(this.flpLayers);
             this.Name = "LayerstackConfigControl";
-            this.Size = new System.Drawing.Size(185, 201);
+            this.Size = new System.Drawing.Size(214, 201);
             this.Controls.SetChildIndex(this.labelName, 0);
             this.Controls.SetChildIndex(this.buttonClose, 0);
             this.Controls.SetChildIndex(this.flpLayers, 0);
