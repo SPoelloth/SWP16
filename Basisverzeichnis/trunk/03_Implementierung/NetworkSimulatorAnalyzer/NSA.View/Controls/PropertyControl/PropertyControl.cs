@@ -89,7 +89,7 @@ namespace NSA.View.Controls.PropertyControl
 
         public void AddLayerToLayerConfigControl(string LayerName, bool IsCustom)
         {
-            var lscc = Controls.OfType<LayerstackConfigControl>().FirstOrDefault();
+            var lscc = Controls.OfType<LayerstackConfigControl>().FirstOrDefault() ?? tempControls.OfType<LayerstackConfigControl>().FirstOrDefault();
             if (lscc == null)
             {
                 throw new InvalidOperationException();
@@ -128,10 +128,12 @@ namespace NSA.View.Controls.PropertyControl
             var addRouteButton = new AddRouteButton();
             addRouteButton.Click += AddRouteButton_Click;
             flpContents.Controls.Add(addRouteButton);
+            ResumeLayout();
         }
 
         public void ClearControls()
         {
+            SuspendLayout();
             foreach (Control c in flpContents.Controls)
             {
                 if (c is InterfaceConfigControl)
@@ -218,17 +220,7 @@ namespace NSA.View.Controls.PropertyControl
             flpContents.Controls.Remove(Control);
         }
 
-        /// <summary>
-        ///     Handler for the GateWayChanged event of a GWConfigControl
-        /// </summary>
-        /// <param name="GwAddress">The IP address of the default gateway</param>
-        /// <param name="InterfaceName">The name of the assigned interface</param>
-        /// <param name="HasInternetAccess">Flag indicating whether the workstation has internet access</param>
-        private void GWConfigControl_GatewayChanged(IPAddress GwAddress, string InterfaceName, bool HasInternetAccess)
-        {
-            GatewayChanged?.Invoke(GwAddress, InterfaceName, HasInternetAccess);
-        }
-
+        #region Interface
         /// <summary>
         ///     Handler for the InterfaceChanged event of an InterfaceConfigControl
         /// </summary>
@@ -236,11 +228,24 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="IpAddress">The IP address of the interface</param>
         /// <param name="SubnetMask">The subnet mask of the interface</param>
         private void InterfaceConfigControl_InterfaceChanged(string InterfaceName, IPAddress IpAddress,
-            IPAddress SubnetMask)
-        {
+            IPAddress SubnetMask) {
             InterfaceChanged?.Invoke(InterfaceName, IpAddress, SubnetMask);
         }
+        #endregion Interface
 
+        #region Gateway
+        /// <summary>
+        ///     Handler for the GateWayChanged event of a GWConfigControl
+        /// </summary>
+        /// <param name="GwAddress">The IP address of the default gateway</param>
+        /// <param name="InterfaceName">The name of the assigned interface</param>
+        /// <param name="HasInternetAccess">Flag indicating whether the workstation has internet access</param>
+        private void GWConfigControl_GatewayChanged(IPAddress GwAddress, string InterfaceName, bool HasInternetAccess) {
+            GatewayChanged?.Invoke(GwAddress, InterfaceName, HasInternetAccess);
+        }
+        #endregion Gateway
+
+        #region Routes
         /// <summary>
         ///     Handler for the RouteChanged event of a RouteConfigControl
         /// </summary>
@@ -250,10 +255,10 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="Route">IP address of the route</param>
         /// <param name="Parameters">Parameters for the route</param>
         private void RouteConfigControl_RouteChanged(string RouteName, IPAddress Source, IPAddress Destination, IPAddress Route,
-            string Parameters)
-        {
+            string Parameters) {
             RouteChanged?.Invoke(RouteName, Source, Destination, Route, Parameters);
         }
+        #endregion Routes
 
         #region Layers
         private void LayerStackConfigControl_LayerAdded() {

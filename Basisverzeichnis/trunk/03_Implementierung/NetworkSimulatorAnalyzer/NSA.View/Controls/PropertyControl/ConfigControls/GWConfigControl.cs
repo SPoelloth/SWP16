@@ -27,7 +27,14 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
                 checkBoxInternetAccess.Checked = HasInternetAccess;
             }
             textBoxIpAddress.Text = Ip.ToString();
-            comboBoxInterfaces.SelectedIndex = comboBoxInterfaces.FindStringExact(InterfaceName);
+            if (String.IsNullOrEmpty(InterfaceName))
+            {
+                comboBoxInterfaces.SelectedIndex = -1;
+            }
+            else
+            {
+                comboBoxInterfaces.SelectedIndex = comboBoxInterfaces.FindStringExact(InterfaceName);
+            }
             initialized = true;
         }
 
@@ -59,14 +66,14 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         }
 
         private void checkBoxInternetAccess_CheckedChanged(object Sender, EventArgs E) {
-            if (initialized)
+            if (initialized && comboBoxInterfaces.SelectedIndex > -1)
             {
                 GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
             }
         }
 
         private void comboBoxInterfaces_SelectedIndexChanged(object Sender, EventArgs E) {
-            if (initialized) {
+            if (initialized && comboBoxInterfaces.SelectedIndex > -1) {
                 GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
             }
         }

@@ -48,9 +48,6 @@ namespace NSA.Controller.ViewControllers
             }
         }
 
-
-
-
         #region Event Handling
 
         #region Interfaces
@@ -89,7 +86,6 @@ namespace NSA.Controller.ViewControllers
         #endregion Routes
 
         #region Gateway
-
         private void PropertyControl_GatewayChanged(IPAddress GatewayAddress, string InterfaceName, bool HasInternetAccess) {
             NetworkManager.Instance.GatewayChanged(selectedNode.Name, GatewayAddress, HasInternetAccess);
         }
@@ -160,14 +156,15 @@ namespace NSA.Controller.ViewControllers
                     propertyControl.AddLayerToLayerConfigControl(layer.GetLayerName(), layer is CustomLayer);
                 }
 
+                GwConfigControl.SetInterfaces(station.GetInterfaces().Select(i => i.Name).ToList());
                 if (selectedNode is Router)
                 {
                     // load gateway config control
-                    // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name, true, (selectedNode as Router).IsGateway);
+                    propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name, true, (selectedNode as Router).IsGateway);
                 }
                 else
                 {
-                    // propertyControl.AddGatewayConfigControl(station.StandardGateway, station.StandardGatewayPort.Name, true);
+                    propertyControl.AddGatewayConfigControl(station.StandardGateway ?? IPAddress.None, station.StandardGatewayPort?.Name , false);
                 }
                 propertyControl.DisplayElements();
             }

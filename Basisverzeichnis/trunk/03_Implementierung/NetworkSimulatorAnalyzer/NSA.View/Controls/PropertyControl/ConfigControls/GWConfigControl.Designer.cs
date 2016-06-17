@@ -35,16 +35,16 @@
             this.comboBoxInterfaces = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // buttonClose
-            // 
-            this.buttonClose.Location = new System.Drawing.Point(153, 4);
-            this.buttonClose.TabIndex = 3;
-            this.buttonClose.Visible = false;
-            // 
             // labelName
             // 
             this.labelName.Size = new System.Drawing.Size(144, 24);
             this.labelName.Text = "Default Gateway";
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.Location = new System.Drawing.Point(191, 3);
+            this.buttonClose.TabIndex = 3;
+            this.buttonClose.Visible = false;
             // 
             // labelInterface
             // 
@@ -58,9 +58,9 @@
             // 
             // textBoxIpAddress
             // 
-            this.textBoxIpAddress.Location = new System.Drawing.Point(78, 35);
+            this.textBoxIpAddress.Location = new System.Drawing.Point(95, 35);
             this.textBoxIpAddress.Name = "textBoxIpAddress";
-            this.textBoxIpAddress.Size = new System.Drawing.Size(95, 20);
+            this.textBoxIpAddress.Size = new System.Drawing.Size(116, 20);
             this.textBoxIpAddress.TabIndex = 0;
             this.textBoxIpAddress.TextChanged += new System.EventHandler(this.textBoxIpAddress_TextChanged);
             // 
@@ -91,13 +91,13 @@
             // 
             this.comboBoxInterfaces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterfaces.FormattingEnabled = true;
-            this.comboBoxInterfaces.Location = new System.Drawing.Point(78, 61);
+            this.comboBoxInterfaces.Location = new System.Drawing.Point(95, 60);
             this.comboBoxInterfaces.Name = "comboBoxInterfaces";
-            this.comboBoxInterfaces.Size = new System.Drawing.Size(95, 21);
+            this.comboBoxInterfaces.Size = new System.Drawing.Size(116, 21);
             this.comboBoxInterfaces.TabIndex = 2;
             this.comboBoxInterfaces.SelectedIndexChanged += new System.EventHandler(this.comboBoxInterfaces_SelectedIndexChanged);
             // 
-            // GWConfigControl
+            // GwConfigControl
             // 
             this.Controls.Add(this.comboBoxInterfaces);
             this.Controls.Add(this.checkBoxInternetAccess);
@@ -105,7 +105,7 @@
             this.Controls.Add(this.labelInterface);
             this.Controls.Add(this.textBoxIpAddress);
             this.Name = "GwConfigControl";
-            this.Size = new System.Drawing.Size(176, 107);
+            this.Size = new System.Drawing.Size(214, 107);
             this.Controls.SetChildIndex(this.buttonClose, 0);
             this.Controls.SetChildIndex(this.labelName, 0);
             this.Controls.SetChildIndex(this.textBoxIpAddress, 0);

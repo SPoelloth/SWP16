@@ -36,22 +36,22 @@
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(153, 3);
+            this.buttonClose.Location = new System.Drawing.Point(191, 4);
             // 
             // textBoxIpAddress
             // 
-            this.textBoxIpAddress.Location = new System.Drawing.Point(78, 35);
+            this.textBoxIpAddress.Location = new System.Drawing.Point(95, 35);
             this.textBoxIpAddress.Name = "textBoxIpAddress";
-            this.textBoxIpAddress.Size = new System.Drawing.Size(95, 20);
+            this.textBoxIpAddress.Size = new System.Drawing.Size(116, 20);
             this.textBoxIpAddress.TabIndex = 0;
             this.textBoxIpAddress.TextChanged += new System.EventHandler(this.textBoxIpAddress_TextChanged);
             this.textBoxIpAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 
             // textBoxSubnetMask
             // 
-            this.textBoxSubnetMask.Location = new System.Drawing.Point(78, 61);
+            this.textBoxSubnetMask.Location = new System.Drawing.Point(95, 61);
             this.textBoxSubnetMask.Name = "textBoxSubnetMask";
-            this.textBoxSubnetMask.Size = new System.Drawing.Size(95, 20);
+            this.textBoxSubnetMask.Size = new System.Drawing.Size(116, 20);
             this.textBoxSubnetMask.TabIndex = 1;
             this.textBoxSubnetMask.TextChanged += new System.EventHandler(this.textBoxSubnetMask_TextChanged);
             this.textBoxSubnetMask.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
@@ -83,7 +83,7 @@
             this.Controls.Add(this.labelIpAddress);
             this.Controls.Add(this.textBoxSubnetMask);
             this.Name = "InterfaceConfigControl";
-            this.Size = new System.Drawing.Size(176, 90);
+            this.Size = new System.Drawing.Size(214, 90);
             this.Controls.SetChildIndex(this.buttonClose, 0);
             this.Controls.SetChildIndex(this.labelName, 0);
             this.Controls.SetChildIndex(this.textBoxSubnetMask, 0);

@@ -28,9 +28,18 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         }
         private bool selected;
 
-        public LayerControl(bool CustomLayer = false) {
+        public LayerControl(string LayerName, bool CustomLayer = false) {
             InitializeComponent();
+            // FIX for an issue where the textbox text was cut off
+            textBoxName.Multiline = true;
+            textBoxName.MinimumSize = new Size(0, 18);
+            textBoxName.Size = new Size(textBoxName.Size.Width, 18);
+            textBoxName.Multiline = false;
+
+            textBoxName.LostFocus += TextBoxName_LostFocus; ;
+            this.LayerName = LayerName;
             IsCustomLayer = CustomLayer;
+
             if (CustomLayer)
             {
                 FormerName = LayerName;
@@ -53,20 +62,36 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             NameChanged?.Invoke(textBoxName.Text);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-            if (IsSelected)
-            {
-                e.Graphics.DrawRectangle(Pens.DodgerBlue,
-                    0,0,Width-1,Height-1);
-            }
+        private void TextBoxName_LostFocus(object sender, EventArgs e) {
+            textBoxName.Enabled = false;
         }
 
         private void textBoxName_Click(object sender, EventArgs e)
         {
-            if (IsCustomLayer) textBoxName.Enabled = true;
+            if (IsCustomLayer)
+            {
+                textBoxName.Enabled = true;
+                textBoxName.Focus();
+            }
             IsSelected = true;
+            Refresh();
+        }
+
+        private void LayerControl_Click(object sender, EventArgs e) {
+            if (IsCustomLayer) {
+                textBoxName.Enabled = true;
+                textBoxName.Focus();
+            }
+            IsSelected = true;
+            Refresh();
+        }
+
+        protected override void OnPaint(PaintEventArgs e) {
+            base.OnPaint(e);
+            if (IsSelected) {
+                e.Graphics.DrawRectangle(Pens.DodgerBlue,
+                    0, 0, Width - 1, Height - 1);
+            }
         }
     }
 }

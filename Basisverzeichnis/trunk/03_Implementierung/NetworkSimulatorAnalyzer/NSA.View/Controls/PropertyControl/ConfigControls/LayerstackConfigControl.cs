@@ -21,15 +21,13 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             LayerControl newLayerControl;
             if (IsCustom)
             {
-                newLayerControl = new LayerControl(true);
-                newLayerControl.LayerName = LayerName;
+                newLayerControl = new LayerControl(LayerName, true);
                 newLayerControl.Selected += CustomLayerControl_Selected;
                 newLayerControl.NameChanged += CustomLayerControl_NameChanged;
             }
             else
             {
-                newLayerControl = new LayerControl(false);
-                newLayerControl.LayerName = LayerName;
+                newLayerControl = new LayerControl(LayerName);
             }
             flpLayers.Controls.Add(newLayerControl);
         }
@@ -43,6 +41,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         {
             if (SelectedLayerControl != null) SelectedLayerControl.IsSelected = false;
             LayerControl.IsSelected = true;
+            LayerControl.Refresh();
             SelectedLayerControl = LayerControl;
         }
 
