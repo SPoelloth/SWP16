@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 
@@ -49,9 +50,9 @@ namespace NSA.Model.NetworkComponents.Helper_Classes
 
         public static bool IsValidSubnetMask(this IPAddress Subnetmask)
         {
-            var address = BitConverter.ToUInt32(Subnetmask.GetAddressBytes(),0);
+            var address = BitConverter.ToUInt32(Subnetmask.GetAddressBytes().Reverse().ToArray(),0);
             bool end = false;
-            for (int i = 31; i>=0; i++)
+            for (int i = 31; i>=0; i--)
             {
                 if (!end)
                 {
