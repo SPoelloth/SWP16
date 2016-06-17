@@ -26,8 +26,8 @@ namespace NSA.View.Controls.PropertyControl
 
         public event Action AddLayer;
         public event Action<string> RemoveLayer;
-        public event Action<string, string, int> LayerChanged;
-        public event Action<string, string> LayerRenamed;
+        public event Action<string, int> LayerIndexChanged;
+        public event Action<string, string> LayerNameChanged;
 
         public PropertyControl()
         {
@@ -57,9 +57,9 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="AssignedInterfaceName">The name of the ethernet interface to be used for the default gateway</param>
         public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName, bool IsRouter, bool HasInternetAccess = true)
         {
-            var newControl = new GwConfigControl(DefaultGatewayAddress, AssignedInterfaceName, IsRouter, HasInternetAccess);
-            newControl.GatewayChanged += GWConfigControl_GatewayChanged;
-            tempControls.Add(newControl);
+            var gwConfigControl = new GwConfigControl(DefaultGatewayAddress, AssignedInterfaceName, IsRouter, HasInternetAccess);
+            gwConfigControl.GatewayChanged += GWConfigControl_GatewayChanged;
+            tempControls.Add(gwConfigControl);
         }
 
         /// <summary>
@@ -83,10 +83,11 @@ namespace NSA.View.Controls.PropertyControl
             layerStackConfigControl.LayerAdded += LayerStackConfigControl_LayerAdded;
             layerStackConfigControl.LayerRemoved += LayerStackConfigControl_LayerRemoved;
             layerStackConfigControl.LayerNameChanged += LayerStackConfigControl_LayerNameChanged;
-            layerStackConfigControl.LayerChanged += LayerStackConfigControl_LayerChanged;
+            layerStackConfigControl.LayerIndexChanged += LayerStackConfigControl_LayerIndexChanged;
+            tempControls.Add(layerStackConfigControl);
         }
 
-        public void AddLayerToLayerConfigControl(string LayerName, string LayerTag, int Index)
+        public void AddLayerToLayerConfigControl(string LayerName, bool IsCustom)
         {
             var lscc = Controls.OfType<LayerstackConfigControl>().FirstOrDefault();
             if (lscc == null)
@@ -95,7 +96,7 @@ namespace NSA.View.Controls.PropertyControl
             }
             else
             {
-                lscc.AddCustomLayer(LayerName, LayerTag, Index);
+                lscc.AddLayer(LayerName, IsCustom);
             }
         }
 
@@ -154,7 +155,7 @@ namespace NSA.View.Controls.PropertyControl
                     lscc.LayerAdded -= LayerStackConfigControl_LayerAdded;
                     lscc.LayerRemoved -= LayerStackConfigControl_LayerRemoved;
                     lscc.LayerNameChanged -= LayerStackConfigControl_LayerNameChanged;
-                    lscc.LayerChanged -= LayerStackConfigControl_LayerChanged;
+                    lscc.LayerIndexChanged -= LayerStackConfigControl_LayerIndexChanged;
                     lscc.Closing -= ConfigControl_Closing;
                 } else if (c is AddInterfaceButton)
                 {
@@ -205,7 +206,7 @@ namespace NSA.View.Controls.PropertyControl
             {
                 var control = Control as InterfaceConfigControl;
                 control.InterfaceChanged -= InterfaceConfigControl_InterfaceChanged;
-                InterfaceRemoved?.Invoke(control.interfaceName);
+                InterfaceRemoved?.Invoke(control.InterfaceName);
             }
             else if (Control is RouteConfigControl)
             {
@@ -259,16 +260,16 @@ namespace NSA.View.Controls.PropertyControl
             AddLayer?.Invoke();
         }
 
-        private void LayerStackConfigControl_LayerRemoved(LayerControl layerControl) {
-            RemoveLayer?.Invoke(layerControl.LayerName);
+        private void LayerStackConfigControl_LayerRemoved(LayerControl LayerControl) {
+            RemoveLayer?.Invoke(LayerControl.LayerName);
         }
 
         private void LayerStackConfigControl_LayerNameChanged(string FormerName, string NewName) {
-            LayerRenamed?.Invoke(FormerName, NewName);
+            LayerNameChanged?.Invoke(FormerName, NewName);
         }
 
-        private void LayerStackConfigControl_LayerChanged(string LayerName, string LayerTag, int LayerIndex) {
-            LayerChanged?.Invoke(LayerName, LayerTag, LayerIndex);
+        private void LayerStackConfigControl_LayerIndexChanged(string LayerName, int LayerIndex) {
+            LayerIndexChanged?.Invoke(LayerName, LayerIndex);
         }
         #endregion Layers
         #endregion Eventhandling

@@ -7,18 +7,12 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         public bool IsCustomLayer = false;
         public event Action<LayerControl> Selected;
         public event Action<string> NameChanged;
-        public event Action<string> TagChanged;
         public string FormerName = "";
 
         public string LayerName
         {
             get { return textBoxName.Text; }
             set { textBoxName.Text = value; }
-        }
-
-        public string LayerTag {
-            get { return textBoxTag.Text; }
-            set { textBoxTag.Text = value; }
         }
 
         public bool IsSelected
@@ -39,7 +33,6 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             IsCustomLayer = CustomLayer;
             if (CustomLayer)
             {
-                labelTag.Visible = textBoxTag.Visible = textBoxTag.Enabled = false;
                 FormerName = LayerName;
             }
         }
@@ -50,19 +43,14 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         }
 
         private void TextBoxName_KeyDown(object sender, KeyEventArgs e) {
-            // TODO: Check if necessary
-            //if (e.KeyCode == Keys.Enter) {
-            //    textBoxName.Enabled = false;
-            //    //this is to remove focus from the textbox
-            //}
+            if (e.KeyCode == Keys.Enter) {
+                textBoxName.Enabled = false;
+                //this is to remove focus from the textbox
+            }
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e) {
             NameChanged?.Invoke(textBoxName.Text);
-        }
-
-        private void textBoxTag_TextChanged(object sender, EventArgs e) {
-            TagChanged?.Invoke(textBoxTag.Text);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -73,6 +61,12 @@ namespace NSA.View.Controls.PropertyControl.Misc {
                 e.Graphics.DrawRectangle(Pens.DodgerBlue,
                     0,0,Width-1,Height-1);
             }
+        }
+
+        private void textBoxName_Click(object sender, EventArgs e)
+        {
+            if (IsCustomLayer) textBoxName.Enabled = true;
+            IsSelected = true;
         }
     }
 }

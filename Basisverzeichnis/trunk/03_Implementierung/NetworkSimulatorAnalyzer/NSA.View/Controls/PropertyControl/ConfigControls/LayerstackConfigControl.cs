@@ -9,34 +9,29 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         public event Action LayerAdded;
         public event Action<LayerControl> LayerRemoved;
         public event Action<string, string> LayerNameChanged;
-        public event Action<string, string, int> LayerChanged;
+        public event Action<string, int> LayerIndexChanged;
 
         public LayerstackConfigControl()
         {
             InitializeComponent();
         }
 
-        public void AddLayer(string LayerName)
+        public void AddLayer(string LayerName, bool IsCustom)
         {
-            LayerControl newLayerControl = new LayerControl(false);
-            newLayerControl.LayerName = LayerName;
-            this.flpLayers.Controls.Add(newLayerControl);
-        }
-
-        public void AddCustomLayer(string LayerName, string LayerTag, int Index)
-        {
-            LayerControl customLayerControl = new LayerControl(true);
-            customLayerControl.LayerName = LayerName;
-            customLayerControl.LayerTag = LayerTag;
-            customLayerControl.Selected += CustomLayerControl_Selected;
-            customLayerControl.NameChanged += CustomLayerControl_NameChanged;
-            customLayerControl.TagChanged += CustomLayerControl_TagChanged;
-            flpLayers.Controls.Add(customLayerControl);
-            flpLayers.Controls.SetChildIndex(customLayerControl, Index);
-        }
-
-        private void CustomLayerControl_TagChanged(string LayerTag) {
-            LayerChanged?.Invoke(SelectedLayerControl.LayerName, LayerTag, flpLayers.Controls.IndexOf(SelectedLayerControl));
+            LayerControl newLayerControl;
+            if (IsCustom)
+            {
+                newLayerControl = new LayerControl(true);
+                newLayerControl.LayerName = LayerName;
+                newLayerControl.Selected += CustomLayerControl_Selected;
+                newLayerControl.NameChanged += CustomLayerControl_NameChanged;
+            }
+            else
+            {
+                newLayerControl = new LayerControl(false);
+                newLayerControl.LayerName = LayerName;
+            }
+            flpLayers.Controls.Add(newLayerControl);
         }
 
         private void CustomLayerControl_NameChanged(string LayerName) {
@@ -56,7 +51,18 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         }
 
         private void btDel_Click(object Sender, System.EventArgs E) {
-            if(SelectedLayerControl.IsCustomLayer) LayerRemoved?.Invoke(SelectedLayerControl);
+            LayerRemoved?.Invoke(SelectedLayerControl);
+            int layerIndex = flpLayers.Controls.IndexOf(SelectedLayerControl);
+            flpLayers.Controls.Remove(SelectedLayerControl);
+            int currentIndex = 0;
+            foreach (LayerControl lc in flpLayers.Controls)
+            {
+                if (layerIndex <= currentIndex)
+                {
+                    LayerIndexChanged?.Invoke(lc.LayerName, currentIndex);
+                }
+                currentIndex++;
+            }
         }
 
         private void btUp_Click(object Sender, System.EventArgs E) {
@@ -69,7 +75,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
                     LayerControl targetControl = (LayerControl)flpLayers.Controls[targetIndex];
                     flpLayers.Controls.SetChildIndex(SelectedLayerControl, targetIndex);
                     flpLayers.Controls.SetChildIndex(targetControl, currentIndex);
-                    LayerChanged?.Invoke(SelectedLayerControl.LayerName, SelectedLayerControl.LayerTag, flpLayers.Controls.IndexOf(SelectedLayerControl));
+                    LayerIndexChanged?.Invoke(SelectedLayerControl.LayerName, flpLayers.Controls.IndexOf(SelectedLayerControl));
                 }
             }
         }
@@ -82,7 +88,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
                     LayerControl targetControl = (LayerControl)flpLayers.Controls[targetIndex];
                     flpLayers.Controls.SetChildIndex(targetControl, currentIndex);
                     flpLayers.Controls.SetChildIndex(SelectedLayerControl, targetIndex);
-                    LayerChanged?.Invoke(SelectedLayerControl.LayerName, SelectedLayerControl.LayerTag, flpLayers.Controls.IndexOf(SelectedLayerControl));
+                    LayerIndexChanged?.Invoke(SelectedLayerControl.LayerName, flpLayers.Controls.IndexOf(SelectedLayerControl));
                 }
             }
         }

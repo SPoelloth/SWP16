@@ -54,7 +54,7 @@ namespace NSA.Model.NetworkComponents
                 return true;
             return false;
         }
-        
+
         /// <summary>
         /// Checks if the Hardwarenode has the IP
         /// </summary>
