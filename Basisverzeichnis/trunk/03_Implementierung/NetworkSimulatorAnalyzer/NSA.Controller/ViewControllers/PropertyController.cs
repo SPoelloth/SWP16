@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Layers;
 using NSA.View.Controls.PropertyControl;
 using NSA.View.Controls.PropertyControl.ConfigControls;
 using NSA.View.Forms;
@@ -39,9 +40,16 @@ namespace NSA.Controller.ViewControllers
                 propertyControl.RemoveRoute += PropertyControlRemoveRoute;
                 propertyControl.RouteChanged += PropertyControl_RouteChanged;
 
-                propertyControl.LayerChanged += PropertyControl_LayerChanged;
+                propertyControl.LayerIndexChanged += PropertyControl_LayerIndexChanged;
+                propertyControl.LayerNameChanged += PropertyControl_LayerNameChanged;
+                propertyControl.AddLayer += PropertyControl_AddLayer;
+                propertyControl.RemoveLayer += PropertyControl_RemoveLayer;
+
             }
         }
+
+
+
 
         #region Event Handling
 
@@ -54,6 +62,7 @@ namespace NSA.Controller.ViewControllers
 
         private void PropertyControl_InterfaceRemoved(string Name) {
             NetworkManager.Instance.RemoveInterface(selectedNode.Name, Name);
+            LoadElementProperties(selectedNode.Name);
         }
 
         private void PropertyControl_InterfaceChanged(string Name, IPAddress IpAddress, IPAddress SubnetMask) {
@@ -70,6 +79,7 @@ namespace NSA.Controller.ViewControllers
 
         private void PropertyControlRemoveRoute(string RouteName) {
             NetworkManager.Instance.RemoveRoute(selectedNode.Name, RouteName);
+            LoadElementProperties(selectedNode.Name);
         }
 
         private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress SubnetMask, string InterfaceName) {
@@ -86,16 +96,35 @@ namespace NSA.Controller.ViewControllers
         #endregion Gateway
 
         #region Layers
+        private void PropertyControl_AddLayer() {
+            Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
+            CustomLayer newCustomLayer = new CustomLayer(currentLayerStack.CreateUniqueName());
+            currentLayerStack.AddLayer(newCustomLayer);
+            propertyControl.AddLayerToLayerConfigControl(newCustomLayer.GetLayerName(), true);
+        }
 
-        private void PropertyControl_LayerChanged(string LayerName, string LayerTag, int Index)
+        private void PropertyControl_RemoveLayer(string LayerName) {
+            Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
+            currentLayerStack.RemoveLayer(LayerName);
+        }
+
+        private void PropertyControl_LayerIndexChanged(string LayerName, int Index)
         {
             var selectedStation = selectedNode as Workstation;
+            if (selectedStation == null)
+            {
+                throw new InvalidOperationException();
+            }
             Layerstack layers = selectedStation.GetLayerstack();
-            // TODO: So oder so aehnlich
-            // ILayer layer = layers.GetLayerByName(LayerName);
-            // layer.Name = LayerName;
-            // layer.Tag = LayerTag;
-            // layers.SetIndex(LayerName, Index);
+            layers.SetIndex(LayerName, Index);
+        }
+
+        private void PropertyControl_LayerNameChanged(string FormerName, string NewName) {
+            var selectedStation = selectedNode as Workstation;
+            if (selectedStation == null) {
+                throw new InvalidOperationException();
+            }
+            selectedStation.GetLayerstack().SetName(FormerName, NewName);
         }
         #endregion Layers
 
@@ -125,7 +154,11 @@ namespace NSA.Controller.ViewControllers
                 }
 
                 // load workstation Layerstack controls
-                // propertyControl.AddLayerStackControl(station.GetLayers());
+                propertyControl.AddLayerStackConfigControl();
+                foreach (ILayer layer in station.GetLayerstack().GetAllLayers())
+                {
+                    propertyControl.AddLayerToLayerConfigControl(layer.GetLayerName(), layer is CustomLayer);
+                }
 
                 if (selectedNode is Router)
                 {

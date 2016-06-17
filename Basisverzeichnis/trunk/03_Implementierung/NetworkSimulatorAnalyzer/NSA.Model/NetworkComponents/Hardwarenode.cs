@@ -69,7 +69,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Lay">The layer to be removed.</param>
         public void RemoveLayer(ILayer Lay)
         {
-            Layerstack.RemoveLayer(Lay);
+            Layerstack.RemoveLayer(Lay.GetLayerName());
         }
 
         /// <summary>
