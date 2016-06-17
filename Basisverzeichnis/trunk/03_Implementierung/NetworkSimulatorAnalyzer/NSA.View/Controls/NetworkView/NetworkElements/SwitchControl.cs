@@ -13,7 +13,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #region Colors
         #region Workstation Colors
         private Pen borderPen = Pens.Black;
-        private Pen separatorPen = new Pen(Color.Black, 2);
         private Pen selectedPen = Pens.Red;
         private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(101, 130, 193), Color.FromArgb(101, 130, 193));
         private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 50), Color.FromArgb(0, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
@@ -40,7 +39,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private List<Rectangle> portHitboxes = new List<Rectangle>();
 
-        int portcount = 10;
         public int NetworkPortCount { get { return portcount; } set { portcount = value; calculateDimension(); calculateHitboxes(); } }
 
         [Obsolete("Do not use! For Designer only!")]

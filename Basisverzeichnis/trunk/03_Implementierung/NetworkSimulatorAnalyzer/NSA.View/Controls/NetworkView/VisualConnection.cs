@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
@@ -30,17 +31,7 @@ namespace NSA.View.Controls.NetworkView
             Port2 = port2;
             Element1.LocationChanged += Element_LocationChanged;
             Element2.LocationChanged += Element_LocationChanged;
-            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
-            connectionControls.Add(new ConnectionControl(name, new Point(), new Point()));
             CalculateLineParts();
-            foreach (var c in connectionControls)
-            {
-                Parent.AddElement(c);
-                c.Click += Connection_Click;
-            }
             parent.SelectionChanged += Deselect;
         }
 
@@ -69,7 +60,7 @@ namespace NSA.View.Controls.NetworkView
                 c.IsSelected = true;
             }
             Selected?.Invoke(this);
-            
+
         }
 
         private void Element_LocationChanged(object sender, EventArgs e)
@@ -79,59 +70,181 @@ namespace NSA.View.Controls.NetworkView
 
         private void CalculateLineParts()
         {
+            if (Element1.Location.X > Element2.Location.X)
+            {
+                var e = Element2;
+                Element2 = Element1;
+                Element1 = e;
+                int p = Port2;
+                Port2 = Port1;
+                Port1 = p;
+            }
+
             var startElement = Element1.GetPortBoundsByID(Port1);
             var targetElement = Element2.GetPortBoundsByID(Port2);
             startElement.Offset(Element1.Location);
             targetElement.Offset(Element2.Location);
 
-            var Location = Rectangle.Union(startElement, targetElement).Location;
-            var a = new Point(startElement.X + startElement.Width, startElement.Y + startElement.Height / 2);
-            var b = new Point(targetElement.X, targetElement.Y + targetElement.Height / 2);
+            List<Point> points = new List<Point>();
+            ConnectionState state = ConnectionState.Straight;
 
-            Point Element1Start = a;
-            Point Element1PixelMargin = a;
-            Element1PixelMargin.X += Element1 is WorkstationControl ? -5 + 10 * (Port1 % 2) : 0;
-            Element1PixelMargin.Y += Element1 is SwitchControl ? 5 : 0;
-            Point Element2Start = b;
-            Point Element2PixelMargin = b;
-            Element2PixelMargin.X += Element2 is WorkstationControl ? -5 + 10 * (Port2 % 2) : 0;
-            Element2PixelMargin.Y += Element2 is SwitchControl ? 5 : 0;
-
-            Point am = new Point((Element1PixelMargin.X + Element2PixelMargin.X) / 2, Element1PixelMargin.Y);
-            Point bm = new Point((Element1PixelMargin.X + Element2PixelMargin.X) / 2, Element2PixelMargin.Y);
-
-            if (DirectConnectionPossible(Element1PixelMargin, Element2PixelMargin))
+            if ((Port1 % 2 == 0 || (targetElement.X - startElement.X) < 0) && !(Element1 is SwitchControl))
             {
-                connectionControls[0].SetPoints(Element1Start, Element1PixelMargin);
-                connectionControls[1].SetPoints(Element1PixelMargin, am);
-                connectionControls[2].SetPoints(am, bm);
-                connectionControls[3].SetPoints(bm, Element2PixelMargin);
-                connectionControls[4].SetPoints(Element2PixelMargin, Element2Start);
+                state = state | ConnectionState.LeftReverse;
             }
-            //else 
-            //{
-            //  TODO
-            //  beide linien nach unten zeichnen bis verbindung möglich ist
-            //  
-            //  
-            //  
-            //  
-            //}
-        }
+            if ((Port2 % 2 == 1 || (targetElement.X - startElement.X) < 0) && !(Element2 is SwitchControl))
+            {
+                state = state | ConnectionState.RightReverse;
+            }
 
-        private bool DirectConnectionPossible(Point point1, Point point2)
-        {
-            // TODO
-            return true;
+            if (state == ConnectionState.Straight)
+            {
+                int initialCableLength = Math.Max(15, Element1.Location.X - Element2.Location.X - Element1.Width) / 2;
+
+                //startpunkt
+                points.Add(new Point(startElement.X + startElement.Width / 2, startElement.Y + startElement.Height / 2));
+                Point prevPoint = points.Last();
+                points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
+                Point center = new Point((int)((startElement.Location.X + startElement.Width + targetElement.Location.X) / 2f), (int)(startElement.Location.Y + startElement.Height + targetElement.Location.Y / 2f));
+
+                prevPoint = points.Last();
+                points.Add(new Point(center.X, prevPoint.Y));
+
+                Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
+                Point endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
+
+                points.Add(new Point(center.X, endDist.Y));
+                points.Add(endDist);
+                points.Add(end);
+            }
+            else if (state == ConnectionState.LeftReverse)
+            {
+                int initialCableLength = 25;
+
+                //startpunkt
+                points.Add(new Point(startElement.X + startElement.Width / 2, startElement.Y + startElement.Height / 2));
+                Point prevPoint = points.Last();
+                points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
+                Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
+                Point endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
+                prevPoint = points.Last();
+                points.Add(new Point(prevPoint.X, endDist.Y));
+                points.Add(endDist);
+                points.Add(end);
+            }
+            else if (state == ConnectionState.RightReverse)
+            {
+                int initialCableLength = 25;
+
+                //startpunkt
+                points.Add(new Point(startElement.X + startElement.Width / 2, startElement.Y + startElement.Height / 2));
+                Point prevPoint = points.Last();
+                points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
+
+                prevPoint = points.Last();
+                Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
+                Point endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
+                points.Add(new Point(endDist.X, prevPoint.Y));
+
+                points.Add(endDist);
+                points.Add(end);
+            }
+            else // if(state == ConnectionState.BothReverse)
+            {
+                int initialCableLength = 50;
+
+                //startpunkt
+                points.Add(new Point(startElement.X + startElement.Width / 2, startElement.Y + startElement.Height / 2));
+                Point prevPoint = points.Last();
+                points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
+
+                prevPoint = points.Last();
+
+                Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
+                Point endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
+
+                if (prevPoint.Y < endDist.Y)
+                {
+                    if (prevPoint.Y + Element1.Height + 25 < endDist.Y)
+                    {
+                        Point center = new Point((prevPoint.X + endDist.X) / 2, (prevPoint.Y + endDist.Y) / 2);
+                        points.Add(new Point(prevPoint.X, center.Y));
+                        prevPoint = points.Last();
+                        points.Add(new Point(endDist.X, prevPoint.Y));
+                    }
+                    else
+                    {
+                        points.Add(new Point(prevPoint.X, Element1.Location.Y - 20));
+                        prevPoint = points.Last();
+                        points.Add(new Point(endDist.X, prevPoint.Y));
+                    }
+                }
+                else
+                {
+                    if (endDist.Y + Element2.Height + 25 < prevPoint.Y)
+                    {
+                        Point center = new Point((prevPoint.X + endDist.X) / 2, (prevPoint.Y + endDist.Y) / 2);
+                        points.Add(new Point(prevPoint.X, center.Y));
+                        prevPoint = points.Last();
+                        points.Add(new Point(endDist.X, prevPoint.Y));
+                    }
+                    else
+                    {
+                        points.Add(new Point(prevPoint.X, Element2.Location.Y - 20));
+                        prevPoint = points.Last();
+                        points.Add(new Point(endDist.X, prevPoint.Y));
+                    }
+                }
+
+                points.Add(endDist);
+                points.Add(end);
+            }
+
+            if (connectionControls.Count < points.Count - 1)
+            {
+                for (int i = 0; connectionControls.Count < points.Count - 1; i++)
+                {
+                    var c = new ConnectionControl(Name, new Point(), new Point());
+                    Parent.AddElement(c);
+                    c.Click += Connection_Click;
+                    connectionControls.Add(c);
+                }
+
+            }
+            if (connectionControls.Count > points.Count - 1 && connectionControls.Count > 0)
+            {
+                for (int i = 0; i < connectionControls.Count - (points.Count - 1); i++)
+                {
+                    var c = connectionControls.Last();
+                    Parent.RemoveElement(c);
+                    c.Click -= Connection_Click;
+                    connectionControls.Remove(c);
+                }
+            }
+
+            for (int i = 0; i < points.Count - 1 && points.Count > 0; i++)
+            {
+                connectionControls[i].SetPoints(points[i], points[i + 1]);
+
+            }
         }
 
         public void Dispose()
         {
-            foreach(var c in connectionControls)
+            foreach (var c in connectionControls)
             {
                 c.Parent.Controls.Remove(c);
                 c.Dispose();
             }
+        }
+
+        [Flags]
+        enum ConnectionState
+        {
+            Straight = 0,
+            LeftReverse = 1,
+            RightReverse = 2,
+            BothReverse = 3,
         }
     }
 }
