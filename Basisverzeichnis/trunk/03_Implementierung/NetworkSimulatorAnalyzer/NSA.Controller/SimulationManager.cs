@@ -50,7 +50,7 @@ namespace NSA.Controller
                 Packet p = Simulations[Simulations.Count - 1].GetLastPacket();
                 if (p == null)
                     return null;
-                res.Add(p.result);
+                res.Add(p.Result);
                 res.Add(new Result());
             }
             else if (hops[hops.Count - 1].Equals(nodeTwo))
@@ -59,7 +59,7 @@ namespace NSA.Controller
                 Packet p = Simulations[Simulations.Count - 1].GetLastPacket();
                 if (p == null)
                     return null;
-                res.Add(p.result);
+                res.Add(p.Result);
             }
             else
             {
@@ -103,7 +103,7 @@ namespace NSA.Controller
             bool result = false;
             foreach (Packet p in sim.GetAllPackets())
             {
-                if ((p.ExpectedResult && p.result.ErrorID == 0) || (!p.ExpectedResult && p.result.ErrorID != 0))
+                if ((p.ExpectedResult && p.Result.ErrorId == 0) || (!p.ExpectedResult && p.Result.ErrorId != 0))
                     result = true;
                 else
                     return false;

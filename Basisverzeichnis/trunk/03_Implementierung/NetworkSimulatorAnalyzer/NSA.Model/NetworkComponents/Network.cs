@@ -29,10 +29,10 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a hardwarenode.
         /// </summary>
-        /// <param name="newNode">The new node.</param>
-        public void AddHardwarenode(Hardwarenode newNode)
+        /// <param name="NewNode">The new node.</param>
+        public void AddHardwarenode(Hardwarenode NewNode)
 	    {
-	        nodes.Add(newNode);
+	        nodes.Add(NewNode);
 	    }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="StartNodeInterfaceName">Start name of the node interface.</param>
         /// <param name="EndNodeInterfaceName">End name of the node interface.</param>
-        /// <param name="newConnection">The new connection.</param>
+        /// <param name="NewConnection">The new connection.</param>
         /// <exception cref="System.InvalidOperationException">
         /// Connection already exists!
         /// or
@@ -48,34 +48,34 @@ namespace NSA.Model.NetworkComponents
         /// or
         /// Interface of endnode is already used!
         /// </exception>
-        public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection newConnection)
+        public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection NewConnection)
 	    {
-	        if (!nodes.Contains(newConnection.Start) || !nodes.Contains(newConnection.End)) return;
-	        if(connections.Count(c => c.Start == newConnection.Start && c.End == newConnection.End
-	           || c.Start == newConnection.End && c.End == newConnection.Start) > 0
-	           || connections.Contains(newConnection))
+	        if (!nodes.Contains(NewConnection.Start) || !nodes.Contains(NewConnection.End)) return;
+	        if(connections.Count(C => C.Start == NewConnection.Start && C.End == NewConnection.End
+	           || C.Start == NewConnection.End && C.End == NewConnection.Start) > 0
+	           || connections.Contains(NewConnection))
 	        {
 	            // there's already a connection between the two nodes
 	            throw new InvalidOperationException("Connection already exists!");
 	        }
             
-            if(newConnection.Start.InterfaceIsUsed(StartNodeInterfaceName))
+            if(NewConnection.Start.InterfaceIsUsed(StartNodeInterfaceName))
                 throw new InvalidOperationException("Interface of startnode is already used!");
-            if (newConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
+            if (NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
                 throw new InvalidOperationException("Interface of endnode is already used!");
 
-            newConnection.Start.AddConnection(StartNodeInterfaceName, newConnection);
-            newConnection.End.AddConnection(EndNodeInterfaceName, newConnection);
-            connections.Add(newConnection);
+            NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
+            NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
+            connections.Add(NewConnection);
 	    }
 
         /// <summary>
         /// Removes the hardwarnode.
         /// </summary>
-        /// <param name="name">The name.</param>
-        public void RemoveHardwarnode(string name)
+        /// <param name="Name">The name.</param>
+        public void RemoveHardwarnode(string Name)
         {
-            nodes.RemoveAll(s => s.Name == name);
+            nodes.RemoveAll(S => S.Name == Name);
 
             // das ist das gleiche:
             //foreach (Hardwarenode h in nodes)
@@ -96,7 +96,7 @@ namespace NSA.Model.NetworkComponents
         /// <param name="ConnectionName">Name of the connection.</param>
         public void RemoveConnection(string ConnectionName)
 	    {
-            var connection = connections.FirstOrDefault(c => c.Name == ConnectionName);
+            var connection = connections.FirstOrDefault(C => C.Name == ConnectionName);
 
             if (connection == null) return;
 
@@ -108,13 +108,13 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Gets the workstation by ip.
         /// </summary>
-        /// <param name="ip">The ip.</param>
+        /// <param name="Ip">The ip.</param>
         /// <returns></returns>
-        public Hardwarenode GetWorkstationByIP(IPAddress ip)
+        public Hardwarenode GetWorkstationByIp(IPAddress Ip)
         {
             foreach (Hardwarenode h in nodes)
             {
-                if (h.HasIp(ip) == true) return h;
+                if (h.HasIp(Ip)) return h;
             }
             return null;
         }

@@ -55,7 +55,7 @@ namespace NSA.Controller
         /// <returns>The found workstation or null if it could not be found.</returns>
         public Hardwarenode GetWorkstationByIp(IPAddress Ip)
         {
-            return network.GetWorkstationByIP(Ip) as Workstation;
+            return network.GetWorkstationByIp(Ip) as Workstation;
         }
 
         /// <summary>

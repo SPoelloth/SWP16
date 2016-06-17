@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -53,25 +54,7 @@ namespace NSA.Model.NetworkComponents
                 return true;
             return false;
         }
-
-        /// <summary>
-        /// Adds a layer to the layerstack.
-        /// </summary>
-        /// <param name="Lay">The layer to be added.</param>
-        public void AddLayer(ILayer Lay)
-        {
-            Layerstack.AddLayer(Lay);
-        }
-
-        /// <summary>
-        /// Removes a layer from the layerstack.
-        /// </summary>
-        /// <param name="Lay">The layer to be removed.</param>
-        public void RemoveLayer(ILayer Lay)
-        {
-            Layerstack.RemoveLayer(Lay);
-        }
-
+        
         /// <summary>
         /// Checks if the Hardwarenode has the IP
         /// </summary>
@@ -99,8 +82,11 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Tags">Optional tags.</param>
         /// <param name="ValInfo">The validation Info</param>
-        /// <returns>If the Hardwarenode could receive the package</returns>
-        public virtual bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo, Hardwarenode destination)
+        /// <param name="Destination">The destination.</param>
+        /// <returns>
+        /// If the Hardwarenode could receive the package
+        /// </returns>
+        public virtual bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo, Hardwarenode Destination)
         {
             return true;
         }
@@ -159,6 +145,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
+        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
         public override int GetHashCode()
         {
             // auto-generated method
@@ -209,11 +196,11 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Gets the port index of connection.
         /// </summary>
-        /// <param name="c">The connection.</param>
+        /// <param name="C">The connection.</param>
         /// <returns>Portindex</returns>
-        public int GetPortIndexOfConnection(Connection c)
+        public int GetPortIndexOfConnection(Connection C)
         {
-            KeyValuePair<string, Connection> pair = Connections.FirstOrDefault(s => s.Value == c);
+            KeyValuePair<string, Connection> pair = Connections.FirstOrDefault(S => S.Value == C);
             if(pair.Equals(default(KeyValuePair<string, Connection>)))
                 return -1;
             string str = pair.Key;

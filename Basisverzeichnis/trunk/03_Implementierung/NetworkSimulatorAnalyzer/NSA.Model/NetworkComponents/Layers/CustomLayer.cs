@@ -7,20 +7,20 @@ namespace NSA.Model.NetworkComponents.Layers
     {
         private string name;
 
-        public CustomLayer(string n)
+        public CustomLayer(string N)
         {
-            name = n;
+            name = N;
         }
 
-        public void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags)
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
         {
-            if(valInfo.Source != null && valInfo.Source.Equals(currentNode))
+            if(ValInfo.Source != null && ValInfo.Source.Equals(CurrentNode))
                 Tags.Add(name, name);
         }
 
-        public bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
         {
-            if (currentNode.Equals(destination) && Tags.ContainsKey(name))
+            if (CurrentNode.Equals(Destination) && Tags.ContainsKey(name))
                 Tags.Remove(name);
             return true;
         }
@@ -30,9 +30,9 @@ namespace NSA.Model.NetworkComponents.Layers
             return name;
         }
 
-        public bool SetLayerName(string newName)
+        public bool SetLayerName(string NewName)
         {
-            name = newName;
+            name = NewName;
             return true;
         }
     }

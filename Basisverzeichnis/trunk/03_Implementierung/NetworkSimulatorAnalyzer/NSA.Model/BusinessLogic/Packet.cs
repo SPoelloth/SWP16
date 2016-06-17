@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
@@ -13,23 +11,23 @@ namespace NSA.Model.BusinessLogic
         public Hardwarenode Destination { get; private set; }
         private List<Hardwarenode> hops = new List<Hardwarenode>();
         public int Ttl { get; private set; }
-        public Result result { get; private set; } = new Result();
+        public Result Result { get; private set; } = new Result();
         public bool ExpectedResult { get; }
         private Dictionary<string, object> tags = new Dictionary<string, object>();
 
-        public Packet(Hardwarenode _source, Hardwarenode _destination,
-            int _ttl, bool expRes)
+        public Packet(Hardwarenode Src, Hardwarenode Dest,
+            int T, bool ExpRes)
         {
-            Source = _source;
-            Destination = _destination;
+            Source = Src;
+            Destination = Dest;
             if (Source == null || Destination == null)
             {
-                result.ErrorID = 5;
-                result.Res = "Source or destination node does not exist.";
-                result.SendError = true;
+                Result.ErrorId = 5;
+                Result.Res = "Source or destination node does not exist.";
+                Result.SendError = true;
             }
-            Ttl = _ttl;
-            ExpectedResult = expRes;
+            Ttl = T;
+            ExpectedResult = ExpRes;
             hops.Add(Source);
         }
 
@@ -49,10 +47,10 @@ namespace NSA.Model.BusinessLogic
         public Packet Send()
         {
             ValidationInfo valInfo = new ValidationInfo();
-            valInfo.NextNodeIP = null;
-            valInfo.Res = result;
+            valInfo.NextNodeIp = null;
+            valInfo.Res = Result;
             valInfo.Source = Source as Workstation;
-            while (!hops[hops.Count - 1].Equals(Destination) && valInfo.Res.ErrorID == 0 && Ttl > 0)
+            while (!hops[hops.Count - 1].Equals(Destination) && valInfo.Res.ErrorId == 0 && Ttl > 0)
             {
                 List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(Destination, tags, valInfo);
                 if (nextNodes != null)
@@ -65,22 +63,22 @@ namespace NSA.Model.BusinessLogic
                     }
                 }
             }
-            result = valInfo.Res;
+            Result = valInfo.Res;
             if (!hops[hops.Count - 1].Equals(Destination) && Ttl == 0)
             {
                 //TTL Error
-                result.ErrorID = 6;
-                result.Res = "TTL is 0 but the destination was not reached.";
-                result.SendError = true;
+                Result.ErrorId = 6;
+                Result.Res = "TTL is 0 but the destination was not reached.";
+                Result.SendError = true;
             }
-            if (result.ErrorID == 0 && tags.Count != 0)
+            if (Result.ErrorId == 0 && tags.Count != 0)
             {
                 //Layer Error
-                result.ErrorID = 7;
-                result.Res = "No Layer " + tags.Keys.First() + " at the destination.";
-                result.SendError = false;
+                Result.ErrorId = 7;
+                Result.Res = "No Layer " + tags.Keys.First() + " at the destination.";
+                Result.SendError = false;
             }
-            if(result.ErrorID == 0)
+            if(Result.ErrorId == 0)
                 return new Packet(Destination, Source, Ttl, ExpectedResult);
             return null;
         }

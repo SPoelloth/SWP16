@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
@@ -9,21 +8,21 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Validates the layer while sending a packet.
         /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="currentNode">The current node.</param>
-        /// <param name="valInfo"></param>
+        /// <param name="Destination"></param>
+        /// <param name="CurrentNode"></param>
+        /// <param name="ValInfo"></param>
         /// <param name="Tags"></param>
-        void ValidateSend(Workstation destination, Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags);
+        void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags);
 
         /// <summary>
         /// Validates the layer while receiving a packet.
         /// </summary>
-        /// <param name="currentNode"></param>
-        /// <param name="valInfo"></param>
+        /// <param name="CurrentNode"></param>
+        /// <param name="ValInfo"></param>
         /// <param name="Tags"></param>
-        /// <param name="destination"></param>
+        /// <param name="Destination"></param>
         /// <returns>Boolean value indicating if the validation was successfull</returns>
-        bool ValidateReceive(Workstation currentNode, ValidationInfo valInfo, Dictionary<string, object> Tags, Hardwarenode destination);
+        bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination);
 
         /// <summary>
         /// Gets the name of the layer.
@@ -34,7 +33,8 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Sets the name of the layer.
         /// </summary>
+        /// <param name="NewName"></param>
         /// <returns></returns>
-        bool SetLayerName(string newName);
+        bool SetLayerName(string NewName);
     }
 }

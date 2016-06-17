@@ -46,7 +46,7 @@ namespace NSA.ModelTests.BusinessLogic
 
             foreach (var runnable in runnables)
             {
-                Assert.IsTrue(runnable.Run().ErrorID == 0);
+                Assert.IsTrue(runnable.Run().ErrorId == 0);
             }
         }
 
@@ -59,7 +59,7 @@ namespace NSA.ModelTests.BusinessLogic
 
             foreach (var runnable in runnables)
             {
-                Assert.IsFalse(runnable.Run().ErrorID == 0);
+                Assert.IsFalse(runnable.Run().ErrorId == 0);
             }
         }
 
@@ -72,7 +72,7 @@ namespace NSA.ModelTests.BusinessLogic
 
             foreach (var runnable in runnables)
             {
-                Assert.IsTrue(runnable.Run().ErrorID == 6);
+                Assert.IsTrue(runnable.Run().ErrorId == 6);
             }
         }
     }

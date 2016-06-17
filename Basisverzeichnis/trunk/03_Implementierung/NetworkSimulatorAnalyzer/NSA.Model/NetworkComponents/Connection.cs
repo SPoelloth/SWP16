@@ -111,11 +111,11 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Gets the index of the port.
         /// </summary>
-        /// <param name="node">The node.</param>
+        /// <param name="Node">The node.</param>
         /// <returns>Portindex</returns>
-        public int GetPortIndex(Hardwarenode node)
+        public int GetPortIndex(Hardwarenode Node)
         {
-            return node.GetPortIndexOfConnection(this);
+            return Node.GetPortIndexOfConnection(this);
         }
     }
 }

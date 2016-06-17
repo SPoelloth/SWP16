@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 
 namespace NSA.Model.NetworkComponents
@@ -20,26 +19,26 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Adds a layer to the stack.
         /// </summary>
-        /// <param name="lay">The layer to be added.</param>
-        public void AddLayer(ILayer lay)
+        /// <param name="Lay">The layer to be added.</param>
+        public void AddLayer(ILayer Lay)
         {
-            layers.Add(lay);
+            layers.Add(Lay);
         }
 
         /// <summary>
         /// Removes a layer from the stack.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="Name">The name.</param>
         /// <exception cref="System.InvalidOperationException">Layer with the name:  + name +  does not exist.</exception>
-        public void RemoveLayer(string name)
+        public void RemoveLayer(string Name)
         {
             foreach (ILayer l in layers)
             {
-                if (l.GetLayerName() != name) continue;
+                if (l.GetLayerName() != Name) continue;
                 layers.Remove(l);
                 return;
             }
-            throw new InvalidOperationException("Layer with the name: " + name + " does not exist.");
+            throw new InvalidOperationException("Layer with the name: " + Name + " does not exist.");
         }
 
         /// <summary>
@@ -54,34 +53,34 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Returns the layer at the index.
         /// </summary>
-        /// <param name="index">The index.</param>
+        /// <param name="Index">The index.</param>
         /// <returns>The layer</returns>
-        public ILayer GetLayer(int index)
+        public ILayer GetLayer(int Index)
         {
-            return layers[index];
+            return layers[Index];
         }
 
         /// <summary>
         /// Inserts at.
         /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="layer">The layer.</param>
-        public void InsertAt(int index, ILayer layer)
+        /// <param name="Index">The index.</param>
+        /// <param name="Layer">The layer.</param>
+        public void InsertAt(int Index, ILayer Layer)
         {
-            layers.Insert(index, layer);
+            layers.Insert(Index, Layer);
         }
 
         /// <summary>
         /// Sets the index.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="newIndex">The new index.</param>
-        public void SetIndex(string name, int newIndex)
+        /// <param name="Name">The name.</param>
+        /// <param name="NewIndex">The new index.</param>
+        public void SetIndex(string Name, int NewIndex)
         {
             ILayer layer = null;
             foreach (ILayer l in layers)
             {
-                if (l.GetLayerName() == name)
+                if (l.GetLayerName() == Name)
                 {
                     layer = l;
                     break;
@@ -90,28 +89,28 @@ namespace NSA.Model.NetworkComponents
             if (layer != null)
             {
                 layers.Remove(layer);
-                InsertAt(newIndex, layer);
+                InsertAt(NewIndex, layer);
             }
         }
 
         /// <summary>
         /// Sets the name.
         /// </summary>
-        /// <param name="oldName">The old name.</param>
-        /// <param name="newName">The new name.</param>
+        /// <param name="OldName">The old name.</param>
+        /// <param name="NewName">The new name.</param>
         /// <returns>True if it worked. False if the newName is already taken by another layer or when there is no layer with the old name</returns>
-        public bool SetName(string oldName, string newName)
+        public bool SetName(string OldName, string NewName)
         {
             foreach (ILayer l in layers)
             {
-                if (l.GetLayerName() == newName)
+                if (l.GetLayerName() == NewName)
                     return false;
             }
             foreach (ILayer l in layers)
             {
-                if (l.GetLayerName() == oldName)
+                if (l.GetLayerName() == OldName)
                 {
-                    return l.SetLayerName(newName);
+                    return l.SetLayerName(NewName);
                 }
             }
             return false;
@@ -129,13 +128,13 @@ namespace NSA.Model.NetworkComponents
         /// <summary>
         /// Determines whether the name is taken or not.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="Name">The name.</param>
         /// <returns></returns>
-        public bool IsNameTaken(string name)
+        public bool IsNameTaken(string Name)
         {
             foreach (ILayer l in layers)
             {
-                if (l.GetLayerName() == name)
+                if (l.GetLayerName() == Name)
                     return false;
             }
             return true;
@@ -150,7 +149,7 @@ namespace NSA.Model.NetworkComponents
             for (int i = 1; ; i++)
             {
                 string name = $"Neues Layer {i}";
-                if (layers.All(l => l.GetLayerName() != name)) return name;
+                if (layers.All(L => L.GetLayerName() != name)) return name;
             }
         }
     }
