@@ -59,7 +59,7 @@
             // labelIpAddress
             // 
             this.labelIpAddress.AutoSize = true;
-            this.labelIpAddress.Location = new System.Drawing.Point(25, 38);
+            this.labelIpAddress.Location = new System.Drawing.Point(3, 38);
             this.labelIpAddress.Name = "labelIpAddress";
             this.labelIpAddress.Size = new System.Drawing.Size(64, 13);
             this.labelIpAddress.TabIndex = 4;
@@ -69,7 +69,7 @@
             // labelSubnetMask
             // 
             this.labelSubnetMask.AutoSize = true;
-            this.labelSubnetMask.Location = new System.Drawing.Point(8, 64);
+            this.labelSubnetMask.Location = new System.Drawing.Point(3, 64);
             this.labelSubnetMask.Name = "labelSubnetMask";
             this.labelSubnetMask.Size = new System.Drawing.Size(81, 13);
             this.labelSubnetMask.TabIndex = 8;

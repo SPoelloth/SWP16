@@ -5,7 +5,7 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         public AddRouteButton()
         {
             AutoSize = true;
-            Text = "Add Route";
+            Text = "Route hinzufügen";
             FontHeight = 12;
         }
 

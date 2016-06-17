@@ -49,7 +49,7 @@
             // labelInterface
             // 
             this.labelInterface.AutoSize = true;
-            this.labelInterface.Location = new System.Drawing.Point(14, 63);
+            this.labelInterface.Location = new System.Drawing.Point(3, 63);
             this.labelInterface.Name = "labelInterface";
             this.labelInterface.Size = new System.Drawing.Size(64, 13);
             this.labelInterface.TabIndex = 2;
@@ -58,7 +58,7 @@
             // 
             // textBoxIpAddress
             // 
-            this.textBoxIpAddress.Location = new System.Drawing.Point(95, 35);
+            this.textBoxIpAddress.Location = new System.Drawing.Point(91, 35);
             this.textBoxIpAddress.Name = "textBoxIpAddress";
             this.textBoxIpAddress.Size = new System.Drawing.Size(116, 20);
             this.textBoxIpAddress.TabIndex = 0;
@@ -67,7 +67,7 @@
             // labelIpAddress
             // 
             this.labelIpAddress.AutoSize = true;
-            this.labelIpAddress.Location = new System.Drawing.Point(14, 38);
+            this.labelIpAddress.Location = new System.Drawing.Point(3, 38);
             this.labelIpAddress.Name = "labelIpAddress";
             this.labelIpAddress.Size = new System.Drawing.Size(64, 13);
             this.labelIpAddress.TabIndex = 0;
@@ -79,7 +79,7 @@
             this.checkBoxInternetAccess.AutoSize = true;
             this.checkBoxInternetAccess.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxInternetAccess.Enabled = false;
-            this.checkBoxInternetAccess.Location = new System.Drawing.Point(8, 87);
+            this.checkBoxInternetAccess.Location = new System.Drawing.Point(3, 87);
             this.checkBoxInternetAccess.Name = "checkBoxInternetAccess";
             this.checkBoxInternetAccess.Size = new System.Drawing.Size(102, 17);
             this.checkBoxInternetAccess.TabIndex = 2;
@@ -91,7 +91,7 @@
             // 
             this.comboBoxInterfaces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxInterfaces.FormattingEnabled = true;
-            this.comboBoxInterfaces.Location = new System.Drawing.Point(95, 60);
+            this.comboBoxInterfaces.Location = new System.Drawing.Point(91, 60);
             this.comboBoxInterfaces.Name = "comboBoxInterfaces";
             this.comboBoxInterfaces.Size = new System.Drawing.Size(116, 21);
             this.comboBoxInterfaces.TabIndex = 2;

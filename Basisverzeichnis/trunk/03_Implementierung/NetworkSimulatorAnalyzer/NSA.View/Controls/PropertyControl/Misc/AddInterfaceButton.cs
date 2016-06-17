@@ -5,7 +5,7 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         public AddInterfaceButton()
         {
             AutoSize = true;
-            Text = "Add Interface";
+            Text = "Schnittstelle hinzufügen";
             FontHeight = 12;
         }
 

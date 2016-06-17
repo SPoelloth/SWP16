@@ -45,61 +45,86 @@ namespace NSA.Controller.ViewControllers
                 propertyControl.AddLayer += PropertyControl_AddLayer;
                 propertyControl.RemoveLayer += PropertyControl_RemoveLayer;
 
+                propertyControl.SwitchPortNumberChanged += PropertyControl_SwitchPortNumberChanged;
             }
         }
 
         #region Event Handling
 
         #region Interfaces
-        private void PropertyControl_InterfaceAdded() {
-            Workstation station = (Workstation)selectedNode;
+
+        private void PropertyControl_InterfaceAdded()
+        {
+            Workstation station = (Workstation) selectedNode;
             NetworkManager.Instance.AddInterfaceToWorkstation(station.Name, IPAddress.None, IPAddress.None);
+            propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
+            propertyControl.RetainScrollPosition = false;
         }
 
-        private void PropertyControl_InterfaceRemoved(string Name) {
+        private void PropertyControl_InterfaceRemoved(string Name)
+        {
             NetworkManager.Instance.RemoveInterface(selectedNode.Name, Name);
             LoadElementProperties(selectedNode.Name);
         }
 
-        private void PropertyControl_InterfaceChanged(string Name, IPAddress IpAddress, IPAddress SubnetMask) {
+        private void PropertyControl_InterfaceChanged(string Name, IPAddress IpAddress, IPAddress SubnetMask)
+        {
             NetworkManager.Instance.InterfaceChanged(selectedNode.Name, Name, IpAddress, SubnetMask);
         }
+
         #endregion Interfaces
 
         #region Routes
-        private void PropertyControlAddRoute() {
-            Workstation station = (Workstation)selectedNode;
-            Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.GetInterfaces()[0]);
+
+        private void PropertyControlAddRoute()
+        {
+            Workstation station = (Workstation) selectedNode;
+            Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None,
+                IPAddress.None, station.GetInterfaces()[0]);
+            propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
+            propertyControl.RetainScrollPosition = false;
         }
 
-        private void PropertyControlRemoveRoute(string RouteName) {
+        private void PropertyControlRemoveRoute(string RouteName)
+        {
             NetworkManager.Instance.RemoveRoute(selectedNode.Name, RouteName);
             LoadElementProperties(selectedNode.Name);
         }
 
-        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress SubnetMask, string InterfaceName) {
-            Workstation station = (Workstation)selectedNode;
-            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask, station.GetInterfaces().Find(i => i.Name == InterfaceName));
+        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway,
+            IPAddress SubnetMask, string InterfaceName)
+        {
+            Workstation station = (Workstation) selectedNode;
+            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask,
+                station.GetInterfaces().Find(i => i.Name == InterfaceName));
         }
+
         #endregion Routes
 
         #region Gateway
-        private void PropertyControl_GatewayChanged(IPAddress GatewayAddress, string InterfaceName, bool HasInternetAccess) {
-            NetworkManager.Instance.GatewayChanged(selectedNode.Name, GatewayAddress, HasInternetAccess);
+
+        private void PropertyControl_GatewayChanged(IPAddress GatewayAddress, string InterfaceName,
+            bool HasInternetAccess)
+        {
+            NetworkManager.Instance.GatewayChanged(selectedNode.Name, GatewayAddress, InterfaceName, HasInternetAccess);
         }
+
         #endregion Gateway
 
         #region Layers
-        private void PropertyControl_AddLayer() {
+
+        private void PropertyControl_AddLayer()
+        {
             Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
             CustomLayer newCustomLayer = new CustomLayer(currentLayerStack.CreateUniqueName());
             currentLayerStack.AddLayer(newCustomLayer);
             propertyControl.AddLayerToLayerConfigControl(newCustomLayer.GetLayerName(), true);
         }
 
-        private void PropertyControl_RemoveLayer(string LayerName) {
+        private void PropertyControl_RemoveLayer(string LayerName)
+        {
             Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
             currentLayerStack.RemoveLayer(LayerName);
         }
@@ -115,18 +140,31 @@ namespace NSA.Controller.ViewControllers
             layers.SetIndex(LayerName, Index);
         }
 
-        private void PropertyControl_LayerNameChanged(string FormerName, string NewName) {
+        private void PropertyControl_LayerNameChanged(string FormerName, string NewName)
+        {
             var selectedStation = selectedNode as Workstation;
-            if (selectedStation == null) {
+            if (selectedStation == null)
+            {
                 throw new InvalidOperationException();
             }
             selectedStation.GetLayerstack().SetName(FormerName, NewName);
         }
+
         #endregion Layers
+
+        #region Switch
+
+        private void PropertyControl_SwitchPortNumberChanged(int NumberOfPorts)
+        {
+            NetworkManager.Instance.SetSwitchInterfaceCount((selectedNode as Switch).Name, NumberOfPorts);
+        }
+
+        #endregion Switch
 
         #endregion Event Handling
 
         #region Methods
+
         public void LoadElementProperties(string ElementName)
         {
             selectedNode = NetworkManager.Instance.GetHardwarenodeByName(ElementName);
@@ -140,13 +178,14 @@ namespace NSA.Controller.ViewControllers
                 {
                     propertyControl.AddInterfaceConfigControl(eth.Name, eth.IpAddress, eth.Subnetmask);
                 }
-
+                
                 // Set InterfaceList in RouteConfigControl
                 RouteConfigControl.SetInterfaces(station.GetInterfaces().Select(i => i.Name).ToList());
                 // load route controls
                 foreach (var route in station.GetRoutes())
                 {
-                    propertyControl.AddRouteConfigControl(route.Name, route.Destination, route.Gateway, route.Subnetmask, route.Iface.Name);
+                    propertyControl.AddRouteConfigControl(route.Name, route.Destination, route.Gateway, route.Subnetmask,
+                        route.Iface.Name);
                 }
 
                 // load workstation Layerstack controls
@@ -160,15 +199,23 @@ namespace NSA.Controller.ViewControllers
                 if (selectedNode is Router)
                 {
                     // load gateway config control
-                    propertyControl.AddGatewayConfigControl(station.StandardGateway ?? IPAddress.None, station.StandardGatewayPort?.Name, true, (selectedNode as Router).IsGateway);
+                    propertyControl.AddGatewayConfigControl(station.StandardGateway ?? IPAddress.None,
+                        station.StandardGatewayPort?.Name, true, (selectedNode as Router).IsGateway);
                 }
                 else
                 {
-                    propertyControl.AddGatewayConfigControl(station.StandardGateway ?? IPAddress.None, station.StandardGatewayPort?.Name , false);
+                    propertyControl.AddGatewayConfigControl(station.StandardGateway ?? IPAddress.None,
+                        station.StandardGatewayPort?.Name, false);
                 }
                 propertyControl.DisplayElements();
             }
+            else if (selectedNode is Switch)
+            {
+                Switch selectedSwitch = selectedNode as Switch;
+                propertyControl.AddSwitchConfigControl(selectedSwitch.GetInterfaceCount());
+            }
         }
+
         #endregion Methods
     }
 }

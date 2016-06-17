@@ -175,6 +175,12 @@
     <Compile Include="Controls\PropertyControl\Misc\AddInterfaceButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\PropertyControl\Misc\Separator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PropertyControl\Misc\Separator.Designer.cs">
+      <DependentUpon>Separator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AdvancedSimulationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -228,6 +234,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\PropertyControl\ConfigControls\RouteConfigControl.resx">
       <DependentUpon>RouteConfigControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PropertyControl\Misc\Separator.resx">
+      <DependentUpon>Separator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AdvancedSimulationForm.resx">
       <DependentUpon>AdvancedSimulationForm.cs</DependentUpon>

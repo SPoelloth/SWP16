@@ -51,7 +51,7 @@
             // labelDestination
             // 
             this.labelDestination.AutoSize = true;
-            this.labelDestination.Location = new System.Drawing.Point(47, 38);
+            this.labelDestination.Location = new System.Drawing.Point(5, 38);
             this.labelDestination.Name = "labelDestination";
             this.labelDestination.Size = new System.Drawing.Size(37, 13);
             this.labelDestination.TabIndex = 12;
@@ -79,7 +79,7 @@
             // labelInterface
             // 
             this.labelInterface.AutoSize = true;
-            this.labelInterface.Location = new System.Drawing.Point(20, 116);
+            this.labelInterface.Location = new System.Drawing.Point(5, 116);
             this.labelInterface.Name = "labelInterface";
             this.labelInterface.Size = new System.Drawing.Size(64, 13);
             this.labelInterface.TabIndex = 16;
@@ -89,7 +89,7 @@
             // labelRoute
             // 
             this.labelRoute.AutoSize = true;
-            this.labelRoute.Location = new System.Drawing.Point(22, 64);
+            this.labelRoute.Location = new System.Drawing.Point(3, 64);
             this.labelRoute.Name = "labelRoute";
             this.labelRoute.Size = new System.Drawing.Size(62, 13);
             this.labelRoute.TabIndex = 15;

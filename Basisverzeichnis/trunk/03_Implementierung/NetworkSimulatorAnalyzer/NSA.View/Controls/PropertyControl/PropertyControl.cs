@@ -13,7 +13,10 @@ namespace NSA.View.Controls.PropertyControl
         private readonly List<InterfaceConfigControl> interfaceConfigControls = new List<InterfaceConfigControl>();
         private readonly List<RouteConfigControl> routeConfigControls = new List<RouteConfigControl>();
         private readonly List<Control> tempControls = new List<Control>();
+        private int scrollPosition = 0;
+        public bool RetainScrollPosition = false;
 
+        #region Event declaration
         public event Action InterfaceAdded;
         public event Action<string> InterfaceRemoved;
         public event Action<string, IPAddress, IPAddress> InterfaceChanged;
@@ -29,12 +32,23 @@ namespace NSA.View.Controls.PropertyControl
         public event Action<string, int> LayerIndexChanged;
         public event Action<string, string> LayerNameChanged;
 
+        public event Action<int> SwitchPortNumberChanged;
+        #endregion Event declaration
         public PropertyControl()
         {
             InitializeComponent();
         }
 
         #region Methods
+
+        public void AddSwitchConfigControl(int NumberOfPorts)
+        {
+            ClearControls();
+            SwitchConfigControl switchConfigControl = new SwitchConfigControl(NumberOfPorts);
+            switchConfigControl.NumberOfPortsChanged += SwitchConfigControl_NumberOfPortsChanged;
+            flpContents.Controls.Add(switchConfigControl);
+            ResumeLayout();
+        }
 
         /// <summary>
         ///     Creates an InterfaceConfigControl and adds it to the list of interfaces to be displayed.
@@ -65,6 +79,7 @@ namespace NSA.View.Controls.PropertyControl
         /// <summary>
         ///     Creates a RouteConfigControl and adds it to the list of routes to be displayed.
         /// </summary>
+        /// <param name="RouteName"></param>
         /// <param name="Source">IP address of the route source</param>
         /// <param name="Destination">IP address of the route destination</param>
         /// <param name="Route">IP address of the route</param>
@@ -114,12 +129,13 @@ namespace NSA.View.Controls.PropertyControl
             var addInterfaceButton = new AddInterfaceButton();
             addInterfaceButton.Click += AddInterfaceButton_Click;
             flpContents.Controls.Add(addInterfaceButton);
-
+            flpContents.Controls.Add(new Separator());
             // Add various singular controls
             foreach (var c in tempControls)
             {
                 flpContents.Controls.Add(c);
             }
+            flpContents.Controls.Add(new Separator());
             // Add RouteConfigControls and an AddButton, if necessary
             foreach (var rcc in routeConfigControls)
             {
@@ -128,11 +144,21 @@ namespace NSA.View.Controls.PropertyControl
             var addRouteButton = new AddRouteButton();
             addRouteButton.Click += AddRouteButton_Click;
             flpContents.Controls.Add(addRouteButton);
+            if (RetainScrollPosition)
+            {
+                flpContents.VerticalScroll.Value = scrollPosition;
+                flpContents.VerticalScroll.Value = scrollPosition;
+                scrollPosition = 0;
+            }
             ResumeLayout();
         }
 
         public void ClearControls()
         {
+            if (RetainScrollPosition)
+            {
+                scrollPosition = flpContents.VerticalScroll.Value;
+            }
             SuspendLayout();
             foreach (Control c in flpContents.Controls)
             {
@@ -277,6 +303,12 @@ namespace NSA.View.Controls.PropertyControl
             LayerIndexChanged?.Invoke(LayerName, LayerIndex);
         }
         #endregion Layers
+
+        #region Switch
+        private void SwitchConfigControl_NumberOfPortsChanged(int NumberOfPorts) {
+            SwitchPortNumberChanged?.Invoke(NumberOfPorts);
+        }
+        #endregion Switch
         #endregion Eventhandling
     }
 }
