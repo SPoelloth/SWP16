@@ -34,18 +34,31 @@
             // 
             // dgvHistory
             // 
+            this.dgvHistory.AllowUserToAddRows = false;
+            this.dgvHistory.AllowUserToDeleteRows = false;
+            this.dgvHistory.AllowUserToResizeRows = false;
+            this.dgvHistory.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvHistory.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvHistory.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvHistory.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvHistory.Location = new System.Drawing.Point(0, 0);
+            this.dgvHistory.MultiSelect = false;
             this.dgvHistory.Name = "dgvHistory";
+            this.dgvHistory.ReadOnly = true;
+            this.dgvHistory.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dgvHistory.RowHeadersVisible = false;
             this.dgvHistory.Size = new System.Drawing.Size(738, 150);
             this.dgvHistory.TabIndex = 0;
+            this.dgvHistory.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHistory_CellContentClick);
             // 
-            // ResultTabPage
+            // HistoryTabPage
             // 
             this.Controls.Add(this.dgvHistory);
-            this.Name = "ResultTabPage";
             this.Size = new System.Drawing.Size(738, 150);
+            this.Tag = "HistoryTabPage";
+            this.Name = "HistoryTabPage";
             ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).EndInit();
             this.ResumeLayout(false);
 

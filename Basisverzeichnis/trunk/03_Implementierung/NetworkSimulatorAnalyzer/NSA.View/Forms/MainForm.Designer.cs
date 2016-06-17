@@ -60,9 +60,10 @@ namespace NSA.View.Forms
             // 
             this.infoControl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.infoControl.Location = new System.Drawing.Point(3, 342);
-            this.infoControl.Name = "infoControl";
+            this.infoControl.Name = "InfoControl";
             this.infoControl.Size = new System.Drawing.Size(746, 182);
             this.infoControl.TabIndex = 1;
+            this.infoControl.Tag = "InfoControl";
             // 
             // networkViewControl
             // 
