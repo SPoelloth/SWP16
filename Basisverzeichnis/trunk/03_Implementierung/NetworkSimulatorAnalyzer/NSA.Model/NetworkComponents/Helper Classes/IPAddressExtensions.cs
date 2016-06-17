@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Windows.Forms;
 
 namespace NSA.Model.NetworkComponents.Helper_Classes
 {
@@ -44,6 +45,22 @@ namespace NSA.Model.NetworkComponents.Helper_Classes
             IPAddress network2 = address2.GetNetworkAddress(subnetMask);
 
             return network1.Equals(network2);
+        }
+
+        public static bool IsValidSubnetMask(this IPAddress Subnetmask)
+        {
+            var address = BitConverter.ToUInt32(Subnetmask.GetAddressBytes(),0);
+            bool end = false;
+            for (int i = 31; i>=0; i++)
+            {
+                if (!end)
+                {
+                    end = (address & (1 << i)) == 0;
+                }
+                if(end && (address & (1 << i)) > 0)
+                    return false;
+            }
+            return true;
         }
     }
 }
