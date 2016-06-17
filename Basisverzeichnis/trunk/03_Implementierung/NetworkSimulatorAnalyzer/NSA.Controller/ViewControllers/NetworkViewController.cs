@@ -29,6 +29,18 @@ namespace NSA.Controller.ViewControllers
             networkViewControl.RemoveConnectionPressed += RemoveConnectionRequest;
             networkViewControl.RemoveElementPressed += RemoveHardwarenodeRequest;
             networkViewControl.NewConnectionCreated += OnNewConnectionCreated;
+            networkViewControl.QuickSimulation += OnQuickSimulationCreated;
+        }
+
+        public void OnQuickSimulationCreated(string source, string target)
+        {
+            SimulationManager.Instance.QuickSimulation(source, target);
+        }
+
+        public void QuickSimulationRequest()
+        {
+            networkViewControl.CreateNewQuickSimulation();
+
         }
 
         private void OnNewConnectionCreated(Control c1, int port1, Control c2, int port2)

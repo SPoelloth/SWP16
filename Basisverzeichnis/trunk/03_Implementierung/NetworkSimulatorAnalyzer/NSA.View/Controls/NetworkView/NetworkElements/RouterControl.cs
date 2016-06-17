@@ -7,7 +7,7 @@ using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.View.Controls.NetworkView.NetworkElements
 {
-    public partial class RouterControl : EditorElementBase, IConfigurable
+    public partial class RouterControl : EditorElementBase, IConfigurable, ISimulationTarget
     {
         #region Parameters
         #region Colors

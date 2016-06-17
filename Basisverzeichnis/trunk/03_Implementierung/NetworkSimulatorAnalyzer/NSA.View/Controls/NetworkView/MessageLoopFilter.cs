@@ -15,6 +15,7 @@ namespace NSA.View.Controls.NetworkView
 
         public State currentState = State.Normal;
         public Action<Control, Point, Control, Point> NewConnection;
+        public Action<Control, Point, Control, Point> NewSimulation;
         public Action Canceled;
 
         Point? firstConnectionPoint = null;
@@ -42,7 +43,7 @@ namespace NSA.View.Controls.NetworkView
 
             if (currentState == State.Connection)
             {
-                Keys kc = (Keys)(int)m.WParam & Keys.KeyCode;
+                Keys kc = (Keys)m.WParam.ToInt64() & Keys.KeyCode;
                 if (m.Msg == WM_KEYDOWN && kc == Keys.Escape)
                 {
                     currentState = State.Normal;
@@ -78,7 +79,38 @@ namespace NSA.View.Controls.NetworkView
 
             if (currentState == State.QuickSimulation)
             {
+                Keys kc = (Keys)m.WParam.ToInt64() & Keys.KeyCode;
+                if (m.Msg == WM_KEYDOWN && kc == Keys.Escape)
+                {
+                    currentState = State.Normal;
+                    Canceled?.Invoke();
+                    return true;
+                }
 
+                if (m.Msg == WM_LBUTTONDOWN)
+                {
+                    if (firstConnectionPoint == null)
+                    {
+                        firstConnectionPoint = new Point(m.LParam.ToInt32() & 0xffff, (m.LParam.ToInt32() >> 16) & 0xffff);
+                        firstConnectionControl = Control.FromHandle(m.HWnd);
+                    }
+                    return true;
+                }
+
+                if (m.Msg == WM_LBUTTONUP && firstConnectionPoint != null)
+                {
+                    var upPoint = new Point(m.LParam.ToInt32() & 0xffff, (m.LParam.ToInt32() >> 16) & 0xffff);
+                    if (upPoint == firstConnectionPoint)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        NewSimulation?.Invoke(firstConnectionControl, firstConnectionPoint.Value, Control.FromHandle(m.HWnd), upPoint);
+                        currentState = State.Normal;
+                    }
+                    return true;
+                }
             }
             return false;
         }
@@ -88,6 +120,12 @@ namespace NSA.View.Controls.NetworkView
         public void ChangeStateNewConnection()
         {
             currentState = State.Connection;
+            firstConnectionPoint = null;
+        }
+
+        public void ChangeStateQuickSimulation()
+        {
+            currentState = State.QuickSimulation;
             firstConnectionPoint = null;
         }
     }

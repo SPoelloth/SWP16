@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\NetworkView\MessageLoopFilter.cs" />
+    <Compile Include="Controls\NetworkView\NetworkElements\ISimulationTarget.cs" />
     <Compile Include="Controls\NetworkView\VisualConnection.cs" />
     <Compile Include="Controls\NetworkView\LabelControl.cs">
       <SubType>UserControl</SubType>

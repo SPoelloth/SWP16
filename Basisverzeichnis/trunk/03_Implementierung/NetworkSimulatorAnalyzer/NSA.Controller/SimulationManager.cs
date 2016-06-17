@@ -249,5 +249,10 @@ namespace NSA.Controller
                 throw new ArgumentException("SimulationManager.createPacket: ttl <= 0");
             return new Packet(Source, Destination, Ttl, ExpectedResult);
         }
+
+        public void QuickSimulation(string Source, string Target)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

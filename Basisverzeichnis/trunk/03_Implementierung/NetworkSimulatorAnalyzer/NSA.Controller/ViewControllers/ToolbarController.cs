@@ -86,7 +86,7 @@ namespace NSA.Controller.ViewControllers
 
         void QuickSimulation_Click(object sender, EventArgs e)
         {
-            MessageBox.Show((sender as Button).Text + " clicked");
+            NetworkViewController.Instance.QuickSimulationRequest();
         }
 
         void CreateConnection_Click(object sender, EventArgs e)

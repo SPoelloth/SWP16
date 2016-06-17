@@ -14,6 +14,7 @@ namespace NSA.View.Controls.NetworkView
         public event Action<VisualConnection> RemoveConnectionPressed;
         public event Action<EditorElementBase> RemoveElementPressed;
         public event Action<Control, int, Control, int> NewConnectionCreated;
+        public event Action<string, string> QuickSimulation;
         public List<VisualConnection> connections = new List<VisualConnection>();
 
         private MessageLoopFilter filter;
@@ -26,8 +27,20 @@ namespace NSA.View.Controls.NetworkView
             filter = new MessageLoopFilter();
             Application.AddMessageFilter(filter);
             filter.NewConnection += OnNewConnection;
+            filter.NewSimulation += OnQuickSimulation;
             filter.Canceled += OnActionCanceled;
             filter.OnDeletePressed += Element_Delete;
+        }
+
+        private void OnQuickSimulation(Control control1, Point p1, Control control2, Point p2)
+        {
+            Cursor = Cursors.Default;
+            foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
+            ISimulationTarget ws1 = control1 as ISimulationTarget;
+            ISimulationTarget ws2 = control2 as ISimulationTarget;
+            if (ws1 == null || ws2 == null) return;
+            QuickSimulation?.Invoke(((Control)ws1).Name, ((Control)ws2).Name);
+
         }
 
         private void OnNewConnection(Control control1, Point p1, Control control2, Point p2)
@@ -175,6 +188,13 @@ namespace NSA.View.Controls.NetworkView
         public void CreateNewConnection()
         {
             filter.ChangeStateNewConnection();
+            Cursor = Cursors.Cross;
+            foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
+        }
+
+        public void CreateNewQuickSimulation()
+        {
+            filter.ChangeStateQuickSimulation();
             Cursor = Cursors.Cross;
             foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
         }
