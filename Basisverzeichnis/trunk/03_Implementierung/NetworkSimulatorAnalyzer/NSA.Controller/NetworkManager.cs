@@ -344,12 +344,17 @@ namespace NSA.Controller
             return node;
         }
 
-        private string CreateUniqueName(HardwarenodeType type)
+        /// <summary>
+        /// Creates a unique name.
+        /// </summary>
+        /// <param name="Type">The type.</param>
+        /// <returns></returns>
+        private string CreateUniqueName(HardwarenodeType Type)
         {
             for(int i = 1; ; i++)
             {
-                string name = $"{type} {i}";
-                if (GetAllHardwareNodes().All(n => n.Name != name)) return name;
+                string name = $"{Type} {i}";
+                if (GetAllHardwareNodes().All(N => N.Name != name)) return name;
             }
         }
 
@@ -430,7 +435,7 @@ namespace NSA.Controller
         #endregion
 
         /// <summary>
-        /// Changes the gateway of a workstation.
+        /// Changes the gateway of a workstation or router.
         /// </summary>
         /// <param name="WorkstationName">The name of the workstation</param>
         /// <param name="Gateway">The new gateway</param>
@@ -440,14 +445,37 @@ namespace NSA.Controller
         public void GatewayChanged(string WorkstationName, IPAddress Gateway, string InterfaceName, bool HasInternetAccess)
         {
             // TODO: Do something with HasInternetAccess and InterfaceName
-            Workstation workstation = network.GetHardwarenodeByName(WorkstationName) as Workstation;
-            if (null != workstation)
+            Router r = GetHardwarenodeByName(WorkstationName) as Router;
+            if (r != null)
             {
-                workstation.StandardGateway = Gateway;
+                r.IsGateway = HasInternetAccess;
+                r.StandardGateway = Gateway;
+                foreach (Interface i in r.GetInterfaces())
+                {
+                    if (i.Name == InterfaceName)
+                    {
+                        r.StandardGatewayPort = i;
+                        break;
+                    }
+                }
             }
             else
             {
-                throw new ArgumentException("Workstation with the name " + WorkstationName + " could not be found");
+                Workstation w = GetHardwarenodeByName(WorkstationName) as Workstation;
+                if (w != null)
+                {
+                    w.StandardGateway = Gateway;
+                    foreach (Interface i in w.GetInterfaces())
+                    {
+                        if (i.Name == InterfaceName)
+                        {
+                            w.StandardGatewayPort = i;
+                            break;
+                        }
+                    }
+                }
+                else
+                    throw new ArgumentException(WorkstationName + ": ist kein Name einer Workstation.");
             }
         }
     }
