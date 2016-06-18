@@ -31,7 +31,22 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Con">The connection to be added.</param>
         public void AddConnection(string IfaceName, Connection Con)
         {
-            Connections.Add(IfaceName, Con);
+            if(HasInterface(IfaceName))
+                Connections.Add(IfaceName, Con);
+            else
+            {
+                throw new InvalidOperationException("Interface: " + IfaceName + " nicht vorhanden, aber eine Verbindung daran.");
+            }
+        }
+
+        /// <summary>
+        /// Determines if there is an Interface with the specified name.
+        /// </summary>
+        /// <param name="IfaceName">Name of the iface.</param>
+        /// <returns></returns>
+        public virtual bool HasInterface(string IfaceName)
+        {
+            return false;
         }
 
         /// <summary>

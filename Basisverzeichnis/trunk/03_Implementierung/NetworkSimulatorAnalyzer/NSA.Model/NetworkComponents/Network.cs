@@ -64,9 +64,15 @@ namespace NSA.Model.NetworkComponents
             if (NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
                 throw new InvalidOperationException("Interface of endnode is already used!");
 
-            NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
-            NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
-            connections.Add(NewConnection);
+            try
+            {
+                NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
+                NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
+                connections.Add(NewConnection);
+            }
+            catch (Exception e)
+            {
+            }
 	    }
 
         /// <summary>

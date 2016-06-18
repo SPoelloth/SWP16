@@ -120,6 +120,21 @@ namespace NSA.Model.NetworkComponents
             return newInterface;
         }
 
+        /// <summary>
+        /// Determines if there is an Interface with the specified name.
+        /// </summary>
+        /// <param name="IfaceName">Name of the iface.</param>
+        /// <returns></returns>
+        public override bool HasInterface(string IfaceName)
+        {
+            foreach (Interface i in interfaces)
+            {
+                if (i.Name == IfaceName)
+                    return true;
+            }
+            return false;
+        }
+
         #endregion
         #region routingtable methods
         /// <summary>

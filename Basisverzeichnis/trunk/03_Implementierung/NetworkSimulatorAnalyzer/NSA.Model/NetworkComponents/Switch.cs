@@ -72,6 +72,21 @@ namespace NSA.Model.NetworkComponents
             return newInterface;
         }
 
+        /// <summary>
+        /// Determines if there is an Interface with the specified name.
+        /// </summary>
+        /// <param name="IfaceName">Name of the iface.</param>
+        /// <returns></returns>
+        public override bool HasInterface(string IfaceName)
+        {
+            foreach (string i in Interfaces)
+            {
+                if (i == IfaceName)
+                    return true;
+            }
+            return false;
+        }
+
         public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
             List<Hardwarenode> nextNodes = new List<Hardwarenode>();
