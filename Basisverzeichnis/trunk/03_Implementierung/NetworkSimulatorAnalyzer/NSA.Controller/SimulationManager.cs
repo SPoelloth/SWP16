@@ -155,80 +155,33 @@ namespace NSA.Controller
         /// <param name="Destination">The destination.</param>
         /// <param name="Ttl">The TTL.</param>
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
+        /// <param name="Broadcast">if set to <c>true</c>: broadcast.</param>
         /// <returns></returns>
-        public Result CreateSimulation(IPAddress Source, IPAddress Destination, int Ttl, bool ExpectedResult)
+        public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl, bool ExpectedResult, bool Broadcast)
         {
-            List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
-            List<Hardwarenode> destinationList = new List<Hardwarenode>();
-
-            bool isBroadcast = false;
-            // Iterate through all workstations and add the destinations to te destinationList
-            foreach (Workstation w in allWorkstations)
+            Simulation sim;
+            Hardwarenode start = NetworkManager.Instance.GetHardwarenodeByName(Source);
+            if (Broadcast)
             {
-                var addWorkstationAsDestination = false;
-                List<Interface> ifaces = w.GetInterfaces();
-                // Iterate through all interfaces of the current workstation.
-                foreach (Interface iface in ifaces)
+                sim =  new Simulation(Simulations.Count, Source, "Broadcast");
+                List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
+                foreach (Workstation w in allWorkstations)
                 {
-                    if (!isBroadcast && Destination.Equals(iface.IpAddress))
+                    if (w.Name != Source)
                     {
-                        // We have found a workstation whose ip matches our destination ip
-                        addWorkstationAsDestination = true;
-                        break;
-                    }
-                    if (!isBroadcast)
-                    {
-                        IPAddress ifaceBroadcastAddress = iface.IpAddress.GetBroadcastAddress(iface.Subnetmask);
-                        if (Destination.Equals(ifaceBroadcastAddress))
-                        {
-                            // Our destination is a broadcast ip
-                            isBroadcast = true;
-                        }
-                    }
-                    if (isBroadcast && Destination.IsInSameSubnet(iface.IpAddress, iface.Subnetmask))
-                    {
-                        // Current workstation is in the destination broadcast subnet.
-                        addWorkstationAsDestination = true;
-                        break;
-                    }
-
-                }
-
-                if (addWorkstationAsDestination)
-                {
-                    // Add the current workstation to the destinationList.
-                    destinationList.Add(w);
-
-                    if (!isBroadcast)
-                    {
-                        // Break because we already have found the single destination workstation.
-                        break;
+                        sim.AddPacketSend(createPacket(start, w, Ttl, ExpectedResult));
                     }
                 }
-            }
-
-            if (destinationList.Count < 1)
-            {
-                Simulation sim = new Simulation(Simulations.Count, Source, Destination);
-                // Our destination list is empty. -> Create an error packet
-                sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source), null, Ttl, ExpectedResult));
-                Result res = StartSimulation(sim);
-                AddSimulationToHistory(sim);
-                return res;
             }
             else
             {
-                // Create Packets for all destinations.
-                Simulation sim = new Simulation(Simulations.Count, Source, Destination);
-                foreach (Hardwarenode destinationNode in destinationList)
-                {
-                    sim.AddPacketSend(createPacket(NetworkManager.Instance.GetWorkstationByIp(Source),
-                        destinationNode, Ttl, ExpectedResult));
-                }
-                Result res = StartSimulation(sim);
-                AddSimulationToHistory(sim);
-                return res;
+                sim = new Simulation(Simulations.Count, Source, Destination);
+                Hardwarenode end = NetworkManager.Instance.GetHardwarenodeByName(Destination);
+                sim.AddPacketSend(createPacket(start, end, Ttl, ExpectedResult));
             }
+            Result res = StartSimulation(sim);
+            AddSimulationToHistory(sim);
+            return res;
         }
 
         /// <summary>
@@ -250,9 +203,14 @@ namespace NSA.Controller
             return new Packet(Source, Destination, Ttl, ExpectedResult);
         }
 
+        /// <summary>
+        /// Creates and Executes a quick simulation
+        /// </summary>
+        /// <param name="Source">The source.</param>
+        /// <param name="Target">The target.</param>
         public void QuickSimulation(string Source, string Target)
         {
-            throw new NotImplementedException();
+            CreateAndExecuteSimulation(Source, Target, 255, true, false);
         }
     }
 }

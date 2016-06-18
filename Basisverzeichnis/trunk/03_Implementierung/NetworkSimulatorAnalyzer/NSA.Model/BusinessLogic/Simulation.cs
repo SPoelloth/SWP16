@@ -9,8 +9,8 @@ namespace NSA.Model.BusinessLogic
     {
         private List<Packet> packetsSend = new List<Packet>();
         private List<Packet> packetsReceived = new List<Packet>();
-        public IPAddress Source { get; private set; }
-        public IPAddress Destination { get; private set; }
+        public string Source { get; private set; }
+        public string Destination { get; private set; }
 	    public int Id { get; private set; }
 
         public Simulation(int I)
@@ -20,7 +20,7 @@ namespace NSA.Model.BusinessLogic
             Destination = null;
         }
 
-        public Simulation(int I, IPAddress S, IPAddress D)
+        public Simulation(int I, string S, string D)
 	    {
 	        Id = I;
 	        Source = S;
