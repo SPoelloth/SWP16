@@ -62,7 +62,7 @@ namespace NSA.Controller.ViewControllers
         {
             string simResult = SimulationManager.Instance.GetSimulationResult(Sim.Id) ? "Erfolgreich" : "Fehlgeschlagen";
            
-            infoControl.AddNewSimulationToHistory("Simulation " + Sim.Id, simResult, Sim.Source.ToString(), Sim.Destination.ToString());
+            infoControl.AddNewSimulationToHistory("Simulation " + Sim.Id, simResult, Sim.Source, Sim.Destination);
         }
     }
 }
