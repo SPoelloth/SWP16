@@ -31,6 +31,7 @@ namespace NSA.Model.NetworkComponents
             Layerstack.AddLayer(new ApplicationLayer());
             AddInterface(new IPAddress(new byte[] {192, 168, 0, 1}), new IPAddress(new byte[] {255, 255, 255, 0}));
             StandardGateway = null;
+            StandardGatewayPort = null;
         }
 
 

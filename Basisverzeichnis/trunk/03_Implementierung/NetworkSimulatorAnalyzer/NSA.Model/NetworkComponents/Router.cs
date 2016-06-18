@@ -10,6 +10,7 @@
         /// <param name="Name">The name.</param>
         public Router(string Name) : base(Name)
         {
+            IsGateway = false;
         }
     }
 }
