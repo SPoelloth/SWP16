@@ -10,6 +10,7 @@ using NSA.Controller.ViewControllers;
 using NSA.Model.BusinessLogic;
 using NSA.View.Forms;
 using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Layers;
 
 namespace NSA.Controller
 {
@@ -109,13 +110,21 @@ namespace NSA.Controller
                                       new XAttribute("Iface", r.Iface.Name)));
                 }
 
+                var layerstack = ws.GetLayerstack().GetAllLayers();
+                XElement layerstackXML = new XElement("Layerstack");
+                for (int i = 0; i < layerstack.Count; i++)
+                {
+                    var layer = layerstack[i];
+                    if (!(layer is CustomLayer)) continue;
+                    layerstackXML.Add(new XElement("Layer",
+                                      new XAttribute("Index", i),
+                                      new XAttribute("Name", layer.GetLayerName())));
+                }
+
                 var xmlnode = new XElement("Workstation",
                               new XAttribute("Name", ws.Name),
                               new XAttribute("LocationX", loc.X),
-                              new XAttribute("LocationY", loc.Y)
-
-                              // TODO LAYERSTACK
-                              );
+                              new XAttribute("LocationY", loc.Y));
 
                 if (ws.StandardGateway != null)
                 {
@@ -125,6 +134,7 @@ namespace NSA.Controller
 
                 xmlnode.Add(interfacesXML);
                 xmlnode.Add(routesinterfacesXML);
+                xmlnode.Add(layerstackXML);
 
                 workstationsXML.Add(xmlnode);
             }
@@ -205,6 +215,18 @@ namespace NSA.Controller
                         var rinterface = route.Attribute("SubnetMask").Value;
 
                         hwNode.AddRoute(new Route(IPAddress.Parse(rDest), IPAddress.Parse(rsubnet), IPAddress.Parse(rgateway), hwNode.GetInterfaces().First(i => i.Name == rinterface)));
+                    }
+
+                    var layerstackXML = node.Element("Layerstack");
+                    if (layerstackXML != null)
+                    {
+                        foreach (var layer in layerstackXML.Elements())
+                        {
+                            var index = int.Parse(layer.Attribute("Index").Value);
+                            var layername = layer.Attribute("Name").Value;
+
+                            hwNode.GetLayerstack().InsertAt(index, new CustomLayer(layername));
+                        }
                     }
 
                     if (hasDefaultGW)
