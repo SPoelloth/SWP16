@@ -141,6 +141,34 @@ namespace NSA.Controller
 
             #endregion Workstation
 
+
+            #region Switch
+
+            XElement switchesXML = new XElement("Switches");
+
+            foreach (var sw in NetworkManager.Instance.GetAllHardwareNodes().OfType<Switch>())
+            {
+                var loc = NetworkViewController.Instance.GetLocationOfElementByName(sw.Name) ?? new Point();
+
+                var interfaces = sw.Interfaces;
+                XElement interfacesXML = new XElement("Interfaces");
+                foreach (var i in interfaces)
+                {
+                    interfacesXML.Add(new XElement("Interface", new XAttribute("Name", i)));
+                }
+
+                var xmlnode = new XElement("Switch",
+                              new XAttribute("Name", sw.Name),
+                              new XAttribute("LocationX", loc.X),
+                              new XAttribute("LocationY", loc.Y));
+
+                xmlnode.Add(interfacesXML);
+                switchesXML.Add(xmlnode);
+            }
+
+            #endregion Switch
+
+
             #region Connections
 
             XElement connectionsXML = new XElement("Connections");
@@ -160,6 +188,7 @@ namespace NSA.Controller
             #endregion Connections
 
             root.Add(workstationsXML);
+            root.Add(switchesXML);
             root.Add(connectionsXML);
             doc.Add(root);
             doc.Save(file);
@@ -185,8 +214,7 @@ namespace NSA.Controller
                     var y = int.Parse(node.Attribute("LocationY").Value);
                     bool hasDefaultGW = node.Attribute("DefaultGW") != null;
 
-                    Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
-                    hwNode.Name = name;
+                    Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation, name);
                     if (hasDefaultGW)
                     {
                         var defaultgw = IPAddress.Parse(node.Attribute("DefaultGW").Value);
@@ -194,15 +222,15 @@ namespace NSA.Controller
                     }
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
 
+                    foreach (var i in hwNode.GetInterfaces().ToList()) NetworkManager.Instance.RemoveInterface(hwNode.Name, i.Name);
                     var interfaceXML = node.Element("Interfaces");
                     if (interfaceXML == null) throw new InvalidDataException();
-                    foreach (var iface in interfaceXML.Elements())
+                    foreach (var xmliface in interfaceXML.Elements())
                     {
-                        var iname = iface.Attribute("Name").Value;
-                        var ip = iface.Attribute("IPAddress").Value;
-                        var subnet = iface.Attribute("SubnetMask").Value;
-
-                        hwNode.SetInterface(iname, IPAddress.Parse(ip), IPAddress.Parse(subnet));
+                        var iname = xmliface.Attribute("Name").Value;
+                        var ip = xmliface.Attribute("IPAddress").Value;
+                        var subnet = xmliface.Attribute("SubnetMask").Value;
+                        NetworkManager.Instance.AddInterfaceToWorkstation(hwNode.Name, IPAddress.Parse(ip), IPAddress.Parse(subnet), int.Parse(iname.Replace(Interface.NamePrefix, "")));
                     }
 
                     var routenXML = node.Element("Routes");
@@ -237,6 +265,34 @@ namespace NSA.Controller
                 }
 
                 #endregion Workstation
+
+                #region Switch
+                XElement switchesXML = root.Element("Switches");
+                if (switchesXML == null) throw new InvalidDataException();
+
+                foreach (var node in switchesXML.Elements())
+                {
+                    var name = node.Attribute("Name").Value;
+
+                    var x = int.Parse(node.Attribute("LocationX").Value);
+                    var y = int.Parse(node.Attribute("LocationY").Value);
+
+                    Switch sw = (Switch)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Switch);
+                    sw.Name = name;
+                    NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
+
+                    sw.Interfaces.Clear();
+
+                    var interfaceXML = node.Element("Interfaces");
+                    if (interfaceXML == null) throw new InvalidDataException();
+                    foreach (var iface in interfaceXML.Elements())
+                    {
+                        var iname = iface.Attribute("Name").Value;
+                        sw.Interfaces.Add(iname);
+                    }
+                }
+
+                #endregion Switch
 
                 #region Connection
 

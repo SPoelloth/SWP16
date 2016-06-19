@@ -7,6 +7,8 @@ namespace NSA.View.Controls.NetworkView
 {
     public partial class LabelControl : EditorElementBase
     {
+        public event Action<string, string> NameChanged;
+
         public new static int ZIndexStart = 1000;
 
         private EditorElementBase parentElement;
@@ -63,6 +65,7 @@ namespace NSA.View.Controls.NetworkView
             var measure = TextRenderer.MeasureText(textBox.Text, textBox.Font);
             Width = textBox.Width = measure.Width;
             Height = measure.Height;
+            NameChanged?.Invoke(parentElement.Name, textBox.Name);
             parentElement.Name = textBox.Text;
             Element_LocationChanged(parentElement, null);
         }

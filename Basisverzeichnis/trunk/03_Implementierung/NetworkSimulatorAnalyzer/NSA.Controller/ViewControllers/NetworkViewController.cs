@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
@@ -30,6 +31,12 @@ namespace NSA.Controller.ViewControllers
             networkViewControl.RemoveElementPressed += RemoveHardwarenodeRequest;
             networkViewControl.NewConnectionCreated += OnNewConnectionCreated;
             networkViewControl.QuickSimulation += OnQuickSimulationCreated;
+            networkViewControl.NodeRenamed += NetworkViewControl_NodeRenamed;
+        }
+
+        private void NetworkViewControl_NodeRenamed(string oldName, string newName)
+        {
+            NetworkManager.Instance.GetAllHardwareNodes().First(n => n.Name == oldName).Name = newName;
         }
 
         public void OnQuickSimulationCreated(string source, string target)
@@ -114,9 +121,22 @@ namespace NSA.Controller.ViewControllers
             return networkViewControl.Controls.OfType<EditorElementBase>().First(s => s.Name == name);
         }
 
-        public void NodeChanged(Hardwarenode node)
+        public void SwitchChanged(Switch sw)
+        { 
+            var switchControl = (SwitchControl)GetControlByName(sw.Name);
+            var ifaces = new List<int>();
+            foreach (var i in sw.Interfaces) ifaces.Add(int.Parse(i.Replace(Interface.NamePrefix, "")));
+            switchControl.SetInterfaces(ifaces);
+        }
+
+        public void AddInterfaceToHardwareNode(string NodeName, string InterfaceName)
         {
-            //TODO den Node neu zeichnen, da er sich geändert ha (Portanzahl); musst gucken um was es sich handelt (Switch, etc).
+            networkViewControl.AddInterfaceToNode(NodeName, InterfaceName);
+        }
+
+        public void RemoveInterfaceFromNode(string NodeName, string InterfaceName)
+        {
+            networkViewControl.RemoveInterfaceFromNode(NodeName, InterfaceName);
         }
     }
 }

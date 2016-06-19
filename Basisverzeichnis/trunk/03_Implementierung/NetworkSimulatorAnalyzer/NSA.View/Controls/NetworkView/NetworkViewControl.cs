@@ -16,6 +16,7 @@ namespace NSA.View.Controls.NetworkView
         public event Action<Control, int, Control, int> NewConnectionCreated;
         public event Action<string, string> QuickSimulation;
         public List<VisualConnection> connections = new List<VisualConnection>();
+        public event Action<string, string> NodeRenamed;
 
         private MessageLoopFilter filter;
 
@@ -30,6 +31,11 @@ namespace NSA.View.Controls.NetworkView
             filter.NewSimulation += OnQuickSimulation;
             filter.Canceled += OnActionCanceled;
             filter.OnDeletePressed += Element_Delete;
+        }
+
+        private void OnNodeRenamed(string oldName, string newName)
+        {
+            NodeRenamed?.Invoke(oldName, newName);
         }
 
         private void OnQuickSimulation(Control control1, Point p1, Control control2, Point p2)
@@ -94,6 +100,7 @@ namespace NSA.View.Controls.NetworkView
             if (element is IConfigurable)
             {
                 var label = new LabelControl(element);
+                label.NameChanged += OnNodeRenamed;
                 Controls.Add(label);
             }
             Controls.Add(element);
@@ -140,7 +147,7 @@ namespace NSA.View.Controls.NetworkView
         }
 
         bool debug = false;
-        
+
         protected override void OnClick(EventArgs e)
         {
             Element_Selected(null);
@@ -197,6 +204,16 @@ namespace NSA.View.Controls.NetworkView
             filter.ChangeStateQuickSimulation();
             Cursor = Cursors.Cross;
             foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
+        }
+
+        public void AddInterfaceToNode(string NodeName, string Eth1)
+        {
+            ((IConfigurable)Controls.OfType<EditorElementBase>().First(n => n.Name == NodeName)).AddInterface(int.Parse(Eth1.Replace("eth", "")));
+        }
+
+        public void RemoveInterfaceFromNode(string NodeName, string Eth1)
+        {
+            ((IConfigurable)Controls.OfType<EditorElementBase>().First(n => n.Name == NodeName)).RemoveInterface(int.Parse(Eth1.Replace("eth", "")));
         }
     }
 }

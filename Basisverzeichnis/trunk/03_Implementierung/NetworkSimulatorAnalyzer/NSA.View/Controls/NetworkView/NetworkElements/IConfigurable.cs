@@ -6,5 +6,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
     {
         Rectangle GetPortBoundsByID(int port);
         int GetPortIDByPoint(Point p);
+        void RemoveInterface(int ethernet);
+        void AddInterface(int ethernet);
     }
 }

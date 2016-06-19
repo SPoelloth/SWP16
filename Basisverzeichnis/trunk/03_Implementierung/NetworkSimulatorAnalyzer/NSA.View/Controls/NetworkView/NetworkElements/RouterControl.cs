@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
@@ -39,9 +40,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #endregion Parameters
 
         private List<Rectangle> portHitboxes = new List<Rectangle>();
-
-        int portcount = 1;
-        public int NetworkPortCount { get { return portcount; } set { portcount = value; calculateDimension(); calculateHitboxes(); } }
+        private List<int> interfaces = new List<int> { 0 };
 
         [Obsolete("Do not use! For Designer only!")]
         public RouterControl() : this(new Point(10, 10), "RouterControl")
@@ -66,15 +65,16 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private void calculateDimension()
         {
+            int maxInterface = interfaces.Max();
             Width = 50;
-            Height = 100 + 6 * (NetworkPortCount > 9 ? NetworkPortCount - 9 - (NetworkPortCount & 1) : 0);
+            Height = 100 + 6 * (maxInterface > 9 ? maxInterface - 9 - (maxInterface & 1) : 0);
         }
 
         private void calculateHitboxes()
         {
             portHitboxes = new List<Rectangle>();
 
-            for (int i = 0; i < portcount; i++)
+            foreach (var i in interfaces)
             {
                 var portRectangle = new Rectangle((Width - portsize) * (i % 2) + (1 - (i % 2) * 3), (i / 2) * (portsize + portdistance) + portOffsetY, portsize, portsize);
                 portHitboxes.Add(portRectangle);
@@ -93,7 +93,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
             g.DrawLine(separatorPen, 3, offsetY + 11, Width - 4, offsetY + 11);
 
-            for (int i = 0; i < portHitboxes.Count; i++)
+            foreach (var i in interfaces)
             {
                 var portRectangle = portHitboxes[i];
                 g.FillRectangle(portBackgroundBrush, portRectangle);
@@ -128,6 +128,22 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                 if (portHitboxes[i].Contains(location)) return i;
             }
             return -1;
+        }
+
+        public void RemoveInterface(int iface)
+        {
+            interfaces.Add(iface);
+            calculateDimension();
+            calculateHitboxes();
+            Invalidate();
+        }
+
+        public void AddInterface(int iface)
+        {
+            interfaces.Remove(iface);
+            calculateDimension();
+            calculateHitboxes();
+            Invalidate();
         }
 
         public override Rectangle GetPortBoundsByID(int port)

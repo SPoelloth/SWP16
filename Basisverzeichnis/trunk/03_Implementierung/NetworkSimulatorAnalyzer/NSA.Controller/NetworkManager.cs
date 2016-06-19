@@ -38,7 +38,7 @@ namespace NSA.Controller
             Router
         };
 
-        private Network network; 
+        private Network network;
 
         // Default constructor:
         private NetworkManager()
@@ -111,18 +111,13 @@ namespace NSA.Controller
         /// <param name="Subnetmask">The subnetmask</param>
         /// <returns>The new created interface.</returns>
         /// <exception cref="System.ArgumentException">Workstation could not be found</exception>
-        public Interface AddInterfaceToWorkstation(string WorkstationName, IPAddress IpAddress, IPAddress Subnetmask)
+        public Interface AddInterfaceToWorkstation(string WorkstationName, IPAddress IpAddress, IPAddress Subnetmask, int portnum = -1)
         {
             Workstation workstation = network.GetHardwarenodeByName(WorkstationName) as Workstation;
-            if (null != workstation)
-            {
-                return workstation.AddInterface(IpAddress, Subnetmask);
-
-            }
-            else
-            {
-                throw new ArgumentException("Workstation with the name " + WorkstationName + " could not be found");
-            }
+            if (null == workstation) throw new ArgumentException("Workstation with the name " + WorkstationName + " could not be found");
+            var iface = workstation.AddInterface(IpAddress, Subnetmask, portnum);
+            NetworkViewController.Instance.AddInterfaceToHardwareNode(workstation.Name, iface.Name);
+            return iface;
         }
 
         /// <summary>
@@ -134,14 +129,10 @@ namespace NSA.Controller
         public string AddInterfaceToSwitch(string SwitchName)
         {
             Switch nodeSwitch = network.GetHardwarenodeByName(SwitchName) as Switch;
-            if (null != nodeSwitch)
-            {
-                return nodeSwitch.AddInterface();
-            }
-            else
-            {
-                throw new ArgumentException("Switch with the name " + SwitchName + " could not be found");
-            }
+            if (null == nodeSwitch) throw new ArgumentException("Switch with the name " + SwitchName + " could not be found");
+            var iface = nodeSwitch.AddInterface();
+            NetworkViewController.Instance.AddInterfaceToHardwareNode(nodeSwitch.Name, iface);
+            return iface;
         }
 
         /// <summary>
@@ -161,16 +152,22 @@ namespace NSA.Controller
                 if (null != (workstation = node as Workstation))
                 {
                     workstation.RemoveInterface(InterfaceName);
+                    NetworkViewController.Instance.RemoveInterfaceFromNode(workstation.Name, InterfaceName);
                     Connection c = workstation.GetConnectionAtPort(InterfaceName);
-                    if(c != null)
+                    if (c != null)
+                    {
                         RemoveConnection(c.Name);
+                    }
                 }
                 else if (null != (nodeSwitch = node as Switch))
                 {
                     nodeSwitch.RemoveInterface(InterfaceName);
+                    NetworkViewController.Instance.RemoveInterfaceFromNode(workstation.Name, InterfaceName);
                     Connection c = nodeSwitch.GetConnectionAtPort(InterfaceName);
                     if (c != null)
+                    {
                         RemoveConnection(c.Name);
+                    }
                 }
             }
             else
@@ -202,13 +199,13 @@ namespace NSA.Controller
                     {
                         for (int i = nodeSwitch.GetInterfaceCount(); i < NewCount; i++)
                             nodeSwitch.AddInterface();
-                        NetworkViewController.Instance.NodeChanged(nodeSwitch);
+                        NetworkViewController.Instance.SwitchChanged(nodeSwitch);
                     }
                     else if (NewCount < nodeSwitch.GetInterfaceCount())
                     {
-                        for(int i = nodeSwitch.GetInterfaceCount(); i > NewCount; i--)
+                        for (int i = nodeSwitch.GetInterfaceCount(); i > NewCount; i--)
                             nodeSwitch.RemoveInterface("eth" + (i - 1));
-                        NetworkViewController.Instance.NodeChanged(nodeSwitch);
+                        NetworkViewController.Instance.SwitchChanged(nodeSwitch);
                     }
                 }
                 else
@@ -319,24 +316,25 @@ namespace NSA.Controller
         /// </summary>
         /// <param name="Type">Type of the node</param>
         /// <returns>The new created hardwarenode.</returns>
-        public Hardwarenode CreateHardwareNode(HardwarenodeType Type)
+        public Hardwarenode CreateHardwareNode(HardwarenodeType Type, string name = null)
         {
             Hardwarenode node = null;
+            string NodeName = name ?? CreateUniqueName(Type);
 
             switch (Type)
             {
                 case HardwarenodeType.Switch:
 
-                    node = new Switch(CreateUniqueName(Type));
+                    node = new Switch(NodeName);
                     break;
                 case HardwarenodeType.Workstation:
-                    node = new Workstation(CreateUniqueName(Type));
+                    node = new Workstation(NodeName);
                     break;
                 case HardwarenodeType.Router:
-                    node = new Router(CreateUniqueName(Type));
+                    node = new Router(NodeName);
                     break;
             }
-            
+
             // Add node to the Network and to the NetworkViewController
             network.AddHardwarenode(node);
             NetworkViewController.Instance.AddHardwarenode(node);
@@ -351,7 +349,7 @@ namespace NSA.Controller
         /// <returns></returns>
         private string CreateUniqueName(HardwarenodeType Type)
         {
-            for(int i = 1; ; i++)
+            for (int i = 1; ; i++)
             {
                 string name = $"{Type} {i}";
                 if (GetAllHardwareNodes().All(N => N.Name != name)) return name;

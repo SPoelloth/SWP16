@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
@@ -38,9 +39,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #endregion Parameters
 
         private List<Rectangle> portHitboxes = new List<Rectangle>();
-
-        int portcount = 5;
-        public int NetworkPortCount { get { return portcount; } set { portcount = value; calculateDimension(); calculateHitboxes(); } }
+        private List<int> interfaces = new List<int> { 0, 1, 2, 3, 4 };
 
         [Obsolete("Do not use! For Designer only!")]
         public SwitchControl() : this(new Point(10, 10), "SwitchControl")
@@ -65,21 +64,45 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private void calculateDimension()
         {
+            int maxPort = interfaces.Count < 1 ? 0 : interfaces.Max();
             Height = 20;
-            Width = 2 * portOffsetX + (portsize + portdistance) * NetworkPortCount;
+            Width = 2 * portOffsetX + (portsize + portdistance) * (maxPort + 1);
         }
 
         private void calculateHitboxes()
         {
             portHitboxes = new List<Rectangle>();
 
-            for (int i = 0; i < portcount; i++)
+            foreach (var i in interfaces)
             {
                 var portRectangle = new Rectangle(portOffsetX + (portsize + portdistance) * i, Height - portsize - 1, portsize, portsize);
                 portHitboxes.Add(portRectangle);
             }
         }
 
+        public void RemoveInterface(int iface)
+        {
+            interfaces.Add(iface);
+            calculateDimension();
+            calculateHitboxes();
+            Invalidate();
+        }
+
+        public void AddInterface(int iface)
+        {
+            interfaces.Remove(iface);
+            calculateDimension();
+            calculateHitboxes();
+            Invalidate();
+        }
+
+        public void SetInterfaces(List<int> ifaces)
+        {
+            interfaces = ifaces;
+            calculateDimension();
+            calculateHitboxes();
+            Invalidate();
+        }
         protected override void OnPaint(PaintEventArgs pe)
         {
             calculateHitboxes();
