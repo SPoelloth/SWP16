@@ -113,7 +113,11 @@ namespace NSA.Controller
 
         public void StartTestscenario(Testscenario T)
         {
-            // todo Dennis & Oleg
+            foreach (var runnable in T.GetRunnables())
+            {
+                Result r = runnable.Run();
+                //FIXME: result is unused
+            }
         }
 
         public void AddSimulationToHistory(Simulation Sim)
