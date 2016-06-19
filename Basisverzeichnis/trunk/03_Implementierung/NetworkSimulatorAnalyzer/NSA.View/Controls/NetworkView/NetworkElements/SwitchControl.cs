@@ -15,7 +15,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #region Workstation Colors
         private Pen borderPen = Pens.Black;
         private Pen selectedPen = Pens.Red;
-        private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(101, 130, 193), Color.FromArgb(101, 130, 193));
+        private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(80, 110, 173), Color.FromArgb(101, 130, 193));
         private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 50), Color.FromArgb(0, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
         private Brush dotBrush = new SolidBrush(Color.FromArgb(0, 255, 0));
         #endregion Workstation Colors

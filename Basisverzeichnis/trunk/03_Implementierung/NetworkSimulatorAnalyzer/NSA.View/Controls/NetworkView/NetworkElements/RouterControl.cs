@@ -14,14 +14,14 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #region Colors
         #region Workstation Colors
         private Pen borderPen = Pens.Black;
-        private Pen separatorPen = new Pen(Color.Black, 2);
+        private Pen separatorPen = new Pen(Color.DimGray, 2);
         private Pen selectedPen = Pens.Red;
-        private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(60, 60, 60), Color.FromArgb(175, 175, 175));
-        private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 200), Color.FromArgb(50, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
-        private Brush dotBrush = new SolidBrush(Color.FromArgb(0, 200, 255));
+        private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(255,255,255), Color.FromArgb(175, 175, 175));
+        private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 200), Color.FromArgb(20, 0, 0, 0), Color.FromArgb(200, 0, 0, 0));
+        private Brush dotBrush = new SolidBrush(Color.FromArgb(0, 0, 255));
         #endregion Workstation Colors
         #region Port Colors
-        private Brush portBackgroundBrush = new SolidBrush(Color.FromArgb(150, 150, 150));
+        private Brush portBackgroundBrush = new SolidBrush(Color.FromArgb(200,200,200));
         private Brush portHighlightBrush = new SolidBrush(Color.FromArgb(100, 255, 255, 255));
         private LinearGradientBrush portOverlayBrush = new LinearGradientBrush(new Point(), new Point(5, 0), Color.FromArgb(0, 0, 0, 0), Color.FromArgb(100, 0, 0, 0));
         private Pen portPins = Pens.White;
@@ -88,9 +88,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             var offsetY = 0;
             g.FillRectangle(backgroundBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
             g.FillRectangle(backgroundGradientBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
-            g.FillRectangle(dotBrush, new Rectangle(5, offsetY + 5, 2, 2));
-            g.FillRectangle(dotBrush, new Rectangle(10, offsetY + 5, 2, 2));
-            g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
+            g.FillRectangle(dotBrush, new Rectangle(7, offsetY + 5, 2, 2));
+            g.FillRectangle(dotBrush, new Rectangle(13, offsetY + 5, 2, 2));
+            g.FillRectangle(dotBrush, new Rectangle(19, offsetY + 5, 2, 2));
             g.DrawLine(separatorPen, 3, offsetY + 11, Width - 4, offsetY + 11);
 
             foreach (var i in interfaces)

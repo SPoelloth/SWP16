@@ -88,9 +88,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             var offsetY = 0;
             g.FillRectangle(backgroundBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
             g.FillRectangle(backgroundGradientBrush, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
-            g.FillRectangle(dotBrush, new Rectangle(5, offsetY + 5, 2, 2));
-            g.FillRectangle(dotBrush, new Rectangle(10, offsetY + 5, 2, 2));
-            g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
+            g.FillRectangle(dotBrush, new Rectangle(7, offsetY + 5, 2, 2));
+            g.FillRectangle(dotBrush, new Rectangle(13, offsetY + 5, 2, 2));
+            g.FillRectangle(dotBrush, new Rectangle(19, offsetY + 5, 2, 2));
             g.DrawLine(separatorPen, 3, offsetY + 11, Width - 4, offsetY + 11);
 
             foreach (var i in interfaces)
