@@ -67,6 +67,8 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             int maxPort = interfaces.Count < 1 ? 0 : interfaces.Max();
             Height = 20;
             Width = 2 * portOffsetX + (portsize + portdistance) * (maxPort + 1);
+            Location = new Point(Location.X + 1, Location.Y);
+            Location = new Point(Location.X - 1, Location.Y);
         }
 
         private void calculateHitboxes()
@@ -82,7 +84,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         public void RemoveInterface(int iface)
         {
-            interfaces.Add(iface);
+            interfaces.Remove(iface);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
@@ -90,7 +92,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         public void AddInterface(int iface)
         {
-            interfaces.Remove(iface);
+            interfaces.Add(iface);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
@@ -146,14 +148,14 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         {
             for (int i = 0; i < portHitboxes.Count; i++)
             {
-                if (portHitboxes[i].Contains(location)) return i;
+                if (portHitboxes[i].Contains(location)) return interfaces[i];
             }
             return -1;
         }
 
         public override Rectangle GetPortBoundsByID(int port)
         {
-            return portHitboxes[port];
+            return portHitboxes[interfaces.IndexOf(port)];
         }
     }
 }

@@ -231,6 +231,10 @@ namespace NSA.View.Controls.NetworkView
 
         public void Dispose()
         {
+            Element1.LocationChanged -= Element_LocationChanged;
+            Element2.LocationChanged -= Element_LocationChanged;
+            Parent.SelectionChanged -= Deselect;
+
             foreach (var c in connectionControls)
             {
                 c.Parent.Controls.Remove(c);

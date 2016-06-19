@@ -41,7 +41,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private List<Rectangle> portHitboxes = new List<Rectangle>();
         private List<int> interfaces = new List<int> { 0 };
-        
+
         [Obsolete("Do not use! For Designer only!")]
         public WorkstationControl() : this(new Point(10, 10), "WorkstationControl")
         {
@@ -93,7 +93,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
             g.DrawLine(separatorPen, 3, offsetY + 11, Width - 4, offsetY + 11);
 
-            foreach(var i in interfaces)
+            foreach (var i in interfaces)
             {
                 var portRectangle = portHitboxes[interfaces.IndexOf(i)];
                 g.FillRectangle(portBackgroundBrush, portRectangle);
@@ -101,7 +101,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                 for (int j = 1; j < portPinCount + 1; j++)
                 {
                     float y = portRectangle.Y + (portsize - borderPen.Width * 2) / portPinCount * j;
-                    int x = portRectangle.X + ((i + 1) % 2) * (portsize - portPinsLength); 
+                    int x = portRectangle.X + ((i + 1) % 2) * (portsize - portPinsLength);
                     g.DrawLine(portPins, new PointF(x, y), new PointF(x + portPinsLength, y));
                 }
                 g.FillRectangle(portRectangle.Contains(mouseLocation) ? portHighlightBrush : portOverlayBrush, portRectangle);
@@ -123,9 +123,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         public int GetPortIDByPoint(Point location)
         {
-            for(int i = 0; i < portHitboxes.Count; i++)
+            for (int i = 0; i < portHitboxes.Count; i++)
             {
-                if (portHitboxes[i].Contains(location)) return i;
+                if (portHitboxes[i].Contains(location)) return interfaces[i];
             }
             return -1;
         }
@@ -148,7 +148,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         public override Rectangle GetPortBoundsByID(int port)
         {
-            return portHitboxes[port];
+            return portHitboxes[interfaces.IndexOf(port)];
         }
     }
 }

@@ -162,7 +162,7 @@ namespace NSA.Controller
                 else if (null != (nodeSwitch = node as Switch))
                 {
                     nodeSwitch.RemoveInterface(InterfaceName);
-                    NetworkViewController.Instance.RemoveInterfaceFromNode(workstation.Name, InterfaceName);
+                    NetworkViewController.Instance.RemoveInterfaceFromNode(nodeSwitch.Name, InterfaceName);
                     Connection c = nodeSwitch.GetConnectionAtPort(InterfaceName);
                     if (c != null)
                     {

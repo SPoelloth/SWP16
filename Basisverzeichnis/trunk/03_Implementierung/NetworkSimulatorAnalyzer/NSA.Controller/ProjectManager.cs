@@ -123,6 +123,7 @@ namespace NSA.Controller
 
                 var xmlnode = new XElement("Workstation",
                               new XAttribute("Name", ws.Name),
+                              new XAttribute("Type", ws.GetType().Name),
                               new XAttribute("LocationX", loc.X),
                               new XAttribute("LocationY", loc.Y));
 
@@ -210,11 +211,15 @@ namespace NSA.Controller
                 foreach (var node in hwNodesXML.Elements())
                 {
                     var name = node.Attribute("Name").Value;
+                    var type = node.Attribute("Type").Value;
                     var x = int.Parse(node.Attribute("LocationX").Value);
                     var y = int.Parse(node.Attribute("LocationY").Value);
                     bool hasDefaultGW = node.Attribute("DefaultGW") != null;
 
-                    Workstation hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation, name);
+                    Workstation hwNode;
+                    if (type == typeof(Router).Name) hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Router, name);
+                    else hwNode = (Workstation)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation, name);
+
                     if (hasDefaultGW)
                     {
                         var defaultgw = IPAddress.Parse(node.Attribute("DefaultGW").Value);
@@ -277,18 +282,15 @@ namespace NSA.Controller
                     var x = int.Parse(node.Attribute("LocationX").Value);
                     var y = int.Parse(node.Attribute("LocationY").Value);
 
-                    Switch sw = (Switch)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Switch);
-                    sw.Name = name;
+                    Switch sw = (Switch)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Switch, name);
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
 
-                    sw.Interfaces.Clear();
-
+                    foreach (var i in sw.Interfaces.ToList()) NetworkManager.Instance.RemoveInterface(sw.Name, i);
                     var interfaceXML = node.Element("Interfaces");
                     if (interfaceXML == null) throw new InvalidDataException();
                     foreach (var iface in interfaceXML.Elements())
                     {
-                        var iname = iface.Attribute("Name").Value;
-                        sw.Interfaces.Add(iname);
+                        NetworkManager.Instance.AddInterfaceToSwitch(sw.Name);
                     }
                 }
 

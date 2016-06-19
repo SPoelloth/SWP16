@@ -206,9 +206,9 @@ namespace NSA.View.Controls.NetworkView
             foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
         }
 
-        public void AddInterfaceToNode(string NodeName, string Eth1)
+        public void AddInterfaceToNode(string NodeName, string ifaceName)
         {
-            ((IConfigurable)Controls.OfType<EditorElementBase>().First(n => n.Name == NodeName)).AddInterface(int.Parse(Eth1.Replace("eth", "")));
+            ((IConfigurable)Controls.OfType<EditorElementBase>().First(n => n.Name == NodeName)).AddInterface(int.Parse(ifaceName.Replace("eth", "")));
         }
 
         public void RemoveInterfaceFromNode(string NodeName, string Eth1)

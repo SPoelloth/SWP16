@@ -65,9 +65,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         private void calculateDimension()
         {
-            int maxInterface = interfaces.Max();
+            int maxPort = interfaces.Count < 1 ? 0 : interfaces.Max();
             Width = 50;
-            Height = 100 + 6 * (maxInterface > 9 ? maxInterface - 9 - (maxInterface & 1) : 0);
+            Height = 100 + 6 * (maxPort > 9 ? maxPort - 9 - (maxPort & 1) : 0);
         }
 
         private void calculateHitboxes()
@@ -95,7 +95,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
             foreach (var i in interfaces)
             {
-                var portRectangle = portHitboxes[i];
+                var portRectangle = portHitboxes[interfaces.IndexOf(i)];
                 g.FillRectangle(portBackgroundBrush, portRectangle);
 
                 for (int j = 1; j < portPinCount + 1; j++)
@@ -125,20 +125,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         {
             for (int i = 0; i < portHitboxes.Count; i++)
             {
-                if (portHitboxes[i].Contains(location)) return i;
+                if (portHitboxes[i].Contains(location)) return interfaces[i];
             }
             return -1;
         }
 
         public void RemoveInterface(int iface)
-        {
-            interfaces.Add(iface);
-            calculateDimension();
-            calculateHitboxes();
-            Invalidate();
-        }
-
-        public void AddInterface(int iface)
         {
             interfaces.Remove(iface);
             calculateDimension();
@@ -146,9 +138,17 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             Invalidate();
         }
 
+        public void AddInterface(int iface)
+        {
+            interfaces.Add(iface);
+            calculateDimension();
+            calculateHitboxes();
+            Invalidate();
+        }
+
         public override Rectangle GetPortBoundsByID(int port)
         {
-            return portHitboxes[port];
+            return portHitboxes[interfaces.IndexOf(port)];
         }
     }
 }
