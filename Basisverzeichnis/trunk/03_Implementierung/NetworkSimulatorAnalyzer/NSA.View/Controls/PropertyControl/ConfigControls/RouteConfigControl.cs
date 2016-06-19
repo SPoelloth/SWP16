@@ -40,7 +40,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         }
 
         private void OnDataChanged() {
-            if (initialized && destinationValidInput && netMaskValidInput && routeValidInput) {
+            if (initialized && destinationValidInput && netMaskValidInput && routeValidInput && !String.IsNullOrEmpty(comboBoxInterfaces.SelectedText)) {
                 RouteChanged?.Invoke(RouteName, IPAddress.Parse(textBoxDestination.Text), IPAddress.Parse(textBoxRoute.Text), IPAddress.Parse(textBoxSubnetMask.Text), comboBoxInterfaces.SelectedText);
             }
         }
