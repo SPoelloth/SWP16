@@ -81,7 +81,7 @@ namespace NSA.Controller.ViewControllers
         {
             Workstation station = (Workstation) selectedNode;
             Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None,
-                IPAddress.None, station.GetInterfaces()[0]);
+                IPAddress.None, station.GetInterfaces().First());
             propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
             propertyControl.RetainScrollPosition = false;
