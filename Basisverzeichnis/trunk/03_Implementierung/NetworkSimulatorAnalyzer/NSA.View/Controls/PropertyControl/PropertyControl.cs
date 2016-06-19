@@ -47,7 +47,6 @@ namespace NSA.View.Controls.PropertyControl
             SwitchConfigControl switchConfigControl = new SwitchConfigControl(NumberOfPorts);
             switchConfigControl.NumberOfPortsChanged += SwitchConfigControl_NumberOfPortsChanged;
             flpContents.Controls.Add(switchConfigControl);
-            ResumeLayout();
         }
 
         /// <summary>
@@ -150,7 +149,6 @@ namespace NSA.View.Controls.PropertyControl
                 flpContents.VerticalScroll.Value = scrollPosition;
                 scrollPosition = 0;
             }
-            ResumeLayout();
         }
 
         public void ClearControls()
@@ -159,7 +157,6 @@ namespace NSA.View.Controls.PropertyControl
             {
                 scrollPosition = flpContents.VerticalScroll.Value;
             }
-            SuspendLayout();
             foreach (Control c in flpContents.Controls)
             {
                 if (c is InterfaceConfigControl)
