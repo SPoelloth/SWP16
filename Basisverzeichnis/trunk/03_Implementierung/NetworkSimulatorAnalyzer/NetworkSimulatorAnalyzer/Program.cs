@@ -17,7 +17,6 @@ namespace NSA
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(ProjectManager.Instance.CreateWindow());
-            
         }
     }
 }

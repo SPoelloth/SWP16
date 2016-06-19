@@ -110,7 +110,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             g.DrawRectangle(IsSelected ? selectedPen : borderPen, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
         }
 
-        Point mouseLocation = new Point();
+        Point mouseLocation;
         protected override void OnMouseMove(MouseEventArgs e)
         {
             mouseLocation = e.Location;
@@ -119,6 +119,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                 Invalidate(r);
             }
             base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            mouseLocation = new Point();
+            base.OnMouseLeave(e);
         }
 
         public int GetPortIDByPoint(Point location)
@@ -130,17 +136,17 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             return -1;
         }
 
-        public void RemoveInterface(int iface)
+        public void RemoveInterface(int Ethernet)
         {
-            interfaces.Remove(iface);
+            interfaces.Remove(Ethernet);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
         }
 
-        public void AddInterface(int iface)
+        public void AddInterface(int Ethernet)
         {
-            interfaces.Add(iface);
+            interfaces.Add(Ethernet);
             calculateDimension();
             calculateHitboxes();
             Invalidate();

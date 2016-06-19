@@ -4,9 +4,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     public interface IConfigurable
     {
-        Rectangle GetPortBoundsByID(int port);
+        Rectangle GetPortBoundsByID(int Port);
         int GetPortIDByPoint(Point p);
-        void RemoveInterface(int ethernet);
-        void AddInterface(int ethernet);
+        void RemoveInterface(int EthernetIndex);
+        void AddInterface(int EthernetIndex);
     }
 }

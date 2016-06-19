@@ -35,6 +35,7 @@ namespace NSA.View.Forms
             networkViewControl.Height = Height - ToolbarControl.Height - infoControl.Height - margin * 4 - 35;
             propertyControl.Location = new Point(networkViewControl.Width + networkViewControl.Location.X + margin, networkViewControl.Location.Y);
             propertyControl.Height = networkViewControl.Height + infoControl.Height;
+            propertyControl.Refresh();
             infoControl.Location = new Point(margin, networkViewControl.Location.Y + networkViewControl.Height + margin);
             infoControl.Width = networkViewControl.Width;
             networkViewControl.Invalidate();

@@ -68,6 +68,8 @@ namespace NSA.View.Controls.NetworkView
             CalculateLineParts();
         }
 
+        private int SwitchConnectionDist = 4;
+
         private void CalculateLineParts()
         {
             if (Element1.Location.X > Element2.Location.X)
@@ -96,7 +98,7 @@ namespace NSA.View.Controls.NetworkView
             {
                 state = state | ConnectionState.RightReverse;
             }
-
+            
             if (state == ConnectionState.Straight)
             {
                 int initialCableLength = Math.Max(15, Element1.Location.X - Element2.Location.X - Element1.Width) / 2;
@@ -104,14 +106,24 @@ namespace NSA.View.Controls.NetworkView
                 //startpunkt
                 points.Add(new Point(startElement.X + startElement.Width / 2, startElement.Y + startElement.Height / 2));
                 Point prevPoint = points.Last();
-                points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
-                Point center = new Point((int)((startElement.Location.X + startElement.Width + targetElement.Location.X) / 2f), (int)(startElement.Location.Y + startElement.Height + targetElement.Location.Y / 2f));
+                var sw1 = Element1 as SwitchControl;
+                var startDist = sw1 != null ? new Point(prevPoint.X, prevPoint.Y + 10 + Port1 * SwitchConnectionDist) : new Point(prevPoint.X + ((Port2 % 2) * 2 - 1) * initialCableLength, prevPoint.Y);
+
+               // int a = 10;
+               // for (int i = 0; i < 10; i++)
+               // {
+               //     Console.WriteLine(i > a / 2 ? a/2 - i % (a / 2) : i);
+               // }
+
+                points.Add(startDist);
+                Point center = new Point((int)((startElement.Location.X + startElement.Width / 2f + targetElement.Location.X) / 2f), (int)(startElement.Location.Y + startElement.Height + targetElement.Location.Y / 2f));
 
                 prevPoint = points.Last();
                 points.Add(new Point(center.X, prevPoint.Y));
 
                 Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
-                Point endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
+                var sw2 = Element2 as SwitchControl;
+                var endDist = sw2 != null ? new Point(end.X, end.Y + 10 + Port2 * SwitchConnectionDist) : new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
 
                 points.Add(new Point(center.X, endDist.Y));
                 points.Add(endDist);
@@ -126,7 +138,9 @@ namespace NSA.View.Controls.NetworkView
                 Point prevPoint = points.Last();
                 points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
                 Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
-                Point endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
+                Point endDist;
+                if (Element2 is SwitchControl) endDist = new Point(end.X, end.Y + 10 + Port2 * SwitchConnectionDist);
+                else endDist = new Point(end.X + ((Port2 % 2) * 2 - 1) * initialCableLength, end.Y);
                 prevPoint = points.Last();
                 points.Add(new Point(prevPoint.X, endDist.Y));
                 points.Add(endDist);
@@ -139,7 +153,10 @@ namespace NSA.View.Controls.NetworkView
                 //startpunkt
                 points.Add(new Point(startElement.X + startElement.Width / 2, startElement.Y + startElement.Height / 2));
                 Point prevPoint = points.Last();
-                points.Add(new Point(prevPoint.X + ((Port1 % 2) * 2 - 1) * initialCableLength, prevPoint.Y));
+                Point startDist;
+                if (Element1 is SwitchControl) startDist = new Point(prevPoint.X, prevPoint.Y + 10 + Port1 * SwitchConnectionDist);
+                else startDist = new Point(prevPoint.X + ((Port2 % 2) * 2 - 1) * initialCableLength, prevPoint.Y);
+                points.Add(startDist);
 
                 prevPoint = points.Last();
                 Point end = new Point(targetElement.X + targetElement.Width / 2, targetElement.Y + targetElement.Height / 2);
@@ -209,7 +226,6 @@ namespace NSA.View.Controls.NetworkView
                     c.Click += Connection_Click;
                     connectionControls.Add(c);
                 }
-
             }
             if (connectionControls.Count > points.Count - 1 && connectionControls.Count > 0)
             {
@@ -225,7 +241,6 @@ namespace NSA.View.Controls.NetworkView
             for (int i = 0; i < points.Count - 1 && points.Count > 0; i++)
             {
                 connectionControls[i].SetPoints(points[i], points[i + 1]);
-
             }
         }
 

@@ -121,6 +121,13 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             base.OnMouseMove(e);
         }
 
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            mouseLocation = new Point();
+            base.OnMouseLeave(e);
+        }
+
+
         public int GetPortIDByPoint(Point location)
         {
             for (int i = 0; i < portHitboxes.Count; i++)
@@ -130,17 +137,17 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             return -1;
         }
 
-        public void RemoveInterface(int iface)
+        public void RemoveInterface(int Ethernet)
         {
-            interfaces.Remove(iface);
+            interfaces.Remove(Ethernet);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
         }
 
-        public void AddInterface(int iface)
+        public void AddInterface(int Ethernet)
         {
-            interfaces.Add(iface);
+            interfaces.Add(Ethernet);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
