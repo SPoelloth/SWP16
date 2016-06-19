@@ -23,7 +23,7 @@ namespace NSA.Model.NetworkComponents.Layers
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
         {
             //Wenn destination direkt dran ist an einer Verbindung
-            foreach (Connection c in CurrentNode.GetConnections().Values)
+            foreach (Connection c in CurrentNode.Connections.Values)
             {
                 if (c.Start.Equals(Destination) || c.End.Equals(Destination))
                 {

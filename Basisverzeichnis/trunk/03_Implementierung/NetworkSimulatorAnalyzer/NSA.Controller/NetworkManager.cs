@@ -204,7 +204,15 @@ namespace NSA.Controller
                     else if (NewCount < nodeSwitch.GetInterfaceCount())
                     {
                         for (int i = nodeSwitch.GetInterfaceCount(); i > NewCount; i--)
-                            nodeSwitch.RemoveInterface("eth" + (i - 1));
+                        {
+                            // connection muss hier mit entfernt werden
+                            // wird die Connection im Model entfernt, erfährt die View nichts davon
+                            string interfaceName = Switch.InterfaceNamePrefix + (i - 1);
+                            string connnectionName = nodeSwitch.Connections.FirstOrDefault(C => C.Key.Equals(interfaceName)).Value.Name;
+                            if(connnectionName != null) RemoveConnection(connnectionName);
+
+                            nodeSwitch.RemoveInterface(interfaceName);
+                        }
                         NetworkViewController.Instance.SwitchChanged(nodeSwitch);
                     }
                 }
@@ -424,8 +432,9 @@ namespace NSA.Controller
             {
                 throw new ArgumentException("Connection with the name " + Name + "could not be found");
             }
-            connection.End.RemoveConnection(Name);
-            connection.Start.RemoveConnection(Name);
+            // Im Network werden die Connections der Hardwarenodes entfernt
+            //connection.End.RemoveConnection(Name);
+            //connection.Start.RemoveConnection(Name);
             network.RemoveConnection(Name);
             NetworkViewController.Instance.RemoveConnection(Name);
         }

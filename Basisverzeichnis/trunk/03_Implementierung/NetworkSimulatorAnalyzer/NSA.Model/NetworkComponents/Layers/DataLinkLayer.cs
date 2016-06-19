@@ -9,9 +9,9 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             if (ValInfo.Iface == null)
                 return;
-            if (CurrentNode.GetConnections().ContainsKey(ValInfo.Iface.Name))
+            if (CurrentNode.Connections.ContainsKey(ValInfo.Iface.Name))
             {
-                ValInfo.NextNodes.Add(CurrentNode.GetConnections()[ValInfo.Iface.Name].Start.Equals(CurrentNode) ? CurrentNode.GetConnections()[ValInfo.Iface.Name].End : CurrentNode.GetConnections()[ValInfo.Iface.Name].Start);
+                ValInfo.NextNodes.Add(CurrentNode.Connections[ValInfo.Iface.Name].Start.Equals(CurrentNode) ? CurrentNode.Connections[ValInfo.Iface.Name].End : CurrentNode.Connections[ValInfo.Iface.Name].Start);
                 return;
             }
             ValInfo.Res.ErrorId = 2;

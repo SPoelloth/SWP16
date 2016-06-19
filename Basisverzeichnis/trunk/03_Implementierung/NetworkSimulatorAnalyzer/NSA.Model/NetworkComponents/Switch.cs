@@ -6,7 +6,7 @@ namespace NSA.Model.NetworkComponents
     public class Switch : Hardwarenode
     {
         public List<string> Interfaces { get; } = new List<string>();
-        private readonly string interfaceNamePrefix = "eth";
+        public static readonly string InterfaceNamePrefix = "eth";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Switch"/> class.
@@ -38,7 +38,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>string: the name of the new interface</returns>
         public string AddInterface()
         {
-            string name = interfaceNamePrefix + GetNewInterfaceNumber();
+            string name = InterfaceNamePrefix + GetNewInterfaceNumber();
             Interfaces.Add(name);
             return name;
         }
@@ -63,7 +63,7 @@ namespace NSA.Model.NetworkComponents
 
             while (!found)
             {
-                if (Interfaces.Exists(I => I.Equals(interfaceNamePrefix + newInterface)))
+                if (Interfaces.Exists(I => I.Equals(InterfaceNamePrefix + newInterface)))
                     newInterface++;
                 else
                     found = true;

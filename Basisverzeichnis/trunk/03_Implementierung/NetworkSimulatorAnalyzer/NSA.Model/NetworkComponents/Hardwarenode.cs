@@ -10,7 +10,7 @@ namespace NSA.Model.NetworkComponents
     public class Hardwarenode
     {
         protected Layerstack Layerstack = new Layerstack();
-        protected Dictionary<string, Connection> Connections = new Dictionary<string, Connection>();
+        public Dictionary<string, Connection> Connections { get; protected set; }= new Dictionary<string, Connection>();
         public string Name { get; set; }
 
         /// <summary>
@@ -118,14 +118,6 @@ namespace NSA.Model.NetworkComponents
             return true;
         }
 
-        /// <summary>
-        /// Gets the connections.
-        /// </summary>
-        /// <returns>Connections</returns>
-        public Dictionary<string, Connection> GetConnections()
-        {
-            return Connections;
-        }
 
         #region Equality
 
