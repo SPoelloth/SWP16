@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,17 +7,29 @@ namespace NSA.View.Forms
 {
     public partial class AdvancedSimulationForm : Form
     {
-        public int AnimationTime = -1;
-        public int MaxHopCount = -1;
+        public int AnimationTime = 1000;
+        public int MaxHopCount = 255;
         public string SourceName = "";
         public string TargetName = "";
-        public int ExpectedResult = -1;
+        public bool ExpectedResult = true;
 
         public AdvancedSimulationForm()
         {
             InitializeComponent();
             resultCombo.SelectedIndex = 0;
             CanExecute_Start();
+        }
+
+        public void SetWorkstations(List<string> AvailableWorkstations)
+        {
+            sourceComboBox.DataSource = AvailableWorkstations;
+            // Workaround for having the same DataSource in two different Comboboxes
+            targetComboBox.BindingContext = new BindingContext();
+            targetComboBox.DataSource = AvailableWorkstations;
+            if (AvailableWorkstations.Count > 1)
+            {
+                targetComboBox.SelectedIndex = 1;
+            }
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -28,14 +41,14 @@ namespace NSA.View.Forms
         private void sourceComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             sourceComboBox.BackColor = sourceComboBox.SelectedIndex < 0 ? Color.Red : SystemColors.Window;
-            SourceName = sourceComboBox.SelectedText;
+            SourceName = sourceComboBox.SelectedItem.ToString();
             CanExecute_Start();
         }
 
         private void targetComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             targetComboBox.BackColor = targetComboBox.SelectedIndex < 0 ? Color.Red : SystemColors.Window;
-            TargetName = targetComboBox.SelectedText;
+            TargetName = targetComboBox.SelectedItem.ToString();
             CanExecute_Start();
         }
 
@@ -55,19 +68,29 @@ namespace NSA.View.Forms
 
         private void animationTimeTextBox_TextChanged(object sender, EventArgs e)
         {
-            // todo
-            CanExecute_Start();
+            if(int.TryParse(animationTimeTextBox.Text, out AnimationTime))
+            {
+                CanExecute_Start();
+            }
         }
 
         private void resultCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ExpectedResult = resultCombo.SelectedIndex;
+            ExpectedResult = resultCombo.SelectedIndex == 0;
             CanExecute_Start();
         }
 
         private void CanExecute_Start()
         {
-            startButton.Enabled = !string.IsNullOrWhiteSpace(SourceName) && !string.IsNullOrWhiteSpace(TargetName) && MaxHopCount > 0 && AnimationTime > -1 && ExpectedResult > -1;
+            startButton.Enabled = !string.IsNullOrWhiteSpace(SourceName) && !string.IsNullOrWhiteSpace(TargetName) && MaxHopCount > 0 && AnimationTime > 0;
+        }
+
+        protected void IntOnlyInput_TextboxKeyPress(object sender, KeyPressEventArgs E)
+        {
+            if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar))
+            {
+                E.Handled = true;
+            }
         }
     }
 }
