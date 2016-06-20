@@ -141,6 +141,7 @@ namespace NSA.Model.NetworkComponents
         /// Sends to ip.
         /// </summary>
         /// <param name="ValInfo">The value information.</param>
+        /// <param name="ComingConn">The coming connection.</param>
         /// <returns></returns>
         public bool SendToIp(ValidationInfo ValInfo, Connection ComingConn)
         {

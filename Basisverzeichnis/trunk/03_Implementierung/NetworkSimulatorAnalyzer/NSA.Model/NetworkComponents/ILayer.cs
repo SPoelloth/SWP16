@@ -12,7 +12,8 @@ namespace NSA.Model.NetworkComponents
         /// <param name="CurrentNode"></param>
         /// <param name="ValInfo"></param>
         /// <param name="Tags"></param>
-        void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags);
+        /// <param name="LayerIndex"></param>
+        void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex);
 
         /// <summary>
         /// Validates the layer while receiving a packet.
@@ -21,8 +22,9 @@ namespace NSA.Model.NetworkComponents
         /// <param name="ValInfo"></param>
         /// <param name="Tags"></param>
         /// <param name="Destination"></param>
+        /// <param name="LayerIndex"></param>
         /// <returns>Boolean value indicating if the validation was successfull</returns>
-        bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination);
+        bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex);
 
         /// <summary>
         /// Gets the name of the layer.

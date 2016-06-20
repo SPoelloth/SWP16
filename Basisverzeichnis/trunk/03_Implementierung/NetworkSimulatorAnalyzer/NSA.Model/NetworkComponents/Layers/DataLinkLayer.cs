@@ -5,7 +5,7 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class DataLinkLayer : ILayer
     {
-        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
             if (ValInfo.Iface == null)
                 return;
@@ -21,7 +21,7 @@ namespace NSA.Model.NetworkComponents.Layers
             ValInfo.NextNodes = null;
         }
 
-        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex)
         {
             if (ValInfo.NextNodeIp == null)
                 return true;

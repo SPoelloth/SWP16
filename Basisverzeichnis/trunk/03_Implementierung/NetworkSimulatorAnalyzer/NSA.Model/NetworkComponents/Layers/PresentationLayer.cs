@@ -5,7 +5,7 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class PresentationLayer : ILayer
     {
-        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex)
         {
             return true;
         }
@@ -20,7 +20,7 @@ namespace NSA.Model.NetworkComponents.Layers
             return false;
         }
 
-        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
             
         }

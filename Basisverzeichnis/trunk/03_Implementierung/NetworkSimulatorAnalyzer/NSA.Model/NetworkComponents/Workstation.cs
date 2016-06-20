@@ -240,7 +240,7 @@ namespace NSA.Model.NetworkComponents
                 {
                     Workstation dest = Destination as Workstation;
                     if(dest != null)
-                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags);
+                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags, i);
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
@@ -265,7 +265,7 @@ namespace NSA.Model.NetworkComponents
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination);
+                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination, i);
             }
             return res;
         }
