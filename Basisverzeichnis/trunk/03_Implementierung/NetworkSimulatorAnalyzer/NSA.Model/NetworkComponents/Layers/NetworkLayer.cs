@@ -32,7 +32,35 @@ namespace NSA.Model.NetworkComponents.Layers
                     return;
                 }
             }
-
+            //Wenn übr Switch direkt dran, dann kann man so auch senden
+            foreach (Connection c in CurrentNode.Connections.Values)
+            {
+                Switch sw;
+                if (c.Start.Equals(CurrentNode))
+                {
+                    sw = c.End as Switch;
+                    if (sw != null)
+                    {
+                        if (sw.SendToDestination(Destination, ValInfo))
+                        {
+                            ValInfo.NextNodes.Insert(0, sw);
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    sw = c.Start as Switch;
+                    if (sw != null)
+                    {
+                        if (sw.SendToDestination(Destination, ValInfo))
+                        {
+                            ValInfo.NextNodes.Insert(0, sw);
+                            return;
+                        }
+                    }
+                }
+            }
             //In der Routingtabelle nachgucken
             List<Interface> interfaces = Destination.GetInterfaces();
             foreach (Interface i in interfaces)

@@ -188,5 +188,58 @@ namespace NSA.Model.NetworkComponents
 
             return false;
         }
+
+        /// <summary>
+        /// Sends to destination.
+        /// </summary>
+        /// <param name="Destination">The destination.</param>
+        /// <param name="ValInfo">The value information.</param>
+        /// <returns></returns>
+        public bool SendToDestination(Workstation Destination, ValidationInfo ValInfo)
+        {
+            foreach (Connection c in Connections.Values)
+            {
+                if (c.End.Equals(Destination))
+                {
+                    ValInfo.NextNodes.Add(c.End);
+                    return true;
+                }
+                if (c.Start.Equals(Destination))
+                {
+                    ValInfo.NextNodes.Add(c.Start);
+                    return true;
+                }
+            }
+            //check if the next switch can send it
+            foreach (Connection c in Connections.Values)
+            {
+                if (c.Start.Equals(this))
+                {
+                    Switch s = c.End as Switch;
+                    if (s != null)
+                    {
+                        if (s.SendToDestination(Destination, ValInfo))
+                        {
+                            ValInfo.NextNodes.Insert(0, s);
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    Switch s = c.Start as Switch;
+                    if (s != null)
+                    {
+                        if (s.SendToDestination(Destination, ValInfo))
+                        {
+                            ValInfo.NextNodes.Insert(0, s);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }
