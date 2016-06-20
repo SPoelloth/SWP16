@@ -1,7 +1,6 @@
 using System;
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
-using System.Net;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -116,7 +115,7 @@ namespace NSA.Controller
             foreach (var runnable in T.GetRunnables())
             {
                 Result r = runnable.Run();
-                //FIXME: result is unused
+                //todo FIXME: result is unused
             }
         }
 
@@ -215,6 +214,23 @@ namespace NSA.Controller
         public void QuickSimulation(string Source, string Target)
         {
             CreateAndExecuteSimulation(Source, Target, 255, true, false);
+        }
+
+        /// <summary>
+        /// Clears the history.
+        /// </summary>
+        public void ClearHistory()
+        {
+            Simulations.Clear();
+        }
+
+        /// <summary>
+        /// Deletes the simulation from history.
+        /// </summary>
+        /// <param name="Index">The index of the simulation.</param>
+        public void DeleteSimulationFromHistory(int Index)
+        {
+            Simulations.RemoveAt(Index);
         }
     }
 }
