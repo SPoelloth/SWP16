@@ -207,7 +207,7 @@ namespace NSA.Controller
                         {
                             // connection muss hier mit entfernt werden
                             // wird die Connection im Model entfernt, erfährt die View nichts davon
-                            string interfaceName = Switch.InterfaceNamePrefix + (i - 1);
+                            string interfaceName = Interface.NamePrefix + (i - 1);
                             string connnectionName = nodeSwitch.Connections.FirstOrDefault(C => C.Key.Equals(interfaceName)).Value?.Name;
                             if(connnectionName != null) RemoveConnection(connnectionName);
 
