@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
@@ -23,14 +24,11 @@ namespace NSA.Model.NetworkComponents.Layers
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
             //Wenn destination direkt dran ist an einer Verbindung
-            foreach (Connection c in CurrentNode.Connections.Values)
+            if (CurrentNode.Connections.Values.Any(C => C.Start.Equals(Destination) || C.End.Equals(Destination)))
             {
-                if (c.Start.Equals(Destination) || c.End.Equals(Destination))
-                {
-                    ValInfo.NextNodes.Add(Destination);
-                    ValInfo.Iface = null;
-                    return;
-                }
+                ValInfo.NextNodes.Add(Destination);
+                ValInfo.Iface = null;
+                return;
             }
             //Wenn übr Switch direkt dran, dann kann man so auch senden
             foreach (Connection c in CurrentNode.Connections.Values)
@@ -39,27 +37,16 @@ namespace NSA.Model.NetworkComponents.Layers
                 if (c.Start.Equals(CurrentNode))
                 {
                     sw = c.End as Switch;
-                    if (sw != null)
-                    {
-                        if (sw.SendToDestination(Destination, ValInfo, c))
-                        {
-                            ValInfo.NextNodes.Insert(0, sw);
-                            return;
-                        }
-                    }
+                    if (sw == null) continue;
+                    if (!sw.SendToDestination(Destination, ValInfo, c)) continue;
+                    ValInfo.NextNodes.Insert(0, sw);
+                    return;
                 }
-                else
-                {
-                    sw = c.Start as Switch;
-                    if (sw != null)
-                    {
-                        if (sw.SendToDestination(Destination, ValInfo, c))
-                        {
-                            ValInfo.NextNodes.Insert(0, sw);
-                            return;
-                        }
-                    }
-                }
+                sw = c.Start as Switch;
+                if (sw == null) continue;
+                if (!sw.SendToDestination(Destination, ValInfo, c)) continue;
+                ValInfo.NextNodes.Insert(0, sw);
+                return;
             }
             //In der Routingtabelle nachgucken
             List<Interface> interfaces = Destination.GetInterfaces();
@@ -68,11 +55,9 @@ namespace NSA.Model.NetworkComponents.Layers
                 Dictionary<string, Route>.ValueCollection routes = CurrentNode.GetRoutes();
                 foreach(Route r in routes)
                 {
-                    if (i.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask))
-                    {
-                        ValInfo.NextNodeIp = r.Gateway;
-                        ValInfo.Iface = r.Iface;
-                    }
+                    if (!i.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask)) continue;
+                    ValInfo.NextNodeIp = r.Gateway;
+                    ValInfo.Iface = r.Iface;
                 }
             }
             if (CurrentNode.StandardGateway != null && ValInfo.NextNodeIp == null)

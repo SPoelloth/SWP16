@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
@@ -9,9 +10,10 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             if (ValInfo.Iface == null)
                 return;
-            if (CurrentNode.Connections.ContainsKey(ValInfo.Iface.Name))
+            Connection c;
+            if(CurrentNode.Connections.TryGetValue(ValInfo.Iface.Name, out c))
             {
-                ValInfo.NextNodes.Add(CurrentNode.Connections[ValInfo.Iface.Name].Start.Equals(CurrentNode) ? CurrentNode.Connections[ValInfo.Iface.Name].End : CurrentNode.Connections[ValInfo.Iface.Name].Start);
+                ValInfo.NextNodes.Add(c.Start.Equals(CurrentNode) ? c.End : c.Start);
                 return;
             }
             ValInfo.Res.ErrorId = Result.Errors.NoConnection;
@@ -26,10 +28,9 @@ namespace NSA.Model.NetworkComponents.Layers
             if (ValInfo.NextNodeIp == null)
                 return true;
             List<Interface> ifaces = CurrentNode.GetInterfaces();
-            foreach (Interface i in ifaces)
+            if (ifaces.Any(I => ValInfo.NextNodeIp.Equals(I.IpAddress)))
             {
-                if (ValInfo.NextNodeIp.Equals(i.IpAddress))
-                    return true;
+                return true;
             }
             ValInfo.Res.ErrorId = Result.Errors.PacketNotForThisNode;
             ValInfo.Res.Res = Result.ResultStrings[(int) ValInfo.Res.ErrorId];
