@@ -38,6 +38,8 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+Basisverzeichnis/trunk/03_Implementierung/NetworkSimulatorAnalyzer/NSA.ModelTests/*
+
 *_i.c
 *_p.c
 *_i.h
