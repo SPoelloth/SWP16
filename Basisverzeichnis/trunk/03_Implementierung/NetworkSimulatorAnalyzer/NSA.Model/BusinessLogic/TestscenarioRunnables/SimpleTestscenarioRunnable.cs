@@ -29,7 +29,7 @@ namespace NSA.Model.BusinessLogic
 
             foreach (var endNode in endNodes)
             {
-                Simulation sim = new Simulation(Guid.NewGuid().ToString());//Testscenario.SimulationId++); todo FIX THIS
+                Simulation sim = new Simulation(Guid.NewGuid().ToString());
                 Packet p = new Packet(startNode, endNode, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
 
