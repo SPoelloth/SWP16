@@ -7,12 +7,13 @@ namespace NSA.Model.BusinessLogic
 {
     public class Testscenario
     {
-        public string Id { get; }
         private Dictionary<Rule, bool> results = new Dictionary<Rule, bool>();
-        public static int SimulationId = 0;
         private Network network;
-        public string fileName { get; private set; }
         private string text;
+
+        public string fileName { get; private set; }
+        public string Id { get; }
+        public int SimulationCount { get; private set; }
         
         public Testscenario(string t, Network n, string fileName)
         {
@@ -32,7 +33,14 @@ namespace NSA.Model.BusinessLogic
                 List<Hardwarenode> endNodes = new List<Hardwarenode>();
 
                 foreach (var eNode in rule.EndNodes)
-                { endNodes.Add(network.GetHardwarenodeByName(eNode)); }
+                {
+                    Hardwarenode newNode = network.GetHardwarenodeByName(eNode);
+                    if (newNode == null)
+                    {
+                        newNode = new Workstation(eNode);
+                    }
+                    endNodes.Add(newNode);
+                }
 
                 switch (rule.SimulType)
                 {
@@ -41,6 +49,9 @@ namespace NSA.Model.BusinessLogic
                     default: break;
                 }
             }
+
+            this.SimulationCount = 0;
+            foreach (var runnable in runnables) { this.SimulationCount += runnable.SimulationCount; }
 
             return runnables;
         }

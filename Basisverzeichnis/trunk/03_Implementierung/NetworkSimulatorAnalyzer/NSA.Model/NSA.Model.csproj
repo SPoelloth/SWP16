@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogic\TestscenarioRunnables\HasInternetTestscenarioRunnable.cs" />
+    <Compile Include="BusinessLogic\TestscenarioRunnables\ITestscenarioRunnable.cs" />
     <Compile Include="BusinessLogic\Packet.cs" />
     <Compile Include="BusinessLogic\Project.cs" />
+    <Compile Include="BusinessLogic\TestscenarioRunnables\SimpleTestscenarioRunnable.cs" />
     <Compile Include="BusinessLogic\Simulation.cs" />
     <Compile Include="BusinessLogic\Testscenario.cs" />
     <Compile Include="NetworkComponents\Helper Classes\Result.cs" />
@@ -68,9 +71,6 @@
     <Compile Include="NetworkComponents\Rule.cs" />
     <Compile Include="NetworkComponents\Switch.cs" />
     <Compile Include="NetworkComponents\Layers\TransportLayer.cs" />
-    <Compile Include="NetworkComponents\TestscenarioRunnables\HasInternetTestscenarioRunnable.cs" />
-    <Compile Include="NetworkComponents\TestscenarioRunnables\ITestscenarioRunnable.cs" />
-    <Compile Include="NetworkComponents\TestscenarioRunnables\SimpleTestscenarioRunnable.cs" />
     <Compile Include="NetworkComponents\Workstation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -2,6 +2,7 @@
 using NSA.Model.BusinessLogic.TestscenarioRunnables;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
+using System;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -10,30 +11,34 @@ namespace NSA.Model.BusinessLogic
         private List<Hardwarenode> endNodes;
         private Rule rule;
         private Hardwarenode startNode;
+        
+        public int SimulationCount { get; }
 
         public SimpleTestscenarioRunnable(Rule rule, Hardwarenode startNode, List<Hardwarenode> endNodes)
         {
             this.rule = rule;
             this.startNode = startNode;
             this.endNodes = endNodes;
+            this.SimulationCount = endNodes.Count; //TODO: change later
         }
   
-        public Result Run()
+        public List<Simulation> Run()
         {
+            List<Simulation> failedSimulations = new List<Simulation>();
             //TODO: add endNodes for subnets
 
             foreach (var endNode in endNodes)
             {
-                Simulation sim = new Simulation("");//Testscenario.SimulationId++); todo FIX THIS
+                Simulation sim = new Simulation(Guid.NewGuid().ToString());
                 Packet p = new Packet(startNode, endNode, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
 
                 Result r = sim.Execute();
-                if (rule.ExpectedResult) if (r.ErrorId != 0) return r;
-                else                     if (r.ErrorId == 0) return r;
+                if ((rule.ExpectedResult && r.ErrorId != 0) || (!rule.ExpectedResult && r.ErrorId == 0))
+                    failedSimulations.Add(sim);
             }
 
-            return new Result();
+            return failedSimulations;
         }
     }
 }

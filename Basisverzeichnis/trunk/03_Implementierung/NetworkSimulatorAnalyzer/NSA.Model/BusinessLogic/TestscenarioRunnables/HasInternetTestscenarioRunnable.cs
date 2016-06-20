@@ -13,15 +13,17 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
         private Rule rule;
         private Hardwarenode startNode;
         private Network network;
+        public int SimulationCount { get; }
 
         public HasInternetTestscenarioRunnable(Rule rule, Hardwarenode startNode, Network n)
         {
             this.rule = rule;
             this.startNode = startNode;
             this.network = n;
+            this.SimulationCount = 0;
         }
 
-        public Result Run()
+        public List<Simulation> Run()
         {
             //TODO: merge and uncomment the code. GetRouters should be there
             //Simulation sim = new Simulation(Testscenario.SimulationId++, rule.ExpectedResult);
@@ -32,7 +34,7 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
             //    sim.AddPacketSend(p);
             //    if (sim.Execute() == false) return false;
             //}
-            return new Result();
+            return new List<Simulation>();
         }
     }
 }
