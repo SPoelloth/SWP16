@@ -82,8 +82,8 @@ namespace NSA.Model.NetworkComponents.Layers
             }
             else if (ValInfo.NextNodeIp == null)
             {
-                ValInfo.Res.ErrorId = 1;
-                ValInfo.Res.Res = "There is no Route or Standard-Gateway for the specified destination.";
+                ValInfo.Res.ErrorId = Result.Errors.NoRoute;
+                ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
                 ValInfo.Res.LayerError = new NetworkLayer();
                 ValInfo.Res.SendError = true;
                 ValInfo.NextNodes = null;

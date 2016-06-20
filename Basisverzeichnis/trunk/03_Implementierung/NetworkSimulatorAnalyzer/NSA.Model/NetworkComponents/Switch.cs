@@ -131,8 +131,8 @@ namespace NSA.Model.NetworkComponents
                     }
                 }
             }
-            ValInfo.Res.ErrorId = 4;
-            ValInfo.Res.Res = "There is no Connection for the next Hardwarenode.";
+            ValInfo.Res.ErrorId = Result.Errors.SwitchNoConnection;
+            ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
             ValInfo.Res.SendError = true;
             return null;
         }

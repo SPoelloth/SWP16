@@ -14,8 +14,8 @@ namespace NSA.Model.NetworkComponents.Layers
                 ValInfo.NextNodes.Add(CurrentNode.Connections[ValInfo.Iface.Name].Start.Equals(CurrentNode) ? CurrentNode.Connections[ValInfo.Iface.Name].End : CurrentNode.Connections[ValInfo.Iface.Name].Start);
                 return;
             }
-            ValInfo.Res.ErrorId = 2;
-            ValInfo.Res.Res = "There is no Connection at the Interface from choosen the Route.";
+            ValInfo.Res.ErrorId = Result.Errors.NoConnection;
+            ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
             ValInfo.Res.LayerError = new DataLinkLayer();
             ValInfo.Res.SendError = true;
             ValInfo.NextNodes = null;
@@ -31,8 +31,8 @@ namespace NSA.Model.NetworkComponents.Layers
                 if (ValInfo.NextNodeIp.Equals(i.IpAddress))
                     return true;
             }
-            ValInfo.Res.ErrorId = 3;
-            ValInfo.Res.Res = "The Connection is to the wrong node.";
+            ValInfo.Res.ErrorId = Result.Errors.PacketNotForThisNode;
+            ValInfo.Res.Res = Result.ResultStrings[(int) ValInfo.Res.ErrorId];
             ValInfo.Res.LayerError = new DataLinkLayer();
             ValInfo.Res.SendError = false;
             return false;

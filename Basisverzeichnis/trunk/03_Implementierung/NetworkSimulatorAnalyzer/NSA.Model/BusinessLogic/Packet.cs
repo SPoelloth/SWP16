@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -23,8 +24,8 @@ namespace NSA.Model.BusinessLogic
             Destination = Dest;
             if (Source == null || Destination == null)
             {
-                Result.ErrorId = 5;
-                Result.Res = "Source or destination node does not exist.";
+                Result.ErrorId = Result.Errors.SourceDestinationNull;
+                Result.Res = Result.ResultStrings[(int)Result.ErrorId];
                 Result.SendError = true;
             }
             Ttl = T;
@@ -70,15 +71,15 @@ namespace NSA.Model.BusinessLogic
             if (!hops[hops.Count - 1].Equals(Destination) && Ttl == 0)
             {
                 //TTL Error
-                Result.ErrorId = 6;
-                Result.Res = "TTL is 0 but the destination was not reached.";
+                Result.ErrorId = Result.Errors.TtlError;
+                Result.Res = Result.ResultStrings[(int)Result.ErrorId];
                 Result.SendError = true;
             }
             if (Result.ErrorId == 0 && tags.Count != 0)
             {
                 //Layer Error
-                Result.ErrorId = 7;
-                Result.Res = "No Layer " + tags.Keys.First() + " at the destination.";
+                Result.ErrorId = Result.Errors.CustomLayerError;
+                Result.Res = String.Format(Result.ResultStrings[(int)Result.ErrorId], tags.Keys.First());
                 Result.LayerError = new CustomLayer(tags.Keys.First());
                 Result.SendError = false;
             }
