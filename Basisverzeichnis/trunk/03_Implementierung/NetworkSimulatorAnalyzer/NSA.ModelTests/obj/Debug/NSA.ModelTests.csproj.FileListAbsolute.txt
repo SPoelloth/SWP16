@@ -1,0 +1,9 @@
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\bin\Debug\NSA.ModelTests.dll
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\bin\Debug\NSA.ModelTests.pdb
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\bin\Debug\NSA.Model.dll
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\bin\Debug\NSA.Model.pdb
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\obj\Debug\NSA.ModelTests.csprojResolveAssemblyReference.cache
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\obj\Debug\NSA.ModelTests.dll
+C:\Users\Oleg Patraschku\Desktop\SW16\SWP16\Basisverzeichnis\trunk\03_Implementierung\NetworkSimulatorAnalyzer\NSA.ModelTests\obj\Debug\NSA.ModelTests.pdb
