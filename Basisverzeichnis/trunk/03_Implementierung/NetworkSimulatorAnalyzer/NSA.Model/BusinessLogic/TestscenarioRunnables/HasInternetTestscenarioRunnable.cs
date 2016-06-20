@@ -25,16 +25,28 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 
         public List<Simulation> Run()
         {
-            //TODO: merge and uncomment the code. GetRouters should be there
-            //Simulation sim = new Simulation(Testscenario.SimulationId++, rule.ExpectedResult);
-            //List<Hardwarenode> routers = network.GetRouters();
-            //foreach (var router in routers)
-            //{
-            //    Packet p = new Packet(startNode, router, 64, null);
-            //    sim.AddPacketSend(p);
-            //    if (sim.Execute() == false) return false;
-            //}
-            return new List<Simulation>();
+            string l = Guid.NewGuid().ToString();
+            Simulation sim = new Simulation(l);
+            List<Router> routers = network.GetRouters();
+            List<Simulation> passedSimulations = new List<Simulation>();
+
+            foreach (var router in routers)
+            {
+                Packet p = new Packet(startNode, router, rule.Options["TTL"], rule.ExpectedResult);
+                sim.AddPacketSend(p);
+                if (sim.Execute().ErrorId == 0)
+                {
+                    passedSimulations.Add(sim);
+                }
+                // else break;
+            }
+
+            if (passedSimulations.Count == 0)
+                passedSimulations.Add(new Simulation(l, startNode.Name, "NoInternetRouter")); //potential BUG
+            else
+                passedSimulations.Clear();
+
+            return passedSimulations;
         }
     }
 }
