@@ -16,8 +16,8 @@ namespace NSA.Model.BusinessLogic.Tests
         {
             var rule = Rule.Parse("A|(Z)|TRUE");
 
-            Assert.AreEqual(rule.StartNode, "A");
-            CollectionAssert.AreEqual(rule.EndNodes, new string[] { "Z" });
+            Assert.AreEqual(rule.StartNodeString, "A");
+            CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "Z" });
             Assert.AreEqual(rule.ExpectedResult, true);
             Assert.AreEqual(rule.SimulType, SimulationType.Simple);
         }
@@ -27,8 +27,8 @@ namespace NSA.Model.BusinessLogic.Tests
         {
             var rule = Rule.Parse("A|(Z)|{TTL:22}|TRUE");
 
-            Assert.AreEqual(rule.StartNode, "A");
-            CollectionAssert.AreEqual(rule.EndNodes, new string[] { "Z" });
+            Assert.AreEqual(rule.StartNodeString, "A");
+            CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "Z" });
 
             int value;
             rule.Options.TryGetValue("TTL", out value);
@@ -43,8 +43,8 @@ namespace NSA.Model.BusinessLogic.Tests
         {
             var rule = Rule.Parse("A|(Zara,Klara)|{TTL:5,SSL:TRUE}|FALSE");
 
-            Assert.AreEqual(rule.StartNode, "A");
-            CollectionAssert.AreEqual(rule.EndNodes, new string[] { "Zara", "Klara" });
+            Assert.AreEqual(rule.StartNodeString, "A");
+            CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "Zara", "Klara" });
 
             int value;
             rule.Options.TryGetValue("TTL", out value);
@@ -61,8 +61,8 @@ namespace NSA.Model.BusinessLogic.Tests
         {
             var rule = Rule.Parse("A|(B,C,D,E,F,G,H,I,J,K,Mama,Nana)|FALSE");
 
-            Assert.AreEqual(rule.StartNode, "A");
-            CollectionAssert.AreEqual(rule.EndNodes, new string[] { "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "Mama", "Nana" });
+            Assert.AreEqual(rule.StartNodeString, "A");
+            CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "Mama", "Nana" });
             Assert.AreEqual(rule.ExpectedResult, false);
             Assert.AreEqual(rule.SimulType, SimulationType.Simple);
         }
@@ -72,7 +72,7 @@ namespace NSA.Model.BusinessLogic.Tests
         {
             var rule = Rule.Parse("A|HAS_INTERNET|TRUE");
 
-            Assert.AreEqual(rule.StartNode, "A");
+            Assert.AreEqual(rule.StartNodeString, "A");
             Assert.AreEqual(rule.ExpectedResult, true);
             Assert.AreEqual(rule.SimulType, SimulationType.HasInternet);
         }
@@ -83,8 +83,8 @@ namespace NSA.Model.BusinessLogic.Tests
         public void OnlyTest()
         {
             var rule = Rule.Parse("A|ONLY(B,C,E,G)|{TTL:64}|FALSE");
-            Assert.AreEqual(rule.StartNode, "A");
-            CollectionAssert.AreEqual(rule.EndNodes, new string[] { "B", "C", "E", "G" });
+            Assert.AreEqual(rule.StartNodeString, "A");
+            CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "B", "C", "E", "G" });
 
             int value;
             rule.Options.TryGetValue("TTL", out value);

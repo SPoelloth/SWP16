@@ -28,19 +28,9 @@ namespace NSA.Model.BusinessLogic
             string[] lines = text.Split('\n');
             foreach (var line in lines)
             {
-                Rule rule = Rule.Parse(line);
-                Hardwarenode startNode = network.GetHardwarenodeByName(rule.StartNode);
-                List<Hardwarenode> endNodes = new List<Hardwarenode>();
-
-                foreach (var eNode in rule.EndNodes)
-                {
-                    Hardwarenode newNode = network.GetHardwarenodeByName(eNode);
-                    if (newNode == null)
-                    {
-                        newNode = new Workstation(eNode);
-                    }
-                    endNodes.Add(newNode);
-                }
+                Rule rule = Rule.Parse(line, n);
+                Hardwarenode startNode = rule.StartNode;
+                List<Hardwarenode> endNodes = rule.EndNodes;
 
                 switch (rule.SimulType)
                 {

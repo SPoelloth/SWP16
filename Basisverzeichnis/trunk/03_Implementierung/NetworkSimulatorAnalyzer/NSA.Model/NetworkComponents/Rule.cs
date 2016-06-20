@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -8,54 +9,50 @@ namespace NSA.Model.BusinessLogic
     {
         Simple = 0,
         Only = 1,
-        HasInternet = 2,
-        Subnet = 3
+        HasInternet = 2
     }
-    
-     
 
     public class Rule
     {
         /**
          * Expected input:
          * PC_NAME | (PC_NAME, ...) | { OPTIONS } | TRUE/FALSE
-         * PC_NAME | SUBNET(PC_NAME), ... | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
+         * PC_NAME | (SUBNET(PC_NAME), ...) | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
          * PC_NAME | ONLY(PC_NAME, ...) | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
          * PC_NAME | HAS_INTERNET | TRUE/FALSE
          */
 
         private SimulationType simulationType;
-        public SimulationType SimulType
-        {
-            get
-            {
-                return simulationType;
-            }
-        }
+        public SimulationType SimulType { get { return simulationType; } }
         private string startNode;
-        public string StartNode
-        {
-            get
-            {
-                return startNode;
-            }
-        }
+        public string StartNodeString { get { return startNode; } }
+        public Hardwarenode StartNode { get { return network.GetHardwarenodeByName(startNode); } }
         private List<string> endNodes;
-        public List<string> EndNodes
+        public List<string> EndNodesString { get { return endNodes; } }
+        public List<Hardwarenode> EndNodes
         {
             get
             {
-                return endNodes;
+                List<Hardwarenode> nodes = new List<Hardwarenode>();
+
+                foreach (var node in endNodes)
+                {
+                    if (node.ToUpper().Contains("SUBNET")) {}
+                        //NOTE: Functionality is not there yet
+                        // nodes.CopyTo(network.GetHardwarenodeBySubnetName(node));
+                    else
+                    {
+                        Hardwarenode n = GetHardwarenodeByName(node);
+                        if (n == null)  newNode = new Workstation(eNode);
+                        nodes.Add(n);
+                    } 
+                }
+
+                return nodes;
             }
         }
-        private Dictionary<string, int> options = new Dictionary<string, int>(){ { "TTL", 64 } };
-        public Dictionary<string, int> Options
-        {
-            get
-            {
-                return options;
-            }
-        }
+        private Dictionary<string, int> options;
+        public Dictionary<string, int> Options { get { return options; } }
         private bool expectedResult;
         public bool ExpectedResult { get { return expectedResult; } }
 
@@ -67,39 +64,20 @@ namespace NSA.Model.BusinessLogic
             "SSL"
         };
 
-        /**
-         * Method throws exceptions while parsing the data or retrieving nodes!
-         */
-        public static List<Simulation> GetSimulationForRule(string stringRule, NetworkComponents.Network networkController)
-        {
-            Rule rule = Rule.Parse(stringRule);
-
-            //NetworkManager.Instance.GetHardwarenodeByName(rule.startNode); // find starting node
-
-            if (rule.simulationType == SimulationType.Only)
-            {
-                //TODO: find all end nodes, subnets
-            }
-
-            List<Simulation> result = new List<Simulation>();
-            foreach (var endNode in rule.endNodes)
-            {
-                //TODO: create simulaitons
-            }
-
-            return result;
-        }
-
-        public Rule(string startNode, List<string> endNodes, Dictionary<string, int> options, SimulationType simulationType, bool expectedResult)
+        public Rule(string startNode, List<string> endNodes, Dictionary<string, int> options, SimulationType simulationType, bool expectedResult, Network n)
         {
             this.startNode = startNode;
             this.endNodes = endNodes;
             this.simulationType = simulationType;
+            
+            if (!options.ContainsKey("TTL")) option["TTL"] = 64;
             this.options = options;
+
             this.expectedResult = expectedResult;
+            this.network = n;
         }
 
-        public static Rule Parse(string rule)
+        public static Rule Parse(string rule, Network n)
         {
             SimulationType simulationType = SimulationType.Simple;
             string startNode = "";
@@ -170,7 +148,7 @@ namespace NSA.Model.BusinessLogic
             if (startNode == "")
             { throw new ArgumentException("Rule doesn't contain all the needed information", rule); }
 
-            return new Rule(startNode, endNodes, options, simulationType, expectedResult);
+            return new Rule(startNode, endNodes, options, simulationType, expectedResult, n);
         }
 
         public static bool CheckForTrueOrFalse(string text, string rule)

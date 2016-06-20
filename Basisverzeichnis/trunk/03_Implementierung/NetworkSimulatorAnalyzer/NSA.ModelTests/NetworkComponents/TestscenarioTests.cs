@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
@@ -13,14 +13,18 @@ namespace NSA.ModelTests.BusinessLogic
     public class TestscenarioTests
     {
         private Network network;
+        private Workstation A;
+        private Workstation B;
+        private Workstation C;
+
         [TestInitialize]
         public void SetUp()
         {
             network = new Network();
 
-            Workstation A = new Workstation("A");
-            Workstation B = new Workstation("B");
-            Workstation C = new Workstation("C");
+            A = new Workstation("A");
+            B = new Workstation("B");
+            C = new Workstation("C");
 
             Router X = new Router("X");
             X.AddInterface(IPAddress.Parse("192.168.1.13"), IPAddress.Parse("255.255.255.0"));
@@ -44,6 +48,13 @@ namespace NSA.ModelTests.BusinessLogic
             network.AddConnection("eth0", "eth0", new Connection(A, B));
             network.AddConnection("eth1", "eth0", new Connection(B, C));
             network.AddConnection("eth0", "eth9", new Connection(X, A));
+        }
+
+        [TestMethod]
+        public void TestRuleSimulationEndNodes()
+        {
+            Rule rule = Rule.Parse("A|(B,C)|{TTL:64}|TRUE", network);
+            Assert.IsTrue(new HashSet<Workstation>(rule.EndNodes).SetEquals(new []{ B,C }));
         }
 
         [TestMethod]
