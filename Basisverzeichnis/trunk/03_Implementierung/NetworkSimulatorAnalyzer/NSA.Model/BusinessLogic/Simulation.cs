@@ -11,6 +11,7 @@ namespace NSA.Model.BusinessLogic
         public string Source { get; private set; }
         public string Destination { get; private set; }
 	    public string Id { get; private set; }
+        public bool ExpectedResult { get; private set; }
 
         public Simulation(string I)
         {
@@ -19,11 +20,12 @@ namespace NSA.Model.BusinessLogic
             Destination = null;
         }
 
-        public Simulation(string I, string S, string D)
+        public Simulation(string I, string S, string D, bool ExpRes)
 	    {
 	        Id = I;
 	        Source = S;
 	        Destination = D;
+            ExpectedResult = ExpRes;
 	    }
 
         /// <summary>

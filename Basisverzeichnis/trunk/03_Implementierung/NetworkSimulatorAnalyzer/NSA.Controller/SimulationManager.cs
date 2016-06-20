@@ -130,7 +130,7 @@ namespace NSA.Controller
             {
                 if (s.Id == Id)
                 {
-                    sim = new Simulation(Guid.NewGuid().ToString("N"), s.Source, s.Destination);
+                    sim = new Simulation(Guid.NewGuid().ToString("N"), s.Source, s.Destination, s.ExpectedResult);
                     oldSim = s;
                 }
             }
@@ -168,7 +168,7 @@ namespace NSA.Controller
             Hardwarenode start = NetworkManager.Instance.GetHardwarenodeByName(Source);
             if (Broadcast)
             {
-                sim =  new Simulation(Guid.NewGuid().ToString("N"), Source, "Broadcast");
+                sim =  new Simulation(Guid.NewGuid().ToString("N"), Source, "Broadcast", ExpectedResult);
                 List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
                 foreach (Workstation w in allWorkstations)
                 {
@@ -180,7 +180,7 @@ namespace NSA.Controller
             }
             else
             {
-                sim = new Simulation(Guid.NewGuid().ToString("N"), Source, Destination);
+                sim = new Simulation(Guid.NewGuid().ToString("N"), Source, Destination, ExpectedResult);
                 Hardwarenode end = NetworkManager.Instance.GetHardwarenodeByName(Destination);
                 sim.AddPacketSend(createPacket(start, end, Ttl, ExpectedResult));
             }
