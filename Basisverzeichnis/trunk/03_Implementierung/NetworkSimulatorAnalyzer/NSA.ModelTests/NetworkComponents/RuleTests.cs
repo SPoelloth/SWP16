@@ -14,7 +14,7 @@ namespace NSA.Model.BusinessLogic.Tests
         [TestMethod()]
         public void SingleEndNodeTest()
         {
-            var rule = Rule.Parse("A|(Z)|TRUE");
+            var rule = Rule.Parse("A|(Z)|TRUE", null);
 
             Assert.AreEqual(rule.StartNodeString, "A");
             CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "Z" });
@@ -25,7 +25,7 @@ namespace NSA.Model.BusinessLogic.Tests
         [TestMethod()]
         public void SingleEndNodeWithOptionTest()
         {
-            var rule = Rule.Parse("A|(Z)|{TTL:22}|TRUE");
+            var rule = Rule.Parse("A|(Z)|{TTL:22}|TRUE", null);
 
             Assert.AreEqual(rule.StartNodeString, "A");
             CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "Z" });
@@ -41,7 +41,7 @@ namespace NSA.Model.BusinessLogic.Tests
         [TestMethod()]
         public void SingleEndNodeWithManyOptionTest()
         {
-            var rule = Rule.Parse("A|(Zara,Klara)|{TTL:5,SSL:TRUE}|FALSE");
+            var rule = Rule.Parse("A|(Zara,Klara)|{TTL:5,SSL:TRUE}|FALSE", null);
 
             Assert.AreEqual(rule.StartNodeString, "A");
             CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "Zara", "Klara" });
@@ -59,7 +59,7 @@ namespace NSA.Model.BusinessLogic.Tests
         [TestMethod()]
         public void ManyEndNodesTest()
         {
-            var rule = Rule.Parse("A|(B,C,D,E,F,G,H,I,J,K,Mama,Nana)|FALSE");
+            var rule = Rule.Parse("A|(B,C,D,E,F,G,H,I,J,K,Mama,Nana)|FALSE", null);
 
             Assert.AreEqual(rule.StartNodeString, "A");
             CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "Mama", "Nana" });
@@ -70,7 +70,7 @@ namespace NSA.Model.BusinessLogic.Tests
         [TestMethod()]
         public void HasInternetTest()
         {
-            var rule = Rule.Parse("A|HAS_INTERNET|TRUE");
+            var rule = Rule.Parse("A|HAS_INTERNET|TRUE", null);
 
             Assert.AreEqual(rule.StartNodeString, "A");
             Assert.AreEqual(rule.ExpectedResult, true);
@@ -82,7 +82,7 @@ namespace NSA.Model.BusinessLogic.Tests
         [TestMethod()]
         public void OnlyTest()
         {
-            var rule = Rule.Parse("A|ONLY(B,C,E,G)|{TTL:64}|FALSE");
+            var rule = Rule.Parse("A|ONLY(B,C,E,G)|{TTL:64}|FALSE", null);
             Assert.AreEqual(rule.StartNodeString, "A");
             CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "B", "C", "E", "G" });
 
@@ -98,7 +98,7 @@ namespace NSA.Model.BusinessLogic.Tests
             bool valid_rule = true;
             try
             {
-                var rule = Rule.Parse("A|(Z)|{TRRL:64}|TRUE");
+                var rule = Rule.Parse("A|(Z)|{TRRL:64}|TRUE", null);
             }
             catch (ArgumentException)
             {

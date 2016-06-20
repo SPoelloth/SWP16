@@ -28,7 +28,7 @@ namespace NSA.Model.BusinessLogic
             string[] lines = text.Split('\n');
             foreach (var line in lines)
             {
-                Rule rule = Rule.Parse(line, n);
+                Rule rule = Rule.Parse(line, network);
                 Hardwarenode startNode = rule.StartNode;
                 List<Hardwarenode> endNodes = rule.EndNodes;
 

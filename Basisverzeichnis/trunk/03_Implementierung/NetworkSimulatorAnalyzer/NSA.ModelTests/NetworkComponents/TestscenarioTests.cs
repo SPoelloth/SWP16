@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
@@ -54,7 +54,9 @@ namespace NSA.ModelTests.BusinessLogic
         public void TestRuleSimulationEndNodes()
         {
             Rule rule = Rule.Parse("A|(B,C)|{TTL:64}|TRUE", network);
-            Assert.IsTrue(new HashSet<Workstation>(rule.EndNodes).SetEquals(new []{ B,C }));
+            Assert.IsTrue(rule.EndNodes.Contains(B));
+            Assert.IsTrue(rule.EndNodes.Contains(C));
+            Assert.IsTrue(rule.EndNodes.Count == 2);
         }
 
         [TestMethod]

@@ -42,8 +42,8 @@ namespace NSA.Model.BusinessLogic
                         // nodes.CopyTo(network.GetHardwarenodeBySubnetName(node));
                     else
                     {
-                        Hardwarenode n = GetHardwarenodeByName(node);
-                        if (n == null)  newNode = new Workstation(eNode);
+                        Hardwarenode n = network.GetHardwarenodeByName(node);
+                        if (n == null)  n = new Workstation(node);
                         nodes.Add(n);
                     } 
                 }
@@ -64,13 +64,14 @@ namespace NSA.Model.BusinessLogic
             "SSL"
         };
 
+        private Network network;
         public Rule(string startNode, List<string> endNodes, Dictionary<string, int> options, SimulationType simulationType, bool expectedResult, Network n)
         {
             this.startNode = startNode;
             this.endNodes = endNodes;
             this.simulationType = simulationType;
             
-            if (!options.ContainsKey("TTL")) option["TTL"] = 64;
+            if (!options.ContainsKey("TTL")) options["TTL"] = 64;
             this.options = options;
 
             this.expectedResult = expectedResult;
