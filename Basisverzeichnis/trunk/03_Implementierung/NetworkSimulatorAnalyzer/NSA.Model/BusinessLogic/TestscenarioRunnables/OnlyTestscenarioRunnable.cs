@@ -9,7 +9,7 @@ namespace NSA.Model.BusinessLogic
     internal class OnlyTestscenarioRunnable : ITestscenarioRunnable
     {
         private Network network;
-        private List<Hardwarenode> restNodes;
+        private List<Hardwarenode> endNodes;
         private Rule rule;
         private Hardwarenode startNode;
         
@@ -20,8 +20,8 @@ namespace NSA.Model.BusinessLogic
             this.rule = rule;
             this.startNode = startNode;
             this.endNodes = endNodes;
-            this.SimulationCount = network.GetAllWorkstations().Count; //TODO: change later
-            this.network = n
+            this.SimulationCount = n.GetAllWorkstations().Count; //TODO: change later
+            this.network = n;
         }
   
         public List<Simulation> Run()
@@ -31,16 +31,17 @@ namespace NSA.Model.BusinessLogic
 
             foreach (var node in network.GetAllWorkstations())
             {
+                if (startNode == node) continue;
                 Simulation sim = new Simulation(Guid.NewGuid().ToString());
 
-                bool expectedResult = rule.ExpectedResult
+                bool expectedResult = rule.ExpectedResult;
                 if (!endNodes.Contains(node)) expectedResult = !expectedResult; 
 
                 Packet p = new Packet(startNode, node, rule.Options["TTL"], expectedResult);
                 sim.AddPacketSend(p);
 
                 Result r = sim.Execute();
-                if ((rule.ExpectedResult && r.ErrorId != 0) || (!rule.ExpectedResult && r.ErrorId == 0))
+                if ((expectedResult && r.ErrorId != 0) || (!expectedResult && r.ErrorId == 0))
                     failedSimulations.Add(sim);
             }
 

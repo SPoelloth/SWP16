@@ -93,6 +93,19 @@ namespace NSA.Model.BusinessLogic.Tests
         }
 
         [TestMethod()]
+        public void OnlyTestUnique()
+        {
+            var rule = Rule.Parse("A|ONLY(B)|{TTL:64}|FALSE", null);
+            Assert.AreEqual(rule.StartNodeString, "A");
+            CollectionAssert.AreEqual(rule.EndNodesString, new string[] { "B"});
+
+            int value;
+            rule.Options.TryGetValue("TTL", out value);
+            Assert.AreEqual(64, value);
+            Assert.AreEqual(rule.ExpectedResult, false);
+        }
+
+        [TestMethod()]
         public void InvalidOptionTest()
         {
             bool valid_rule = true;

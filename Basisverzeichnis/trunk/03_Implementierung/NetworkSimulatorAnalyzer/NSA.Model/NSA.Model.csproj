@@ -47,6 +47,7 @@
     <Compile Include="BusinessLogic\TestscenarioRunnables\ITestscenarioRunnable.cs" />
     <Compile Include="BusinessLogic\Packet.cs" />
     <Compile Include="BusinessLogic\Project.cs" />
+    <Compile Include="BusinessLogic\TestscenarioRunnables\OnlyTestscenarioRunnable.cs" />
     <Compile Include="BusinessLogic\TestscenarioRunnables\SimpleTestscenarioRunnable.cs" />
     <Compile Include="BusinessLogic\Simulation.cs" />
     <Compile Include="BusinessLogic\Testscenario.cs" />

@@ -99,7 +99,7 @@ namespace NSA.ModelTests.BusinessLogic
         }
 
         [TestMethod]
-        public void TestTTLShouldFail()
+        public void TestTTLShouldFail() 
         {
             Testscenario t = new Testscenario("A|(B)|{TTL:0}|TRUE", network, "y");
 
@@ -108,6 +108,19 @@ namespace NSA.ModelTests.BusinessLogic
             foreach (var runnable in runnables)
             {
                 Assert.IsTrue(runnable.Run().Count != 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestAonlyReachesBShouldFail()
+        {
+            Testscenario t = new Testscenario("A|ONLY(B)|TRUE", network, "y");
+
+            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+
+            foreach (var runnable in runnables)
+            {
+                Assert.IsFalse(runnable.Run().Count != 0);
             }
         }
     }
