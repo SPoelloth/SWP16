@@ -21,6 +21,12 @@ namespace NSA.ModelTests.BusinessLogic
             Workstation A = new Workstation("A");
             Workstation B = new Workstation("B");
             Workstation C = new Workstation("C");
+
+            Router X = new Router("X");
+            X.AddInterface(IPAddress.Parse("192.168.1.13"), IPAddress.Parse("255.255.255.0"));
+            X.IsGateway = true;
+            X.AddRoute(new Route(IPAddress.Parse("192.168.1.1"), IPAddress.Parse("255.255.255.0"), IPAddress.Parse("192.168.1.1"), new Interface(IPAddress.Parse("192.168.1.13"), IPAddress.Parse("255.255.255.0"), 0)));
+
             A.AddInterface(IPAddress.Parse("192.168.1.1"), IPAddress.Parse("255.255.255.0"));
             B.AddInterface(IPAddress.Parse("192.168.1.2"), IPAddress.Parse("255.255.255.0")); //mittlerer Rechner schnittstelle eins: eth0
             B.AddInterface(IPAddress.Parse("192.168.1.3"), IPAddress.Parse("255.255.255.0")); //mittlerer Rechner schnittstelle eins: eth1
@@ -29,18 +35,34 @@ namespace NSA.ModelTests.BusinessLogic
             A.AddRoute(new Route(IPAddress.Parse("192.168.1.4"), IPAddress.Parse("255.255.255.0"), IPAddress.Parse("192.168.1.2"), new Interface(IPAddress.Parse("192.168.1.1"), IPAddress.Parse("255.255.255.0"), 0)));
             //Route von C nach A über B
             A.AddRoute(new Route(IPAddress.Parse("192.168.1.1"), IPAddress.Parse("255.255.255.0"), IPAddress.Parse("192.168.1.3"), new Interface(IPAddress.Parse("192.168.1.4"), IPAddress.Parse("255.255.255.0"), 0)));
+            A.AddRoute(new Route(IPAddress.Parse("192.168.1.13"), IPAddress.Parse("255.255.255.0"), IPAddress.Parse("192.168.1.13"), new Interface(IPAddress.Parse("192.168.1.1"), IPAddress.Parse("255.255.255.0"), 0)));
             network.AddHardwarenode(A);
             network.AddHardwarenode(B);
             network.AddHardwarenode(C);
+            network.AddHardwarenode(X);
 
             network.AddConnection("eth0", "eth0", new Connection(A, B));
             network.AddConnection("eth1", "eth0", new Connection(B, C));
+            network.AddConnection("eth0", "eth9", new Connection(X, A));
         }
 
         [TestMethod]
         public void TestSimulationExpectedResultIsTrue()
         {
             Testscenario t = new Testscenario("A|(B,C)|{TTL:64}|TRUE", network, "r");
+
+            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+
+            foreach (var runnable in runnables)
+            {
+                Assert.IsTrue(runnable.Run().Count == 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestHasInternetIsTrue()
+        {
+            Testscenario t = new Testscenario("A|HAS_INTERNET|TRUE", network, "r");
 
             List<ITestscenarioRunnable> runnables = t.GetRunnables();
 
