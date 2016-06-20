@@ -34,8 +34,9 @@ namespace NSA.Model.BusinessLogic
 
                 switch (rule.SimulType)
                 {
-                    case SimulationType.Simple: runnables.Add(new SimpleTestscenarioRunnable(rule, startNode, endNodes)); break;
-                    case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule, startNode, network)); break;
+                    case SimulationType.Simple:      runnables.Add(new SimpleTestscenarioRunnable(rule, startNode, endNodes));        break;
+                    case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule, startNode, network));    break;
+                    case SimulationType.Only:        runnables.Add(new OnlyTestscenarioRunnable(rule, startNode, endNodes, network)); break;
                     default: break;
                 }
             }

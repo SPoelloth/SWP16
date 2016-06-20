@@ -32,8 +32,7 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 
             foreach (var router in routers)
             {
-                //rule.Options["TTL"]
-                Packet p = new Packet(startNode, router, 64, rule.ExpectedResult);
+                Packet p = new Packet(startNode, router, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
                 if (sim.Execute().ErrorId == 0)
                 {
