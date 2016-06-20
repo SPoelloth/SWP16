@@ -244,5 +244,14 @@ namespace NSA.Model.NetworkComponents
 
             return false;
         }
+
+        public void SetInterfaceCount(int count)
+        {
+            Interfaces.Clear();
+            for(int i = 0; i < count; i++)
+            {
+                Interfaces.Add(Interface.NamePrefix + i);
+            }
+        }
     }
 }

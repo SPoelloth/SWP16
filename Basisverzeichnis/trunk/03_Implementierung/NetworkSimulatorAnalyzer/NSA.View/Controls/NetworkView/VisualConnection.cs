@@ -98,7 +98,7 @@ namespace NSA.View.Controls.NetworkView
             {
                 state = state | ConnectionState.RightReverse;
             }
-            
+
             if (state == ConnectionState.Straight)
             {
                 int initialCableLength = Math.Max(15, Element1.Location.X - Element2.Location.X - Element1.Width) / 2;
@@ -109,11 +109,11 @@ namespace NSA.View.Controls.NetworkView
                 var sw1 = Element1 as SwitchControl;
                 var startDist = sw1 != null ? new Point(prevPoint.X, prevPoint.Y + 10 + Port1 * SwitchConnectionDist) : new Point(prevPoint.X + ((Port2 % 2) * 2 - 1) * initialCableLength, prevPoint.Y);
 
-               // int a = 10;
-               // for (int i = 0; i < 10; i++)
-               // {
-               //     Console.WriteLine(i > a / 2 ? a/2 - i % (a / 2) : i);
-               // }
+                // int a = 10;
+                // for (int i = 0; i < 10; i++)
+                // {
+                //     Console.WriteLine(i > a / 2 ? a/2 - i % (a / 2) : i);
+                // }
 
                 points.Add(startDist);
                 Point center = new Point((int)((startElement.Location.X + startElement.Width / 2f + targetElement.Location.X) / 2f), (int)(startElement.Location.Y + startElement.Height + targetElement.Location.Y / 2f));
@@ -166,7 +166,7 @@ namespace NSA.View.Controls.NetworkView
                 points.Add(endDist);
                 points.Add(end);
             }
-            else // if(state == ConnectionState.BothReverse)
+            else if (state == ConnectionState.BothReverse)
             {
                 int initialCableLength = 50;
 
@@ -219,7 +219,7 @@ namespace NSA.View.Controls.NetworkView
 
             if (connectionControls.Count < points.Count - 1)
             {
-                for (int i = 0; connectionControls.Count < points.Count - 1; i++)
+                for (; connectionControls.Count < points.Count - 1;)
                 {
                     var c = new ConnectionControl(Name, new Point(), new Point());
                     Parent.AddElement(c);

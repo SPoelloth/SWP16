@@ -13,7 +13,7 @@ namespace NSA.Model.NetworkComponents
         private Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
-        
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
@@ -29,7 +29,7 @@ namespace NSA.Model.NetworkComponents
             Layerstack.AddLayer(new SessionLayer());
             Layerstack.AddLayer(new PresentationLayer());
             Layerstack.AddLayer(new ApplicationLayer());
-            AddInterface(new IPAddress(new byte[] {192, 168, 0, 1}), new IPAddress(new byte[] {255, 255, 255, 0}));
+            AddInterface(new IPAddress(new byte[] { 192, 168, 0, 1 }), new IPAddress(new byte[] { 255, 255, 255, 0 }));
             StandardGateway = null;
             StandardGatewayPort = null;
         }
@@ -90,17 +90,16 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Ip">The new ip.</param>
         /// <param name="Mask">The new subnetmask.</param>
         /// <returns>bool: false if the interface could not be found, otherwise true</returns>
-        public bool SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
+        public void SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
         {
             if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))
             {
                 AddInterface(Ip, Mask, int.Parse(Ifacename.Replace(Interface.NamePrefix, "")));
-                return true;
+                return;
             }
             interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
-            return true;
         }
-        
+
         /// <summary>
         /// Gets the new interface number.
         /// </summary>
@@ -239,7 +238,7 @@ namespace NSA.Model.NetworkComponents
                 if (ValInfo.NextNodes != null)
                 {
                     Workstation dest = Destination as Workstation;
-                    if(dest != null)
+                    if (dest != null)
                         Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags);
                     else
                     {
@@ -281,5 +280,5 @@ namespace NSA.Model.NetworkComponents
 
         #endregion
     }
-    
+
 }

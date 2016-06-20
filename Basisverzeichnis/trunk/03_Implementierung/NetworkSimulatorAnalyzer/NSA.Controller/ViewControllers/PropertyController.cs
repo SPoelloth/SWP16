@@ -80,8 +80,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControlAddRoute()
         {
             Workstation station = (Workstation) selectedNode;
-            Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None,
-                IPAddress.None, station.GetInterfaces().First());
+            NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.GetInterfaces().First());
             propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
             propertyControl.RetainScrollPosition = false;
@@ -93,12 +92,10 @@ namespace NSA.Controller.ViewControllers
             LoadElementProperties(selectedNode.Name);
         }
 
-        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway,
-            IPAddress SubnetMask, string InterfaceName)
+        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress SubnetMask, string InterfaceName)
         {
             Workstation station = (Workstation) selectedNode;
-            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask,
-                station.GetInterfaces().Find(i => i.Name == InterfaceName));
+            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask, station.GetInterfaces().Find(i => i.Name == InterfaceName));
         }
 
         #endregion Routes
