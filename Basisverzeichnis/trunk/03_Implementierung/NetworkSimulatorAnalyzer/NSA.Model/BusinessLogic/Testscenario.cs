@@ -13,7 +13,7 @@ namespace NSA.Model.BusinessLogic
 
         public string fileName { get; private set; }
         public string Id { get; }
-        public int SimulationCount { get; }
+        public int SimulationCount { get; private set; }
         
         public Testscenario(string t, Network n, string fileName)
         {

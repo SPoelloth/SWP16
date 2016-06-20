@@ -2,6 +2,7 @@
 using NSA.Model.BusinessLogic.TestscenarioRunnables;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
+using System;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -28,7 +29,7 @@ namespace NSA.Model.BusinessLogic
 
             foreach (var endNode in endNodes)
             {
-                Simulation sim = new Simulation("");//Testscenario.SimulationId++); todo FIX THIS
+                Simulation sim = new Simulation(Guid.NewGuid().ToString());//Testscenario.SimulationId++); todo FIX THIS
                 Packet p = new Packet(startNode, endNode, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
 
