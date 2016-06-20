@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
@@ -11,16 +10,16 @@ namespace NSA.Model.BusinessLogic
         private List<Packet> packetsReceived = new List<Packet>();
         public string Source { get; private set; }
         public string Destination { get; private set; }
-	    public int Id { get; private set; }
+	    public string Id { get; private set; }
 
-        public Simulation(int I)
+        public Simulation(string I)
         {
             Id = I;
             Source = null;
             Destination = null;
         }
 
-        public Simulation(int I, string S, string D)
+        public Simulation(string I, string S, string D)
 	    {
 	        Id = I;
 	        Source = S;
@@ -44,6 +43,15 @@ namespace NSA.Model.BusinessLogic
 	    {
 	        return packetsSend;
 	    }
+
+        /// <summary>
+        /// Gets the received packets.
+        /// </summary>
+        /// <returns></returns>
+        public List<Packet> GetReceivedPackets()
+        {
+            return packetsReceived;
+        }
 
         /// <summary>
         /// Executes this instance.

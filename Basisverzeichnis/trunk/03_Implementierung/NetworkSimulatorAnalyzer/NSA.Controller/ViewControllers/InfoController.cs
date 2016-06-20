@@ -47,7 +47,7 @@ namespace NSA.Controller.ViewControllers
             if (row != null)
             {
                 var values = row["Simulationen"].ToString().Split(' ');
-                SimulationManager.Instance.RunSimulationFromHistory(int.Parse(values[1]));
+                SimulationManager.Instance.RunSimulationFromHistory(""); //int.Parse(values[1])); todo FIX THIS
             }
         }
 

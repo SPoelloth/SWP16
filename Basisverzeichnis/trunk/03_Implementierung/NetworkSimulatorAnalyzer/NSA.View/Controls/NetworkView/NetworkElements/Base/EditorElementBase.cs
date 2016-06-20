@@ -44,7 +44,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             g.DrawImage(Image, 0, 0, Image.Width, Image.Height);
         }
 
-        Point lastMouseLocation = new Point();
+        internal Point lastMouseLocation = new Point();
         bool dragging = false;
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -75,11 +75,13 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             Cursor = Cursor == Cursors.Default ? Cursors.Hand : Cursor;
             base.OnMouseHover(e);
         }
-
+        
         protected override void OnMouseLeave(EventArgs e)
         {
             Cursor = Cursor == Cursors.Hand ? Cursors.Default : Cursor;
             base.OnMouseLeave(e);
+            lastMouseLocation = new Point();
+            Invalidate();
         }
 
         protected override void OnMouseClick(MouseEventArgs e)

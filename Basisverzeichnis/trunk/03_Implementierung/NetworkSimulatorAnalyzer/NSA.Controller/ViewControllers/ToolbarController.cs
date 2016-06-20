@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using NSA.View.Controls.Toolbar;
 using NSA.View.Forms;
@@ -77,11 +78,12 @@ namespace NSA.Controller.ViewControllers
         void AdvancedSimulation_Click(object sender, EventArgs e)
         {
             AdvancedSimulationForm form = new AdvancedSimulationForm();
+            form.SetWorkstations(NetworkManager.Instance.GetAllWorkstations().Select(w => w.Name).ToList());
             var dlgresult = form.ShowDialog();
             if (dlgresult != DialogResult.OK) return;
 
-            //SimulationManager.Instance.CreateSimulation();
-            //todo 
+            SimulationManager.Instance.CreateAndExecuteSimulation(form.SourceName, form.TargetName, form.MaxHopCount,
+                form.ExpectedResult, false);
         }
 
         void QuickSimulation_Click(object sender, EventArgs e)
@@ -106,7 +108,6 @@ namespace NSA.Controller.ViewControllers
 
         void AddComputer_Click(object sender, EventArgs e)
         {
-            // MessageBox.Show((sender as Button).Text + " clicked");
             NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Workstation);
         }
 

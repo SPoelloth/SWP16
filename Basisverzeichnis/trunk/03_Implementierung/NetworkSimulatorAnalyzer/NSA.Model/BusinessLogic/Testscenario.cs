@@ -11,18 +11,14 @@ namespace NSA.Model.BusinessLogic
         private Dictionary<Rule, bool> results = new Dictionary<Rule, bool>();
         public static int SimulationId = 0;
         private Network network;
+        public string fileName { get; private set; }
         private string text;
-
-        public Testscenario()
-        {
-        }
-        // todo: an id is needed
-        // Vorschlag: Id = Guid.NewGuid().ToString("N"); (Tamara)
-        // in the ProjectManager is a method to load the testscenario by id so the testscenario has to have an id
-        public Testscenario(string t, Network n)
+        
+        public Testscenario(string t, Network n, string fileName)
         {
             network = n;
             text = t;
+            this.fileName = fileName;
         }
 
         public List<ITestscenarioRunnable> GetRunnables()

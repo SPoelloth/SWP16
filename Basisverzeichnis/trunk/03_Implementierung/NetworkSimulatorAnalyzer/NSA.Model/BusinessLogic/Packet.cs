@@ -2,6 +2,7 @@
 using System.Linq;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
+using NSA.Model.NetworkComponents.Layers;
 
 namespace NSA.Model.BusinessLogic
 {
@@ -78,6 +79,7 @@ namespace NSA.Model.BusinessLogic
                 //Layer Error
                 Result.ErrorId = 7;
                 Result.Res = "No Layer " + tags.Keys.First() + " at the destination.";
+                Result.LayerError = new CustomLayer(tags.Keys.First());
                 Result.SendError = false;
             }
             if(Result.ErrorId == 0)

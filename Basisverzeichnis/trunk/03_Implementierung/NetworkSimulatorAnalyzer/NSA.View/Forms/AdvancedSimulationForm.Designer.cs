@@ -73,9 +73,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(12, 96);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(133, 13);
+            this.label4.Size = new System.Drawing.Size(155, 13);
             this.label4.TabIndex = 3;
-            this.label4.Text = "Zeit für Animation pro Hop:";
+            this.label4.Text = "Zeit für Animation pro Hop (ms):";
             // 
             // label5
             // 
@@ -88,6 +88,7 @@
             // 
             // sourceComboBox
             // 
+            this.sourceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sourceComboBox.FormattingEnabled = true;
             this.sourceComboBox.Location = new System.Drawing.Point(166, 13);
             this.sourceComboBox.Name = "sourceComboBox";
@@ -97,6 +98,7 @@
             // 
             // targetComboBox
             // 
+            this.targetComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.targetComboBox.FormattingEnabled = true;
             this.targetComboBox.Location = new System.Drawing.Point(166, 40);
             this.targetComboBox.Name = "targetComboBox";
@@ -113,6 +115,7 @@
             this.hopCountTextBox.Text = "255";
             this.hopCountTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.hopCountTextBox.TextChanged += new System.EventHandler(this.hopCountTextBox_TextChanged);
+            this.hopCountTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.IntOnlyInput_TextboxKeyPress);
             // 
             // animationTimeTextBox
             // 
@@ -120,19 +123,18 @@
             this.animationTimeTextBox.Name = "animationTimeTextBox";
             this.animationTimeTextBox.Size = new System.Drawing.Size(121, 20);
             this.animationTimeTextBox.TabIndex = 8;
-            this.animationTimeTextBox.Text = "1000 ms";
+            this.animationTimeTextBox.Text = "1000";
             this.animationTimeTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.animationTimeTextBox.TextChanged += new System.EventHandler(this.animationTimeTextBox_TextChanged);
+            this.animationTimeTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.IntOnlyInput_TextboxKeyPress);
             // 
             // resultCombo
             // 
             this.resultCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.resultCombo.FormattingEnabled = true;
             this.resultCombo.Items.AddRange(new object[] {
-            "Erfolgreich",
-            "Timeout",
-            "Ziel nicht erreichbar",
-            "Hier Ergebnisse aus Sim eintragen"});
+            "Erreichbar",
+            "Nicht erreichbar"});
             this.resultCombo.Location = new System.Drawing.Point(166, 119);
             this.resultCombo.Name = "resultCombo";
             this.resultCombo.Size = new System.Drawing.Size(121, 21);
@@ -141,7 +143,7 @@
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(216, 150);
+            this.startButton.Location = new System.Drawing.Point(212, 150);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 10;
@@ -165,7 +167,11 @@
             this.Controls.Add(this.ttlLabel);
             this.Controls.Add(this.destinationLabel);
             this.Controls.Add(this.sourceLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AdvancedSimulationForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "NSA - Erweiterte Simulation";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -15,7 +15,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         #region Workstation Colors
         private Pen borderPen = Pens.Black;
         private Pen selectedPen = Pens.Red;
-        private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(101, 130, 193), Color.FromArgb(101, 130, 193));
+        private LinearGradientBrush backgroundBrush = new LinearGradientBrush(new Point(), new Point(3, 0), Color.FromArgb(80, 110, 173), Color.FromArgb(101, 130, 193));
         private LinearGradientBrush backgroundGradientBrush = new LinearGradientBrush(new Point(), new Point(0, 50), Color.FromArgb(0, 0, 0, 0), Color.FromArgb(255, 0, 0, 0));
         private Brush dotBrush = new SolidBrush(Color.FromArgb(0, 255, 0));
         #endregion Workstation Colors
@@ -82,17 +82,17 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             }
         }
 
-        public void RemoveInterface(int iface)
+        public void RemoveInterface(int Ethernet)
         {
-            interfaces.Remove(iface);
+            interfaces.Remove(Ethernet);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
         }
 
-        public void AddInterface(int iface)
+        public void AddInterface(int Ethernet)
         {
-            interfaces.Add(iface);
+            interfaces.Add(Ethernet);
             calculateDimension();
             calculateHitboxes();
             Invalidate();
@@ -133,7 +133,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             g.DrawRectangle(IsSelected ? selectedPen : borderPen, new Rectangle(0, offsetY, Width - 1, Height - 1 - offsetY));
         }
 
-        Point mouseLocation = new Point();
+        Point mouseLocation;
         protected override void OnMouseMove(MouseEventArgs e)
         {
             mouseLocation = e.Location;
@@ -142,6 +142,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
                 Invalidate(r);
             }
             base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            mouseLocation = new Point();
+            base.OnMouseLeave(e);
         }
 
         public int GetPortIDByPoint(Point location)
@@ -156,6 +162,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         public override Rectangle GetPortBoundsByID(int port)
         {
             return portHitboxes[interfaces.IndexOf(port)];
+        }
+
+        public int GetInterfaceCount()
+        {
+            return interfaces.Count;
         }
     }
 }

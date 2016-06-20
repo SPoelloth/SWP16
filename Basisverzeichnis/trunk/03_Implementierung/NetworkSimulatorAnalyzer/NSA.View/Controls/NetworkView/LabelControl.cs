@@ -65,7 +65,7 @@ namespace NSA.View.Controls.NetworkView
             var measure = TextRenderer.MeasureText(textBox.Text, textBox.Font);
             Width = textBox.Width = measure.Width;
             Height = measure.Height;
-            NameChanged?.Invoke(parentElement.Name, textBox.Name);
+            NameChanged?.Invoke(parentElement.Name, textBox.Text);
             parentElement.Name = textBox.Text;
             Element_LocationChanged(parentElement, null);
         }

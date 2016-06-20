@@ -353,7 +353,7 @@ namespace NSA.Controller
             {
                 try
                 {
-                    testscenarios.Add(new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network));
+                    testscenarios.Add(new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network, file.FullName));
                 }
                 catch (IOException)
                 {
