@@ -35,16 +35,16 @@ namespace NSA.Controller
             if (Simulations.Count == 0)
                 return null;
             if (IsSendPacket)
-                p = Simulations[Simulations.Count - 1].GetSendPackets()?[PacketIndex];
+                p = Simulations[Simulations.Count - 1].PacketsSend?[PacketIndex];
             else
-                p = Simulations[Simulations.Count - 1].GetReceivedPackets()?[PacketIndex];
+                p = Simulations[Simulations.Count - 1].PacketsReceived?[PacketIndex];
             if (p == null)
                 return null;
             Hardwarenode nodeOne = NetworkManager.Instance.GetHardwarenodeByName(NodeOneName);
             Hardwarenode nodeTwo = NetworkManager.Instance.GetHardwarenodeByName(NodeTwoName);
             if (nodeOne == null || nodeTwo == null)
                 return null;
-            List<Hardwarenode> hops = p.GetHops();
+            List<Hardwarenode> hops = p.Hops;
             if (hops.Count < 2)
                 return null;
             if (hops[hops.Count].Equals(nodeTwo))
@@ -141,7 +141,7 @@ namespace NSA.Controller
                 }
             }
             if (sim == null) return null;
-            foreach (Packet p in oldSim.GetSendPackets())
+            foreach (Packet p in oldSim.PacketsSend)
             {
                 sim.AddPacketSend(createPacket(p.Source, p.Destination, p.Ttl, p.ExpectedResult));
             }

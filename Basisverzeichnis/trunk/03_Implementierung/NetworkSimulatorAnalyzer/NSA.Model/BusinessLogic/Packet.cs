@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -10,7 +11,7 @@ namespace NSA.Model.BusinessLogic
     {
         public Hardwarenode Source { get; private set; }
         public Hardwarenode Destination { get; private set; }
-        private List<Hardwarenode> hops = new List<Hardwarenode>();
+        public List<Hardwarenode> Hops { get; } = new List<Hardwarenode>();
         public int Ttl { get; private set; }
         public Result Result { get; private set; } = new Result();
         public bool ExpectedResult { get; }
@@ -23,22 +24,13 @@ namespace NSA.Model.BusinessLogic
             Destination = Dest;
             if (Source == null || Destination == null)
             {
-                Result.ErrorId = 5;
-                Result.Res = "Source or destination node does not exist.";
+                Result.ErrorId = Result.Errors.SourceDestinationNull;
+                Result.Res = Result.ResultStrings[(int)Result.ErrorId];
                 Result.SendError = true;
             }
             Ttl = T;
             ExpectedResult = ExpRes;
-            hops.Add(Source);
-        }
-
-        /// <summary>
-        /// Gets the hops.
-        /// </summary>
-        /// <returns></returns>
-        public List<Hardwarenode> GetHops()
-        {
-            return hops;
+            Hops.Add(Source);
         }
 
         /// <summary>
@@ -53,32 +45,32 @@ namespace NSA.Model.BusinessLogic
                 Res = Result,
                 Source = Source as Workstation
             };
-            while (!hops[hops.Count - 1].Equals(Destination) && valInfo.Res.ErrorId == 0 && Ttl > 0)
+            while (!Hops[Hops.Count - 1].Equals(Destination) && valInfo.Res.ErrorId == 0 && Ttl > 0)
             {
-                List<Hardwarenode> nextNodes = hops[hops.Count - 1].Send(Destination, tags, valInfo);
+                List<Hardwarenode> nextNodes = Hops[Hops.Count - 1].Send(Destination, tags, valInfo);
                 if (nextNodes != null)
                 {
                     if (nextNodes[nextNodes.Count - 1].Receive(tags, valInfo, Destination))
                         Ttl--;
                     foreach (Hardwarenode n in nextNodes)
                     {
-                        hops.Add(n);
+                        Hops.Add(n);
                     }
                 }
             }
             Result = valInfo.Res;
-            if (!hops[hops.Count - 1].Equals(Destination) && Ttl == 0)
+            if (!Hops[Hops.Count - 1].Equals(Destination) && Ttl == 0)
             {
                 //TTL Error
-                Result.ErrorId = 6;
-                Result.Res = "TTL is 0 but the destination was not reached.";
+                Result.ErrorId = Result.Errors.TtlError;
+                Result.Res = Result.ResultStrings[(int)Result.ErrorId];
                 Result.SendError = true;
             }
             if (Result.ErrorId == 0 && tags.Count != 0)
             {
                 //Layer Error
-                Result.ErrorId = 7;
-                Result.Res = "No Layer " + tags.Keys.First() + " at the destination.";
+                Result.ErrorId = Result.Errors.CustomLayerError;
+                Result.Res = String.Format(Result.ResultStrings[(int)Result.ErrorId], tags.Keys.First());
                 Result.LayerError = new CustomLayer(tags.Keys.First());
                 Result.SendError = false;
             }

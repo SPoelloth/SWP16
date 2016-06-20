@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
@@ -9,8 +10,8 @@ namespace NSA.Model.NetworkComponents
 {
     public class Hardwarenode
     {
-        protected Layerstack Layerstack = new Layerstack();
-        public Dictionary<string, Connection> Connections { get; protected set; }= new Dictionary<string, Connection>();
+        public Layerstack Layerstack { get; } = new Layerstack();
+        public Dictionary<string, Connection> Connections { get; protected set; } = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
         /// <summary>
@@ -31,11 +32,10 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Con">The connection to be added.</param>
         public void AddConnection(string IfaceName, Connection Con)
         {
-            if(HasInterface(IfaceName))
-                Connections.Add(IfaceName, Con);
+            if(HasInterface(IfaceName)) Connections.Add(IfaceName, Con);
             else
             {
-                throw new InvalidOperationException("Interface: " + IfaceName + " nicht vorhanden, aber eine Verbindung daran.");
+                Debug.Assert(false, "Interface: " + IfaceName + " nicht vorhanden, aber es soll eine Verbindung daran gesetzt werden.");
             }
         }
 
@@ -77,9 +77,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns></returns>
         public bool InterfaceIsUsed(string InterfaceName)
         {
-            if (Connections.ContainsKey(InterfaceName))
-                return true;
-            return false;
+            return Connections.ContainsKey(InterfaceName);
         }
 
         /// <summary>
@@ -130,18 +128,9 @@ namespace NSA.Model.NetworkComponents
         /// </returns>
         public override bool Equals(object Obj)
         {
-            // If parameter is null return false.
-            if (Obj == null)
-            {
-                return false;
-            }
-
-            // If parameter cannot be cast to Point return false.
+            // If parameter cannot be cast to Hardwarenode return false.
             Hardwarenode h = Obj as Hardwarenode;
-            if ((object)h == null)
-            {
-                return false;
-            }
+            if (h == null) return false;
 
             // Return true if the fields match:
             return string.Equals(Name, h.Name);
@@ -152,9 +141,9 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Other">The other.</param>
         /// <returns></returns>
-        protected bool Equals(Hardwarenode Other)
+        public bool Equals(Hardwarenode Other)
         {
-            // auto-generated method
+            if (Other == null) return false;
             return string.Equals(Name, Other.Name);
         }
 
@@ -182,18 +171,11 @@ namespace NSA.Model.NetworkComponents
         public static bool operator ==(Hardwarenode A, Hardwarenode B)
         {
             // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(A, B))
-            {
-                return true;
-            }
+            if (ReferenceEquals(A, B)) return true;
 
-            // If one is null, but not both, return false.
-            if (((object)A == null) || ((object)B == null))
-            {
-                return false;
-            }
-
-            // Return true if the fields match:
+            // If not casted to object, the Hardwarenode == Operator gets used => endless loop => Stackoverflow
+            // If I do not check B for null, Resharper complains about possible  NullReferenceException
+            if ((object) A == null || ((object)B == null)) return false;
             return A.Name == B.Name;
         }
 

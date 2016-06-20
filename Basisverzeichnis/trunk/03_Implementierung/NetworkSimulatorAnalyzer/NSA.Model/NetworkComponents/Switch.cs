@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
@@ -6,7 +7,6 @@ namespace NSA.Model.NetworkComponents
     public class Switch : Hardwarenode
     {
         public List<string> Interfaces { get; } = new List<string>();
-        public static readonly string InterfaceNamePrefix = "eth";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Switch"/> class.
@@ -38,7 +38,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>string: the name of the new interface</returns>
         public string AddInterface()
         {
-            string name = InterfaceNamePrefix + GetNewInterfaceNumber();
+            string name = Interface.NamePrefix + getNewInterfaceNumber();
             Interfaces.Add(name);
             return name;
         }
@@ -56,17 +56,17 @@ namespace NSA.Model.NetworkComponents
         /// Gets the new interface number.
         /// </summary>
         /// <returns>int: number for next interface</returns>
-        private int GetNewInterfaceNumber()
+        private int getNewInterfaceNumber()
         {
             int newInterface = 0;
             bool found = false;
 
             while (!found)
             {
-                if (Interfaces.Exists(I => I.Equals(InterfaceNamePrefix + newInterface)))
-                    newInterface++;
-                else
+                if (!Interfaces.Exists(I => I.Equals(Interface.NamePrefix + newInterface)))
                     found = true;
+                else
+                    newInterface++;
             }
 
             return newInterface;
@@ -79,12 +79,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns></returns>
         public override bool HasInterface(string IfaceName)
         {
-            foreach (string i in Interfaces)
-            {
-                if (i == IfaceName)
-                    return true;
-            }
-            return false;
+            return Interfaces.Any(i => i == IfaceName);
         }
 
         public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo ValInfo)
@@ -131,8 +126,8 @@ namespace NSA.Model.NetworkComponents
                     }
                 }
             }
-            ValInfo.Res.ErrorId = 4;
-            ValInfo.Res.Res = "There is no Connection for the next Hardwarenode.";
+            ValInfo.Res.ErrorId = Result.Errors.SwitchNoConnection;
+            ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
             ValInfo.Res.SendError = true;
             return null;
         }
@@ -141,6 +136,7 @@ namespace NSA.Model.NetworkComponents
         /// Sends to ip.
         /// </summary>
         /// <param name="ValInfo">The value information.</param>
+        /// <param name="ComingConn">The coming connection.</param>
         /// <returns></returns>
         public bool SendToIp(ValidationInfo ValInfo, Connection ComingConn)
         {

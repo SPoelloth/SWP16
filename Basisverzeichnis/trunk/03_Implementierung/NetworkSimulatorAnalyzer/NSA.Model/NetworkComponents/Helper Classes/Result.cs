@@ -13,14 +13,37 @@
          * 6: Packet:        TTL is 0 but the destination was not reached
          * 7: Tags:          CustomLayer at source but not at destination
          */
-        public int ErrorId { get; set; }
+        public Errors ErrorId { get; set; }
+
+        public enum Errors
+        {
+            NoError,
+            NoRoute,
+            NoConnection,
+            PacketNotForThisNode,
+            SwitchNoConnection,
+            SourceDestinationNull,
+            TtlError,
+            CustomLayerError
+        };
+
+        public static readonly string[] ResultStrings = { "Es ist kein Fehler bei der Simulation aufgetreten.",
+            "Es gibt keine Route oder Standard-Gateway zum Zielrechner.",
+            "Es gibt keine Verbindung zum nächsten Rechner.",
+            "Das Packet war nicht für diesen Rechner bestimmt.",
+            "Es gibt keine Verbindung zum nächsten Rechner.",
+            "Quell- oder Zielrechner ist null.",
+            "TTL ist 0, aber der Zielrechner wurde nicht erreicht.",
+            "Layer {0} ist am Quell- aber nicht am Zielrechner enthalten."
+        };
+
         public string Res { get; set; }
         public ILayer LayerError { get; set; }
         public bool SendError { get; set; }
 
         public Result()
         {
-            ErrorId = 0;
+            ErrorId = Result.Errors.NoError;
             Res = "";
             LayerError = null;
         }

@@ -114,7 +114,7 @@ namespace NSA.Controller.ViewControllers
 
         private void PropertyControl_AddLayer()
         {
-            Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
+            Layerstack currentLayerStack = (selectedNode as Workstation).Layerstack;
             CustomLayer newCustomLayer = new CustomLayer(currentLayerStack.CreateUniqueName());
             currentLayerStack.AddLayer(newCustomLayer);
             propertyControl.AddLayerToLayerConfigControl(newCustomLayer.GetLayerName(), true);
@@ -122,7 +122,7 @@ namespace NSA.Controller.ViewControllers
 
         private void PropertyControl_RemoveLayer(string LayerName)
         {
-            Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
+            Layerstack currentLayerStack = (selectedNode as Workstation).Layerstack;
             currentLayerStack.RemoveLayer(LayerName);
         }
 
@@ -133,7 +133,7 @@ namespace NSA.Controller.ViewControllers
             {
                 throw new InvalidOperationException();
             }
-            Layerstack layers = selectedStation.GetLayerstack();
+            Layerstack layers = selectedStation.Layerstack;
             layers.SetIndex(LayerName, Index);
         }
 
@@ -144,7 +144,7 @@ namespace NSA.Controller.ViewControllers
             {
                 throw new InvalidOperationException();
             }
-            selectedStation.GetLayerstack().SetName(FormerName, NewName);
+            selectedStation.Layerstack.SetName(FormerName, NewName);
         }
 
         #endregion Layers
@@ -187,7 +187,7 @@ namespace NSA.Controller.ViewControllers
 
                 // load workstation Layerstack controls
                 propertyControl.AddLayerStackConfigControl();
-                foreach (ILayer layer in station.GetLayerstack().GetAllLayers())
+                foreach (ILayer layer in station.Layerstack.GetAllLayers())
                 {
                     propertyControl.AddLayerToLayerConfigControl(layer.GetLayerName(), layer is CustomLayer);
                 }

@@ -6,8 +6,8 @@ namespace NSA.Model.BusinessLogic
 {
 	public class Simulation
     {
-        private List<Packet> packetsSend = new List<Packet>();
-        private List<Packet> packetsReceived = new List<Packet>();
+        public List<Packet> PacketsSend { get; } = new List<Packet>();
+        public List<Packet> PacketsReceived { get; } = new List<Packet>();
         public string Source { get; private set; }
         public string Destination { get; private set; }
 	    public string Id { get; private set; }
@@ -34,25 +34,7 @@ namespace NSA.Model.BusinessLogic
         /// <param name="Packet">The packet.</param>
         public void AddPacketSend(Packet Packet)
 	    {
-            packetsSend.Add(Packet);
-        }
-
-        /// <summary>
-        /// Gets the send packets.
-        /// </summary>
-        /// <returns></returns>
-        public List<Packet> GetSendPackets()
-	    {
-	        return packetsSend;
-	    }
-
-        /// <summary>
-        /// Gets the received packets.
-        /// </summary>
-        /// <returns></returns>
-        public List<Packet> GetReceivedPackets()
-        {
-            return packetsReceived;
+            PacketsSend.Add(Packet);
         }
 
         /// <summary>
@@ -60,7 +42,7 @@ namespace NSA.Model.BusinessLogic
         /// </summary>
         public Result Execute()
 	    {
-            foreach (Packet sendpacket in packetsSend)
+            foreach (Packet sendpacket in PacketsSend)
             {
                 if (sendpacket.Result.ErrorId == 0)
                 {
@@ -68,21 +50,21 @@ namespace NSA.Model.BusinessLogic
 
                     if (p != null)
                     {
-                        packetsReceived.Add(p);
+                        PacketsReceived.Add(p);
                     }
                     else
                         return sendpacket.Result;
                 }
             }
 
-            foreach (Packet backpacket in packetsReceived)
+            foreach (Packet backpacket in PacketsReceived)
             {
                 if(backpacket.Result.ErrorId == 0)
                     backpacket.Send();
             }
-            if(packetsReceived.Count > 0)
-                return packetsReceived[packetsReceived.Count - 1].Result;
-            return packetsSend[packetsSend.Count - 1].Result;
+            if(PacketsReceived.Count > 0)
+                return PacketsReceived[PacketsReceived.Count - 1].Result;
+            return PacketsSend[PacketsSend.Count - 1].Result;
 	    }
 
         /// <summary>
@@ -91,7 +73,7 @@ namespace NSA.Model.BusinessLogic
         /// <returns></returns>
         public IEnumerable<Packet> GetAllPackets()
 	    {
-	        return packetsSend.Concat(packetsReceived);
+	        return PacketsSend.Concat(PacketsReceived);
 	    }
 
         /// <summary>
@@ -100,11 +82,11 @@ namespace NSA.Model.BusinessLogic
         /// <returns>Null if there is no packet.</returns>
         public Packet GetLastPacket()
 	    {
-	        if (packetsReceived.Count == 0 && packetsSend.Count == 0)
+	        if (PacketsReceived.Count == 0 && PacketsSend.Count == 0)
 	            return null;
-	        if (packetsReceived.Count == 0)
-	            return packetsSend[packetsSend.Count - 1];
-	        return packetsReceived[packetsReceived.Count - 1];
+	        if (PacketsReceived.Count == 0)
+	            return PacketsSend[PacketsSend.Count - 1];
+	        return PacketsReceived[PacketsReceived.Count - 1];
 	    }
     }
 }
