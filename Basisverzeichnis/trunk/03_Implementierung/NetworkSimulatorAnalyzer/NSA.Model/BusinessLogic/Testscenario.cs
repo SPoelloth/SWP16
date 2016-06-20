@@ -32,7 +32,14 @@ namespace NSA.Model.BusinessLogic
                 List<Hardwarenode> endNodes = new List<Hardwarenode>();
 
                 foreach (var eNode in rule.EndNodes)
-                { endNodes.Add(network.GetHardwarenodeByName(eNode)); }
+                {
+                    Hardwarenode newNode = network.GetHardwarenodeByName(eNode);
+                    if (newNode == null)
+                    {
+                        newNode = new Workstation(eNode);
+                    }
+                    endNodes.Add(newNode);
+                }
 
                 switch (rule.SimulType)
                 {

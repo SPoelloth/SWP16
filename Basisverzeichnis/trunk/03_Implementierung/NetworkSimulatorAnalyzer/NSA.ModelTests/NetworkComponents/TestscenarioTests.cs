@@ -40,13 +40,13 @@ namespace NSA.ModelTests.BusinessLogic
         [TestMethod]
         public void TestSimulationExpectedResultIsTrue()
         {
-            Testscenario t = new Testscenario("A|(B,C)|{TTL:64}|TRUE", network, "a");
+            Testscenario t = new Testscenario("A|(B,C)|{TTL:64}|TRUE", network, "r");
 
             List<ITestscenarioRunnable> runnables = t.GetRunnables();
 
             foreach (var runnable in runnables)
             {
-                Assert.IsTrue(runnable.Run().Count == 0);
+                Assert.IsTrue(runnable.Run().ErrorId == 0);
             }
         }
 
@@ -59,20 +59,20 @@ namespace NSA.ModelTests.BusinessLogic
 
             foreach (var runnable in runnables)
             {
-                Assert.IsFalse(runnable.Run().Count == 0);
+                Assert.IsFalse(runnable.Run().ErrorId == 0);
             }
         }
 
         [TestMethod]
         public void TestTTLShouldFail()
         {
-            Testscenario t = new Testscenario("A|(B)|{TTL:0}|TRUE", network, "x");
+            Testscenario t = new Testscenario("A|(B)|{TTL:0}|TRUE", network, "y");
 
             List<ITestscenarioRunnable> runnables = t.GetRunnables();
 
             foreach (var runnable in runnables)
             {
-                Assert.IsTrue(runnable.Run().Count == 1);
+                Assert.IsTrue(runnable.Run().ErrorId != 0);
             }
         }
     }
