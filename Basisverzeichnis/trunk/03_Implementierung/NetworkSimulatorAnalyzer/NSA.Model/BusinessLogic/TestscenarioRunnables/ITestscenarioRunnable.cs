@@ -9,6 +9,7 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 {
     public interface ITestscenarioRunnable
     {
-        Result Run();
+        int SimulationCount { get; }
+        List<Simulation> Run(); // returns list of failed Simulations
     }
 }

@@ -103,13 +103,19 @@ namespace NSA.Controller
             return result;
         }
 
-        public void StartTestscenario(Testscenario T)
+        public List<Simulation> StartTestscenario(Testscenario T)
         {
+            List<Simulation> failedSimulations = new List<Simulation>();
+
             foreach (var runnable in T.GetRunnables())
             {
-                Result r = runnable.Run();
-                //todo FIXME: result is unused
+                foreach (var simulation in runnable.Run())
+                {
+                    failedSimulations.Add(simulation);  
+                }
             }
+
+            return failedSimulations;
         }
 
         public void AddSimulationToHistory(Simulation Sim)
