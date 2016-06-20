@@ -41,7 +41,7 @@ namespace NSA.Model.NetworkComponents.Layers
                     sw = c.End as Switch;
                     if (sw != null)
                     {
-                        if (sw.SendToDestination(Destination, ValInfo))
+                        if (sw.SendToDestination(Destination, ValInfo, c))
                         {
                             ValInfo.NextNodes.Insert(0, sw);
                             return;
@@ -53,7 +53,7 @@ namespace NSA.Model.NetworkComponents.Layers
                     sw = c.Start as Switch;
                     if (sw != null)
                     {
-                        if (sw.SendToDestination(Destination, ValInfo))
+                        if (sw.SendToDestination(Destination, ValInfo, c))
                         {
                             ValInfo.NextNodes.Insert(0, sw);
                             return;

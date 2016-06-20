@@ -194,8 +194,9 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Destination">The destination.</param>
         /// <param name="ValInfo">The value information.</param>
+        /// <param name="ComingCon">The coming connection.</param>
         /// <returns></returns>
-        public bool SendToDestination(Workstation Destination, ValidationInfo ValInfo)
+        public bool SendToDestination(Workstation Destination, ValidationInfo ValInfo, Connection ComingCon)
         {
             foreach (Connection c in Connections.Values)
             {
@@ -213,12 +214,13 @@ namespace NSA.Model.NetworkComponents
             //check if the next switch can send it
             foreach (Connection c in Connections.Values)
             {
+                if (c == ComingCon) continue;
                 if (c.Start.Equals(this))
                 {
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToDestination(Destination, ValInfo))
+                        if (s.SendToDestination(Destination, ValInfo, c))
                         {
                             ValInfo.NextNodes.Insert(0, s);
                             return true;
@@ -230,7 +232,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToDestination(Destination, ValInfo))
+                        if (s.SendToDestination(Destination, ValInfo, c))
                         {
                             ValInfo.NextNodes.Insert(0, s);
                             return true;
