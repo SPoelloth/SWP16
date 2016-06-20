@@ -111,7 +111,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(ValInfo))
+                        if (s.SendToIp(ValInfo, c))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -123,7 +123,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(ValInfo))
+                        if (s.SendToIp(ValInfo, c))
                         {
                             nextNodes.Insert(0, s);
                             return nextNodes;
@@ -142,7 +142,7 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="ValInfo">The value information.</param>
         /// <returns></returns>
-        public bool SendToIp(ValidationInfo ValInfo)
+        public bool SendToIp(ValidationInfo ValInfo, Connection ComingConn)
         {
             foreach (Connection c in Connections.Values)
             {
@@ -160,12 +160,13 @@ namespace NSA.Model.NetworkComponents
             //check if the next switch can send it
             foreach (Connection c in Connections.Values)
             {
+                if (c == ComingConn) continue;
                 if (c.Start.Equals(this))
                 {
                     Switch s = c.End as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(ValInfo))
+                        if (s.SendToIp(ValInfo, c))
                         {
                             ValInfo.NextNodes.Insert(0, s);
                             return true;
@@ -177,7 +178,7 @@ namespace NSA.Model.NetworkComponents
                     Switch s = c.Start as Switch;
                     if (s != null)
                     {
-                        if (s.SendToIp(ValInfo))
+                        if (s.SendToIp(ValInfo, c))
                         {
                             ValInfo.NextNodes.Insert(0, s);
                             return true;
