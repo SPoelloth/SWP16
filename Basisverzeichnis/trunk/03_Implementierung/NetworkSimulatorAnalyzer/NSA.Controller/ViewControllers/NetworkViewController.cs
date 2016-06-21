@@ -41,7 +41,7 @@ namespace NSA.Controller.ViewControllers
 
         public void OnQuickSimulationCreated(string source, string target)
         {
-            SimulationManager.Instance.QuickSimulation(source, target);
+            SimulationManager.Instance.CreateAndExecuteSimulation(source, target);
         }
 
         public void QuickSimulationRequest()
