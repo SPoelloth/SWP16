@@ -41,7 +41,7 @@ namespace NSA.Controller.ViewControllers
 
         public void OnQuickSimulationCreated(string source, string target)
         {
-            SimulationManager.Instance.QuickSimulation(source, target);
+            SimulationManager.Instance.CreateAndExecuteSimulation(source, target);
         }
 
         public void QuickSimulationRequest()
@@ -52,11 +52,7 @@ namespace NSA.Controller.ViewControllers
 
         private void OnNewConnectionCreated(Control c1, int port1, Control c2, int port2)
         {
-            try
-            {
-                NetworkManager.Instance.CreateConnection(c1.Name, "eth" + port1, c2.Name, "eth" + port2);
-            }
-            catch { }
+            NetworkManager.Instance.CreateConnection(c1.Name, "eth" + port1, c2.Name, "eth" + port2);
         }
 
         public Point? GetLocationOfElementByName(string name)
@@ -122,7 +118,7 @@ namespace NSA.Controller.ViewControllers
         }
 
         public void SwitchChanged(Switch sw)
-        { 
+        {
             var switchControl = (SwitchControl)GetControlByName(sw.Name);
             var ifaces = new List<int>();
             foreach (var i in sw.Interfaces) ifaces.Add(int.Parse(i.Replace(Interface.NamePrefix, "")));

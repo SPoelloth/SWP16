@@ -12,15 +12,17 @@ namespace NSA.Model.NetworkComponents.Layers
             name = N;
         }
 
-        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
-            if(ValInfo.Source != null && ValInfo.Source.Equals(CurrentNode))
-                Tags.Add(name, name);
+            if (ValInfo.Source != null && ValInfo.Source.Equals(CurrentNode))
+            {
+                Tags.Add(name, LayerIndex);
+            }
         }
 
-        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex)
         {
-            if (CurrentNode.Equals(Destination) && Tags.ContainsKey(name))
+            if (CurrentNode.Equals(Destination) && Tags.ContainsKey(name) && LayerIndex == (int)Tags[name])
                 Tags.Remove(name);
             return true;
         }

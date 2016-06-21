@@ -1,38 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
 {
     public class DataLinkLayer : ILayer
     {
-        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags)
+        public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
             if (ValInfo.Iface == null)
                 return;
-            if (CurrentNode.Connections.ContainsKey(ValInfo.Iface.Name))
+            Connection c;
+            if(CurrentNode.Connections.TryGetValue(ValInfo.Iface.Name, out c))
             {
-                ValInfo.NextNodes.Add(CurrentNode.Connections[ValInfo.Iface.Name].Start.Equals(CurrentNode) ? CurrentNode.Connections[ValInfo.Iface.Name].End : CurrentNode.Connections[ValInfo.Iface.Name].Start);
+                ValInfo.NextNodes.Add(c.Start.Equals(CurrentNode) ? c.End : c.Start);
                 return;
             }
-            ValInfo.Res.ErrorId = 2;
-            ValInfo.Res.Res = "There is no Connection at the Interface from choosen the Route.";
+            ValInfo.Res.ErrorId = Result.Errors.NoConnection;
+            ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
             ValInfo.Res.LayerError = new DataLinkLayer();
             ValInfo.Res.SendError = true;
             ValInfo.NextNodes = null;
         }
 
-        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination)
+        public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex)
         {
             if (ValInfo.NextNodeIp == null)
                 return true;
             List<Interface> ifaces = CurrentNode.GetInterfaces();
-            foreach (Interface i in ifaces)
+            if (ifaces.Any(I => ValInfo.NextNodeIp.Equals(I.IpAddress)))
             {
-                if (ValInfo.NextNodeIp.Equals(i.IpAddress))
-                    return true;
+                return true;
             }
-            ValInfo.Res.ErrorId = 3;
-            ValInfo.Res.Res = "The Connection is to the wrong node.";
+            ValInfo.Res.ErrorId = Result.Errors.PacketNotForThisNode;
+            ValInfo.Res.Res = Result.ResultStrings[(int) ValInfo.Res.ErrorId];
             ValInfo.Res.LayerError = new DataLinkLayer();
             ValInfo.Res.SendError = false;
             return false;

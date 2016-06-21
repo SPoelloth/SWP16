@@ -1,6 +1,9 @@
 using System;
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -32,27 +35,22 @@ namespace NSA.Controller
         {
             List<Result> res = new List<Result>();
             Packet p = null;
-            if (Simulations.Count == 0)
-                return null;
-            if (IsSendPacket)
-                p = Simulations[Simulations.Count - 1].GetSendPackets()?[PacketIndex];
-            else
-                p = Simulations[Simulations.Count - 1].GetReceivedPackets()?[PacketIndex];
-            if (p == null)
+            p = IsSendPacket ? Simulations[Simulations.Count - 1].PacketsSend?[PacketIndex] : Simulations[Simulations.Count - 1].PacketsReceived?[PacketIndex];
+            if (p == null || Simulations.Count == 0)
                 return null;
             Hardwarenode nodeOne = NetworkManager.Instance.GetHardwarenodeByName(NodeOneName);
             Hardwarenode nodeTwo = NetworkManager.Instance.GetHardwarenodeByName(NodeTwoName);
             if (nodeOne == null || nodeTwo == null)
                 return null;
-            List<Hardwarenode> hops = p.GetHops();
+            List<Hardwarenode> hops = p.Hops;
             if (hops.Count < 2)
                 return null;
-            if (hops[hops.Count].Equals(nodeTwo))
+            if (hops.Last().Equals(nodeTwo))
             {
                 res.Add(new Result());
                 res.Add(p.Result);
             }
-            else if (hops[hops.Count].Equals(nodeTwo))
+            else if (hops.Last().Equals(nodeOne))
             {
                 res.Add(p.Result);
                 res.Add(new Result());
@@ -66,16 +64,6 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Starts the simulation.
-        /// </summary>
-        /// <param name="Sim">The sim.</param>
-        /// <returns>Result of the last packet</returns>
-        public Result StartSimulation(Simulation Sim)
-        {
-            return Sim.Execute();
-        }
-
-        /// <summary>
         /// Gets the simulation result.
         /// </summary>
         /// <param name="Id">The identifier.</param>
@@ -84,23 +72,15 @@ namespace NSA.Controller
         /// </returns>
         public bool GetSimulationResult(string Id)
         {
-            Simulation sim = null;
-            foreach (Simulation s in Simulations)
-            {
-                if (s.Id == Id)
-                    sim = s;
-            }
+            Simulation sim = Simulations.First(S => S.Id == Id);
             if (sim == null)
                 return false;
-            bool result = false;
             foreach (Packet p in sim.GetAllPackets())
             {
-                if ((p.ExpectedResult && p.Result.ErrorId == 0) || (!p.ExpectedResult && p.Result.ErrorId != 0))
-                    result = true;
-                else
+                if ((!p.ExpectedResult || p.Result.ErrorId != 0) && (p.ExpectedResult || p.Result.ErrorId == 0))
                     return false;
             }
-            return result;
+            return true;
         }
 
         public List<Simulation> StartTestscenario(Testscenario T)
@@ -134,29 +114,18 @@ namespace NSA.Controller
             Simulation sim = null, oldSim = null;
             foreach (Simulation s in Simulations)
             {
-                if (s.Id == Id)
-                {
-                    sim = new Simulation(Guid.NewGuid().ToString("N"), s.Source, s.Destination);
-                    oldSim = s;
-                }
+                if (s.Id != Id) continue;
+                sim = new Simulation(Guid.NewGuid().ToString("N"), s.Source, s.Destination, s.ExpectedResult);
+                oldSim = s;
             }
             if (sim == null) return null;
-            foreach (Packet p in oldSim.GetSendPackets())
+            foreach (Packet p in oldSim.PacketsSend)
             {
-                sim.AddPacketSend(createPacket(p.Source, p.Destination, p.Ttl, p.ExpectedResult));
+                sim.AddPacketSend(new Packet(p.Source, p.Destination, p.Ttl, p.ExpectedResult));
             }
             Result res = sim.Execute();
             AddSimulationToHistory(sim);
             return res;
-        }
-
-        /// <summary>
-        /// Runs the last simulation.
-        /// </summary>
-        /// <returns></returns>
-        public Result RunLastSimulation()
-        {
-            return RunSimulationFromHistory(Simulations[Simulations.Count - 1].Id);
         }
 
         /// <summary>
@@ -168,60 +137,29 @@ namespace NSA.Controller
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
         /// <param name="Broadcast">if set to <c>true</c>: broadcast.</param>
         /// <returns></returns>
-        public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl, bool ExpectedResult, bool Broadcast)
+        public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl = 255, bool ExpectedResult = true, bool Broadcast = false)
         {
             Simulation sim;
             Hardwarenode start = NetworkManager.Instance.GetHardwarenodeByName(Source);
             if (Broadcast)
             {
-                sim =  new Simulation(Guid.NewGuid().ToString("N"), Source, "Broadcast");
+                sim =  new Simulation(Guid.NewGuid().ToString("N"), Source, "Broadcast", ExpectedResult);
                 List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
                 foreach (Workstation w in allWorkstations)
                 {
-                    if (w.Name != Source)
-                    {
-                        sim.AddPacketSend(createPacket(start, w, Ttl, ExpectedResult));
-                    }
+                    if (w.Name == Source) continue;
+                    sim.AddPacketSend(new Packet(start, w, Ttl, ExpectedResult));
                 }
             }
             else
             {
-                sim = new Simulation(Guid.NewGuid().ToString("N"), Source, Destination);
+                sim = new Simulation(Guid.NewGuid().ToString("N"), Source, Destination, ExpectedResult);
                 Hardwarenode end = NetworkManager.Instance.GetHardwarenodeByName(Destination);
-                sim.AddPacketSend(createPacket(start, end, Ttl, ExpectedResult));
+                sim.AddPacketSend(new Packet(start, end, Ttl, ExpectedResult));
             }
-            Result res = StartSimulation(sim);
+            Result res = sim.Execute();
             AddSimulationToHistory(sim);
             return res;
-        }
-
-        /// <summary>
-        /// Creates the packet.
-        /// </summary>
-        /// <param name="Source">The source.</param>
-        /// <param name="Destination">The destination.</param>
-        /// <param name="Ttl">The TTL.</param>
-        /// <param name="ExpectedResult">if set to <c>true</c> [expected result].</param>
-        /// <returns>
-        /// the packet
-        /// </returns>
-        /// <exception cref="System.ArgumentException">SimulationManager.createPacket: ttl kleiner-gleich 0</exception>
-        /// <exception cref="ArgumentException">SimulationManager.createPacket: source or destination is null or ttl 0</exception>
-        private Packet createPacket(Hardwarenode Source, Hardwarenode Destination, int Ttl, bool ExpectedResult)
-        {
-            if (Ttl <= 0)
-                throw new ArgumentException("SimulationManager.createPacket: ttl <= 0");
-            return new Packet(Source, Destination, Ttl, ExpectedResult);
-        }
-
-        /// <summary>
-        /// Creates and Executes a quick simulation
-        /// </summary>
-        /// <param name="Source">The source.</param>
-        /// <param name="Target">The target.</param>
-        public void QuickSimulation(string Source, string Target)
-        {
-            CreateAndExecuteSimulation(Source, Target, 255, true, false);
         }
 
         /// <summary>
@@ -239,6 +177,41 @@ namespace NSA.Controller
         public void DeleteSimulationFromHistory(int Index)
         {
             Simulations.RemoveAt(Index);
+        }
+
+
+        /// <summary>
+        /// Gets all hardwarenodes belonging to a subnet.
+        /// </summary>
+        /// <param name="Subnetmask">The subnetmask.</param>
+        /// <returns>A list of hardwarenodes who belong to the subnet.</returns>
+        public List<Hardwarenode> GetHardwareNodesForSubnet(string Subnetmask)
+        {
+            List<Hardwarenode> nodes = new List<Hardwarenode>();
+
+            IPAddress subnetAddress;
+            bool ok = IPAddress.TryParse(Subnetmask, out subnetAddress);
+            Debug.Assert(ok, "Invalid Subnetmask");
+
+            List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
+            // Iterate through all workstations
+            foreach (Workstation w in allWorkstations)
+            {
+                List<Interface> ifaces = w.GetInterfaces();
+                // Iterate through all interfaces of the current workstation.
+                foreach (Interface iface in ifaces)
+                {
+                    if (subnetAddress.Equals(iface.Subnetmask))
+                    {
+                        // Workstation is in the same subnet.
+                        nodes.Add(w);
+                        break;
+                    }
+                }
+
+            }
+
+            return nodes;
         }
     }
 }

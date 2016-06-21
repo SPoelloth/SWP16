@@ -110,7 +110,7 @@ namespace NSA.Controller
                                       new XAttribute("Iface", r.Iface.Name)));
                 }
 
-                var layerstack = ws.GetLayerstack().GetAllLayers();
+                var layerstack = ws.Layerstack.GetAllLayers();
                 XElement layerstackXML = new XElement("Layerstack");
                 for (int i = 0; i < layerstack.Count; i++)
                 {
@@ -258,7 +258,7 @@ namespace NSA.Controller
                             var index = int.Parse(layer.Attribute("Index").Value);
                             var layername = layer.Attribute("Name").Value;
 
-                            hwNode.GetLayerstack().InsertAt(index, new CustomLayer(layername));
+                            hwNode.Layerstack.InsertAt(index, new CustomLayer(layername));
                         }
                     }
 

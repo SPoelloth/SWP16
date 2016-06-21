@@ -30,12 +30,9 @@ namespace NSA.Model.NetworkComponents
         /// </returns>
         public override bool Equals(object Obj)
         {
-            // If parameter cannot be cast to Point return false.
+            // If parameter cannot be cast to Connection return false.
             Connection c = Obj as Connection;
-            if ((object)c == null)
-            {
-                return false;
-            }
+            if (c == null) return false;
 
             // Return true if the fields match (same hardwarenodes):
             return (Start == c.Start && End == c.End) || (Start == c.End && End == c.Start);
@@ -46,10 +43,10 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Other">The other.</param>
         /// <returns></returns>
-        protected bool Equals(Connection Other)
+        public bool Equals(Connection Other)
         {
-            // auto-generated method
-            return (Equals(Start, Other.Start) && Equals(End, Other.End)) || (Equals(Start, Other.End) && Equals(End, Other.Start));
+            if (Other == null) return false;
+            return (Start.Equals(Other.Start) && End.Equals(Other.End)) || (Start.Equals(Other.End) && End.Equals(Other.Start));
         }
 
         /// <summary>
@@ -75,22 +72,14 @@ namespace NSA.Model.NetworkComponents
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(Connection A, Connection B)
+        public static bool operator == (Connection A, Connection B)
         {
             // If both are null, or both are same instance, return true.
-            if (ReferenceEquals(A, B))
-            {
-                return true;
-            }
+            if (ReferenceEquals(A, B)) return true;
 
-            // If one is null, but not both, return false.
-            if (((object)A == null) || ((object)B == null))
-            {
-                return false;
-            }
-
-            // Return true if the fields match:
-            return (Equals(A.Start, B.Start) && Equals(A.End, B.End)) || (Equals(A.Start, B.End) && Equals(A.End, B.Start));
+            // If not casted to object, the Connection == Operator gets used => endless loop => Stackoverflow
+            if ((object) A == null) return false;
+            return A.Equals(B);
         }
 
         /// <summary>

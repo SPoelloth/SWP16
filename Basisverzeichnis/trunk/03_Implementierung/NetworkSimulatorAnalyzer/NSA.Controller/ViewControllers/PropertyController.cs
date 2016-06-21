@@ -80,8 +80,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControlAddRoute()
         {
             Workstation station = (Workstation) selectedNode;
-            Route newRoute = NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None,
-                IPAddress.None, station.GetInterfaces().First());
+            NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.GetInterfaces().First());
             propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
             propertyControl.RetainScrollPosition = false;
@@ -93,12 +92,10 @@ namespace NSA.Controller.ViewControllers
             LoadElementProperties(selectedNode.Name);
         }
 
-        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway,
-            IPAddress SubnetMask, string InterfaceName)
+        private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress SubnetMask, string InterfaceName)
         {
             Workstation station = (Workstation) selectedNode;
-            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask,
-                station.GetInterfaces().Find(i => i.Name == InterfaceName));
+            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask, station.GetInterfaces().Find(i => i.Name == InterfaceName));
         }
 
         #endregion Routes
@@ -117,7 +114,7 @@ namespace NSA.Controller.ViewControllers
 
         private void PropertyControl_AddLayer()
         {
-            Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
+            Layerstack currentLayerStack = (selectedNode as Workstation).Layerstack;
             CustomLayer newCustomLayer = new CustomLayer(currentLayerStack.CreateUniqueName());
             currentLayerStack.AddLayer(newCustomLayer);
             propertyControl.AddLayerToLayerConfigControl(newCustomLayer.GetLayerName(), true);
@@ -125,7 +122,7 @@ namespace NSA.Controller.ViewControllers
 
         private void PropertyControl_RemoveLayer(string LayerName)
         {
-            Layerstack currentLayerStack = (selectedNode as Workstation).GetLayerstack();
+            Layerstack currentLayerStack = (selectedNode as Workstation).Layerstack;
             currentLayerStack.RemoveLayer(LayerName);
         }
 
@@ -136,7 +133,7 @@ namespace NSA.Controller.ViewControllers
             {
                 throw new InvalidOperationException();
             }
-            Layerstack layers = selectedStation.GetLayerstack();
+            Layerstack layers = selectedStation.Layerstack;
             layers.SetIndex(LayerName, Index);
         }
 
@@ -147,7 +144,7 @@ namespace NSA.Controller.ViewControllers
             {
                 throw new InvalidOperationException();
             }
-            selectedStation.GetLayerstack().SetName(FormerName, NewName);
+            selectedStation.Layerstack.SetName(FormerName, NewName);
         }
 
         #endregion Layers
@@ -190,7 +187,7 @@ namespace NSA.Controller.ViewControllers
 
                 // load workstation Layerstack controls
                 propertyControl.AddLayerStackConfigControl();
-                foreach (ILayer layer in station.GetLayerstack().GetAllLayers())
+                foreach (ILayer layer in station.Layerstack.GetAllLayers())
                 {
                     propertyControl.AddLayerToLayerConfigControl(layer.GetLayerName(), layer is CustomLayer);
                 }

@@ -13,7 +13,7 @@ namespace NSA.Model.NetworkComponents
         private readonly Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
-        
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Workstation" /> class.
@@ -29,7 +29,7 @@ namespace NSA.Model.NetworkComponents
             Layerstack.AddLayer(new SessionLayer());
             Layerstack.AddLayer(new PresentationLayer());
             Layerstack.AddLayer(new ApplicationLayer());
-            AddInterface(new IPAddress(new byte[] {192, 168, 0, 1}), new IPAddress(new byte[] {255, 255, 255, 0}));
+            AddInterface(new IPAddress(new byte[] { 192, 168, 0, 1 }), new IPAddress(new byte[] { 255, 255, 255, 0 }));
             StandardGateway = null;
             StandardGatewayPort = null;
         }
@@ -57,7 +57,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>The newly added Interface</returns>
         public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int PortNum = -1)
         {
-            if (PortNum == -1) PortNum = GetNewInterfaceNumber();
+            if (PortNum == -1) PortNum = getNewInterfaceNumber();
             Interface interfaceObj = new Interface(Ip, Subnetmask, PortNum);
             interfaces.Add(interfaceObj);
             return interfaceObj;
@@ -90,34 +90,32 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Ip">The new ip.</param>
         /// <param name="Mask">The new subnetmask.</param>
         /// <returns>bool: false if the interface could not be found, otherwise true</returns>
-        public bool SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
+        public void SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
         {
             if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))
             {
                 AddInterface(Ip, Mask, int.Parse(Ifacename.Replace(Interface.NamePrefix, "")));
-                return true;
+                return;
             }
             interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
-            return true;
         }
-        
+
         /// <summary>
         /// Gets the new interface number.
         /// </summary>
         /// <returns>int: number for next interface</returns>
-        private int GetNewInterfaceNumber()
+        private int getNewInterfaceNumber()
         {
             int newInterface = 0;
             bool found = false;
 
             while (!found)
             {
-                if (interfaces.Exists(I => I.Name.Equals(Interface.NamePrefix + newInterface)))
-                    newInterface++;
-                else
+                if (!interfaces.Exists(I => I.Name.Equals(Interface.NamePrefix + newInterface)))
                     found = true;
+                else
+                    newInterface++;
             }
-
             return newInterface;
         }
 
@@ -236,11 +234,20 @@ namespace NSA.Model.NetworkComponents
             ValInfo.Iface = null;
             for (int i = Layerstack.GetSize() - 1; i >= 0; i--)
             {
+                int customLayerCount = 0;
+                //Calculate the custom layer count before this layer
+                for (int j = 0; j < i; j++)
+                {
+                    if (Layerstack.GetLayer(j) is CustomLayer)
+                        customLayerCount++;
+                }
                 if (ValInfo.NextNodes != null)
                 {
                     Workstation dest = Destination as Workstation;
-                    if(dest != null)
-                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags);
+                    if (dest != null)
+                    {
+                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags, i - customLayerCount);
+                    }
                     else
                     {
                         throw new ArgumentException("Destination is no Workstation.");
@@ -262,24 +269,19 @@ namespace NSA.Model.NetworkComponents
         public override bool Receive(Dictionary<string, object> Tags, ValidationInfo ValInfo, Hardwarenode Destination)
         {
             bool res = true;
+            int customLayerCount = 0;
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
                 if (res)
-                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination);
+                {
+                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination, i - customLayerCount);
+                    if (Layerstack.GetLayer(i) is CustomLayer)
+                        customLayerCount++;
+                }
             }
             return res;
         }
-
-        /// <summary>
-        /// Gets the layerstack.
-        /// </summary>
-        /// <returns></returns>
-        public Layerstack GetLayerstack()
-        {
-            return Layerstack;
-        }
-
         #endregion
     }
-    
+
 }

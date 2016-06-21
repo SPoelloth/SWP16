@@ -43,6 +43,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\InfoControl\ControlContents\HistoryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\HistoryControl.Designer.cs">
+      <DependentUpon>HistoryControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\HopsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\HopsControl.Designer.cs">
+      <DependentUpon>HopsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\ResultsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\ResultsControl.Designer.cs">
+      <DependentUpon>ResultsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\ScenariosControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\ScenariosControl.Designer.cs">
+      <DependentUpon>ScenariosControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NetworkView\MessageLoopFilter.cs" />
     <Compile Include="Controls\NetworkView\NetworkElements\ISimulationTarget.cs" />
     <Compile Include="Controls\NetworkView\VisualConnection.cs" />
@@ -209,6 +233,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\InfoControl\ControlContents\HistoryControl.resx">
+      <DependentUpon>HistoryControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\ControlContents\HopsControl.resx">
+      <DependentUpon>HopsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\ControlContents\ResultsControl.resx">
+      <DependentUpon>ResultsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\ControlContents\ScenariosControl.resx">
+      <DependentUpon>ScenariosControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\NetworkView\LabelControl.resx">
       <DependentUpon>LabelControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -30,7 +30,7 @@ namespace NSA.Controller.ViewControllers
             {
                 throw new InvalidOperationException("InfoControl was null/not found");
             }
-            var htp = infoControl.GetTabControl().TabPages["HistoryTabPage"] as HistoryTabPage;
+            var htp = infoControl.historyControl;
             if (htp != null) htp.HistoryRerunButtonClicked += HistoryTabPage_HistoryRerunButtonClicked;
         }
 
@@ -62,7 +62,7 @@ namespace NSA.Controller.ViewControllers
         {
             string simResult = SimulationManager.Instance.GetSimulationResult(Sim.Id) ? "Erfolgreich" : "Fehlgeschlagen";
            
-            infoControl.AddNewSimulationToHistory("Simulation " + Sim.Id, simResult, Sim.Source, Sim.Destination);
+            infoControl.historyControl.AddHistoryData("Simulation " + Sim.Id, simResult, Sim.Source, Sim.Destination);
         }
     }
 }
