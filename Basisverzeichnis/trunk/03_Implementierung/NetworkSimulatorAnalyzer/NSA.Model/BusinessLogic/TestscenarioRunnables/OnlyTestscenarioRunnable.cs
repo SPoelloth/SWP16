@@ -15,11 +15,11 @@ namespace NSA.Model.BusinessLogic
         
         public int SimulationCount { get; }
 
-        public OnlyTestscenarioRunnable(Rule rule, Hardwarenode startNode, List<Hardwarenode> endNodes, Network n)
+        public OnlyTestscenarioRunnable(Rule rule, Network n)
         {
             this.rule = rule;
-            this.startNode = startNode;
-            this.endNodes = endNodes;
+            this.startNode = rule.StartNode;
+            this.endNodes = rule.EndNodes;
             this.SimulationCount = n.GetAllWorkstations().Count; //TODO: change later
             this.network = n;
         }

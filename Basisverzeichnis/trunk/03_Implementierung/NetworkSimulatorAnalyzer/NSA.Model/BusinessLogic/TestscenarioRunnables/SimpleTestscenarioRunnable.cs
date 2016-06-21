@@ -14,12 +14,12 @@ namespace NSA.Model.BusinessLogic
         
         public int SimulationCount { get; }
 
-        public SimpleTestscenarioRunnable(Rule rule, Hardwarenode startNode, List<Hardwarenode> endNodes)
+        public SimpleTestscenarioRunnable(Rule rule)
         {
             this.rule = rule;
-            this.startNode = startNode;
-            this.endNodes = endNodes;
-            this.SimulationCount = endNodes.Count; //TODO: change later
+            this.startNode = rule.StartNode;
+            this.endNodes = rule.EndNodes;
+            this.SimulationCount = this.endNodes.Count; //TODO: change later
         }
   
         public List<Simulation> Run()

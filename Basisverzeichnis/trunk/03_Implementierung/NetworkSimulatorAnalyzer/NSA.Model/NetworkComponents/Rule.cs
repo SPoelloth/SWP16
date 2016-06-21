@@ -35,6 +35,8 @@ namespace NSA.Model.BusinessLogic
             {
                 List<Hardwarenode> nodes = new List<Hardwarenode>();
 
+                if (simulationType == SimulationType.HasInternet)   return network.GetRouters();
+
                 foreach (var node in endNodes)
                 {
                     if (node.ToUpper().Contains("SUBNET")) {}

@@ -29,14 +29,12 @@ namespace NSA.Model.BusinessLogic
             foreach (var line in lines)
             {
                 Rule rule = Rule.Parse(line, network);
-                Hardwarenode startNode = rule.StartNode;
-                List<Hardwarenode> endNodes = rule.EndNodes;
 
                 switch (rule.SimulType)
                 {
-                    case SimulationType.Simple:      runnables.Add(new SimpleTestscenarioRunnable(rule, startNode, endNodes));        break;
-                    case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule, startNode, network));    break;
-                    case SimulationType.Only:        runnables.Add(new OnlyTestscenarioRunnable(rule, startNode, endNodes, network)); break;
+                    case SimulationType.Simple:      runnables.Add(new SimpleTestscenarioRunnable(rule));        break;
+                    case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule));   break;
+                    case SimulationType.Only:        runnables.Add(new OnlyTestscenarioRunnable(rule, network)); break;
                     default: break;
                 }
             }

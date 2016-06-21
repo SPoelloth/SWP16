@@ -12,14 +12,14 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
     {
         private Rule rule;
         private Hardwarenode startNode;
-        private Network network;
+        private List<Hardwarenode> endNodes
         public int SimulationCount { get; }
 
-        public HasInternetTestscenarioRunnable(Rule rule, Hardwarenode startNode, Network n)
+        public HasInternetTestscenarioRunnable(Rule rule)
         {
             this.rule = rule;
-            this.startNode = startNode;
-            this.network = n;
+            this.startNode = rule.StartNode;
+            this.endNodes = rule.EndNodes;
             this.SimulationCount = 0;
         }
 
@@ -27,10 +27,9 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
         {
             string l = Guid.NewGuid().ToString();
             Simulation sim = new Simulation(l);
-            List<Router> routers = network.GetRouters();
             List<Simulation> passedSimulations = new List<Simulation>();
 
-            foreach (var router in routers)
+            foreach (var router in endNodes)
             {
                 Packet p = new Packet(startNode, router, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
