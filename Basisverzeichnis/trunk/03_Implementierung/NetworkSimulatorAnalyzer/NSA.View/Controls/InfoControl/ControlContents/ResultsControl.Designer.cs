@@ -28,31 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvHistory = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).BeginInit();
+            this.bnClearResult = new System.Windows.Forms.Button();
+            this.dgvResults = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
             this.SuspendLayout();
             // 
-            // dgvHistory
+            // bnClearResult
             // 
-            this.dgvHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvHistory.Location = new System.Drawing.Point(0, 0);
-            this.dgvHistory.Name = "dgvHistory";
-            this.dgvHistory.Size = new System.Drawing.Size(738, 150);
-            this.dgvHistory.TabIndex = 0;
+            this.bnClearResult.Location = new System.Drawing.Point(3, 0);
+            this.bnClearResult.Name = "bnClearResult";
+            this.bnClearResult.Size = new System.Drawing.Size(101, 23);
+            this.bnClearResult.TabIndex = 3;
+            this.bnClearResult.Text = "Ergebnisse leeren";
+            this.bnClearResult.UseVisualStyleBackColor = true;
+            this.bnClearResult.Click += new System.EventHandler(this.bnClearResults_Click);
             // 
-            // ResultTabPage
+            // dgvResults
             // 
-            this.Controls.Add(this.dgvHistory);
+            this.dgvResults.AllowUserToAddRows = false;
+            this.dgvResults.AllowUserToDeleteRows = false;
+            this.dgvResults.AllowUserToResizeRows = false;
+            this.dgvResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvResults.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvResults.Location = new System.Drawing.Point(0, 27);
+            this.dgvResults.MultiSelect = false;
+            this.dgvResults.Name = "dgvResults";
+            this.dgvResults.ReadOnly = true;
+            this.dgvResults.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dgvResults.RowHeadersVisible = false;
+            this.dgvResults.Size = new System.Drawing.Size(738, 123);
+            this.dgvResults.TabIndex = 2;
+            this.dgvResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvResults_CellContentClick);
+            // 
+            // ResultsControl
+            // 
+            this.Controls.Add(this.bnClearResult);
+            this.Controls.Add(this.dgvResults);
             this.Name = "ResultsControl";
             this.Size = new System.Drawing.Size(738, 150);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dgvHistory;
+        private System.Windows.Forms.Button bnClearResult;
+        private System.Windows.Forms.DataGridView dgvResults;
     }
 }

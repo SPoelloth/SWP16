@@ -101,7 +101,7 @@ namespace NSA.Controller
         public void AddSimulationToHistory(Simulation Sim)
         {
             Simulations.Add(Sim);
-            InfoController.Instance.AddNewSimulationToHistory(Sim);
+            InfoController.Instance.AddSimulationToHistoryTab(Sim);
         }
 
         /// <summary>
@@ -173,10 +173,11 @@ namespace NSA.Controller
         /// <summary>
         /// Deletes the simulation from history.
         /// </summary>
-        /// <param name="Index">The index of the simulation.</param>
-        public void DeleteSimulationFromHistory(int Index)
+        /// <param name="Id">The identifier.</param>
+        public void DeleteSimulationFromHistory(string Id)
         {
-            Simulations.RemoveAt(Index);
+           // every simulation has a unique ID
+            Simulations.RemoveAll(S => S.Id.Equals(Id));
         }
 
 

@@ -353,7 +353,10 @@ namespace NSA.Controller
             {
                 try
                 {
-                    testscenarios.Add(new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network, file.FullName));
+                    Testscenario ts = new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network,
+                        file.FullName);
+                    testscenarios.Add(ts);
+                    InfoController.Instance.AddTestscenarioToScenarioTab(ts);
                 }
                 catch (IOException)
                 {
@@ -361,14 +364,15 @@ namespace NSA.Controller
             }
         }
 
+
         /// <summary>
-        /// Gets a Testscenario by its id.
+        /// Gets the testscenario by name.
         /// </summary>
-        /// <param name="Id">The id of the Testscenario.</param>
-        /// <returns>Returns the Testscenario.</returns>
-        public Testscenario GetTestscenarioById(string Id)
+        /// <param name="Name">The name.</param>
+        /// <returns>Testscenario with given name</returns>
+        public Testscenario GetTestscenarioByName(string Name)
         {
-            return testscenarios?.FirstOrDefault(Testscenario => Testscenario.Id.Equals(Id));
+            return testscenarios?.FirstOrDefault(Testscenario => Testscenario.FileName.Equals(Name));
         }
 
         /// <summary>

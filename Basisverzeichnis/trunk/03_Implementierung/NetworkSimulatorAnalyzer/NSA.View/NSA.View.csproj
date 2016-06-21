@@ -121,30 +121,6 @@
     <Compile Include="Controls\InfoControl\InfoControl.Designer.cs">
       <DependentUpon>InfoControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\HistoryTabPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\HistoryTabPage.Designer.cs">
-      <DependentUpon>HistoryTabPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\HopsTabPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\HopsTabPage.Designer.cs">
-      <DependentUpon>HopsTabPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\ResultTabPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\ResultTabPage.Designer.cs">
-      <DependentUpon>ResultTabPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\ScenarioTabPage.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\InfoControl\TabPages\ScenarioTabPage.Designer.cs">
-      <DependentUpon>ScenarioTabPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\NetworkView\NetworkElements\ComputerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -283,18 +259,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\InfoControl\InfoControl.resx">
       <DependentUpon>InfoControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\InfoControl\TabPages\HistoryTabPage.resx">
-      <DependentUpon>HistoryTabPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\InfoControl\TabPages\HopsTabPage.resx">
-      <DependentUpon>HopsTabPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\InfoControl\TabPages\ResultTabPage.resx">
-      <DependentUpon>ResultTabPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\InfoControl\TabPages\ScenarioTabPage.resx">
-      <DependentUpon>ScenarioTabPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\NetworkView\NetworkViewControl.resx">
       <DependentUpon>NetworkViewControl.cs</DependentUpon>

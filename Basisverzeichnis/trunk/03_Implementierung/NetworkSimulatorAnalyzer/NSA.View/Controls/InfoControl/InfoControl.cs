@@ -1,6 +1,5 @@
 ﻿using System.Windows.Forms;
 using NSA.View.Controls.InfoControl.ControlContents;
-using NSA.View.Controls.InfoControl.TabPages;
 
 namespace NSA.View.Controls.InfoControl
 {

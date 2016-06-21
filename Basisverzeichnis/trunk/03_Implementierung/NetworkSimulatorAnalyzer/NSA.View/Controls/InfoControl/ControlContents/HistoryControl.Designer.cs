@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.dgvHistory = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
+            this.bnClearHistory = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,18 +56,19 @@
             this.dgvHistory.TabIndex = 0;
             this.dgvHistory.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHistory_CellContentClick);
             // 
-            // button1
+            // bnClearHistory
             // 
-            this.button1.Location = new System.Drawing.Point(3, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.bnClearHistory.Location = new System.Drawing.Point(3, 0);
+            this.bnClearHistory.Name = "bnClearHistory";
+            this.bnClearHistory.Size = new System.Drawing.Size(101, 23);
+            this.bnClearHistory.TabIndex = 1;
+            this.bnClearHistory.Text = "History leeren";
+            this.bnClearHistory.UseVisualStyleBackColor = true;
+            this.bnClearHistory.Click += new System.EventHandler(this.bnClearHistory_Click);
             // 
-            // HistoryTabPage
+            // HistoryControl
             // 
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.bnClearHistory);
             this.Controls.Add(this.dgvHistory);
             this.Name = "HistoryControl";
             this.Size = new System.Drawing.Size(738, 150);
@@ -80,6 +81,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvHistory;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button bnClearHistory;
     }
 }
