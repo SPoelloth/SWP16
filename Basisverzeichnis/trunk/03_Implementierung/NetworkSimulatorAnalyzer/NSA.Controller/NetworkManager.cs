@@ -84,11 +84,11 @@ namespace NSA.Controller
         /// <param name="WorkstationName">The name of the workstation</param>
         /// <param name="IpAddress">The ipAddress</param>
         /// <param name="Subnetmask">The subnetmask</param>
-        /// <param name="portnum">The portnumber.</param>
-        public void AddInterfaceToWorkstation(string WorkstationName, IPAddress IpAddress, IPAddress Subnetmask, int portnum = -1)
+        /// <param name="Portnum">The portnumber.</param>
+        public void AddInterfaceToWorkstation(string WorkstationName, IPAddress IpAddress, IPAddress Subnetmask, int Portnum = -1)
         {
             Workstation workstation = GetWorkstationByName(WorkstationName);
-            var iface = workstation.AddInterface(IpAddress, Subnetmask, portnum);
+            var iface = workstation.AddInterface(IpAddress, Subnetmask, Portnum);
             NetworkViewController.Instance.AddInterfaceToHardwareNode(workstation.Name, iface.Name);
         }
 
@@ -247,18 +247,18 @@ namespace NSA.Controller
         public Hardwarenode CreateHardwareNode(HardwarenodeType Type, string Name = null)
         {
             Hardwarenode node = null;
-            string NodeName = Name ?? CreateUniqueName(Type);
+            string nodeName = Name ?? CreateUniqueName(Type);
 
             switch (Type)
             {
                 case HardwarenodeType.Switch:
-                    node = new Switch(NodeName);
+                    node = new Switch(nodeName);
                     break;
                 case HardwarenodeType.Workstation:
-                    node = new Workstation(NodeName);
+                    node = new Workstation(nodeName);
                     break;
                 case HardwarenodeType.Router:
-                    node = new Router(NodeName);
+                    node = new Router(nodeName);
                     break;
             }
 
@@ -355,7 +355,7 @@ namespace NSA.Controller
             // TODO: Do something with HasInternetAccess and InterfaceName
             Workstation ws = GetWorkstationByName(WorkstationName);
             ws.StandardGateway = Gateway;
-            ws.StandardGatewayPort = ws.GetInterfaces().First(i => i.Name == InterfaceName);
+            ws.StandardGatewayPort = ws.GetInterfaces().First(I => I.Name == InterfaceName);
             var r = ws as Router;
             if (r != null) r.IsGateway = HasInternetAccess;
         }
