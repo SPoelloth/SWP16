@@ -64,7 +64,7 @@ namespace NSA.ModelTests.BusinessLogic
         {
             Testscenario t = new Testscenario("A|(B,C)|{TTL:64}|TRUE", network, "r");
 
-            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+            List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
             foreach (var runnable in runnables)
             {
@@ -77,7 +77,7 @@ namespace NSA.ModelTests.BusinessLogic
         {
             Testscenario t = new Testscenario("A|HAS_INTERNET|TRUE", network, "r");
 
-            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+            List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
             foreach (var runnable in runnables)
             {
@@ -90,7 +90,7 @@ namespace NSA.ModelTests.BusinessLogic
         {
             Testscenario t = new Testscenario("A|(D)|{TTL:64}|TRUE", network, "x");
 
-            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+            List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
             foreach (var runnable in runnables)
             {
@@ -103,7 +103,7 @@ namespace NSA.ModelTests.BusinessLogic
         {
             Testscenario t = new Testscenario("A|(B)|{TTL:0}|TRUE", network, "y");
 
-            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+            List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
             foreach (var runnable in runnables)
             {
@@ -116,7 +116,7 @@ namespace NSA.ModelTests.BusinessLogic
         {
             Testscenario t = new Testscenario("A|ONLY(B)|TRUE", network, "y");
 
-            List<ITestscenarioRunnable> runnables = t.GetRunnables();
+            List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
             foreach (var runnable in runnables)
             {

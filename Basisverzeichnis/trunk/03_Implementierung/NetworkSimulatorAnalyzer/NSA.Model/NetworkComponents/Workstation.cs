@@ -9,8 +9,8 @@ namespace NSA.Model.NetworkComponents
 {
     public class Workstation : Hardwarenode
     {
-        private List<Interface> interfaces = new List<Interface>();
-        private Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
+        private readonly List<Interface> interfaces = new List<Interface>();
+        private readonly Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
         

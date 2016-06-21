@@ -7,8 +7,8 @@ namespace NSA.Model.NetworkComponents
 {
     public class Network
     {
-        private List<Hardwarenode> nodes;
-        private List<Connection> connections;
+        private readonly List<Hardwarenode> nodes;
+        private readonly List<Connection> connections;
 
 	    public Network()
 	    {

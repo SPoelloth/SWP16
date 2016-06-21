@@ -107,7 +107,7 @@ namespace NSA.Controller
         {
             List<Simulation> failedSimulations = new List<Simulation>();
 
-            foreach (var runnable in T.GetRunnables())
+            foreach (var runnable in T.GetTestscenarioRunnables())
             {
                 foreach (var simulation in runnable.Run())
                 {

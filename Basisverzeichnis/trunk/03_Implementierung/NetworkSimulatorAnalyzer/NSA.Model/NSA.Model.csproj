@@ -69,7 +69,7 @@
     <Compile Include="NetworkComponents\Route.cs" />
     <Compile Include="NetworkComponents\Router.cs" />
     <Compile Include="NetworkComponents\Layers\SessionLayer.cs" />
-    <Compile Include="NetworkComponents\Rule.cs" />
+    <Compile Include="BusinessLogic\Rule.cs" />
     <Compile Include="NetworkComponents\Switch.cs" />
     <Compile Include="NetworkComponents\Layers\TransportLayer.cs" />
     <Compile Include="NetworkComponents\Workstation.cs" />

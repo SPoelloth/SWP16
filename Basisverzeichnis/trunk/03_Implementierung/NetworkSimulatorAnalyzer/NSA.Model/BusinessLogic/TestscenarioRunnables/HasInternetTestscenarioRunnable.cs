@@ -1,37 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NSA.Model.NetworkComponents;
-using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 {
     class HasInternetTestscenarioRunnable: ITestscenarioRunnable
     {
-        private Rule rule;
-        private Hardwarenode startNode;
-        private List<Hardwarenode> endNodes
+        private readonly Rule rule;
+        private readonly Hardwarenode startNode;
+        private readonly List<Hardwarenode> endNodes;
         public int SimulationCount { get; }
 
-        public HasInternetTestscenarioRunnable(Rule rule)
+        public HasInternetTestscenarioRunnable(Rule Rule)
         {
-            this.rule = rule;
-            this.startNode = rule.StartNode;
-            this.endNodes = rule.EndNodes;
-            this.SimulationCount = 0;
+            rule = Rule;
+            startNode = Rule.StartNode;
+            endNodes = Rule.EndNodes;
+            SimulationCount = 0;
         }
 
+        /// <summary>
+        /// runs all simulations for a given rule
+        /// </summary>
+        /// <returns>simulations that failed</returns>
         public List<Simulation> Run()
         {
-            string l = Guid.NewGuid().ToString();
-            Simulation sim = new Simulation(l);
-            List<Simulation> passedSimulations = new List<Simulation>();
+            var l = Guid.NewGuid().ToString();
+            var sim = new Simulation(l);
+            var passedSimulations = new List<Simulation>();
 
             foreach (var router in endNodes)
             {
-                Packet p = new Packet(startNode, router, rule.Options["TTL"], rule.ExpectedResult);
+                var p = new Packet(startNode, router, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
                 if (sim.Execute().ErrorId == 0)
                 {

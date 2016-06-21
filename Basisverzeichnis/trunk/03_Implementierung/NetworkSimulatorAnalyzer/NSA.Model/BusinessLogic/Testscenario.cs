@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 using NSA.Model.BusinessLogic.TestscenarioRunnables;
@@ -7,40 +6,45 @@ namespace NSA.Model.BusinessLogic
 {
     public class Testscenario
     {
-        private Dictionary<Rule, bool> results = new Dictionary<Rule, bool>();
-        private Network network;
-        private string text;
+        private readonly Network network;
+        private readonly string text;
 
-        public string fileName { get; private set; }
+        public string FileName { get; private set; }
         public string Id { get; }
         public int SimulationCount { get; private set; }
         
-        public Testscenario(string t, Network n, string fileName)
+        public Testscenario(string T, Network N, string FileName)
         {
-            network = n;
-            text = t;
-            this.fileName = fileName;
+            network = N;
+            text = T;
+            this.FileName = FileName;
         }
 
-        public List<ITestscenarioRunnable> GetRunnables()
+        /// <summary>
+        /// parses the text and creates Testscenario runnables
+        /// </summary>
+        /// <returns>runnables</returns>
+        public List<ITestscenarioRunnable> GetTestscenarioRunnables()
         {
-            List<ITestscenarioRunnable> runnables = new List<ITestscenarioRunnable>();
-            string[] lines = text.Split('\n');
+            var runnables = new List<ITestscenarioRunnable>();
+            var lines = text.Split('\n');
             foreach (var line in lines)
             {
-                Rule rule = Rule.Parse(line, network);
+                var rule = Rule.Parse(line, network);
 
                 switch (rule.SimulType)
                 {
                     case SimulationType.Simple:      runnables.Add(new SimpleTestscenarioRunnable(rule));        break;
                     case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule));   break;
                     case SimulationType.Only:        runnables.Add(new OnlyTestscenarioRunnable(rule, network)); break;
-                    default: break;
                 }
             }
 
-            this.SimulationCount = 0;
-            foreach (var runnable in runnables) { this.SimulationCount += runnable.SimulationCount; }
+            SimulationCount = 0;
+            foreach (var runnable in runnables)
+            {
+                SimulationCount += runnable.SimulationCount;
+            }
 
             return runnables;
         }

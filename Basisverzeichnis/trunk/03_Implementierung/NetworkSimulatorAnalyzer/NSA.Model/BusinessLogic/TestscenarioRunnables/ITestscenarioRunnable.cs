@@ -1,15 +1,15 @@
-﻿using NSA.Model.NetworkComponents.Helper_Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 {
     public interface ITestscenarioRunnable
     {
         int SimulationCount { get; }
-        List<Simulation> Run(); // returns list of failed Simulations
+
+        /// <summary>
+        /// runs all simulations for a given rule
+        /// </summary>
+        /// <returns>simulations that failed</returns>
+        List<Simulation> Run();
     }
 }

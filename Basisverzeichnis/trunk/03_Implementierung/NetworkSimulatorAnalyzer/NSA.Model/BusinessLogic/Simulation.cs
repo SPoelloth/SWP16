@@ -6,8 +6,8 @@ namespace NSA.Model.BusinessLogic
 {
 	public class Simulation
     {
-        private List<Packet> packetsSend = new List<Packet>();
-        private List<Packet> packetsReceived = new List<Packet>();
+        private readonly List<Packet> packetsSend = new List<Packet>();
+        private readonly List<Packet> packetsReceived = new List<Packet>();
         public string Source { get; private set; }
         public string Destination { get; private set; }
 	    public string Id { get; private set; }

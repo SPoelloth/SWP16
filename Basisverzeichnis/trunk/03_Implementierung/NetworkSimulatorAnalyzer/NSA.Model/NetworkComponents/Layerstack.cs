@@ -6,7 +6,7 @@ namespace NSA.Model.NetworkComponents
 {
     public class Layerstack
     {
-        private List<ILayer> layers;
+        private readonly List<ILayer> layers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Layerstack"/> class.

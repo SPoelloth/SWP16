@@ -1,46 +1,47 @@
-using System.Collections.Generic;
-using NSA.Model.BusinessLogic.TestscenarioRunnables;
-using NSA.Model.NetworkComponents;
-using NSA.Model.NetworkComponents.Helper_Classes;
 using System;
+using System.Collections.Generic;
+using NSA.Model.NetworkComponents;
 
-namespace NSA.Model.BusinessLogic
+namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 {
     internal class OnlyTestscenarioRunnable : ITestscenarioRunnable
     {
-        private Network network;
-        private List<Hardwarenode> endNodes;
-        private Rule rule;
-        private Hardwarenode startNode;
+        private readonly Network network;
+        private readonly List<Hardwarenode> endNodes;
+        private readonly Rule rule;
+        private readonly Hardwarenode startNode;
         
         public int SimulationCount { get; }
 
-        public OnlyTestscenarioRunnable(Rule rule, Network n)
+        public OnlyTestscenarioRunnable(Rule Rule, Network N)
         {
-            this.rule = rule;
-            this.startNode = rule.StartNode;
-            this.endNodes = rule.EndNodes;
-            this.SimulationCount = n.GetAllWorkstations().Count; //TODO: change later
-            this.network = n;
+            rule = Rule;
+            startNode = Rule.StartNode;
+            endNodes = Rule.EndNodes;
+            SimulationCount = N.GetAllWorkstations().Count; 
+            network = N;
         }
-  
+
+        /// <summary>
+        /// runs all simulations for a given rule
+        /// </summary>
+        /// <returns>simulations that failed</returns>
         public List<Simulation> Run()
         {
-            List<Simulation> failedSimulations = new List<Simulation>();
-            //TODO: add endNodes for subnets
+            var failedSimulations = new List<Simulation>();
 
             foreach (var node in network.GetAllWorkstations())
             {
                 if (startNode == node) continue;
-                Simulation sim = new Simulation(Guid.NewGuid().ToString());
+                var sim = new Simulation(Guid.NewGuid().ToString());
 
-                bool expectedResult = rule.ExpectedResult;
+                var expectedResult = rule.ExpectedResult;
                 if (!endNodes.Contains(node)) expectedResult = !expectedResult; 
 
-                Packet p = new Packet(startNode, node, rule.Options["TTL"], expectedResult);
+                var p = new Packet(startNode, node, rule.Options["TTL"], expectedResult);
                 sim.AddPacketSend(p);
 
-                Result r = sim.Execute();
+                var r = sim.Execute();
                 if ((expectedResult && r.ErrorId != 0) || (!expectedResult && r.ErrorId == 0))
                     failedSimulations.Add(sim);
             }
