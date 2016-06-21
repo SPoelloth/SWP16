@@ -30,7 +30,7 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
 
             foreach (var endNode in endNodes)
             {
-                var sim = new Simulation(Guid.NewGuid().ToString());
+                var sim = new Simulation(Guid.NewGuid().ToString(), startNode.Name, endNode.Name, rule.ExpectedResult);
                 var p = new Packet(startNode, endNode, rule.Options["TTL"], rule.ExpectedResult);
                 sim.AddPacketSend(p);
 

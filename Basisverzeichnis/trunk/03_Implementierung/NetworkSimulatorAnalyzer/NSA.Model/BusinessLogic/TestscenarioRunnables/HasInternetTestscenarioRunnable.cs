@@ -41,7 +41,7 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
             }
 
             if (passedSimulations.Count == 0)
-                passedSimulations.Add(new Simulation(l, startNode.Name, "NoInternetRouter")); //potential BUG
+                passedSimulations.Add(new Simulation(l, startNode.Name, "NoInternetRouter", rule.ExpectedResult)); //potential BUG
             else
                 passedSimulations.Clear();
 

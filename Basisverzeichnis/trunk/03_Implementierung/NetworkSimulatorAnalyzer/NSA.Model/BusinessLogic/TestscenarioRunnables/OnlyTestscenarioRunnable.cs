@@ -33,10 +33,11 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
             foreach (var node in network.GetAllWorkstations())
             {
                 if (startNode == node) continue;
-                var sim = new Simulation(Guid.NewGuid().ToString());
 
                 var expectedResult = rule.ExpectedResult;
-                if (!endNodes.Contains(node)) expectedResult = !expectedResult; 
+                if (!endNodes.Contains(node)) expectedResult = !expectedResult;
+
+                var sim = new Simulation(Guid.NewGuid().ToString(), startNode.Name, node.Name, expectedResult);
 
                 var p = new Packet(startNode, node, rule.Options["TTL"], expectedResult);
                 sim.AddPacketSend(p);
