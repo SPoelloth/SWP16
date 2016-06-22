@@ -39,17 +39,20 @@
             this.flpContents.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flpContents.Location = new System.Drawing.Point(0, 0);
             this.flpContents.Name = "flpContents";
-            this.flpContents.Size = new System.Drawing.Size(235, 384);
+            this.flpContents.Size = new System.Drawing.Size(233, 382);
             this.flpContents.TabIndex = 0;
             this.flpContents.WrapContents = false;
+            this.flpContents.Scroll += new System.Windows.Forms.ScrollEventHandler(this.flpContents_Scroll);
             // 
             // PropertyControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.flpContents);
+            this.DoubleBuffered = true;
             this.Name = "PropertyControl";
-            this.Size = new System.Drawing.Size(235, 384);
+            this.Size = new System.Drawing.Size(233, 382);
             this.ResumeLayout(false);
 
         }

@@ -6,10 +6,8 @@ using System.Windows.Forms;
 using NSA.View.Controls.PropertyControl.ConfigControls;
 using NSA.View.Controls.PropertyControl.Misc;
 
-namespace NSA.View.Controls.PropertyControl
-{
-    public partial class PropertyControl : UserControl
-    {
+namespace NSA.View.Controls.PropertyControl {
+    public partial class PropertyControl : UserControl {
         private readonly List<InterfaceConfigControl> interfaceConfigControls = new List<InterfaceConfigControl>();
         private readonly List<RouteConfigControl> routeConfigControls = new List<RouteConfigControl>();
         private readonly List<Control> tempControls = new List<Control>();
@@ -34,15 +32,13 @@ namespace NSA.View.Controls.PropertyControl
 
         public event Action<int> SwitchPortNumberChanged;
         #endregion Event declaration
-        public PropertyControl()
-        {
+        public PropertyControl() {
             InitializeComponent();
         }
 
         #region Methods
 
-        public void AddSwitchConfigControl(int NumberOfPorts)
-        {
+        public void AddSwitchConfigControl(int NumberOfPorts) {
             ClearControls();
             SwitchConfigControl switchConfigControl = new SwitchConfigControl(NumberOfPorts);
             switchConfigControl.NumberOfPortsChanged += SwitchConfigControl_NumberOfPortsChanged;
@@ -55,8 +51,7 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="InterfaceName">The name of the interface</param>
         /// <param name="IpAddress">The current IP address of the interface</param>
         /// <param name="SubnetMask">The current subnet mask of the interface</param>
-        public void AddInterfaceConfigControl(string InterfaceName, IPAddress IpAddress, IPAddress SubnetMask)
-        {
+        public void AddInterfaceConfigControl(string InterfaceName, IPAddress IpAddress, IPAddress SubnetMask) {
             var newControl = new InterfaceConfigControl(IpAddress, SubnetMask, InterfaceName);
             newControl.Closing += ConfigControl_Closing;
             newControl.InterfaceChanged += InterfaceConfigControl_InterfaceChanged;
@@ -68,8 +63,7 @@ namespace NSA.View.Controls.PropertyControl
         /// </summary>
         /// <param name="DefaultGatewayAddress">The IP adress of the default gateway</param>
         /// <param name="AssignedInterfaceName">The name of the ethernet interface to be used for the default gateway</param>
-        public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName, bool IsRouter, bool HasInternetAccess = true)
-        {
+        public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName, bool IsRouter, bool HasInternetAccess = true) {
             var gwConfigControl = new GwConfigControl(DefaultGatewayAddress, AssignedInterfaceName, IsRouter, HasInternetAccess);
             gwConfigControl.GatewayChanged += GWConfigControl_GatewayChanged;
             tempControls.Add(gwConfigControl);
@@ -83,16 +77,14 @@ namespace NSA.View.Controls.PropertyControl
         /// <param name="Destination">IP address of the route destination</param>
         /// <param name="Route">IP address of the route</param>
         /// <param name="Parameters">Parameters for the route</param>
-        public void AddRouteConfigControl(string RouteName, IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters)
-        {
+        public void AddRouteConfigControl(string RouteName, IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters) {
             var newControl = new RouteConfigControl(RouteName, Source, Destination, Route, Parameters);
             newControl.Closing += ConfigControl_Closing;
             newControl.RouteChanged += RouteConfigControl_RouteChanged;
             routeConfigControls.Add(newControl);
         }
 
-        public void AddLayerStackConfigControl()
-        {
+        public void AddLayerStackConfigControl() {
             var layerStackConfigControl = new LayerstackConfigControl();
             layerStackConfigControl.LayerAdded += LayerStackConfigControl_LayerAdded;
             layerStackConfigControl.LayerRemoved += LayerStackConfigControl_LayerRemoved;
@@ -101,15 +93,11 @@ namespace NSA.View.Controls.PropertyControl
             tempControls.Add(layerStackConfigControl);
         }
 
-        public void AddLayerToLayerConfigControl(string LayerName, bool IsCustom)
-        {
+        public void AddLayerToLayerConfigControl(string LayerName, bool IsCustom) {
             var lscc = Controls.OfType<LayerstackConfigControl>().FirstOrDefault() ?? tempControls.OfType<LayerstackConfigControl>().FirstOrDefault();
-            if (lscc == null)
-            {
+            if (lscc == null) {
                 throw new InvalidOperationException();
-            }
-            else
-            {
+            } else {
                 lscc.AddLayer(LayerName, IsCustom);
             }
         }
@@ -118,11 +106,9 @@ namespace NSA.View.Controls.PropertyControl
         ///     Puts the config controls in the flowlayoutpanel, where they are displayed for the user.
         ///     Is called after all elements have been created and added.
         /// </summary>
-        public void DisplayElements()
-        {
+        public void DisplayElements() {
             // Add InterfaceConfigControls first
-            foreach (var icc in interfaceConfigControls)
-            {
+            foreach (var icc in interfaceConfigControls) {
                 flpContents.Controls.Add(icc);
             }
             var addInterfaceButton = new AddInterfaceButton();
@@ -130,64 +116,52 @@ namespace NSA.View.Controls.PropertyControl
             flpContents.Controls.Add(addInterfaceButton);
             flpContents.Controls.Add(new Separator());
             // Add various singular controls
-            foreach (var c in tempControls)
-            {
+            foreach (var c in tempControls) {
                 flpContents.Controls.Add(c);
             }
             flpContents.Controls.Add(new Separator());
             // Add RouteConfigControls and an AddButton, if necessary
-            foreach (var rcc in routeConfigControls)
-            {
+            foreach (var rcc in routeConfigControls) {
                 flpContents.Controls.Add(rcc);
             }
             var addRouteButton = new AddRouteButton();
             addRouteButton.Click += AddRouteButton_Click;
             flpContents.Controls.Add(addRouteButton);
-            if (RetainScrollPosition)
-            {
+            if (RetainScrollPosition) {
                 flpContents.VerticalScroll.Value = scrollPosition;
                 flpContents.VerticalScroll.Value = scrollPosition;
                 scrollPosition = 0;
             }
         }
 
-        public void ClearControls()
-        {
-            if (RetainScrollPosition)
-            {
+        public void ClearControls() {
+            if (RetainScrollPosition) {
                 scrollPosition = flpContents.VerticalScroll.Value;
             }
-            foreach (Control c in flpContents.Controls)
-            {
-                if (c is InterfaceConfigControl)
-                {
+            foreach (Control c in flpContents.Controls) {
+                if (c is InterfaceConfigControl) {
                     InterfaceConfigControl icc = c as InterfaceConfigControl;
                     icc.InterfaceChanged -= InterfaceConfigControl_InterfaceChanged;
                     icc.Closing -= ConfigControl_Closing;
-                } else if (c is RouteConfigControl)
-                {
+                } else if (c is RouteConfigControl) {
                     RouteConfigControl rcc = c as RouteConfigControl;
                     rcc.RouteChanged -= RouteConfigControl_RouteChanged;
                     rcc.Closing -= ConfigControl_Closing;
-                } else if (c is GwConfigControl)
-                {
+                } else if (c is GwConfigControl) {
                     GwConfigControl gcc = c as GwConfigControl;
                     gcc.GatewayChanged -= GWConfigControl_GatewayChanged;
                     gcc.Closing -= ConfigControl_Closing;
-                } else if (c is LayerstackConfigControl)
-                {
+                } else if (c is LayerstackConfigControl) {
                     LayerstackConfigControl lscc = c as LayerstackConfigControl;
                     lscc.LayerAdded -= LayerStackConfigControl_LayerAdded;
                     lscc.LayerRemoved -= LayerStackConfigControl_LayerRemoved;
                     lscc.LayerNameChanged -= LayerStackConfigControl_LayerNameChanged;
                     lscc.LayerIndexChanged -= LayerStackConfigControl_LayerIndexChanged;
                     lscc.Closing -= ConfigControl_Closing;
-                } else if (c is AddInterfaceButton)
-                {
+                } else if (c is AddInterfaceButton) {
                     AddInterfaceButton aib = c as AddInterfaceButton;
                     aib.Click -= AddInterfaceButton_Click;
-                } else if (c is AddRouteButton)
-                {
+                } else if (c is AddRouteButton) {
                     AddRouteButton arb = c as AddRouteButton;
                     arb.Click -= AddRouteButton_Click;
                 }
@@ -206,8 +180,7 @@ namespace NSA.View.Controls.PropertyControl
         /// </summary>
         /// <param name="Sender"></param>
         /// <param name="E"></param>
-        private void AddInterfaceButton_Click(object Sender, EventArgs E)
-        {
+        private void AddInterfaceButton_Click(object Sender, EventArgs E) {
             InterfaceAdded?.Invoke();
         }
 
@@ -216,8 +189,7 @@ namespace NSA.View.Controls.PropertyControl
         /// </summary>
         /// <param name="Sender"></param>
         /// <param name="E"></param>
-        private void AddRouteButton_Click(object Sender, EventArgs E)
-        {
+        private void AddRouteButton_Click(object Sender, EventArgs E) {
             AddRoute?.Invoke();
         }
 
@@ -225,18 +197,14 @@ namespace NSA.View.Controls.PropertyControl
         ///     Handler for the Closing event of a ConfigControl
         /// </summary>
         /// <param name="Control">The closing control</param>
-        private void ConfigControl_Closing(ConfigControlBase Control)
-        {
-            if (Control is InterfaceConfigControl)
-            {
+        private void ConfigControl_Closing(ConfigControlBase Control) {
+            if (Control is InterfaceConfigControl) {
                 var control = Control as InterfaceConfigControl;
                 control.InterfaceChanged -= InterfaceConfigControl_InterfaceChanged;
                 InterfaceRemoved?.Invoke(control.InterfaceName);
-            }
-            else if (Control is RouteConfigControl)
-            {
+            } else if (Control is RouteConfigControl) {
                 var rcc = Control as RouteConfigControl;
-                ((RouteConfigControl) Control).RouteChanged -= RouteConfigControl_RouteChanged;
+                ((RouteConfigControl)Control).RouteChanged -= RouteConfigControl_RouteChanged;
                 RemoveRoute?.Invoke(rcc.RouteName);
             }
             Control.Closing -= ConfigControl_Closing;
@@ -306,6 +274,15 @@ namespace NSA.View.Controls.PropertyControl
             SwitchPortNumberChanged?.Invoke(NumberOfPorts);
         }
         #endregion Switch
+
+
+        private void flpContents_Scroll(object sender, ScrollEventArgs e)
+        {
+            if (e.Type == ScrollEventType.EndScroll)
+            {
+                flpContents.Refresh();
+            }
+        }
         #endregion Eventhandling
     }
 }
