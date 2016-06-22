@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
@@ -158,5 +159,38 @@ namespace NSA.Model.NetworkComponents
 	    {
             return connections.ToList();
 	    }
+
+        /// <summary>
+        /// Gets all hardwarenodes belonging to a subnet.
+        /// </summary>
+        /// <param name="Subnetmask">The subnetmask.</param>
+        /// <returns>A list of hardwarenodes who belong to the subnet.</returns>
+        public List<Hardwarenode> GetHardwareNodesForSubnet(string Subnetmask)
+        {
+            List<Hardwarenode> resultNodes = new List<Hardwarenode>();
+            IPAddress subnetAddress;
+            bool ok = IPAddress.TryParse(Subnetmask, out subnetAddress);
+            Debug.Assert(ok, "Invalid Subnetmask");
+
+            List<Workstation> allWorkstations = GetAllWorkstations();
+            // Iterate through all workstations
+            foreach (Workstation w in allWorkstations)
+            {
+                List<Interface> ifaces = w.GetInterfaces();
+                // Iterate through all interfaces of the current workstation.
+                foreach (Interface iface in ifaces)
+                {
+                    if (subnetAddress.Equals(iface.Subnetmask))
+                    {
+                        // Workstation is in the same subnet.
+                        resultNodes.Add(w);
+                        break;
+                    }
+                }
+
+            }
+
+            return resultNodes;
+        }
     }
 }
