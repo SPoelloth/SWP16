@@ -31,7 +31,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.Name = "Separator";
-            this.Size = new System.Drawing.Size(212, 2);
+            this.Size = new System.Drawing.Size(202, 2);
             this.ResumeLayout(false);
 
         }
