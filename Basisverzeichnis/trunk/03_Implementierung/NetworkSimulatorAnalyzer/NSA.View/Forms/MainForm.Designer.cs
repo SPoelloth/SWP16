@@ -40,9 +40,10 @@ namespace NSA.View.Forms
             // 
             this.propertyControl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.propertyControl.AutoScroll = true;
-            this.propertyControl.Location = new System.Drawing.Point(755, 55);
+            this.propertyControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.propertyControl.Location = new System.Drawing.Point(760, 55);
             this.propertyControl.Name = "propertyControl";
-            this.propertyControl.Size = new System.Drawing.Size(238, 469);
+            this.propertyControl.Size = new System.Drawing.Size(243, 469);
             this.propertyControl.TabIndex = 3;
             this.propertyControl.Tag = "PropertyControl";
             // 
@@ -50,7 +51,7 @@ namespace NSA.View.Forms
             // 
             this.ToolbarControl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ToolbarControl.AutoSize = true;
-            this.ToolbarControl.Location = new System.Drawing.Point(31, 12);
+            this.ToolbarControl.Location = new System.Drawing.Point(36, 12);
             this.ToolbarControl.Name = "ToolbarControl";
             this.ToolbarControl.Size = new System.Drawing.Size(902, 46);
             this.ToolbarControl.TabIndex = 2;
@@ -59,7 +60,7 @@ namespace NSA.View.Forms
             // infoControl
             // 
             this.infoControl.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.infoControl.Location = new System.Drawing.Point(3, 342);
+            this.infoControl.Location = new System.Drawing.Point(8, 342);
             this.infoControl.Name = "infoControl";
             this.infoControl.Size = new System.Drawing.Size(746, 182);
             this.infoControl.TabIndex = 1;
@@ -69,7 +70,7 @@ namespace NSA.View.Forms
             // 
             this.networkViewControl.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.networkViewControl.BackColor = System.Drawing.SystemColors.Control;
-            this.networkViewControl.Location = new System.Drawing.Point(3, 64);
+            this.networkViewControl.Location = new System.Drawing.Point(8, 64);
             this.networkViewControl.Name = "networkViewControl";
             this.networkViewControl.Size = new System.Drawing.Size(746, 281);
             this.networkViewControl.TabIndex = 0;
@@ -80,7 +81,7 @@ namespace NSA.View.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(996, 527);
+            this.ClientSize = new System.Drawing.Size(1007, 527);
             this.Controls.Add(this.propertyControl);
             this.Controls.Add(this.ToolbarControl);
             this.Controls.Add(this.infoControl);
