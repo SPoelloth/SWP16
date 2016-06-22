@@ -299,6 +299,16 @@ namespace NSA.Controller
             NetworkViewController.Instance.RemoveHardwarenode(Name);
         }
 
+        /// <summary>
+        /// Changes a HardwareNode's name and makes the PropertyController reload its properties.
+        /// </summary>
+        /// <param name="OldName">The old name.</param>
+        /// <param name="NewName">The new name.</param>
+        public void RenameHardwarenode(string OldName, string NewName)
+        {
+            GetAllHardwareNodes().First(n => n.Name == OldName).Name = NewName;
+            PropertyController.Instance.LoadElementProperties(NewName);
+        }
         #endregion
 
         #region Connection-related methods

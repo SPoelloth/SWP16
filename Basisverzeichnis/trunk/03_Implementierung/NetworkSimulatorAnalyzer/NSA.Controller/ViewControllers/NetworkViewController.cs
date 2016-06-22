@@ -36,7 +36,7 @@ namespace NSA.Controller.ViewControllers
 
         private void NetworkViewControl_NodeRenamed(string oldName, string newName)
         {
-            NetworkManager.Instance.GetAllHardwareNodes().First(n => n.Name == oldName).Name = newName;
+            NetworkManager.Instance.RenameHardwarenode(oldName, newName);
         }
 
         public void OnQuickSimulationCreated(string source, string target)
