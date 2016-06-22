@@ -6,6 +6,13 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class DataLinkLayer : ILayer
     {
+        private int index;
+
+        public DataLinkLayer(int I)
+        {
+            index = I;
+        }
+
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
             if (ValInfo.Iface == null)
@@ -18,7 +25,7 @@ namespace NSA.Model.NetworkComponents.Layers
             }
             ValInfo.Res.ErrorId = Result.Errors.NoConnection;
             ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
-            ValInfo.Res.LayerError = new DataLinkLayer();
+            ValInfo.Res.LayerError = new DataLinkLayer(index);
             ValInfo.Res.SendError = true;
             ValInfo.NextNodes = null;
         }
@@ -34,7 +41,7 @@ namespace NSA.Model.NetworkComponents.Layers
             }
             ValInfo.Res.ErrorId = Result.Errors.PacketNotForThisNode;
             ValInfo.Res.Res = Result.ResultStrings[(int) ValInfo.Res.ErrorId];
-            ValInfo.Res.LayerError = new DataLinkLayer();
+            ValInfo.Res.LayerError = new DataLinkLayer(index);
             ValInfo.Res.SendError = false;
             return false;
         }
@@ -47,6 +54,16 @@ namespace NSA.Model.NetworkComponents.Layers
         public bool SetLayerName(string NewName)
         {
             return false;
+        }
+
+        public int GetLayerIndex()
+        {
+            return index;
+        }
+
+        public void SetLayerIndex(int I)
+        {
+            index = I;
         }
     }
 }

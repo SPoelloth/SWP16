@@ -32,6 +32,15 @@ namespace NSA.Model.NetworkComponents
         /// <exception cref="System.InvalidOperationException">Layer with the name:  + name +  does not exist.</exception>
         public void RemoveLayer(string Name)
         {
+            bool decrease = false;
+            List<ILayer> list = layers.OrderBy(I => I.GetLayerIndex()).ToList();
+            foreach (ILayer l in list)
+            {
+                if (decrease)
+                    l.SetLayerIndex(l.GetLayerIndex() - 1);
+                if (l.GetLayerName().Equals(Name))
+                    decrease = true;
+            }
             foreach (ILayer l in layers)
             {
                 if (l.GetLayerName() != Name) continue;
@@ -57,7 +66,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>The layer</returns>
         public ILayer GetLayer(int Index)
         {
-            return layers[Index];
+            return layers.OrderBy(I => I.GetLayerIndex()).ToList()[Index];
         }
 
         /// <summary>
@@ -67,7 +76,12 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Layer">The layer.</param>
         public void InsertAt(int Index, ILayer Layer)
         {
-            layers.Insert(Index, Layer);
+            List<ILayer> list = layers.OrderBy(I => I.GetLayerIndex()).ToList();
+            for (int i = Index; i < list.Count; i++)
+            {
+                list[i].SetLayerIndex(list[i].GetLayerIndex() + 1);
+            }
+            AddLayer(Layer);
         }
 
         /// <summary>
@@ -77,20 +91,20 @@ namespace NSA.Model.NetworkComponents
         /// <param name="NewIndex">The new index.</param>
         public void SetIndex(string Name, int NewIndex)
         {
-            ILayer layer = null;
-            foreach (ILayer l in layers)
-            {
-                if (l.GetLayerName() == Name)
-                {
-                    layer = l;
-                    break;
-                }
-            }
-            if (layer != null)
-            {
-                layers.Remove(layer);
-                InsertAt(NewIndex, layer);
-            }
+            ILayer l = GetLayerByName(Name);
+            l.SetLayerIndex(NewIndex);
+            RemoveLayer(Name);
+            InsertAt(NewIndex, l);
+        }
+
+        /// <summary>
+        /// Gets the layer with the name.
+        /// </summary>
+        /// <param name="Name">The name.</param>
+        /// <returns></returns>
+        public ILayer GetLayerByName(string Name)
+        {
+            return layers.FirstOrDefault(L => L.GetLayerName().Equals(Name));
         }
 
         /// <summary>
@@ -122,7 +136,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns></returns>
         public List<ILayer> GetAllLayers()
         {
-            return layers.ToList();
+            return layers.OrderBy(I => I.GetLayerIndex()).ToList();
         }
 
         /// <summary>

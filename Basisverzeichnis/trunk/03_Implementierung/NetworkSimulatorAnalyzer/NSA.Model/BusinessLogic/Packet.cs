@@ -71,7 +71,7 @@ namespace NSA.Model.BusinessLogic
                 //Layer Error
                 Result.ErrorId = Result.Errors.CustomLayerError;
                 Result.Res = String.Format(Result.ResultStrings[(int)Result.ErrorId], tags.Keys.First());
-                Result.LayerError = new CustomLayer(tags.Keys.First());
+                Result.LayerError = new CustomLayer(tags.Keys.First(), 0);
                 Result.SendError = false;
             }
             if(Result.ErrorId == 0)

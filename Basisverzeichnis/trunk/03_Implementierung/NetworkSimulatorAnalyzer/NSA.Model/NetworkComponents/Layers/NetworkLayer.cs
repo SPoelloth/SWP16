@@ -6,6 +6,13 @@ namespace NSA.Model.NetworkComponents.Layers
 {
     public class NetworkLayer : ILayer
     {
+        private int index;
+
+        public NetworkLayer(int I)
+        {
+            index = I;
+        }
+
         public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex)
         {
             return true;
@@ -19,6 +26,16 @@ namespace NSA.Model.NetworkComponents.Layers
         public bool SetLayerName(string NewName)
         {
             return false;
+        }
+
+        public int GetLayerIndex()
+        {
+            return index;
+        }
+
+        public void SetLayerIndex(int I)
+        {
+            index = I;
         }
 
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
@@ -69,7 +86,7 @@ namespace NSA.Model.NetworkComponents.Layers
             {
                 ValInfo.Res.ErrorId = Result.Errors.NoRoute;
                 ValInfo.Res.Res = Result.ResultStrings[(int)ValInfo.Res.ErrorId];
-                ValInfo.Res.LayerError = new NetworkLayer();
+                ValInfo.Res.LayerError = new NetworkLayer(index);
                 ValInfo.Res.SendError = true;
                 ValInfo.NextNodes = null;
             }

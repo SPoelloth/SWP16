@@ -22,13 +22,13 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Name">The Name.</param>
         public Workstation(string Name) : base(Name)
         {
-            Layerstack.AddLayer(new PhysicalLayer());
-            Layerstack.AddLayer(new DataLinkLayer());
-            Layerstack.AddLayer(new NetworkLayer());
-            Layerstack.AddLayer(new TransportLayer());
-            Layerstack.AddLayer(new SessionLayer());
-            Layerstack.AddLayer(new PresentationLayer());
-            Layerstack.AddLayer(new ApplicationLayer());
+            Layerstack.AddLayer(new PhysicalLayer(0));
+            Layerstack.AddLayer(new DataLinkLayer(1));
+            Layerstack.AddLayer(new NetworkLayer(2));
+            Layerstack.AddLayer(new TransportLayer(3));
+            Layerstack.AddLayer(new SessionLayer(4));
+            Layerstack.AddLayer(new PresentationLayer(5));
+            Layerstack.AddLayer(new ApplicationLayer(6));
             AddInterface(new IPAddress(new byte[] { 192, 168, 0, 1 }), new IPAddress(new byte[] { 255, 255, 255, 0 }));
             StandardGateway = null;
             StandardGatewayPort = null;

@@ -115,7 +115,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControl_AddLayer()
         {
             Layerstack currentLayerStack = (selectedNode as Workstation).Layerstack;
-            CustomLayer newCustomLayer = new CustomLayer(currentLayerStack.CreateUniqueName());
+            CustomLayer newCustomLayer = new CustomLayer(currentLayerStack.CreateUniqueName(), currentLayerStack.GetSize() - 1);
             currentLayerStack.AddLayer(newCustomLayer);
             propertyControl.AddLayerToLayerConfigControl(newCustomLayer.GetLayerName(), true);
         }

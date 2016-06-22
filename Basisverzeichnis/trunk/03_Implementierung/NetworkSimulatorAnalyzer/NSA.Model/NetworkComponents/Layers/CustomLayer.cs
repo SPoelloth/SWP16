@@ -6,10 +6,12 @@ namespace NSA.Model.NetworkComponents.Layers
     public class CustomLayer : ILayer
     {
         private string name;
+        private int index;
 
-        public CustomLayer(string N)
+        public CustomLayer(string N, int I)
         {
             name = N;
+            index = I;
         }
 
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
@@ -36,6 +38,16 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             name = NewName;
             return true;
+        }
+
+        public int GetLayerIndex()
+        {
+            return index;
+        }
+
+        public void SetLayerIndex(int I)
+        {
+            index = I;
         }
     }
 }

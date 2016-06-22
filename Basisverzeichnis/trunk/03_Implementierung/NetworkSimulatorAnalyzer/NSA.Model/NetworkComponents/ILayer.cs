@@ -38,5 +38,17 @@ namespace NSA.Model.NetworkComponents
         /// <param name="NewName"></param>
         /// <returns></returns>
         bool SetLayerName(string NewName);
+
+        /// <summary>
+        /// Gets the index of the layer.
+        /// </summary>
+        /// <returns></returns>
+        int GetLayerIndex();
+
+        /// <summary>
+        /// Sets the index of the layer.
+        /// </summary>
+        /// <param name="I">The Index.</param>
+        void SetLayerIndex(int I);
     }
 }

@@ -34,8 +34,7 @@ namespace NSA.Controller
         public Tuple<Result, Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName)
         {
             Tuple<Result, Result> res;
-            Packet p = null;
-            p = IsSendPacket ? Simulations[Simulations.Count - 1].PacketsSend?[PacketIndex] : Simulations[Simulations.Count - 1].PacketsReceived?[PacketIndex];
+            Packet p = IsSendPacket ? Simulations[Simulations.Count - 1].PacketsSend?[PacketIndex] : Simulations[Simulations.Count - 1].PacketsReceived?[PacketIndex];
             if (p == null || Simulations.Count == 0)
                 return null;
             Hardwarenode nodeOne = NetworkManager.Instance.GetHardwarenodeByName(NodeOneName);

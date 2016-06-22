@@ -258,7 +258,7 @@ namespace NSA.Controller
                             var index = int.Parse(layer.Attribute("Index").Value);
                             var layername = layer.Attribute("Name").Value;
 
-                            hwNode.Layerstack.InsertAt(index, new CustomLayer(layername));
+                            hwNode.Layerstack.InsertAt(index, new CustomLayer(layername, index));
                         }
                     }
 
