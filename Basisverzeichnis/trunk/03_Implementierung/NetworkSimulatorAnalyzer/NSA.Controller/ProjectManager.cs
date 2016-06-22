@@ -314,8 +314,7 @@ namespace NSA.Controller
                 #endregion Connection
 
             }
-            // ReSharper disable once UnusedVariable
-            catch (Exception e)
+            catch
             {
                 CreateNewProject();
                 MessageBox.Show("Laden des Projekts fehlgeschlagen");
