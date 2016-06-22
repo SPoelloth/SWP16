@@ -63,16 +63,12 @@ namespace NSA.Model.NetworkComponents
                 throw new InvalidOperationException("Interface of startnode is already used!");
             if (NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
                 throw new InvalidOperationException("Interface of endnode is already used!");
+ 
 
-            try
-            {
                 NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
                 NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
                 connections.Add(NewConnection);
-            }
-            catch (Exception e)
-            {
-            }
+            
 	    }
 
         /// <summary>
@@ -154,18 +150,11 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <returns>A List of routers</returns>
         public List<Router> GetRouters()
-	    {
-	        List<Router> routers = new List<Router>();
-	        foreach (Hardwarenode n in nodes)
-	        {
-	            Router r = n as Router;
-                if(r != null && r.IsGateway)
-                    routers.Add(r);
-	        }
-	        return routers;
-	    }
+        {
+            return nodes.OfType<Router>().Where(R => R.IsGateway).ToList();
+        }
 
-	    public List<Connection> GetAllConnections()
+        public List<Connection> GetAllConnections()
 	    {
             return connections.ToList();
 	    }
