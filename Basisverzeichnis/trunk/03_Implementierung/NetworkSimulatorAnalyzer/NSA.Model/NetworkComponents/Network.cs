@@ -118,11 +118,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns></returns>
         public Hardwarenode GetWorkstationByIp(IPAddress Ip)
         {
-            foreach (Hardwarenode h in nodes)
-            {
-                if (h.HasIp(Ip)) return h;
-            }
-            return null;
+            return nodes.FirstOrDefault(H => H.HasIp(Ip));
         }
 
         /// <summary>
@@ -140,13 +136,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>all Workstations</returns>
         public List<Workstation> GetAllWorkstations()
         {
-            List<Workstation> workstation = new List<Workstation>();
-
-            foreach (Hardwarenode h in nodes)
-            {
-                if (h is Workstation) workstation.Add((Workstation)h);
-            }
-            return workstation;
+            return nodes.OfType<Workstation>().ToList();
         }
 
         /// <summary>
