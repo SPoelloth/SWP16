@@ -31,9 +31,9 @@ namespace NSA.Controller
         /// <param name="NodeOneName">Name of the node one.</param>
         /// <param name="NodeTwoName">Name of the node two.</param>
         /// <returns></returns>
-        public List<Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName)
+        public Tuple<Result, Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName)
         {
-            List<Result> res = new List<Result>();
+            Tuple<Result, Result> res;
             Packet p = null;
             p = IsSendPacket ? Simulations[Simulations.Count - 1].PacketsSend?[PacketIndex] : Simulations[Simulations.Count - 1].PacketsReceived?[PacketIndex];
             if (p == null || Simulations.Count == 0)
@@ -47,18 +47,15 @@ namespace NSA.Controller
                 return null;
             if (hops.Last().Equals(nodeTwo))
             {
-                res.Add(new Result());
-                res.Add(p.Result);
+                res = new Tuple<Result, Result>(new Result(), p.Result);
             }
             else if (hops.Last().Equals(nodeOne))
             {
-                res.Add(p.Result);
-                res.Add(new Result());
+                res = new Tuple<Result, Result>(p.Result, new Result());
             }
             else
             {
-                res.Add(new Result());
-                res.Add(new Result());
+                res = new Tuple<Result, Result>(new Result(), new Result());
             }
             return res;
         }
