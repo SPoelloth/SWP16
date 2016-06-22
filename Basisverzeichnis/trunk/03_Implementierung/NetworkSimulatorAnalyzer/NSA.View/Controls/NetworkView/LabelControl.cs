@@ -17,8 +17,6 @@ namespace NSA.View.Controls.NetworkView
         public LabelControl()
         {
             InitializeComponent();
-            textBox.Text = "Text";
-            Controls.Remove(textBox);
         }
 
         public LabelControl(EditorElementBase element)
@@ -27,6 +25,9 @@ namespace NSA.View.Controls.NetworkView
             element.LocationChanged += Element_LocationChanged;
             parentElement = element;
             InitializeComponent();
+            textBox.Text = "Text";
+            label1.Text = "Text";
+            Controls.Remove(textBox);
             textBox.TextChanged += TextBox_TextChanged;
             textBox.KeyDown += TextBox1_KeyDown;
             textBox.LostFocus += TextBox1_LostFocus;
@@ -40,6 +41,7 @@ namespace NSA.View.Controls.NetworkView
             var isLinux = Type.GetType("Mono.Runtime") != null;
             textBox.Location = new Point(textBox.Location.X + 3, textBox.Location.Y);
             label1.Location = new Point(label1.Location.X + (isLinux ? 3 : 0), label1.Location.Y);
+            parentElement.Deselected += () => { TextboxEnable(false); };
             TextBox_TextChanged(parentElement, null);
         }
 
@@ -68,7 +70,6 @@ namespace NSA.View.Controls.NetworkView
             TextBox_TextChanged(this, null);
             NameChanged?.Invoke(parentElement.Name, textBox.Text);
             parentElement.Name = textBox.Text;
-            parentElement.Selected?.Invoke(parentElement);
         }
 
         private void Element_LocationChanged(object sender, EventArgs e)

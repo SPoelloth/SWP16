@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace NSA.View.Controls.NetworkView.NetworkElements
+﻿namespace NSA.View.Controls.NetworkView.NetworkElements
 {
     public interface ISimulationTarget
     {

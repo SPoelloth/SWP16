@@ -8,14 +8,27 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
     {
         Image Image;
         public Action<EditorElementBase> Selected;
+        internal Action Deselected;
 
         public static int ZIndexStart = 0;
         public int ZIndex;
 
         private bool isSelected = false;
-        public bool IsSelected { get { return isSelected; } set { if (isSelected != value) { isSelected = value; Invalidate(); } } }
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                if (isSelected != value)
+                {
+                    isSelected = value;
+                    Invalidate();
+                    if (!IsSelected) Deselected?.Invoke();
+                }
+            }
+        }
 
-        public EditorElementBase() : this(new Point(0, 0), "EditorElementBase")
+        internal EditorElementBase() 
         {
 
         }
@@ -75,7 +88,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             Cursor = Cursor == Cursors.Default ? Cursors.Hand : Cursor;
             base.OnMouseHover(e);
         }
-        
+
         protected override void OnMouseLeave(EventArgs e)
         {
             Cursor = Cursor == Cursors.Hand ? Cursors.Default : Cursor;

@@ -136,7 +136,7 @@ namespace NSA.View.Controls.NetworkView
         {
             foreach (var c in Controls.OfType<EditorElementBase>())
             {
-                c.IsSelected = false;
+                if (c != element) c.IsSelected = false;
             }
             foreach (var c in connections)
             {

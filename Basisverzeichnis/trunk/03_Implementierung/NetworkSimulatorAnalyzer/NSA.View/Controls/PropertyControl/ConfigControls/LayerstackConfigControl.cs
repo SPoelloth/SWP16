@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NSA.View.Controls.PropertyControl.Misc;
 
 namespace NSA.View.Controls.PropertyControl.ConfigControls

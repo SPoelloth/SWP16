@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using NSA.View.Controls.InfoControl.ControlContents;
 
 namespace NSA.View.Controls.InfoControl
 {
