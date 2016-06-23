@@ -106,8 +106,6 @@ namespace NSA.Model.BusinessLogic
                 var newIndex = Rule.IndexOf(BusinessLogic.Rule.Separator, index + 1, StringComparison.Ordinal);
                 var info = newIndex == -1 ? Rule.Substring(index + 1, Rule.Length - index - 1) : Rule.Substring(index + 1, newIndex - index - 1);
 
-                info = info.Trim();
-
                 switch (i)
                 {
                     case 0: startNode = info; break;
