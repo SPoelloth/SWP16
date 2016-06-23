@@ -108,6 +108,7 @@
             this.Controls.Add(this.btDown);
             this.Controls.Add(this.btUp);
             this.Controls.Add(this.flpLayers);
+            this.DoubleBuffered = true;
             this.Name = "LayerstackConfigControl";
             this.Size = new System.Drawing.Size(214, 241);
             this.Controls.SetChildIndex(this.flpLayers, 0);

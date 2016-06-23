@@ -13,6 +13,7 @@ namespace NSA.View.Controls.PropertyControl {
         private readonly List<Control> tempControls = new List<Control>();
         private int scrollPosition = 0;
         public bool RetainScrollPosition = false;
+        private readonly System.Timers.Timer refreshAfterScrollTimer = new System.Timers.Timer();
 
         #region Event declaration
         public event Action InterfaceAdded;
@@ -32,9 +33,13 @@ namespace NSA.View.Controls.PropertyControl {
 
         public event Action<int> SwitchPortNumberChanged;
         #endregion Event declaration
+
         public PropertyControl() {
             InitializeComponent();
+            refreshAfterScrollTimer.Interval = 100;
+            refreshAfterScrollTimer.Elapsed += RefreshAfterScrollTimer_Elapsed;
         }
+
 
         #region Methods
 
@@ -278,10 +283,19 @@ namespace NSA.View.Controls.PropertyControl {
 
         private void flpContents_Scroll(object sender, ScrollEventArgs e)
         {
+            Refresh();
             if (e.Type == ScrollEventType.EndScroll)
             {
-                flpContents.Refresh();
+                refreshAfterScrollTimer.Enabled = true;
+                refreshAfterScrollTimer.Start();
             }
+        }
+
+        private void RefreshAfterScrollTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            refreshAfterScrollTimer.Stop();
+            refreshAfterScrollTimer.Enabled = false;
+            Refresh();
         }
         #endregion Eventhandling
     }

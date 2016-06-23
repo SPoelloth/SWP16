@@ -104,6 +104,7 @@
             this.Controls.Add(this.labelIpAddress);
             this.Controls.Add(this.labelInterface);
             this.Controls.Add(this.textBoxIpAddress);
+            this.DoubleBuffered = true;
             this.Name = "GwConfigControl";
             this.Size = new System.Drawing.Size(214, 107);
             this.Controls.SetChildIndex(this.buttonClose, 0);

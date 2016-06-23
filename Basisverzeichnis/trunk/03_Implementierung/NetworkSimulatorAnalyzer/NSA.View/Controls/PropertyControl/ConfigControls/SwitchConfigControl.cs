@@ -49,6 +49,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls {
             // 
             this.Controls.Add(this.labelPortNumber);
             this.Controls.Add(this.numericUpDownPorts);
+            this.DoubleBuffered = true;
             this.Name = "SwitchConfigControl";
             this.Size = new System.Drawing.Size(214, 59);
             this.Controls.SetChildIndex(this.labelName, 0);

@@ -57,6 +57,7 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.labelName);
+            this.DoubleBuffered = true;
             this.Name = "ConfigControlBase";
             this.Size = new System.Drawing.Size(185, 107);
             this.ResumeLayout(false);

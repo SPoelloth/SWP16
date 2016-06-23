@@ -82,6 +82,7 @@
             this.Controls.Add(this.labelSubnetMask);
             this.Controls.Add(this.labelIpAddress);
             this.Controls.Add(this.textBoxSubnetMask);
+            this.DoubleBuffered = true;
             this.Name = "InterfaceConfigControl";
             this.Size = new System.Drawing.Size(214, 90);
             this.Controls.SetChildIndex(this.buttonClose, 0);

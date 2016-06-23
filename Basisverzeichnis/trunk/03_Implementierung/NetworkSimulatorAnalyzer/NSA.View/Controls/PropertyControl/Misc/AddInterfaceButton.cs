@@ -7,6 +7,7 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             AutoSize = true;
             Text = "Schnittstelle hinzufügen";
             FontHeight = 12;
+            DoubleBuffered = true;
         }
 
         public sealed override string Text

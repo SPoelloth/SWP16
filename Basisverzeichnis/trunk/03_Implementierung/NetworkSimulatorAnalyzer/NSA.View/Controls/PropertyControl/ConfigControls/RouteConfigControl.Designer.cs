@@ -135,6 +135,7 @@
             this.Controls.Add(this.labelRoute);
             this.Controls.Add(this.labelDestination);
             this.Controls.Add(this.textBoxDestination);
+            this.DoubleBuffered = true;
             this.Name = "RouteConfigControl";
             this.Size = new System.Drawing.Size(214, 141);
             this.Controls.SetChildIndex(this.labelName, 0);

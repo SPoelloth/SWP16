@@ -49,6 +49,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.textBoxName);
+            this.DoubleBuffered = true;
             this.Name = "LayerControl";
             this.Size = new System.Drawing.Size(151, 19);
             this.Click += new System.EventHandler(this.LayerControl_Click);
