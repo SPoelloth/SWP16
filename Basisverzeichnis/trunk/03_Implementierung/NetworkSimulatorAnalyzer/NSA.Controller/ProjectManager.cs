@@ -24,13 +24,20 @@ namespace NSA.Controller
 
         private void Initialize()
         {
-            CreateNewProject();
+            ClearProject();
         }
 
         /// <summary>
         /// Clears the Project.
         /// </summary>
         public void CreateNewProject()
+        {
+            var result = AskSave();
+            if (result == DialogResult.Cancel) return;
+            ClearProject();
+        }
+
+        private void ClearProject()
         {
             foreach (var c in NetworkManager.Instance.GetAllConnections().ToList())
             {
@@ -74,6 +81,19 @@ namespace NSA.Controller
             SaveToFile(file);
             // create Directory
             Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", TestscenarioDirectoryName));
+        }
+
+        private bool IsProjectEmpty()
+        {
+           return NetworkManager.Instance.GetAllConnections().Count + NetworkManager.Instance.GetAllHardwareNodes().Count < 1;
+        }
+
+        private DialogResult AskSave()
+        {
+            if (IsProjectEmpty()) return DialogResult.OK;
+            var result = MessageBox.Show("Willst du das Projekt speichern?", "Projekt ist nicht leer", MessageBoxButtons.YesNoCancel);
+            if (result == DialogResult.Yes) Save();
+            return result;
         }
 
         private void SaveToFile(string file)
@@ -316,7 +336,7 @@ namespace NSA.Controller
             }
             catch
             {
-                CreateNewProject();
+                ClearProject();
                 MessageBox.Show("Laden des Projekts fehlgeschlagen");
             }
             CurrentProject.Path = file;
@@ -327,13 +347,15 @@ namespace NSA.Controller
         /// </summary>
         public void LoadProject()
         {
+            var result = AskSave();
+            if (result == DialogResult.Cancel) return;
             var openFileDialog = new OpenFileDialog { Filter = "XML|*.xml" };
-            var result = openFileDialog.ShowDialog();
+            result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) return;
             var file = openFileDialog.FileName;
             try
             {
-                CreateNewProject();
+                ClearProject();
                 LoadFromFile(file);
             }
             catch (IOException)
