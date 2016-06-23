@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Resources;
+using System.Runtime.Versioning;
 using System.Windows.Forms;
 using NSA.View.Controls.Toolbar;
 using NSA.View.Forms;
@@ -20,51 +22,51 @@ namespace NSA.Controller.ViewControllers
             var flp = MainForm.Instance.GetComponent("ToolbarControl") as ToolbarControl;
             if (flp == null) throw new NullReferenceException("ToolbarControl darf nicht null sein");
 
-            int btnWidth = 80;
-            int btnHeight = 40;
+            int btnWidth = 60;
+            int btnHeight = 60;
             var btnColor = SystemColors.Control;
 
-            var btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Neues Projekt" };
+            var btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.CreateNew, BackgroundImageLayout = ImageLayout.Stretch};
             btn.Click += newProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Projekt öffnen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Load, BackgroundImageLayout = ImageLayout.Stretch};
             btn.Click += OpenProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Projekt speichern" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Save, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += SaveProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Speichern unter..." };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.SaveAs, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += SaveProjectAs_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Computer hinzufügen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NSA1, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddComputer_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Router hinzufügen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NSA2, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddRouter_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Switch hinzufügen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NSA3, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddSwitch_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Verbindung erstellen" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NetworkCable, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += CreateConnection_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Schnelle Simulation" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Simulation, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += QuickSimulation_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Erweiterte Simulation" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Erweiterte_Simulation, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Broadcast" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.erweiterteSimulationTeil1, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += Broadcast_Click;
             flp.AddButton(btn);
         }

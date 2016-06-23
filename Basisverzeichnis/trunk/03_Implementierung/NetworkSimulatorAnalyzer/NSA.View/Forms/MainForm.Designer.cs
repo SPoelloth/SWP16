@@ -30,6 +30,7 @@ namespace NSA.View.Forms
     /// </summary>
     private void InitializeComponent()
     {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.propertyControl = new NSA.View.Controls.PropertyControl.PropertyControl();
             this.ToolbarControl = new NSA.View.Controls.Toolbar.ToolbarControl();
             this.infoControl = new NSA.View.Controls.InfoControl.InfoControl();
@@ -80,12 +81,13 @@ namespace NSA.View.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1007, 527);
             this.Controls.Add(this.propertyControl);
             this.Controls.Add(this.ToolbarControl);
             this.Controls.Add(this.infoControl);
             this.Controls.Add(this.networkViewControl);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(880, 500);
             this.Name = "MainForm";
             this.Text = "Network Simulator and Analyzer";
