@@ -77,7 +77,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 
         private void textBoxSubnetMask_TextChanged(object Sender, EventArgs E)
         {
-            if (IsValidIP(textBoxSubnetMask.Text))
+            if (IsValidSubnetMask(IPAddress.Parse(textBoxSubnetMask.Text)))
             {
                 textBoxSubnetMask.BackColor = SystemColors.Window;
                 netMaskValidInput = true;

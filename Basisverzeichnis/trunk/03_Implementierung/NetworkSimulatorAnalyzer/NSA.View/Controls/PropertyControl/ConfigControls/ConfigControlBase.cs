@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -47,6 +49,19 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
             //return the results
             return valid;
+        }
+
+        public static bool IsValidSubnetMask(IPAddress Subnetmask) {
+            var address = BitConverter.ToUInt32(Subnetmask.GetAddressBytes().Reverse().ToArray(), 0);
+            bool end = false;
+            for (int i = 31; i >= 0; i--) {
+                if (!end) {
+                    end = (address & (1 << i)) == 0;
+                }
+                if (end && (address & (1 << i)) > 0)
+                    return false;
+            }
+            return true;
         }
     }
 }
