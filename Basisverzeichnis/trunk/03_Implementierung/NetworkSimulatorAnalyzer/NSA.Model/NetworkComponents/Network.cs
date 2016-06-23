@@ -166,9 +166,9 @@ namespace NSA.Model.NetworkComponents
         /// </summary>
         /// <param name="Subnetmask">The subnetmask.</param>
         /// <returns>A list of hardwarenodes who belong to the subnet.</returns>
-        public List<Hardwarenode> GetHardwareNodesForSubnet(string Subnetmask)
+        public List<Workstation> GetHardwareNodesForSubnet(string Subnetmask)
         {
-            List<Hardwarenode> resultNodes = new List<Hardwarenode>();
+            List<Workstation> resultNodes = new List<Workstation>();
             IPAddress subnetAddress;
             bool ok = IPAddress.TryParse(Subnetmask, out subnetAddress);
             Debug.Assert(ok, "Invalid Subnetmask");

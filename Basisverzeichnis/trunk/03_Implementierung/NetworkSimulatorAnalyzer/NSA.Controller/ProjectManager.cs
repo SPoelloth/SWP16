@@ -117,7 +117,7 @@ namespace NSA.Controller
                     var layer = layerstack[i];
                     if (!(layer is CustomLayer)) continue;
                     layerstackXML.Add(new XElement("Layer",
-                                      new XAttribute("Index", i),
+                                      new XAttribute("Index", layer.GetLayerIndex()),
                                       new XAttribute("Name", layer.GetLayerName())));
                 }
 

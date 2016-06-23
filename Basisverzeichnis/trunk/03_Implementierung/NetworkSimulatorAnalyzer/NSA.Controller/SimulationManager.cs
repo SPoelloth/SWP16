@@ -132,18 +132,19 @@ namespace NSA.Controller
         /// <param name="Ttl">The TTL.</param>
         /// <param name="ExpectedResult">the expected result of the simulation.</param>
         /// <param name="Broadcast">if set to <c>true</c>: broadcast.</param>
+        /// <param name="Subnet">The subnetmask.</param>
         /// <returns></returns>
-        public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl = 255, bool ExpectedResult = true, bool Broadcast = false)
+        public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl = 255, bool ExpectedResult = true, bool Broadcast = false, string Subnet = "")
         {
             Simulation sim;
             Hardwarenode start = NetworkManager.Instance.GetHardwarenodeByName(Source);
             if (Broadcast)
             {
                 sim =  new Simulation(Guid.NewGuid().ToString("N"), Source, "Broadcast", ExpectedResult);
-                List<Workstation> allWorkstations = NetworkManager.Instance.GetAllWorkstations();
+                List<Workstation> allWorkstations = NetworkManager.Instance.GetHardwareNodesForSubnet(Subnet);
                 foreach (Workstation w in allWorkstations)
                 {
-                    if (w.Name == Source) continue;
+                    if (w.Name.Equals(Source)) continue;
                     sim.AddPacketSend(new Packet(start, w, Ttl, ExpectedResult));
                 }
             }
@@ -156,6 +157,17 @@ namespace NSA.Controller
             Result res = sim.Execute();
             AddSimulationToHistory(sim);
             return res;
+        }
+
+        /// <summary>
+        /// Creates the and execute a broadcast.
+        /// </summary>
+        /// <param name="Source">The source.</param>
+        /// <param name="Subnet">The subnet.</param>
+        /// <param name="ExpectedResult">if set to <c>true</c> [expected result].</param>
+        public void CreateAndExecuteBroadcast(string Source, string Subnet, bool ExpectedResult)
+        {
+            CreateAndExecuteSimulation(Source, null, 255, ExpectedResult, true, Subnet);
         }
 
         /// <summary>

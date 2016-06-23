@@ -62,6 +62,16 @@ namespace NSA.Controller
             return network.Connections;
         }
 
+        /// <summary>
+        /// Gets the hardware nodes of the subnet.
+        /// </summary>
+        /// <param name="Subnetmask">The subnetmask.</param>
+        /// <returns></returns>
+        public List<Workstation> GetHardwareNodesForSubnet(string Subnetmask)
+        {
+            return network.GetHardwareNodesForSubnet(Subnetmask);
+        }
+
         #endregion
 
         #region Interface-related methods
@@ -306,7 +316,12 @@ namespace NSA.Controller
         /// <param name="NewName">The new name.</param>
         public void RenameHardwarenode(string OldName, string NewName)
         {
-            GetAllHardwareNodes().First(n => n.Name == OldName).Name = NewName;
+            if (GetAllHardwareNodes().FirstOrDefault(N => N.Name == NewName) == null)
+            {
+                Debug.Assert(false);
+                return;
+            }
+            GetAllHardwareNodes().First(N => N.Name == OldName).Name = NewName;
             PropertyController.Instance.LoadElementProperties(NewName);
         }
         #endregion
