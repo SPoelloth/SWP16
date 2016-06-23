@@ -64,7 +64,7 @@ namespace NSA.Controller.ViewControllers
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.erweiterteSimulationTeil1, BackgroundImageLayout = ImageLayout.Stretch };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Broadcast" };
             btn.Click += Broadcast_Click;
             flp.AddButton(btn);
 
