@@ -63,6 +63,10 @@ namespace NSA.Controller.ViewControllers
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Erweiterte Simulation" };
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
+
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Broadcast" };
+            btn.Click += Broadcast_Click;
+            flp.AddButton(btn);
         }
 
         private void newProject_Click(object sender, EventArgs e)
@@ -73,6 +77,16 @@ namespace NSA.Controller.ViewControllers
         public void Init()
         {
             
+        }
+
+        void Broadcast_Click(object sender, EventArgs e)
+        {
+            BroadcastSimulationForm form = new BroadcastSimulationForm();
+            form.SetWorkstations(NetworkManager.Instance.GetAllWorkstations().Select(w => w.Name).ToList());
+            var dlgresult = form.ShowDialog();
+            if (dlgresult != DialogResult.OK) return;
+
+            SimulationManager.Instance.CreateAndExecuteBroadcast(form.SourceName, form.TargetSubnet, form.ExpectedResult);
         }
 
         void AdvancedSimulation_Click(object sender, EventArgs e)

@@ -66,14 +66,6 @@ namespace NSA.View.Forms
             CanExecute_Start();
         }
 
-        private void animationTimeTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if(int.TryParse(animationTimeTextBox.Text, out AnimationTime))
-            {
-                CanExecute_Start();
-            }
-        }
-
         private void resultCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             ExpectedResult = resultCombo.SelectedIndex == 0;
