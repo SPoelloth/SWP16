@@ -19,7 +19,7 @@ namespace NSA.View.Controls.NetworkView
 
         Point? firstConnectionPoint = null;
         Control firstConnectionControl = null;
-        
+
         public Action OnDeletePressed;
 
 
@@ -62,16 +62,11 @@ namespace NSA.View.Controls.NetworkView
 
                 if (m.Msg == WM_LBUTTONUP && firstConnectionPoint != null)
                 {
-                    var upPoint = new Point(m.LParam.ToInt32() & 0xffff, (m.LParam.ToInt32() >> 16) & 0xffff);
-                    if (upPoint == firstConnectionPoint)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        NewConnection?.Invoke(firstConnectionControl, firstConnectionPoint.Value, Control.FromHandle(m.HWnd), upPoint);
-                        currentState = State.Normal;
-                    }
+                    var upPoint = new Point((short)(m.LParam.ToInt32() & 0xffff), (short)((m.LParam.ToInt32() >> 16) & 0xffff));
+                    if (upPoint == firstConnectionPoint) return true;
+                    NewConnection?.Invoke(firstConnectionControl, firstConnectionPoint.Value, Control.FromHandle(m.HWnd), upPoint);
+                    currentState = State.Normal;
+
                     return true;
                 }
             }

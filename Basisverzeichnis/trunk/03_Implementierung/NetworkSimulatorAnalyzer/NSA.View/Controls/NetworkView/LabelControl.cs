@@ -65,9 +65,18 @@ namespace NSA.View.Controls.NetworkView
                 label1.Text = "Name";
             }
             var text = textBox.Text.Trim(' ');
+            TextBox_TextChanged(this, null);
+            var nvc = Parent as NetworkViewControl;
+            if (nvc != null)
+            {
+                if (nvc.NameExists(text))
+                {
+                    textBox.Text = label1.Text;
+                    return;
+                }
+            }
             textBox.Text = text;
             label1.Text = text;
-            TextBox_TextChanged(this, null);
             NameChanged?.Invoke(parentElement.Name, textBox.Text);
             parentElement.Name = textBox.Text;
         }

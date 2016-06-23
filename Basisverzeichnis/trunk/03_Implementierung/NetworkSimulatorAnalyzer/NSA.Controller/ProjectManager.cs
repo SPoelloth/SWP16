@@ -32,12 +32,12 @@ namespace NSA.Controller
         /// </summary>
         public void CreateNewProject()
         {
-            foreach (var c in NetworkManager.Instance.GetAllConnections())
+            foreach (var c in NetworkManager.Instance.GetAllConnections().ToList())
             {
                 NetworkManager.Instance.RemoveConnection(c.Name);
             }
 
-            foreach (var h in NetworkManager.Instance.GetAllHardwareNodes())
+            foreach (var h in NetworkManager.Instance.GetAllHardwareNodes().ToList())
             {
                 NetworkManager.Instance.RemoveHardwarenode(h.Name);
             }
