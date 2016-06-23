@@ -154,7 +154,7 @@ namespace NSA.Controller
                 Hardwarenode end = NetworkManager.Instance.GetHardwarenodeByName(Destination);
                 sim.AddPacketSend(new Packet(start, end, Ttl, ExpectedResult));
             }
-            Result res = sim.Execute();
+            var res = sim.GetAllPackets().Any() ? sim.Execute() : new Result(Result.Errors.NoPackets, Result.ResultStrings[(int)Result.Errors.NoPackets], null);
             AddSimulationToHistory(sim);
             return res;
         }
