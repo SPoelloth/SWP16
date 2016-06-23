@@ -67,6 +67,15 @@ namespace NSA.Controller.ViewControllers
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.erweiterteSimulationTeil1, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += Broadcast_Click;
             flp.AddButton(btn);
+
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Screenshot erstellen"};
+            btn.Click += Screenshot_Click;
+            flp.AddButton(btn);
+        }
+
+        private void Screenshot_Click(object sender, EventArgs e)
+        {
+            NetworkViewController.Instance.SaveToBitmap();
         }
 
         private void newProject_Click(object sender, EventArgs e)

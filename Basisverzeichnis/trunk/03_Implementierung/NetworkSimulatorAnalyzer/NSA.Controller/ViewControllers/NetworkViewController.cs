@@ -5,6 +5,8 @@ using NSA.View.Controls.NetworkView;
 using NSA.View.Controls.NetworkView.NetworkElements.Base;
 using NSA.View.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using NSA.View.Controls.NetworkView.NetworkElements;
 using System.Linq;
 using System.Windows.Forms;
@@ -134,6 +136,17 @@ namespace NSA.Controller.ViewControllers
         public void RemoveInterfaceFromNode(string NodeName, string InterfaceName)
         {
             networkViewControl.RemoveInterfaceFromNode(NodeName, InterfaceName);
+        }
+
+        public void SaveToBitmap()
+        {
+            var bitmap = networkViewControl.CreateScreenshot();
+            if (bitmap == null) return;
+            var saveFileDialog = new SaveFileDialog { Filter = "PNG|*.png" };
+            var result = saveFileDialog.ShowDialog();
+            if (result != DialogResult.OK) return;
+            var file = saveFileDialog.FileName;
+            bitmap.Save(file, ImageFormat.Png);
         }
     }
 }

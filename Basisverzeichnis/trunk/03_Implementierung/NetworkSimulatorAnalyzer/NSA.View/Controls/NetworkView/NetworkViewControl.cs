@@ -48,12 +48,17 @@ namespace NSA.View.Controls.NetworkView
             {
                 int diffX = e.X - mouseLoc.X;
                 int diffY = e.Y - mouseLoc.Y;
-                foreach (Control c in Controls.OfType<IConfigurable>().OfType<Control>())
-                {
-                    c.Location = new Point(c.Location.X + diffX, c.Location.Y + diffY);
-                }
+                moveControls(new Point(diffX, diffY));
             }
             mouseLoc = e.Location;
+        }
+
+        private void moveControls(Point moveDiff)
+        {
+            foreach (Control c in Controls.OfType<IConfigurable>().OfType<Control>())
+            {
+                c.Location = new Point(c.Location.X + moveDiff.X, c.Location.Y + moveDiff.Y);
+            }
         }
 
         private void OnNodeRenamed(string oldName, string newName)
@@ -168,7 +173,7 @@ namespace NSA.View.Controls.NetworkView
         {
             var s = Math.Sin(angle);
             var c = Math.Cos(angle);
-            
+
             var xnew = p.X * c - p.Y * s;
             var ynew = p.X * s + p.Y * c;
 
@@ -311,6 +316,33 @@ namespace NSA.View.Controls.NetworkView
         internal bool NameExists(string name)
         {
             return Controls.OfType<Control>().Any(c => c.Name == name);
+        }
+
+        public Bitmap CreateScreenshot()
+        {
+            if (!Controls.OfType<EditorElementBase>().Any()) return null;
+            var oldSize = Size;
+            var area = Controls.OfType<EditorElementBase>().Aggregate(Controls.OfType<EditorElementBase>().First().Bounds, (current, c) => Rectangle.Union(current, c.Bounds));
+            var bmp = new Bitmap(area.Width, area.Height);
+            moveControls(new Point(-area.Location.X, -area.Location.Y));
+            Size = Rectangle.Union(new Rectangle(), area).Size;
+            ReverseZOrder();
+            DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
+            ReverseZOrder();
+            moveControls(area.Location);
+            Size = oldSize;
+            return bmp;
+        }
+
+        private void ReverseZOrder()
+        {
+            foreach (var c in Controls.OfType<EditorElementBase>()) c.ZIndex = int.MaxValue - c.ZIndex;
+            var controls = Controls.OfType<EditorElementBase>().OrderBy(o => o.ZIndex).ToList();
+            foreach (EditorElementBase c in controls)
+            {
+                Controls.Remove(c);
+                Controls.Add(c);
+            }
         }
     }
 }

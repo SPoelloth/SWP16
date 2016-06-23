@@ -80,18 +80,6 @@ namespace NSA.Model.NetworkComponents
         public void RemoveHardwarnode(string Name)
         {
             nodes.RemoveAll(S => S.Name == Name);
-
-            // das ist das gleiche:
-            //foreach (Hardwarenode h in nodes)
-            //{
-            //    // A Hardwarenode is identified by its name. 
-            //    // This loop is cancelled as soon as the correct hardwarenode which should be removed is reached. 
-            //    if (h.Name == name)
-            //    {
-            //        nodes.Remove(h);
-            //        return;
-            //    }
-            //}
         }
 
         /// <summary>
