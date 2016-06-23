@@ -28,7 +28,7 @@ namespace NSA.View.Forms
         private void MainForm_Resize(object sender, EventArgs e)
         {
             int margin = 5;
-            ToolbarControl.Location = new Point(margin, margin);
+            ToolbarControl.Location = new Point(1, 0);
             ToolbarControl.Size = new Size(Width - margin * 2, ToolbarControl.Height);
             networkViewControl.Location = new Point(margin, ToolbarControl.Location.Y + ToolbarControl.Height + margin);
             networkViewControl.Width = Width - propertyControl.Width - margin * 4 - 12;

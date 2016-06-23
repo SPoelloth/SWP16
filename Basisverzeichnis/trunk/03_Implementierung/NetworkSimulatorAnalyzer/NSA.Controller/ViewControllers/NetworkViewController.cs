@@ -20,7 +20,7 @@ namespace NSA.Controller.ViewControllers
         #endregion Singleton
 
         private NetworkViewControl networkViewControl;
-
+        private Random rnd = new Random();
 
         public void Initialize()
         {
@@ -93,9 +93,10 @@ namespace NSA.Controller.ViewControllers
 
         public void AddHardwarenode(Hardwarenode node)
         {
-            if (node is Workstation && !(node is Router)) networkViewControl.AddElement(new WorkstationControl(new Point(100, 100), node.Name));
-            if (node is Switch) networkViewControl.AddElement(new SwitchControl(new Point(100, 100), node.Name));
-            if (node is Router) networkViewControl.AddElement(new RouterControl(new Point(100, 100), node.Name));
+            var randomLoc = new Point(10 + (int)((networkViewControl.Width - 100) * rnd.NextDouble()), 10 + (int)((networkViewControl.Height - 100) * rnd.NextDouble()));
+            if (node is Switch) networkViewControl.AddElement(new SwitchControl(randomLoc, node.Name));
+            if (node is Router) networkViewControl.AddElement(new RouterControl(randomLoc, node.Name));
+            if (node is Workstation) networkViewControl.AddElement(new WorkstationControl(randomLoc, node.Name));
         }
 
         public void AddConnection(Connection connection)

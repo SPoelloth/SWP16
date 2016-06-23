@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Resources;
-using System.Runtime.Versioning;
 using System.Windows.Forms;
 using NSA.View.Controls.Toolbar;
 using NSA.View.Forms;
@@ -22,15 +20,15 @@ namespace NSA.Controller.ViewControllers
             var flp = MainForm.Instance.GetComponent("ToolbarControl") as ToolbarControl;
             if (flp == null) throw new NullReferenceException("ToolbarControl darf nicht null sein");
 
-            int btnWidth = 60;
-            int btnHeight = 60;
+            int btnWidth = 52;
+            int btnHeight = 52;
             var btnColor = SystemColors.Control;
 
-            var btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.CreateNew, BackgroundImageLayout = ImageLayout.Stretch};
+            var btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.CreateNew, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += newProject_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Load, BackgroundImageLayout = ImageLayout.Stretch};
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Load, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += OpenProject_Click;
             flp.AddButton(btn);
 
@@ -42,15 +40,15 @@ namespace NSA.Controller.ViewControllers
             btn.Click += SaveProjectAs_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NSA1, BackgroundImageLayout = ImageLayout.Stretch };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Workstation, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddComputer_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NSA2, BackgroundImageLayout = ImageLayout.Stretch };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Router, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddRouter_Click;
             flp.AddButton(btn);
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NSA3, BackgroundImageLayout = ImageLayout.Stretch };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Switch, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddSwitch_Click;
             flp.AddButton(btn);
 
@@ -78,7 +76,7 @@ namespace NSA.Controller.ViewControllers
 
         public void Init()
         {
-            
+
         }
 
         void Broadcast_Click(object sender, EventArgs e)
@@ -99,7 +97,7 @@ namespace NSA.Controller.ViewControllers
             if (dlgresult != DialogResult.OK) return;
 
             SimulationManager.Instance.CreateAndExecuteSimulation(form.SourceName, form.TargetName, form.MaxHopCount,
-                form.ExpectedResult, false);
+                form.ExpectedResult);
         }
 
         void QuickSimulation_Click(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using NSA.View.Controls.NetworkView.NetworkElements;
@@ -92,16 +93,65 @@ namespace NSA.View.Controls.NetworkView
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            //e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
 
             var g = e.Graphics;
 
-           // foreach(var c in Controls.OfType<IConfigurable>().OfType<Control>())
-           // {
-           //     if(!Bounds.IntersectsWith(c.Bounds))
-           //     {
-           //     }  
-           // }
+            foreach (var c in Controls.OfType<IConfigurable>().OfType<Control>())
+            {
+                if (!Bounds.IntersectsWith(c.Bounds))
+                {
+                    Point center = new Point(Width / 2, Height / 2);
+                    Point target = new Point(c.Location.X + c.Width / 2, c.Location.Y + c.Height / 2);
+
+                    int intersectX = 0, intersectY = 0;
+                    bool Xgegeben = false;
+
+                    float m = (target.Y - center.Y) / ((float)target.X - center.X);
+                    float mcrit = (Height - center.Y) / (float)(Width - center.X);
+
+                    Xgegeben = Math.Abs(m) < mcrit;
+
+                    if (target.X > center.X)
+                    {
+                        if (m > mcrit) intersectY = Height;
+                        else if (m < -mcrit) intersectY = 0;
+                        else intersectX = Width;
+                    }
+                    else
+                    {
+                        if (m > mcrit) intersectY = 0;
+                        else if (m < -mcrit) intersectY = Height;
+                        else intersectX = 0;
+                    }
+
+                    if (Xgegeben)
+                    {
+                        intersectY = (int)(m * (intersectX - center.X)) + center.Y;
+                    }
+                    else
+                    {
+                        intersectX = (int)((intersectY - center.Y) / m) + center.X;
+                    }
+
+                    float winkelrad = (float)(target.X > center.X ? Math.Atan(m) : Math.PI + Math.Atan(m));
+
+                    Point left = new Point(-20, -3);
+                    Point right = new Point(-20, 3);
+                    left = rotate_point(left, winkelrad);
+                    right = rotate_point(right, winkelrad);
+                    left.Offset(intersectX, intersectY);
+                    right.Offset(intersectX, intersectY);
+
+                    var points = new[]
+                    {
+                      new Point(intersectX,intersectY),
+                      left,
+                      right
+                    };
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    g.FillPolygon(Brushes.Black, points);
+                }
+            }
 
             if (debug)
             {
@@ -112,6 +162,17 @@ namespace NSA.View.Controls.NetworkView
                 }
             }
 
+        }
+
+        Point rotate_point(Point p, float angle)
+        {
+            var s = Math.Sin(angle);
+            var c = Math.Cos(angle);
+            
+            var xnew = p.X * c - p.Y * s;
+            var ynew = p.X * s + p.Y * c;
+
+            return new Point((int)xnew, (int)ynew);
         }
 
         protected override void OnSizeChanged(EventArgs e)
