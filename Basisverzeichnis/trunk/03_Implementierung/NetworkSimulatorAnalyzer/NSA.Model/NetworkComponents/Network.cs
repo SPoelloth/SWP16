@@ -9,12 +9,12 @@ namespace NSA.Model.NetworkComponents
     public class Network
     {
         private readonly List<Hardwarenode> nodes;
-        private readonly List<Connection> connections;
+        public List<Connection> Connections { get; private set; }
 
-	    public Network()
+        public Network()
 	    {
             nodes = new List<Hardwarenode>();
-            connections = new List<Connection>();
+            Connections = new List<Connection>();
 	    }
 
         /// <summary>
@@ -42,34 +42,35 @@ namespace NSA.Model.NetworkComponents
         /// <param name="StartNodeInterfaceName">Start name of the node interface.</param>
         /// <param name="EndNodeInterfaceName">End name of the node interface.</param>
         /// <param name="NewConnection">The new connection.</param>
-        /// <exception cref="System.InvalidOperationException">
         /// Connection already exists!
         /// or
         /// Interface of startnode is already used!
         /// or
         /// Interface of endnode is already used!
-        /// </exception>
         public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection NewConnection)
 	    {
 	        if (!nodes.Contains(NewConnection.Start) || !nodes.Contains(NewConnection.End)) return;
-	        if(connections.Count(C => C.Start == NewConnection.Start && C.End == NewConnection.End
-	           || C.Start == NewConnection.End && C.End == NewConnection.Start) > 0
-	           || connections.Contains(NewConnection))
-	        {
-	            // there's already a connection between the two nodes
-	            throw new InvalidOperationException("Connection already exists!");
-	        }
-            
-            if(NewConnection.Start.InterfaceIsUsed(StartNodeInterfaceName))
-                throw new InvalidOperationException("Interface of startnode is already used!");
-            if (NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
-                throw new InvalidOperationException("Interface of endnode is already used!");
- 
+            if (Connections.Count(C => C.Equals(NewConnection)) > 0)
+            {
+                Debug.Assert(Connections.Count(C => C.Equals(NewConnection)) <= 0, "Connection already exists!");
+                return;
+            }
 
-                NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
-                NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
-                connections.Add(NewConnection);
+            if (NewConnection.Start.InterfaceIsUsed(StartNodeInterfaceName))
+            {
+                Debug.Assert(NewConnection.Start.InterfaceIsUsed(StartNodeInterfaceName) == false, "Interface of startnode is already used!");
+                return;
+            }
+
+            if (NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
+            {
+                Debug.Assert(NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName) == false, "Interface of endnode is already used!");
+                return;
+            }
             
+            NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
+            NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
+            Connections.Add(NewConnection);
 	    }
 
         /// <summary>
@@ -99,11 +100,11 @@ namespace NSA.Model.NetworkComponents
         /// <param name="ConnectionName">Name of the connection.</param>
         public void RemoveConnection(string ConnectionName)
 	    {
-            var connection = connections.FirstOrDefault(C => C.Name == ConnectionName);
+            var connection = Connections.FirstOrDefault(C => C.Name == ConnectionName);
 
             if (connection == null) return;
 
-            connections.Remove(connection);
+            Connections.Remove(connection);
             connection.Start.RemoveConnection(Interface.NamePrefix + connection.GetPortIndex(connection.Start));
             connection.End.RemoveConnection(Interface.NamePrefix + connection.GetPortIndex(connection.End));
         }
@@ -143,7 +144,7 @@ namespace NSA.Model.NetworkComponents
         /// <returns>the connection with its name</returns>
         public Connection GetConnectionByName(string Name)
         {
-            return connections.FirstOrDefault(N => N.Name == Name);
+            return Connections.FirstOrDefault(N => N.Name == Name);
         }
 
         /// <summary>
@@ -157,7 +158,7 @@ namespace NSA.Model.NetworkComponents
 
         public List<Connection> GetAllConnections()
 	    {
-            return connections.ToList();
+            return Connections.ToList();
 	    }
 
         /// <summary>

@@ -59,7 +59,7 @@ namespace NSA.Controller
         /// <returns></returns>
         public List<Connection> GetAllConnections()
         {
-            return network.GetAllConnections();
+            return network.Connections;
         }
 
         #endregion
