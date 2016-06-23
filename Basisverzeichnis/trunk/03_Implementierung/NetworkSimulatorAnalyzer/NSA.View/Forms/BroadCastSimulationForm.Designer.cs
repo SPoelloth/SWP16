@@ -120,7 +120,7 @@
             this.MinimizeBox = false;
             this.Name = "BroadcastSimulationForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "NSA - Erweiterte Simulation";
+            this.Text = "NSA - Broadcast";
             this.ResumeLayout(false);
             this.PerformLayout();
 

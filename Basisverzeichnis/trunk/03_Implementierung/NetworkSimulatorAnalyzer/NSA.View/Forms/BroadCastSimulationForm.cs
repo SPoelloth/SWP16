@@ -61,7 +61,7 @@ namespace NSA.View.Forms
 
         private void textBoxSubnet_TextChanged(object sender, EventArgs e)
         {
-            if (IsValidSubnetMask(IPAddress.Parse(textBoxSubnet.Text)))
+            if (IsValidIP(textBoxSubnet.Text) && IsValidSubnetMask(IPAddress.Parse(textBoxSubnet.Text)))
             {
                 textBoxSubnet.BackColor = SystemColors.Window;
                 subnetValidInput = true;
@@ -96,6 +96,26 @@ namespace NSA.View.Forms
                     return false;
             }
             return true;
+        }
+
+        protected bool IsValidIP(string addr) {
+            //create our match pattern
+            var pattern = @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+            //create our Regular Expression object
+            var check = new Regex(pattern);
+            //boolean variable to hold the status
+            var valid = false;
+            //check to make sure an ip address was provided
+            if (addr == "") {
+                //no address provided so return false
+                valid = false;
+            } else {
+                //address provided so use the IsMatch Method
+                //of the Regular Expression object
+                valid = check.IsMatch(addr, 0);
+            }
+            //return the results
+            return valid;
         }
     }
 }

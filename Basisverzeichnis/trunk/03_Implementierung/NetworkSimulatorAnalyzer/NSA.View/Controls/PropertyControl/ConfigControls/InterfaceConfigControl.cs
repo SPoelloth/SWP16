@@ -42,7 +42,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 
         private void textBoxSubnetMask_TextChanged(object sender, EventArgs E)
         {
-            if (IsValidSubnetMask(IPAddress.Parse(textBoxSubnetMask.Text)))
+            if (IsValidIP(textBoxSubnetMask.Text) && IsValidSubnetMask(IPAddress.Parse(textBoxSubnetMask.Text)))
             {
                 textBoxSubnetMask.BackColor = SystemColors.Window;
                 subnetMaskValidInput = true;
