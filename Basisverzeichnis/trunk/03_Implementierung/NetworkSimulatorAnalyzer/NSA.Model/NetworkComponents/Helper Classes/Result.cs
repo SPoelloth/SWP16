@@ -24,7 +24,8 @@
             SwitchNoConnection,
             SourceDestinationNull,
             TtlError,
-            CustomLayerError
+            CustomLayerError,
+            NoPackets
         };
 
         public static readonly string[] ResultStrings = { "Es ist kein Fehler bei der Simulation aufgetreten.",
@@ -34,7 +35,8 @@
             "Es gibt keine Verbindung zum nächsten Rechner.",
             "Quell- oder Zielrechner ist null.",
             "TTL ist 0, aber der Zielrechner wurde nicht erreicht.",
-            "Layer {0} ist am Quell- aber nicht am Zielrechner enthalten."
+            "Layer {0} ist am Quell- aber nicht am Zielrechner enthalten.",
+            "Keine Packete in der Simulation."
         };
 
         public string Res { get; set; }
@@ -46,6 +48,13 @@
             ErrorId = Result.Errors.NoError;
             Res = "";
             LayerError = null;
+        }
+
+        public Result(Errors ErrId, string R, ILayer L)
+        {
+            ErrorId = ErrId;
+            Res = R;
+            LayerError = L;
         }
     }
 }

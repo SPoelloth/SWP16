@@ -31,6 +31,28 @@ namespace NSA.View.Controls.NetworkView
             filter.NewSimulation += OnQuickSimulation;
             filter.Canceled += OnActionCanceled;
             filter.OnDeletePressed += Element_Delete;
+            MouseMove += NetworkViewControl_MouseMove;
+            MouseDown += NetworkViewControl_MouseDown;
+        }
+
+        private void NetworkViewControl_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left) mouseLoc = e.Location;
+        }
+
+        Point mouseLoc;
+        private void NetworkViewControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                int diffX = e.X - mouseLoc.X;
+                int diffY = e.Y - mouseLoc.Y;
+                foreach (Control c in Controls.OfType<IConfigurable>().OfType<Control>())
+                {
+                    c.Location = new Point(c.Location.X + diffX, c.Location.Y + diffY);
+                }
+            }
+            mouseLoc = e.Location;
         }
 
         private void OnNodeRenamed(string oldName, string newName)
@@ -46,7 +68,6 @@ namespace NSA.View.Controls.NetworkView
             ISimulationTarget ws2 = control2 as ISimulationTarget;
             if (ws1 == null || ws2 == null) return;
             QuickSimulation?.Invoke(((Control)ws1).Name, ((Control)ws2).Name);
-
         }
 
         private void OnNewConnection(Control control1, Point p1, Control control2, Point p2)
@@ -72,15 +93,25 @@ namespace NSA.View.Controls.NetworkView
         {
             base.OnPaint(e);
             //e.Graphics.DrawRectangle(Pens.DodgerBlue, new Rectangle(0, 0, Size.Width - 1, Size.Height - 1));
+
+            var g = e.Graphics;
+
+           // foreach(var c in Controls.OfType<IConfigurable>().OfType<Control>())
+           // {
+           //     if(!Bounds.IntersectsWith(c.Bounds))
+           //     {
+           //     }  
+           // }
+
             if (debug)
             {
-                var g = e.Graphics;
                 int i = 0;
                 foreach (var c in Controls.OfType<EditorElementBase>())
                 {
                     g.DrawString($"{c.GetType().Name + c.ZIndex} X:{c.Location.X} Y:{c.Location.Y} Selected:{c.IsSelected}", SystemFonts.DefaultFont, Brushes.Blue, 2, i++ * (SystemFonts.DefaultFont.Height + 2));
                 }
             }
+
         }
 
         protected override void OnSizeChanged(EventArgs e)
@@ -214,6 +245,11 @@ namespace NSA.View.Controls.NetworkView
         public void RemoveInterfaceFromNode(string NodeName, string Eth1)
         {
             ((IConfigurable)Controls.OfType<EditorElementBase>().First(n => n.Name == NodeName)).RemoveInterface(int.Parse(Eth1.Replace("eth", "")));
+        }
+
+        internal bool NameExists(string name)
+        {
+            return Controls.OfType<Control>().Any(c => c.Name == name);
         }
     }
 }
