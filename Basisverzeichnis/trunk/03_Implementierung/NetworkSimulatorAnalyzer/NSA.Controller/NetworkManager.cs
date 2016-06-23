@@ -316,7 +316,7 @@ namespace NSA.Controller
         /// <param name="NewName">The new name.</param>
         public void RenameHardwarenode(string OldName, string NewName)
         {
-            if (GetAllHardwareNodes().FirstOrDefault(N => N.Name == NewName) == null)
+            if (GetAllHardwareNodes().FirstOrDefault(N => N.Name == NewName) != null)
             {
                 Debug.Assert(false);
                 return;
