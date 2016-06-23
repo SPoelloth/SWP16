@@ -95,8 +95,8 @@ namespace NSA.Controller.ViewControllers
         {
             var randomLoc = new Point(10 + (int)((networkViewControl.Width - 100) * rnd.NextDouble()), 10 + (int)((networkViewControl.Height - 100) * rnd.NextDouble()));
             if (node is Switch) networkViewControl.AddElement(new SwitchControl(randomLoc, node.Name));
-            if (node is Router) networkViewControl.AddElement(new RouterControl(randomLoc, node.Name));
-            if (node is Workstation) networkViewControl.AddElement(new WorkstationControl(randomLoc, node.Name));
+            else if (node is Router) networkViewControl.AddElement(new RouterControl(randomLoc, node.Name));
+            else if (node is Workstation) networkViewControl.AddElement(new WorkstationControl(randomLoc, node.Name));
         }
 
         public void AddConnection(Connection connection)
