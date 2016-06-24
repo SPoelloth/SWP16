@@ -28,20 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dgvHistory = new System.Windows.Forms.DataGridView();
             this.dgvHops = new System.Windows.Forms.DataGridView();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).BeginInit();
+            this.cbPackets = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHops)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dgvHistory
-            // 
-            this.dgvHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHistory.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvHistory.Location = new System.Drawing.Point(0, 0);
-            this.dgvHistory.Name = "dgvHistory";
-            this.dgvHistory.Size = new System.Drawing.Size(738, 150);
-            this.dgvHistory.TabIndex = 0;
             // 
             // dgvHops
             // 
@@ -49,33 +39,44 @@
             this.dgvHops.AllowUserToDeleteRows = false;
             this.dgvHops.AllowUserToResizeRows = false;
             this.dgvHops.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvHops.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvHops.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvHops.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHops.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvHops.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvHops.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgvHops.Location = new System.Drawing.Point(0, 0);
+            this.dgvHops.Location = new System.Drawing.Point(0, 25);
             this.dgvHops.MultiSelect = false;
             this.dgvHops.Name = "dgvHops";
+            this.dgvHops.ReadOnly = true;
+            this.dgvHops.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dgvHops.RowHeadersVisible = false;
             this.dgvHops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvHops.Size = new System.Drawing.Size(738, 150);
-            this.dgvHops.TabIndex = 1;
+            this.dgvHops.Size = new System.Drawing.Size(738, 125);
+            this.dgvHops.TabIndex = 2;
+            // 
+            // cbPackets
+            // 
+            this.cbPackets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPackets.FormattingEnabled = true;
+            this.cbPackets.Location = new System.Drawing.Point(3, 3);
+            this.cbPackets.Name = "cbPackets";
+            this.cbPackets.Size = new System.Drawing.Size(121, 21);
+            this.cbPackets.TabIndex = 4;
+            this.cbPackets.SelectedValueChanged += new System.EventHandler(this.cbPackets_SelectedValueChanged);
             // 
             // HopsControl
             // 
+            this.Controls.Add(this.cbPackets);
             this.Controls.Add(this.dgvHops);
-            this.Controls.Add(this.dgvHistory);
             this.Name = "HopsControl";
             this.Size = new System.Drawing.Size(738, 150);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHistory)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHops)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dgvHistory;
         private System.Windows.Forms.DataGridView dgvHops;
+        private System.Windows.Forms.ComboBox cbPackets;
     }
 }

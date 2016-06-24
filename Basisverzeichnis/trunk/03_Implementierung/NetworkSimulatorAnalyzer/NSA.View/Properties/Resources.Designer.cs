@@ -91,6 +91,33 @@ namespace NSA.View.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Ergebnis am Startknoten ähnelt.
+        /// </summary>
+        public static string HopsControl_AddColumns_Ergebnis_am_Startknoten {
+            get {
+                return ResourceManager.GetString("HopsControl_AddColumns_Ergebnis_am_Startknoten", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Startknoten ähnelt.
+        /// </summary>
+        public static string HopsControl_AddColumns_Startknoten {
+            get {
+                return ResourceManager.GetString("HopsControl_AddColumns_Startknoten", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Zielknoten ähnelt.
+        /// </summary>
+        public static string HopsControl_AddColumns_Zielknoten {
+            get {
+                return ResourceManager.GetString("HopsControl_AddColumns_Zielknoten", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap Load {

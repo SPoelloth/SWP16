@@ -4,6 +4,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using NSA.Model.BusinessLogic;
+using NSA.Model.NetworkComponents;
+using NSA.Model.NetworkComponents.Helper_Classes;
 using NSA.View.Controls.InfoControl;
 using NSA.View.Forms;
 
@@ -18,6 +20,13 @@ namespace NSA.Controller.ViewControllers
         #endregion Singleton
 
         private readonly InfoControl infoControl;
+
+        // {2} if a detailed result is available
+        private const string baseResult = "Simulation von {0} nach {1} fehlgeschlagen {2}";
+        private const string sendPacket = "Hinpaket {0}";
+        private const string receivedPacket = "Rückpaket {0}";
+
+        private Simulation lastSimulation;
 
         public void Initialize() {}
 
@@ -46,7 +55,8 @@ namespace NSA.Controller.ViewControllers
             // Scenarios Control Eventhandler
             stc.StartScenarioButtonClicked += ScenarioTabPage_StartScenarioButtonClicked;
 
-            // todo: HopControl
+            // Hops Control Eventhanlder
+            hstc.PacketSelected += hopsTabPage_PacketSelected;
         }
 
         #region Event Handling
@@ -109,9 +119,6 @@ namespace NSA.Controller.ViewControllers
             if (failedSimulations.Count == 0) addScenarioResultToResultsTab(scenarioName, "Erfolgreich");
             else
             {
-                // {2} if a detailed result is available
-                string baseResult = "Simulation von {0} nach {1} fehlgeschlagen {2}";
-
                 foreach (Simulation s in failedSimulations)
                 {
                     string simResult = string.Format(baseResult, s.Source, s.Destination, "");
@@ -119,6 +126,47 @@ namespace NSA.Controller.ViewControllers
                 }
 
                 addScenarioResultToResultsTab(scenarioName, "Fehler aufgetreten");
+            }
+        }
+
+        /// <summary>
+        /// Handles the PacketSelected event of the HopsTabPage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The instance containing the event data.</param>
+        private void hopsTabPage_PacketSelected(object sender, string e)
+        {
+            var values = e.Split(' ');
+            int index = int.Parse(values[1]);
+            List<Hardwarenode> hops = null;
+
+            infoControl.hopsControl.ClearHopsOnly();
+
+            if (values[0].Equals(string.Format(sendPacket, "").Trim(' ')))
+            {
+                hops = lastSimulation.PacketsSend[index].Hops;
+            }
+            else if (values[0].Equals(string.Format(receivedPacket, "").Trim(' ')))
+            {
+                hops = lastSimulation.PacketsReceived[index].Hops;
+            }
+
+            if (hops == null)
+                return;
+
+            if (hops.Count == 1)
+            {
+                infoControl.hopsControl.AddHop(hops[0].Name, "-", "-", "-");
+            }
+
+            for (int i = 0; i < hops.Count - 1; i++)
+            {
+                var results = SimulationManager.Instance.GetHopResult(true, index, hops[i].Name, hops[i + 1].Name);
+
+                string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
+                string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
+
+                infoControl.hopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
             }
         }
 
@@ -134,8 +182,10 @@ namespace NSA.Controller.ViewControllers
         {
             string expectedRes = Sim.ExpectedResult ? "Verbindung möglich" : "Verbindung nicht möglich";
             string simResult = SimulationManager.Instance.GetSimulationResult(Sim.Id) ? "Erfolgreich" : "Fehler aufgetreten";
-           
+
+            lastSimulation = Sim;
             infoControl.historyControl.AddHistoryData(Sim.Id, expectedRes, simResult, Sim.Source, Sim.Destination);
+            UpdateHopsFromLastSimulation(Sim);
         }
 
         /// <summary>
@@ -173,16 +223,20 @@ namespace NSA.Controller.ViewControllers
         /// <param name="Sim">The sim.</param>
         public void UpdateHopsFromLastSimulation(Simulation Sim)
         {
-            // ToDo: HopControl
-            //var sendPackets = Sim.PacketsSend;
-            //var receivedPackets = Sim.PacketsReceived;
-            
+            infoControl.hopsControl.Clear();
 
-            //foreach (var p in sendPackets)
-            //{
-            //    var hops = p.Hops;
-            //    // isSendPacket, PacketIndex, NodeName start, NodeName dest
-            //}
+            var sendPackets = Sim.PacketsSend;
+            var receivedPackets = Sim.PacketsReceived;
+            
+            for (int i = 0; i < sendPackets.Count; i++)
+            {
+                infoControl.hopsControl.AddPacket(string.Format(sendPacket, i));
+            }
+
+            for (int i = 0; i < receivedPackets.Count; i++)
+            {
+                infoControl.hopsControl.AddPacket(string.Format(receivedPacket, i));
+            }
         }
 
         /// <summary>
@@ -194,6 +248,8 @@ namespace NSA.Controller.ViewControllers
             infoControl.resultsControl.Clear();
             infoControl.hopsControl.Clear();
             infoControl.scenariosControl.Clear();
+
+            lastSimulation = null;
         }
 
         #endregion

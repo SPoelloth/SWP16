@@ -1,13 +1,17 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
 {
-    // todo: finish hop control
+ 
     public partial class HopsControl : UserControl
     {
-        private readonly DataTable data = new DataTable();
+        public delegate void PacketSelectedEventHandler(object sender, string e);
+        public event PacketSelectedEventHandler PacketSelected;
 
+        private readonly DataTable gridData = new DataTable();
+     
         /// <summary>
         /// Initializes a new instance of the <see cref="HopsControl"/> class.
         /// </summary>
@@ -24,10 +28,10 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         private void AddColumns()
         {
-            data.Columns.Add("Start", typeof(string));
-            data.Columns.Add("ErgebnisStart", typeof(string));
-            data.Columns.Add("Ziel", typeof(string));
-            data.Columns.Add("ErgebnisZiel", typeof(string));
+            gridData.Columns.Add("Start", typeof(string));
+            gridData.Columns.Add("ErgebnisStart", typeof(string));
+            gridData.Columns.Add("Ziel", typeof(string));
+            gridData.Columns.Add("ErgebnisZiel", typeof(string));
 
             var dataCol1 = new DataGridViewTextBoxColumn
             {
@@ -61,7 +65,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
                 DisplayIndex = 4
             };
 
-            dgvHops.DataSource = data;
+            dgvHops.DataSource = gridData;
             dgvHops.Columns.AddRange(dataCol1, dataCol2, dataCol3, dataCol4);
         }
 
@@ -75,10 +79,20 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// <param name="EndResult">The end result.</param>
         public void AddHop(string StartNode, string StartResult, string EndNode, string EndResult)
         {
-            var row = data.NewRow();
+            var row = gridData.NewRow();
             row.ItemArray = new object[] { StartNode, StartResult, EndNode, EndResult };
 
-            data.Rows.Add(row);
+            gridData.Rows.Add(row);
+        }
+
+        /// <summary>
+        /// Adds the given packet to the packet drop down list.
+        /// </summary>
+        /// <param name="PacketName">Name of the packet.</param>
+        public void AddPacket(string PacketName)
+        {
+            cbPackets.Items.Add(PacketName);
+            cbPackets.SelectedItem = PacketName;
         }
         
         /// <summary>
@@ -86,7 +100,26 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         public void Clear()
         {
-            data.Rows.Clear();
+            cbPackets.Items.Clear();
+            gridData.Rows.Clear();
+        }
+
+        /// <summary>
+        /// Clears only the DataGridView containing the hops of a packet.
+        /// </summary>
+        public void ClearHopsOnly()
+        {
+            gridData.Rows.Clear();
+        }
+
+        /// <summary>
+        /// Handles the SelectedValueChanged event of the cbPackets control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void cbPackets_SelectedValueChanged(object sender, EventArgs e)
+        {
+            PacketSelected?.Invoke(this, cbPackets.SelectedItem as string);
         }
     }
 }
