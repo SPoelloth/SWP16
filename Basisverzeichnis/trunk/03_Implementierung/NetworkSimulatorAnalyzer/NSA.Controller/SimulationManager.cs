@@ -1,9 +1,7 @@
 using System;
 using NSA.Model.BusinessLogic;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using NSA.Controller.ViewControllers;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
