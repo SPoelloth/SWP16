@@ -67,7 +67,13 @@
 
         #endregion
 
+        /// <summary>
+        /// Label displaying the name of the control
+        /// </summary>
         public System.Windows.Forms.Label labelName;
+        /// <summary>
+        /// Button for closing the control
+        /// </summary>
         public System.Windows.Forms.Button buttonClose;
     }
 }

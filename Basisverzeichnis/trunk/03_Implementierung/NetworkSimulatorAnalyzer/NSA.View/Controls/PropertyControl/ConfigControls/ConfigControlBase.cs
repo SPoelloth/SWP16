@@ -6,19 +6,26 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
+    /// <summary>
+    /// Base class for ConfigControls.
+    /// </summary>
     public partial class ConfigControlBase : UserControl
     {
+        /// <summary>
+        /// Set to true once initialization has finished.
+        /// </summary>
         protected bool initialized = false;
+        /// <summary>
+        /// Is fired when the control is being closed
+        /// </summary>
         public event Action<ConfigControlBase> Closing;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ConfigControlBase()
         {
             InitializeComponent();
-        }
-
-        protected override void OnPaint(PaintEventArgs pe)
-        {
-            base.OnPaint(pe);
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -26,7 +33,11 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             Closing?.Invoke(this);
         }
 
-        // TODO: We should probably move this someplace else
+        /// <summary>
+        /// Checks whether a string ist a valid IP address
+        /// </summary>
+        /// <param name="addr">The address</param>
+        /// <returns>True if valid, false otherwise</returns>
         protected bool IsValidIP(string addr)
         {
             //create our match pattern
@@ -51,7 +62,12 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             return valid;
         }
 
-        public static bool IsValidSubnetMask(IPAddress Subnetmask) {
+        /// <summary>
+        /// Checks whether an IP address is a valid subnet mask.
+        /// </summary>
+        /// <param name="Subnetmask">The subnetmask</param>
+        /// <returns>True if valid, false otherwise</returns>
+        protected static bool IsValidSubnetMask(IPAddress Subnetmask) {
             var address = BitConverter.ToUInt32(Subnetmask.GetAddressBytes().Reverse().ToArray(), 0);
             bool end = false;
             for (int i = 31; i >= 0; i--) {

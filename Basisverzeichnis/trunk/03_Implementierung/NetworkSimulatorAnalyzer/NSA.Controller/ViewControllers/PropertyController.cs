@@ -10,10 +10,15 @@ using NSA.View.Forms;
 
 namespace NSA.Controller.ViewControllers
 {
-    public class PropertyController
+    /// <summary>
+    /// Controller class handling the PropertyControl and its interaction with the model
+    /// </summary>
+    internal class PropertyController
     {
         #region Singleton
-
+        /// <summary>
+        /// Instance refrence for the singleton pattern.
+        /// </summary>
         public static PropertyController Instance = new PropertyController();
 
         #endregion Singleton
@@ -161,7 +166,10 @@ namespace NSA.Controller.ViewControllers
         #endregion Event Handling
 
         #region Methods
-
+        /// <summary>
+        /// Load properties of a hardwarenode for editing in the PropertyConfigControl
+        /// </summary>
+        /// <param name="ElementName"></param>
         public void LoadElementProperties(string ElementName)
         {
             selectedNode = NetworkManager.Instance.GetHardwarenodeByName(ElementName);

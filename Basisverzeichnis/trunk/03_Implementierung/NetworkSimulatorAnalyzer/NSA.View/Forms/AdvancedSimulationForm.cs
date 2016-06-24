@@ -5,14 +5,31 @@ using System.Windows.Forms;
 
 namespace NSA.View.Forms
 {
+    /// <summary>
+    /// Dialog for starting a simulation with provided parameters.
+    /// </summary>
     public partial class AdvancedSimulationForm : Form
     {
-        public int AnimationTime = 1000;
+        /// <summary>
+        /// TTL of the simulation packet.
+        /// </summary>
         public int MaxHopCount = 255;
+        /// <summary>
+        /// Name of the source.
+        /// </summary>
         public string SourceName = "";
+        /// <summary>
+        /// Name of the target.
+        /// </summary>
         public string TargetName = "";
+        /// <summary>
+        /// Expected simulation result.
+        /// </summary>
         public bool ExpectedResult = true;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public AdvancedSimulationForm()
         {
             InitializeComponent();
@@ -20,6 +37,10 @@ namespace NSA.View.Forms
             CanExecute_Start();
         }
 
+        /// <summary>
+        /// Sets the list of available workstations.
+        /// </summary>
+        /// <param name="AvailableWorkstations">List of available workstations.</param>
         public void SetWorkstations(List<string> AvailableWorkstations)
         {
             sourceComboBox.DataSource = AvailableWorkstations;
@@ -74,10 +95,10 @@ namespace NSA.View.Forms
 
         private void CanExecute_Start()
         {
-            startButton.Enabled = !string.IsNullOrWhiteSpace(SourceName) && !string.IsNullOrWhiteSpace(TargetName) && MaxHopCount > 0 && AnimationTime > 0;
+            startButton.Enabled = !string.IsNullOrWhiteSpace(SourceName) && !string.IsNullOrWhiteSpace(TargetName) && MaxHopCount > 0;
         }
 
-        protected void IntOnlyInput_TextboxKeyPress(object sender, KeyPressEventArgs E)
+        private void IntOnlyInput_TextboxKeyPress(object sender, KeyPressEventArgs E)
         {
             if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar))
             {

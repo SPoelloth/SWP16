@@ -2,23 +2,47 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace NSA.View.Controls.PropertyControl.Misc {
-    public partial class LayerControl : UserControl {
+namespace NSA.View.Controls.PropertyControl.Misc
+{
+    /// <summary>
+    /// Control representing a layer in the <see cref="LayerStackConfigControl"/>.
+    /// </summary>
+    public partial class LayerControl : UserControl
+    {
+        /// <summary>
+        /// Flag indicating whether the represented layer is a custom layer.
+        /// </summary>
         public bool IsCustomLayer = false;
+        /// <summary>
+        /// Is fired when the layer control is selected.
+        /// </summary>
         public event Action<LayerControl> Selected;
+        /// <summary>
+        /// Is fired when the name of the layer has changed.
+        /// </summary>
         public event Action<string> NameChanged;
+        /// <summary>
+        /// The former name of the control, when renamed.
+        /// </summary>
         public string FormerName = "";
 
+        /// <summary>
+        /// The name of the layer.
+        /// </summary>
         public string LayerName
         {
             get { return textBoxName.Text; }
             set { textBoxName.Text = value; }
         }
 
+        /// <summary>
+        /// Flag indicating whether the control is currently selected.
+        /// </summary>
         public bool IsSelected
         {
             get { return selected; }
-            set {
+            set
+            {
                 if (!IsCustomLayer || value == selected)
                 {
                     return;
@@ -28,7 +52,13 @@ namespace NSA.View.Controls.PropertyControl.Misc {
         }
         private bool selected;
 
-        public LayerControl(string LayerName, bool CustomLayer = false) {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="LayerName">Name of the layer.</param>
+        /// <param name="CustomLayer">Flag indicating whether the represented layer is a custom layer.</param>
+        public LayerControl(string LayerName, bool CustomLayer = false)
+        {
             InitializeComponent();
             // FIX for an issue where the textbox text was cut off
             textBoxName.Multiline = true;
@@ -36,7 +66,8 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             textBoxName.Size = new Size(textBoxName.Size.Width, 18);
             textBoxName.Multiline = false;
 
-            textBoxName.LostFocus += TextBoxName_LostFocus; ;
+            textBoxName.LostFocus += TextBoxName_LostFocus;
+            ;
             this.LayerName = LayerName;
             IsCustomLayer = CustomLayer;
 
@@ -51,18 +82,22 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             Selected?.Invoke(this);
         }
 
-        private void TextBoxName_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter) {
+        private void TextBoxName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
                 textBoxName.Enabled = false;
                 //this is to remove focus from the textbox
             }
         }
 
-        private void textBoxName_TextChanged(object sender, EventArgs e) {
+        private void textBoxName_TextChanged(object sender, EventArgs e)
+        {
             NameChanged?.Invoke(textBoxName.Text);
         }
 
-        private void TextBoxName_LostFocus(object sender, EventArgs e) {
+        private void TextBoxName_LostFocus(object sender, EventArgs e)
+        {
             textBoxName.Enabled = false;
         }
 
@@ -77,8 +112,10 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             Refresh();
         }
 
-        private void LayerControl_Click(object sender, EventArgs e) {
-            if (IsCustomLayer) {
+        private void LayerControl_Click(object sender, EventArgs e)
+        {
+            if (IsCustomLayer)
+            {
                 textBoxName.Enabled = true;
                 textBoxName.Focus();
             }
@@ -86,9 +123,15 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             Refresh();
         }
 
-        protected override void OnPaint(PaintEventArgs e) {
+        /// <summary>
+        /// Overrides the OnPain method for selection display purposes.
+        /// </summary>
+        /// <param name="e">The paint event</param>
+        protected override void OnPaint(PaintEventArgs e)
+        {
             base.OnPaint(e);
-            if (IsSelected) {
+            if (IsSelected)
+            {
                 e.Graphics.DrawRectangle(Pens.DodgerBlue,
                     0, 0, Width - 1, Height - 1);
             }

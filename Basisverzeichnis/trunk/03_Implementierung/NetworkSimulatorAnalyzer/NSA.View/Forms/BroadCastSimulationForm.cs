@@ -8,13 +8,28 @@ using System.Windows.Forms;
 
 namespace NSA.View.Forms
 {
+    /// <summary>
+    /// Allows the user to execute a broadcast to a given subnet.
+    /// </summary>
     public partial class BroadcastSimulationForm : Form
     {
+        /// <summary>
+        /// Name of the surce
+        /// </summary>
         public string SourceName = "";
+        /// <summary>
+        /// Target subnet
+        /// </summary>
         public string TargetSubnet = "";
+        /// <summary>
+        /// Expected Result
+        /// </summary>
         public bool ExpectedResult = true;
         private bool subnetValidInput = false;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public BroadcastSimulationForm()
         {
             InitializeComponent();
@@ -22,6 +37,10 @@ namespace NSA.View.Forms
             CanExecute_Start();
         }
 
+        /// <summary>
+        /// Sets the datasource of the available workstations
+        /// </summary>
+        /// <param name="AvailableWorkstations">The available workstations</param>
         public void SetWorkstations(List<string> AvailableWorkstations)
         {
             sourceComboBox.DataSource = AvailableWorkstations;
@@ -51,7 +70,7 @@ namespace NSA.View.Forms
             startButton.Enabled = !string.IsNullOrWhiteSpace(SourceName) && subnetValidInput;
         }
 
-        protected void IntOnlyInput_TextboxKeyPress(object sender, KeyPressEventArgs E)
+        private void IntOnlyInput_TextboxKeyPress(object sender, KeyPressEventArgs E)
         {
             if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar))
             {
@@ -85,7 +104,7 @@ namespace NSA.View.Forms
             }
         }
 
-        public static bool IsValidSubnetMask(IPAddress Subnetmask) {
+        private static bool IsValidSubnetMask(IPAddress Subnetmask) {
             var address = BitConverter.ToUInt32(Subnetmask.GetAddressBytes().Reverse().ToArray(), 0);
             bool end = false;
             for (int i = 31; i >= 0; i--) {
@@ -98,7 +117,7 @@ namespace NSA.View.Forms
             return true;
         }
 
-        protected bool IsValidIP(string addr) {
+        private bool IsValidIP(string addr) {
             //create our match pattern
             var pattern = @"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
             //create our Regular Expression object

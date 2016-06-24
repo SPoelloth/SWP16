@@ -7,33 +7,80 @@ using NSA.View.Controls.PropertyControl.ConfigControls;
 using NSA.View.Controls.PropertyControl.Misc;
 
 namespace NSA.View.Controls.PropertyControl {
+    /// <summary>
+    /// Control containing and managing ConfigControls
+    /// </summary>
     public partial class PropertyControl : UserControl {
         private readonly List<InterfaceConfigControl> interfaceConfigControls = new List<InterfaceConfigControl>();
         private readonly List<RouteConfigControl> routeConfigControls = new List<RouteConfigControl>();
         private readonly List<Control> tempControls = new List<Control>();
         private int scrollPosition = 0;
-        public bool RetainScrollPosition = false;
         private readonly System.Timers.Timer refreshAfterScrollTimer = new System.Timers.Timer();
 
+        /// <summary>
+        /// Flag indicating whether the scroll position should be retained
+        /// </summary>
+        public bool RetainScrollPosition = false;
+
         #region Event declaration
+        /// <summary>
+        /// Is fired when an interface is added.
+        /// </summary>
         public event Action InterfaceAdded;
+        /// <summary>
+        /// Is fired when an interface is removed.
+        /// </summary>
         public event Action<string> InterfaceRemoved;
+        /// <summary>
+        /// Is fired when an interface has changed.
+        /// </summary>
         public event Action<string, IPAddress, IPAddress> InterfaceChanged;
 
+        /// <summary>
+        /// Is fired when a gateway has changed.
+        /// </summary>
         public event Action<IPAddress, string, bool> GatewayChanged;
 
+        /// <summary>
+        /// Is fired when a route is added.
+        /// </summary>
         public event Action AddRoute;
+        /// <summary>
+        /// Is fired when a route is removed.
+        /// </summary>
         public event Action<string> RemoveRoute;
+        /// <summary>
+        /// Is fired when a route has changed.
+        /// </summary>
         public event Action<string, IPAddress, IPAddress, IPAddress, string> RouteChanged;
 
+        /// <summary>
+        /// Is fired when a route is added.
+        /// </summary>
         public event Action AddLayer;
+        /// <summary>
+        /// Is fired when a route is removed.
+        /// </summary>
         public event Action<string> RemoveLayer;
+
+        /// <summary>
+        /// Is fired when a layer index has changed.
+        /// </summary>
         public event Action<string, int> LayerIndexChanged;
+        /// <summary>
+        /// Is fired when a layer has changed.
+        /// </summary>
         public event Action<string, string> LayerNameChanged;
 
+        /// <summary>
+        /// Is fired when the number of ports on a switch has changed.
+        /// </summary>
         public event Action<int> SwitchPortNumberChanged;
         #endregion Event declaration
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public PropertyControl() {
             InitializeComponent();
             refreshAfterScrollTimer.Interval = 100;
@@ -42,7 +89,10 @@ namespace NSA.View.Controls.PropertyControl {
 
 
         #region Methods
-
+        /// <summary>
+        /// Adds a switch config control.
+        /// </summary>
+        /// <param name="NumberOfPorts">The number of ports on the switch</param>
         public void AddSwitchConfigControl(int NumberOfPorts) {
             ClearControls();
             SwitchConfigControl switchConfigControl = new SwitchConfigControl(NumberOfPorts);
@@ -51,7 +101,7 @@ namespace NSA.View.Controls.PropertyControl {
         }
 
         /// <summary>
-        ///     Creates an InterfaceConfigControl and adds it to the list of interfaces to be displayed.
+        /// Creates an InterfaceConfigControl and adds it to the list of interfaces to be displayed.
         /// </summary>
         /// <param name="InterfaceName">The name of the interface</param>
         /// <param name="IpAddress">The current IP address of the interface</param>
@@ -64,10 +114,12 @@ namespace NSA.View.Controls.PropertyControl {
         }
 
         /// <summary>
-        ///     Creates a GateWayConfigControl and adds it to the list of controls to be displayed.
+        /// Creates a GateWayConfigControl and adds it to the list of controls to be displayed.
         /// </summary>
         /// <param name="DefaultGatewayAddress">The IP adress of the default gateway</param>
         /// <param name="AssignedInterfaceName">The name of the ethernet interface to be used for the default gateway</param>
+        /// <param name="IsRouter">Flag indicating whether the selected hardwarenode is a router</param>
+        /// <param name="HasInternetAccess">Flag indicating whether the selected hardwarenode has internet access</param>
         public void AddGatewayConfigControl(IPAddress DefaultGatewayAddress, string AssignedInterfaceName, bool IsRouter, bool HasInternetAccess = true) {
             var gwConfigControl = new GwConfigControl(DefaultGatewayAddress, AssignedInterfaceName, IsRouter, HasInternetAccess);
             gwConfigControl.GatewayChanged += GWConfigControl_GatewayChanged;
@@ -75,7 +127,7 @@ namespace NSA.View.Controls.PropertyControl {
         }
 
         /// <summary>
-        ///     Creates a RouteConfigControl and adds it to the list of routes to be displayed.
+        /// Creates a RouteConfigControl and adds it to the list of routes to be displayed.
         /// </summary>
         /// <param name="RouteName"></param>
         /// <param name="Source">IP address of the route source</param>
@@ -89,6 +141,9 @@ namespace NSA.View.Controls.PropertyControl {
             routeConfigControls.Add(newControl);
         }
 
+        /// <summary>
+        /// Creates a LayerStackConfigControl and adds it to the list of controls to be displayed.
+        /// </summary>
         public void AddLayerStackConfigControl() {
             var layerStackConfigControl = new LayerstackConfigControl();
             layerStackConfigControl.LayerAdded += LayerStackConfigControl_LayerAdded;
@@ -98,6 +153,9 @@ namespace NSA.View.Controls.PropertyControl {
             tempControls.Add(layerStackConfigControl);
         }
 
+        /// <summary>
+        /// Adds a new layer to a LayerStackConfigControl.
+        /// </summary>
         public void AddLayerToLayerConfigControl(string LayerName, bool IsCustom) {
             var lscc = Controls.OfType<LayerstackConfigControl>().FirstOrDefault() ?? tempControls.OfType<LayerstackConfigControl>().FirstOrDefault();
             if (lscc == null) {
@@ -108,8 +166,8 @@ namespace NSA.View.Controls.PropertyControl {
         }
 
         /// <summary>
-        ///     Puts the config controls in the flowlayoutpanel, where they are displayed for the user.
-        ///     Is called after all elements have been created and added.
+        /// Puts the config controls in the flowlayoutpanel, where they are displayed for the user.
+        /// Is called after all elements have been created and added.
         /// </summary>
         public void DisplayElements() {
             // Add InterfaceConfigControls first
@@ -139,6 +197,9 @@ namespace NSA.View.Controls.PropertyControl {
             }
         }
 
+        /// <summary>
+        /// Clears the controls in the property control.
+        /// </summary>
         public void ClearControls() {
             if (RetainScrollPosition) {
                 scrollPosition = flpContents.VerticalScroll.Value;
@@ -181,7 +242,7 @@ namespace NSA.View.Controls.PropertyControl {
         #region Eventhandling
 
         /// <summary>
-        ///     Handler for the click of the "Add Interface" button
+        /// Handler for the click of the "Add Interface" button.
         /// </summary>
         /// <param name="Sender"></param>
         /// <param name="E"></param>
@@ -190,7 +251,7 @@ namespace NSA.View.Controls.PropertyControl {
         }
 
         /// <summary>
-        ///     Handler for the click of the "Add Route" button
+        /// Handler for the click of the "Add Route" button.
         /// </summary>
         /// <param name="Sender"></param>
         /// <param name="E"></param>
@@ -199,7 +260,7 @@ namespace NSA.View.Controls.PropertyControl {
         }
 
         /// <summary>
-        ///     Handler for the Closing event of a ConfigControl
+        /// Handler for the Closing event of a ConfigControl.
         /// </summary>
         /// <param name="Control">The closing control</param>
         private void ConfigControl_Closing(ConfigControlBase Control) {
@@ -218,7 +279,7 @@ namespace NSA.View.Controls.PropertyControl {
 
         #region Interface
         /// <summary>
-        ///     Handler for the InterfaceChanged event of an InterfaceConfigControl
+        /// Handler for the InterfaceChanged event of an InterfaceConfigControl.
         /// </summary>
         /// <param name="InterfaceName">The name of the interface</param>
         /// <param name="IpAddress">The IP address of the interface</param>
@@ -231,7 +292,7 @@ namespace NSA.View.Controls.PropertyControl {
 
         #region Gateway
         /// <summary>
-        ///     Handler for the GateWayChanged event of a GWConfigControl
+        /// Handler for the GateWayChanged event of a GWConfigControl.
         /// </summary>
         /// <param name="GwAddress">The IP address of the default gateway</param>
         /// <param name="InterfaceName">The name of the assigned interface</param>
@@ -243,7 +304,7 @@ namespace NSA.View.Controls.PropertyControl {
 
         #region Routes
         /// <summary>
-        ///     Handler for the RouteChanged event of a RouteConfigControl
+        /// Handler for the RouteChanged event of a RouteConfigControl
         /// </summary>
         /// <param name="RouteName">The name of the route</param>
         /// <param name="Source">IP address of the route source</param>

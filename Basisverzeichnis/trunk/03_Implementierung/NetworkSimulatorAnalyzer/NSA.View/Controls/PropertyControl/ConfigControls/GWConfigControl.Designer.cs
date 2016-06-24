@@ -63,6 +63,7 @@
             this.textBoxIpAddress.Size = new System.Drawing.Size(116, 20);
             this.textBoxIpAddress.TabIndex = 0;
             this.textBoxIpAddress.TextChanged += new System.EventHandler(this.textBoxIpAddress_TextChanged);
+            this.textBoxIpAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ipInput_TextboxKeyPress);
             // 
             // labelIpAddress
             // 
@@ -104,7 +105,6 @@
             this.Controls.Add(this.labelIpAddress);
             this.Controls.Add(this.labelInterface);
             this.Controls.Add(this.textBoxIpAddress);
-            this.DoubleBuffered = true;
             this.Name = "GwConfigControl";
             this.Size = new System.Drawing.Size(214, 107);
             this.Controls.SetChildIndex(this.buttonClose, 0);

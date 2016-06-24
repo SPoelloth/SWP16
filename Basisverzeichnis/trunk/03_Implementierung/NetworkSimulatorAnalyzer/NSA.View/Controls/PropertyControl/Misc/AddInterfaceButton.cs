@@ -1,7 +1,15 @@
 ﻿using System.Windows.Forms;
 
-namespace NSA.View.Controls.PropertyControl.Misc {
-    public class AddInterfaceButton : Button {
+namespace NSA.View.Controls.PropertyControl.Misc
+{
+    /// <summary>
+    /// Button for adding a new network interface
+    /// </summary>
+    public class AddInterfaceButton : Button
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public AddInterfaceButton()
         {
             AutoSize = true;
@@ -10,6 +18,9 @@ namespace NSA.View.Controls.PropertyControl.Misc {
             DoubleBuffered = true;
         }
 
+        /// <summary>
+        /// Property for the button text
+        /// </summary>
         public sealed override string Text
         {
             get { return base.Text; }

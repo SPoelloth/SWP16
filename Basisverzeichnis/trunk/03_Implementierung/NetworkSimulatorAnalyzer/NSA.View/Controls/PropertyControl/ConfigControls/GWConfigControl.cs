@@ -7,12 +7,25 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
+    /// <summary>
+    /// Control for configuring a default gateway
+    /// </summary>
     public partial class GwConfigControl : ConfigControlBase
     {
         private static List<string> interfaceList;
         private bool ipValidInput;
+        /// <summary>
+        /// Is fired when the gateway data has changed and is valid.
+        /// </summary>
         public event Action<IPAddress, string, bool> GatewayChanged;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="Ip">The IP address</param>
+        /// <param name="InterfaceName">The name of the interface to be used</param>
+        /// <param name="IsRouter">Flag indicating whether the selected hardwarenode is a router</param>
+        /// <param name="HasInternetAccess">Flag indicating whether the selected hardwarenode has internet access</param>
         public GwConfigControl(IPAddress Ip, string InterfaceName, bool IsRouter, bool HasInternetAccess = false)
         {
             InitializeComponent();
@@ -38,6 +51,10 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             initialized = true;
         }
 
+        /// <summary>
+        /// Sets the list of interfaces for this hardwarenode
+        /// </summary>
+        /// <param name="Interfaces"></param>
         public static void SetInterfaces(List<string> Interfaces) {
             interfaceList = Interfaces;
         }
@@ -78,7 +95,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        protected void ipInput_TextboxKeyPress(object Sender, KeyPressEventArgs E)
+        private void ipInput_TextboxKeyPress(object Sender, KeyPressEventArgs E)
         {
             if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar) &&
                 (E.KeyChar != '.'))

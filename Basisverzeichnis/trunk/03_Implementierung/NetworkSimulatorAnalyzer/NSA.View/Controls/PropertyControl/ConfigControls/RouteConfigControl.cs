@@ -7,13 +7,30 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.PropertyControl.ConfigControls
 {
+    /// <summary>
+    /// Control for configuring a route
+    /// </summary>
     public partial class RouteConfigControl : ConfigControlBase
     {
         private static List<string> interfaceList;
         private bool netMaskValidInput = false, destinationValidInput = false, routeValidInput = false;
+        /// <summary>
+        /// Name of the route
+        /// </summary>
         public readonly string RouteName;
+        /// <summary>
+        /// Is fired when the Route has changed and its inputs are valid
+        /// </summary>
         public event Action<string, IPAddress, IPAddress, IPAddress, string> RouteChanged;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="RouteName">Name of the route</param>
+        /// <param name="Destination">Target of the Route</param>
+        /// <param name="Route">IP of the gateway for this route</param>
+        /// <param name="SubnetMask">Subnetmask of the route</param>
+        /// <param name="InterfaceName">Name of the interface to be used</param>
         public RouteConfigControl(string RouteName, IPAddress Destination, IPAddress Route, IPAddress SubnetMask, string InterfaceName)
         {
             this.RouteName = RouteName;
@@ -34,6 +51,10 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             initialized = true;
         }
 
+        /// <summary>
+        /// Sets the list of interfaces of the current hardwarenode.
+        /// </summary>
+        /// <param name="Interfaces">List of interfaces of the current hardwarenode</param>
         public static void SetInterfaces(List<string> Interfaces)
         {
             interfaceList = Interfaces;
@@ -88,7 +109,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
             }
         }
 
-        protected void ipInput_TextboxKeyPress(object Sender, KeyPressEventArgs E)
+        private void ipInput_TextboxKeyPress(object Sender, KeyPressEventArgs E)
         {
             if (!char.IsControl(E.KeyChar) && !char.IsDigit(E.KeyChar) &&
                 (E.KeyChar != '.'))

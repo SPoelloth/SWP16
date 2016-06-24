@@ -1,16 +1,25 @@
 ﻿using System;
 
-namespace NSA.View.Controls.PropertyControl.ConfigControls {
-    public class SwitchConfigControl : ConfigControlBase {
+namespace NSA.View.Controls.PropertyControl.ConfigControls
+{
+    /// <summary>
+    /// Control for configuring a switch.
+    /// </summary>
+    public class SwitchConfigControl : ConfigControlBase
+    {
         private System.Windows.Forms.NumericUpDown numericUpDownPorts;
         private System.Windows.Forms.Label labelPortNumber;
 
+        /// <summary>
+        /// Is fired when the number of ports has changed.
+        /// </summary>
         public event System.Action<int> NumberOfPortsChanged;
 
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.numericUpDownPorts = new System.Windows.Forms.NumericUpDown();
             this.labelPortNumber = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPorts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize) (this.numericUpDownPorts)).BeginInit();
             this.SuspendLayout();
             // 
             // labelName
@@ -26,11 +35,13 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls {
             // numericUpDownPorts
             // 
             this.numericUpDownPorts.Location = new System.Drawing.Point(168, 29);
-            this.numericUpDownPorts.Maximum = new decimal(new int[] {
-            32,
-            0,
-            0,
-            0});
+            this.numericUpDownPorts.Maximum = new decimal(new int[]
+            {
+                32,
+                0,
+                0,
+                0
+            });
             this.numericUpDownPorts.Name = "numericUpDownPorts";
             this.numericUpDownPorts.Size = new System.Drawing.Size(43, 20);
             this.numericUpDownPorts.TabIndex = 3;
@@ -56,12 +67,15 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls {
             this.Controls.SetChildIndex(this.buttonClose, 0);
             this.Controls.SetChildIndex(this.numericUpDownPorts, 0);
             this.Controls.SetChildIndex(this.labelPortNumber, 0);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPorts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.numericUpDownPorts)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="NumberOfPorts">The number of ports</param>
         public SwitchConfigControl(int NumberOfPorts)
         {
             InitializeComponent();
@@ -69,7 +83,8 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls {
             initialized = true;
         }
 
-        private void numericUpDownPorts_ValueChanged(object sender, EventArgs e) {
+        private void numericUpDownPorts_ValueChanged(object sender, EventArgs e)
+        {
             if (initialized)
             {
                 NumberOfPortsChanged?.Invoke((int) numericUpDownPorts.Value);
