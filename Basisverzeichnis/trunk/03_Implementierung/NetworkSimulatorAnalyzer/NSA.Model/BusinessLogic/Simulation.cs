@@ -4,15 +4,58 @@ using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.BusinessLogic
 {
-	public class Simulation
+    /// <summary>
+    /// Klasse um die Simulation darzustellen
+    /// </summary>
+    public class Simulation
     {
+        /// <summary>
+        /// Liefert die Hinpackete zurück
+        /// </summary>
+        /// <value>
+        /// Die Hinpackete
+        /// </value>
         public List<Packet> PacketsSend { get; } = new List<Packet>();
+        /// <summary>
+        /// Liefert die Rückpackete zurück
+        /// </summary>
+        /// <value>
+        /// Die Rückpackete
+        /// </value>
         public List<Packet> PacketsReceived { get; } = new List<Packet>();
+        /// <summary>
+        /// Liefert den Namen der Quell-Workstation zurück
+        /// </summary>
+        /// <value>
+        /// Der Name der Quell-Workstation
+        /// </value>
         public string Source { get; private set; }
+        /// <summary>
+        /// Liefert den Namen der Ziel-Workstation zurück
+        /// </summary>
+        /// <value>
+        /// Der Name der Ziel-Workstation
+        /// </value>
         public string Destination { get; private set; }
-	    public string Id { get; private set; }
+        /// <summary>
+        /// Liefert die ID zurück
+        /// </summary>
+        /// <value>
+        /// Die ID der Simulation
+        /// </value>
+        public string Id { get; private set; }
+        /// <summary>
+        /// Liefert das erwartete Ergebnis zurück
+        /// </summary>
+        /// <value>
+        ///   Das erwartete Ergebnis
+        /// </value>
         public bool ExpectedResult { get; private set; }
 
+        /// <summary>
+        /// Konstruktor der für die Simulationen der Testszenarien verwendet wird.
+        /// </summary>
+        /// <param name="I">Die ID</param>
         public Simulation(string I)
         {
             Id = I;
@@ -20,6 +63,13 @@ namespace NSA.Model.BusinessLogic
             Destination = null;
         }
 
+        /// <summary>
+        /// Konstruktor, der für die normalen Simulationen verwendet wird.
+        /// </summary>
+        /// <param name="I">Die ID</param>
+        /// <param name="S">Der Name der Quell-Workstation</param>
+        /// <param name="D">Der Name der Ziel-Workstation</param>
+        /// <param name="ExpRes">Das erwartete Ergebnis</param>
         public Simulation(string I, string S, string D, bool ExpRes)
 	    {
 	        Id = I;
@@ -29,16 +79,16 @@ namespace NSA.Model.BusinessLogic
 	    }
 
         /// <summary>
-        /// Adds the packet send.
+        /// Fügt ein Hinpacket in die Liste ein.
         /// </summary>
-        /// <param name="Packet">The packet.</param>
+        /// <param name="Packet">Das hinzuzufügende Packet</param>
         public void AddPacketSend(Packet Packet)
 	    {
             PacketsSend.Add(Packet);
         }
 
         /// <summary>
-        /// Executes this instance.
+        /// Führt die Simulation durch.
         /// </summary>
         public Result Execute()
 	    {
@@ -68,18 +118,18 @@ namespace NSA.Model.BusinessLogic
 	    }
 
         /// <summary>
-        /// Gets all packets.
+        /// Liefert alle Packete zurück
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Alle Packete</returns>
         public IEnumerable<Packet> GetAllPackets()
 	    {
 	        return PacketsSend.Concat(PacketsReceived);
 	    }
 
         /// <summary>
-        /// Gets the last packet.
+        /// Liefert das letzte Packet zurück.
         /// </summary>
-        /// <returns>Null if there is no packet.</returns>
+        /// <returns>Null wenn es kein Packet gibt, sonst das letzte Packet</returns>
         public Packet GetLastPacket()
 	    {
 	        if (PacketsReceived.Count == 0 && PacketsSend.Count == 0)
