@@ -366,6 +366,22 @@ namespace NSA.Controller
             NetworkViewController.Instance.RemoveConnection(Name);
         }
 
+        /// <summary>
+        /// Gets the connection by nodes.
+        /// </summary>
+        /// <param name="N1">The first node</param>
+        /// <param name="N2">The second node</param>
+        /// <returns>The Connection or null if no connection was found</returns>
+        public Connection GetConnectionByNodes(Hardwarenode N1, Hardwarenode N2)
+        {
+            foreach (Connection c in GetAllConnections())
+            {
+                if ((c.Start == N1 && c.End == N2) || (c.End == N1 && c.Start == N2))
+                    return c;
+            }
+            return null;
+        }
+
         #endregion
 
         /// <summary>
