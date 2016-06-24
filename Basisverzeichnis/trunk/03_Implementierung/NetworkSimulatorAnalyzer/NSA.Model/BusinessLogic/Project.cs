@@ -3,10 +3,26 @@
 
 namespace NSA.Model.BusinessLogic
 {
-	public class Project
+    /// <summary>
+    /// Class for project
+    /// </summary>
+    public class Project
 	{
-	    public string Path { get; set; }
-	    public Network Network { get; set; }
+        /// <summary>
+        /// Gets or sets the path.
+        /// </summary>
+        /// <value>
+        /// The path.
+        /// </value>
+        public string Path { get; set; }
+
+        /// <summary>
+        /// Gets or sets the network.
+        /// </summary>
+        /// <value>
+        /// The network.
+        /// </value>
+        public Network Network { get; set; }
 
         // Default Konstruktor
         /// <summary>
