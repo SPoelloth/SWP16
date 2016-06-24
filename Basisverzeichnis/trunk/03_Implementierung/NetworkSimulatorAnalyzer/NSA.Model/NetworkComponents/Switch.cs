@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
 {
     public class Switch : Hardwarenode
     {
-        public List<string> Interfaces { get; } = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Switch"/> class.
@@ -14,73 +13,46 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Name">The name of the switch.</param>
         public Switch(string Name) : base(Name)
         {
-            AddInterface();
-            AddInterface();
-            AddInterface();
-            AddInterface();
-            AddInterface();
-        }
-
-        /// <summary>
-        /// Gets the interface count.
-        /// </summary>
-        /// <returns>
-        /// int: interface count
-        /// </returns>
-        public int GetInterfaceCount()
-        {
-            return Interfaces.Count;
-        }
-
-        /// <summary>
-        /// Adds the interface.
-        /// </summary>
-        /// <returns>string: the name of the new interface</returns>
-        public string AddInterface()
-        {
-            string name = Interface.NamePrefix + getNewInterfaceNumber();
-            Interfaces.Add(name);
-            return name;
-        }
-
-        /// <summary>
-        /// Removes the interface with the given name.
-        /// </summary>
-        /// <param name="InterfaceName">The name.</param>
-        public void RemoveInterface(string InterfaceName)
-        {
-            Interfaces.Remove(InterfaceName);
-        }
-
-        /// <summary>
-        /// Gets the new interface number.
-        /// </summary>
-        /// <returns>int: number for next interface</returns>
-        private int getNewInterfaceNumber()
-        {
-            int newInterface = 0;
-            bool found = false;
-
-            while (!found)
+            for (int i = 0; i < 5; i++)
             {
-                if (!Interfaces.Exists(I => I.Equals(Interface.NamePrefix + newInterface)))
-                    found = true;
-                else
-                    newInterface++;
+                Interfaces.Add(new Interface(null, null, getNewInterfaceNumber()));
             }
+        }
 
-            return newInterface;
+        #region methods
+        #region interface methods
+
+        /// <summary>
+        /// Adds a new interface with the given IP and subnetmask
+        /// </summary>
+        /// <param name="Ip">The IP of the interface. Ignored if used with switch</param>
+        /// <param name="Subnetmask">The subnetmask. Ignored if used with switch </param>
+        /// <param name="PortNum">Number of port. Only for project loading purpose. </param>
+        /// <returns>The newly added Interface</returns>
+        public override Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int PortNum = -1)
+        {
+            if (PortNum == -1) PortNum = getNewInterfaceNumber();
+
+            Interface interfaceObj = new Interface(null, null, PortNum);
+            Interfaces.Add(interfaceObj);
+            return interfaceObj;
         }
 
         /// <summary>
-        /// Determines if there is an Interface with the specified name.
+        /// Sets the interface count to the given value.
         /// </summary>
-        /// <param name="IfaceName">Name of the iface.</param>
-        /// <returns></returns>
-        public override bool HasInterface(string IfaceName)
+        /// <param name="count">The count.</param>
+        public void SetInterfaceCount(int count)
         {
-            return Interfaces.Any(i => i == IfaceName);
+            Interfaces.Clear();
+            for (int i = 0; i < count; i++)
+            {
+                Interfaces.Add(new Interface(null, null, getNewInterfaceNumber()));
+            }
         }
+
+        #endregion
+
 
         public override List<Hardwarenode> Send(Hardwarenode Destination, Dictionary<string, object> Tags, ValidationInfo ValInfo)
         {
@@ -241,13 +213,6 @@ namespace NSA.Model.NetworkComponents
             return false;
         }
 
-        public void SetInterfaceCount(int count)
-        {
-            Interfaces.Clear();
-            for(int i = 0; i < count; i++)
-            {
-                Interfaces.Add(Interface.NamePrefix + i);
-            }
-        }
+        #endregion
     }
 }

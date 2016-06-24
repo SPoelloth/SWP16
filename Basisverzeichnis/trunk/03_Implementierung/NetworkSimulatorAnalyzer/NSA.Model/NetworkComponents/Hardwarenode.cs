@@ -14,16 +14,107 @@ namespace NSA.Model.NetworkComponents
         public Dictionary<string, Connection> Connections { get; protected set; } = new Dictionary<string, Connection>();
         public string Name { get; set; }
 
+        public List<Interface> Interfaces { get; protected set; } = new List<Interface>();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Hardwarenode" /> class.
         /// </summary>
-        /// <param name="Name">The name.</param>
-        public Hardwarenode(string Name)
+        /// <param name="N">The n.</param>
+        public Hardwarenode(string N)
         {
-            this.Name = Name;
+            Name = N;
         }
 
         #region Methods
+
+        #region interface methods
+        /// <summary>
+        /// Adds a new interface with the given IP and subnetmask
+        /// </summary>
+        /// <param name="Ip">The IP of the interface. Ignored if used with switch</param>
+        /// <param name="Subnetmask">The subnetmask. Ignored if used with switch </param>
+        /// <param name="PortNum">Number of port. Only for project loading purpose. </param>
+        /// <returns>The newly added Interface</returns>
+        public virtual Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int PortNum = -1)
+        {
+            if (PortNum == -1) PortNum = getNewInterfaceNumber();
+            Interface interfaceObj = new Interface(Ip, Subnetmask, PortNum);
+            Interfaces.Add(interfaceObj);
+            return interfaceObj;
+        }
+
+        /// <summary>
+        /// Removes the interface with the given name.
+        /// </summary>
+        /// <param name="InterfaceName">The Interfacename.</param>
+        public void RemoveInterface(string InterfaceName)
+        {
+            Interfaces.Remove(Interfaces.Find(I => I.Name.Equals(InterfaceName)));
+        }
+
+        /// <summary>
+        /// Gets the interface count.
+        /// </summary>
+        /// <returns>
+        /// int: interface count
+        /// </returns>
+        public int GetInterfaceCount()
+        {
+            return Interfaces.Count;
+        }
+
+        /// <summary>
+        /// Sets the interface.
+        /// </summary>
+        /// <param name="Ifacename">The name of the Interface.</param>
+        /// <param name="Ip">The new ip.</param>
+        /// <param name="Mask">The new subnetmask.</param>
+        /// <returns>bool: false if the interface could not be found, otherwise true</returns>
+        public virtual void SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
+        {
+            if (!Interfaces.Exists(I => I.Name.Equals(Ifacename)))
+            {
+                AddInterface(Ip, Mask, int.Parse(Ifacename.Replace(Interface.NamePrefix, "")));
+                return;
+            }
+            Interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
+        }
+
+        /// <summary>
+        /// Gets the new interface number.
+        /// </summary>
+        /// <returns>int: number for next interface</returns>
+        protected int getNewInterfaceNumber()
+        {
+            int newInterface = 0;
+            bool found = false;
+
+            while (!found)
+            {
+                if (!Interfaces.Exists(I => I.Name.Equals(Interface.NamePrefix + newInterface)))
+                    found = true;
+                else
+                    newInterface++;
+            }
+            return newInterface;
+        }
+
+        /// <summary>
+        /// Determines if there is an Interface with the specified name.
+        /// </summary>
+        /// <param name="IfaceName">Name of the iface.</param>
+        /// <returns></returns>
+        public virtual bool HasInterface(string IfaceName)
+        {
+            foreach (Interface i in Interfaces)
+            {
+                if (i.Name == IfaceName)
+                    return true;
+            }
+            return false;
+        }
+
+        #endregion
 
         /// <summary>
         /// Adds a connection.
@@ -37,16 +128,6 @@ namespace NSA.Model.NetworkComponents
             {
                 Debug.Assert(false, "Interface: " + IfaceName + " nicht vorhanden, aber es soll eine Verbindung daran gesetzt werden.");
             }
-        }
-
-        /// <summary>
-        /// Determines if there is an Interface with the specified name.
-        /// </summary>
-        /// <param name="IfaceName">Name of the iface.</param>
-        /// <returns></returns>
-        public virtual bool HasInterface(string IfaceName)
-        {
-            return false;
         }
 
         /// <summary>

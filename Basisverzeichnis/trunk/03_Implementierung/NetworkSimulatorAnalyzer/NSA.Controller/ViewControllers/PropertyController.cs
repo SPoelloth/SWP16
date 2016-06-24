@@ -80,7 +80,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControlAddRoute()
         {
             Workstation station = (Workstation) selectedNode;
-            NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.GetInterfaces().First());
+            NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.Interfaces.First());
             propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
             propertyControl.RetainScrollPosition = false;
@@ -95,7 +95,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControl_RouteChanged(string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress SubnetMask, string InterfaceName)
         {
             Workstation station = (Workstation) selectedNode;
-            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask, station.GetInterfaces().Find(i => i.Name == InterfaceName));
+            NetworkManager.Instance.RouteChanged(station.Name, RouteName, Destination, Gateway, SubnetMask, station.Interfaces.Find(i => i.Name == InterfaceName));
         }
 
         #endregion Routes
@@ -171,13 +171,13 @@ namespace NSA.Controller.ViewControllers
                 var station = selectedNode as Workstation;
 
                 // load workstation ethernet interface config controls
-                foreach (var eth in station.GetInterfaces())
+                foreach (var eth in station.Interfaces)
                 {
                     propertyControl.AddInterfaceConfigControl(eth.Name, eth.IpAddress, eth.Subnetmask);
                 }
                 
                 // Set InterfaceList in RouteConfigControl
-                RouteConfigControl.SetInterfaces(station.GetInterfaces().Select(i => i.Name).ToList());
+                RouteConfigControl.SetInterfaces(station.Interfaces.Select(i => i.Name).ToList());
                 // load route controls
                 foreach (var route in station.GetRoutes())
                 {
@@ -192,7 +192,7 @@ namespace NSA.Controller.ViewControllers
                     propertyControl.AddLayerToLayerConfigControl(layer.GetLayerName(), layer is CustomLayer);
                 }
 
-                GwConfigControl.SetInterfaces(station.GetInterfaces().Select(i => i.Name).ToList());
+                GwConfigControl.SetInterfaces(station.Interfaces.Select(i => i.Name).ToList());
                 if (selectedNode is Router)
                 {
                     // load gateway config control

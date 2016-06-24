@@ -9,7 +9,6 @@ namespace NSA.Model.NetworkComponents
 {
     public class Workstation : Hardwarenode
     {
-        private readonly List<Interface> interfaces = new List<Interface>();
         private readonly Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
         public IPAddress StandardGateway { get; set; }
         public Interface StandardGatewayPort { get; set; }
@@ -29,112 +28,13 @@ namespace NSA.Model.NetworkComponents
             Layerstack.AddLayer(new SessionLayer(4));
             Layerstack.AddLayer(new PresentationLayer(5));
             Layerstack.AddLayer(new ApplicationLayer(6));
-            AddInterface(new IPAddress(new byte[] { 192, 168, 0, 1 }), new IPAddress(new byte[] { 255, 255, 255, 0 }));
+            Interfaces.Add(new Interface(new IPAddress(new byte[] { 192, 168, 0, 1 }), new IPAddress(new byte[] { 255, 255, 255, 0 }), getNewInterfaceNumber()));
             StandardGateway = null;
             StandardGatewayPort = null;
         }
 
 
         #region methods
-        #region interface methods
-        /// <summary>
-        /// Gets the interfaces.
-        /// </summary>
-        /// <returns>
-        /// The Interfaces
-        /// </returns>
-        public List<Interface> GetInterfaces()
-        {
-            return interfaces;
-        }
-
-        /// <summary>
-        /// Adds a new interface with the given IP and subnetmask
-        /// </summary>
-        /// <param name="Ip">The IP of the interface.</param>
-        /// <param name="Subnetmask">The subnetmask.</param>
-        /// <param name="PortNum">Number of port</param>
-        /// <returns>The newly added Interface</returns>
-        public Interface AddInterface(IPAddress Ip, IPAddress Subnetmask, int PortNum = -1)
-        {
-            if (PortNum == -1) PortNum = getNewInterfaceNumber();
-            Interface interfaceObj = new Interface(Ip, Subnetmask, PortNum);
-            interfaces.Add(interfaceObj);
-            return interfaceObj;
-        }
-
-        /// <summary>
-        /// Removes the interface with the given name.
-        /// </summary>
-        /// <param name="InterfaceName">The Interfacename.</param>
-        public void RemoveInterface(string InterfaceName)
-        {
-            interfaces.Remove(interfaces.Find(I => I.Name.Equals(InterfaceName)));
-        }
-
-        /// <summary>
-        /// Gets the interface count.
-        /// </summary>
-        /// <returns>
-        /// int: interface count
-        /// </returns>
-        public int GetInterfaceCount()
-        {
-            return interfaces.Count;
-        }
-
-        /// <summary>
-        /// Sets the interface.
-        /// </summary>
-        /// <param name="Ifacename">The name of the Interface.</param>
-        /// <param name="Ip">The new ip.</param>
-        /// <param name="Mask">The new subnetmask.</param>
-        /// <returns>bool: false if the interface could not be found, otherwise true</returns>
-        public void SetInterface(string Ifacename, IPAddress Ip, IPAddress Mask)
-        {
-            if (!interfaces.Exists(I => I.Name.Equals(Ifacename)))
-            {
-                AddInterface(Ip, Mask, int.Parse(Ifacename.Replace(Interface.NamePrefix, "")));
-                return;
-            }
-            interfaces.Find(I => I.Name.Equals(Ifacename)).SetInterface(Ip, Mask);
-        }
-
-        /// <summary>
-        /// Gets the new interface number.
-        /// </summary>
-        /// <returns>int: number for next interface</returns>
-        private int getNewInterfaceNumber()
-        {
-            int newInterface = 0;
-            bool found = false;
-
-            while (!found)
-            {
-                if (!interfaces.Exists(I => I.Name.Equals(Interface.NamePrefix + newInterface)))
-                    found = true;
-                else
-                    newInterface++;
-            }
-            return newInterface;
-        }
-
-        /// <summary>
-        /// Determines if there is an Interface with the specified name.
-        /// </summary>
-        /// <param name="IfaceName">Name of the iface.</param>
-        /// <returns></returns>
-        public override bool HasInterface(string IfaceName)
-        {
-            foreach (Interface i in interfaces)
-            {
-                if (i.Name == IfaceName)
-                    return true;
-            }
-            return false;
-        }
-
-        #endregion
         #region routingtable methods
         /// <summary>
         /// Adds the route.
@@ -211,7 +111,7 @@ namespace NSA.Model.NetworkComponents
         {
             bool hasIp = false;
 
-            foreach (Interface iface in interfaces)
+            foreach (Interface iface in Interfaces)
             {
                 hasIp = iface.IpAddress.Equals(Ip);
                 if (hasIp) break;

@@ -34,7 +34,7 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             if (ValInfo.NextNodeIp == null)
                 return true;
-            List<Interface> ifaces = CurrentNode.GetInterfaces();
+            List<Interface> ifaces = CurrentNode.Interfaces;
             if (ifaces.Any(I => ValInfo.NextNodeIp.Equals(I.IpAddress)))
             {
                 return true;

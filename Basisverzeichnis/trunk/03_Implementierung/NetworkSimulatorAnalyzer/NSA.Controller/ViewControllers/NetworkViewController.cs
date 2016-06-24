@@ -124,7 +124,7 @@ namespace NSA.Controller.ViewControllers
         {
             var switchControl = (SwitchControl)GetControlByName(sw.Name);
             var ifaces = new List<int>();
-            foreach (var i in sw.Interfaces) ifaces.Add(int.Parse(i.Replace(Interface.NamePrefix, "")));
+            foreach (var i in sw.Interfaces) ifaces.Add(int.Parse(i.Name.Replace(Interface.NamePrefix, "")));
             switchControl.SetInterfaces(ifaces);
         }
 

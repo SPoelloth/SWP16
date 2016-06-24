@@ -66,7 +66,7 @@ namespace NSA.Model.NetworkComponents.Layers
                 return;
             }
             //In der Routingtabelle nachgucken
-            List<Interface> interfaces = Destination.GetInterfaces();
+            List<Interface> interfaces = Destination.Interfaces;
             foreach (Interface i in interfaces)
             {
                 Dictionary<string, Route>.ValueCollection routes = CurrentNode.GetRoutes();

@@ -109,7 +109,7 @@ namespace NSA.Controller
             {
                 var loc = NetworkViewController.Instance.GetLocationOfElementByName(ws.Name) ?? new Point();
 
-                var interfaces = ws.GetInterfaces();
+                var interfaces = ws.Interfaces;
                 XElement interfacesXML = new XElement("Interfaces");
                 foreach (var i in interfaces)
                 {
@@ -247,7 +247,7 @@ namespace NSA.Controller
                     }
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
 
-                    foreach (var i in hwNode.GetInterfaces().ToList()) NetworkManager.Instance.RemoveInterface(hwNode.Name, i.Name);
+                    foreach (var i in hwNode.Interfaces.ToList()) NetworkManager.Instance.RemoveInterface(hwNode.Name, i.Name);
                     var interfaceXML = node.Element("Interfaces");
                     if (interfaceXML == null) throw new InvalidDataException();
                     foreach (var xmliface in interfaceXML.Elements())
@@ -267,7 +267,7 @@ namespace NSA.Controller
                         var rsubnet = route.Attribute("SubnetMask").Value;
                         var rinterface = route.Attribute("SubnetMask").Value;
 
-                        hwNode.AddRoute(new Route(IPAddress.Parse(rDest), IPAddress.Parse(rsubnet), IPAddress.Parse(rgateway), hwNode.GetInterfaces().First(i => i.Name == rinterface)));
+                        hwNode.AddRoute(new Route(IPAddress.Parse(rDest), IPAddress.Parse(rsubnet), IPAddress.Parse(rgateway), hwNode.Interfaces.First(i => i.Name == rinterface)));
                     }
 
                     var layerstackXML = node.Element("Layerstack");
@@ -285,7 +285,7 @@ namespace NSA.Controller
                     if (hasDefaultGW)
                     {
                         var defaultgwport = node.Attribute("DefaultGWPort").Value;
-                        hwNode.StandardGatewayPort = hwNode.GetInterfaces().First(i => i.Name == defaultgwport);
+                        hwNode.StandardGatewayPort = hwNode.Interfaces.First(i => i.Name == defaultgwport);
                     }
                 }
 
@@ -305,7 +305,7 @@ namespace NSA.Controller
                     Switch sw = (Switch)NetworkManager.Instance.CreateHardwareNode(NetworkManager.HardwarenodeType.Switch, name);
                     NetworkViewController.Instance.MoveElementToLocation(name, new Point(x, y));
 
-                    foreach (var i in sw.Interfaces.ToList()) NetworkManager.Instance.RemoveInterface(sw.Name, i);
+                    foreach (var i in sw.Interfaces.ToList()) NetworkManager.Instance.RemoveInterface(sw.Name, i.Name);
                     var interfaceXML = node.Element("Interfaces");
                     if (interfaceXML == null) throw new InvalidDataException();
                     foreach (var iface in interfaceXML.Elements())

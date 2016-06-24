@@ -165,7 +165,7 @@ namespace NSA.Model.NetworkComponents
             // Iterate through all workstations
             foreach (Workstation w in allWorkstations)
             {
-                List<Interface> ifaces = w.GetInterfaces();
+                List<Interface> ifaces = w.Interfaces;
                 // Iterate through all interfaces of the current workstation.
                 foreach (Interface iface in ifaces)
                 {

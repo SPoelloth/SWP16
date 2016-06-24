@@ -114,8 +114,8 @@ namespace NSA.Controller
                 Debug.Assert(nodeSwitch != null, "Switch with the name " + SwitchName + " could not be found");
                 return;
             }
-            var iface = nodeSwitch.AddInterface();
-            NetworkViewController.Instance.AddInterfaceToHardwareNode(nodeSwitch.Name, iface);
+            var iface = nodeSwitch.AddInterface(null, null);
+            NetworkViewController.Instance.AddInterfaceToHardwareNode(nodeSwitch.Name, iface.Name);
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace NSA.Controller
             interfaceDiff = interfaceDiff.Except(nodeSwitch.Interfaces).ToList();
             foreach (var i in interfaceDiff)
             {
-                string connnectionName = nodeSwitch.Connections.FirstOrDefault(C => C.Key.Equals(i)).Value?.Name;
+                string connnectionName = nodeSwitch.Connections.FirstOrDefault(C => C.Key.Equals(i.Name)).Value?.Name;
                 if (connnectionName != null) RemoveConnection(connnectionName);
             }
 
@@ -380,7 +380,7 @@ namespace NSA.Controller
             // TODO: Do something with HasInternetAccess and InterfaceName
             Workstation ws = GetWorkstationByName(WorkstationName);
             ws.StandardGateway = Gateway;
-            ws.StandardGatewayPort = ws.GetInterfaces().First(I => I.Name == InterfaceName);
+            ws.StandardGatewayPort = ws.Interfaces.First(I => I.Name == InterfaceName);
             var r = ws as Router;
             if (r != null) r.IsGateway = HasInternetAccess;
         }
