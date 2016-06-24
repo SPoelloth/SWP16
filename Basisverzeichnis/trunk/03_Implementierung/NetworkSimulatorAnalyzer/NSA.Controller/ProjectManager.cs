@@ -16,7 +16,7 @@ namespace NSA.Controller
 {
     public class ProjectManager
     {
-        public Project CurrentProject = new Project();
+        internal Project CurrentProject = new Project();
         private List<Testscenario> testscenarios = new List<Testscenario>();
         private const string TestscenarioDirectoryName = "Testscenarios";
 
@@ -404,7 +404,13 @@ namespace NSA.Controller
         {
             var form = MainForm.Instance;
             form.Shown += Form_Shown;
+            form.FormClosing += Form_FormClosing;
             return form;
+        }
+
+        private void Form_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = AskSave() == DialogResult.Cancel;
         }
 
         /// <summary>

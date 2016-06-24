@@ -11,13 +11,13 @@ namespace NSA.View.Forms
         public static MainForm Instance = new MainForm();
 
         #endregion Singleton
-
+        
         MainForm()
         {
             InitializeComponent();
             MainForm_Resize(null, null);
         }
-
+        
         public UserControl GetComponent(string name)
         {
             foreach (UserControl control in Controls)
@@ -41,6 +41,9 @@ namespace NSA.View.Forms
             networkViewControl.Invalidate();
         }
 
+        /// <summary>
+        /// Turn on WS_EX_COMPOSITED
+        /// </summary>
         protected override CreateParams CreateParams
         {
             get

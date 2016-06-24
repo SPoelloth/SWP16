@@ -38,13 +38,18 @@ namespace NSA.View.Controls.NetworkView
 
         private void NetworkViewControl_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) mouseLoc = e.Location;
+            if (e.Button == MouseButtons.Left)
+            {
+                enableMoving = true;
+                mouseLoc = e.Location;
+            }
         }
 
+        bool enableMoving = false;
         Point mouseLoc;
         private void NetworkViewControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (enableMoving && e.Button == MouseButtons.Left)
             {
                 int diffX = e.X - mouseLoc.X;
                 int diffY = e.Y - mouseLoc.Y;
@@ -115,19 +120,19 @@ namespace NSA.View.Controls.NetworkView
                     float mcrit = (Height - center.Y) / (float)(Width - center.X);
 
                     Xgegeben = Math.Abs(m) < mcrit;
+                    if (Xgegeben) intersectX = target.X > center.X ? Width : 0;
 
-                    if (target.X > center.X)
-                    {
-                        if (m > mcrit) intersectY = Height;
-                        else if (m < -mcrit) intersectY = 0;
-                        else intersectX = Width;
-                    }
-                    else
-                    {
-                        if (m > mcrit) intersectY = 0;
-                        else if (m < -mcrit) intersectY = Height;
-                        else intersectX = 0;
-                    }
+                    if (!Xgegeben)
+                        if (target.X > center.X)
+                        {
+                            if (m > mcrit) intersectY = Height;
+                            else if (m < -mcrit) intersectY = 0;
+                        }
+                        else
+                        {
+                            if (m > mcrit) intersectY = 0;
+                            else if (m < -mcrit) intersectY = Height;
+                        }
 
                     if (Xgegeben)
                     {
@@ -256,6 +261,7 @@ namespace NSA.View.Controls.NetworkView
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
+            enableMoving = false;
             Refresh();
             base.OnMouseUp(e);
         }
