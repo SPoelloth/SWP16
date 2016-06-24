@@ -24,53 +24,74 @@ namespace NSA.Controller.ViewControllers
             int btnHeight = 52;
             var btnColor = SystemColors.Control;
 
+            // Create the ToolTip and associate with the Form container.
+            ToolTip t = new ToolTip();
+            // Set up the delays for the ToolTip.
+            t.AutoPopDelay = 5000;
+            t.InitialDelay = 500;
+            t.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            t.ShowAlways = true;
+
             var btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.CreateNew, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += newProject_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Neues Projekt anlegen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Load, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += OpenProject_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Projekt öffnen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Save, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += SaveProject_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Projekt speichern");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.SaveAs, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += SaveProjectAs_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Projekt speichern unter...");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Workstation, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddComputer_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Computer hinzufügen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Router, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddRouter_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Router hinzufügen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Switch, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AddSwitch_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Switch hinzufügen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.NetworkCable, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += CreateConnection_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Verbindung erstellen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Simulation, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += QuickSimulation_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Schnelle Simulation ausführen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Erweiterte_Simulation, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += AdvancedSimulation_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Erweiterte Simulation ausführen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Broadcast" };
             btn.Click += Broadcast_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Broadcast ausführen");
 
             btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Screenshot erstellen"};
             btn.Click += Screenshot_Click;
             flp.AddButton(btn);
+            t.SetToolTip(btn, "Netzwerk als Bild exportieren");
         }
 
         private void Screenshot_Click(object sender, EventArgs e)
