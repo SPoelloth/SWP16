@@ -11,10 +11,17 @@ using NSA.View.Forms;
 
 namespace NSA.Controller.ViewControllers
 {
+    /// <summary>
+    /// Implements the controller for the info control of the main form.
+    /// is singleton
+    /// </summary>
     public class InfoController
     {
         #region Singleton
 
+        /// <summary>
+        /// The instance
+        /// </summary>
         public static InfoController Instance = new InfoController();
 
         #endregion Singleton
@@ -28,6 +35,9 @@ namespace NSA.Controller.ViewControllers
 
         private Simulation lastSimulation;
 
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
         public void Initialize() {}
 
         /// <summary>
@@ -204,7 +214,7 @@ namespace NSA.Controller.ViewControllers
         /// <param name="T">The t.</param>
         public void AddTestscenarioToScenarioTab(Testscenario T)
         {
-            infoControl.scenariosControl.AddTestScenario(T.FileName, T.SimulationCount);
+            infoControl.scenariosControl.AddTestScenario(T.FileName);
         }
 
         /// <summary>

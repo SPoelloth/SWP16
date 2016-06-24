@@ -5,6 +5,11 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
 {
+    /// <summary>
+    /// Class for the ResultsControl of the InfoControl. 
+    /// It displays the result ofexecuted testscenarios.
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class ResultsControl : UserControl
     {
         private readonly DataTable data = new DataTable();

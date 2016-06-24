@@ -4,10 +4,23 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
 {
- 
+
+    /// <summary>
+    /// Class for the HopsControl of the InfoControl. 
+    /// It displays a list of all packets of the last simulation and shows the corresponding hops.
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class HopsControl : UserControl
     {
+        /// <summary>
+        /// EventHandler delegate for the PacketSelected event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event argument e. It contains the name of the selected packet.</param>
         public delegate void PacketSelectedEventHandler(object sender, string e);
+        /// <summary>
+        /// Occurs when [packet selected].
+        /// </summary>
         public event PacketSelectedEventHandler PacketSelected;
 
         private readonly DataTable gridData = new DataTable();

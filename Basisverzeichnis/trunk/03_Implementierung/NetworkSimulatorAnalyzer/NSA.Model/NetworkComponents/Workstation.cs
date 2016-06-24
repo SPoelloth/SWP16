@@ -7,10 +7,26 @@ using NSA.Model.NetworkComponents.Layers;
 
 namespace NSA.Model.NetworkComponents
 {
+    /// <summary>
+    /// Implements the network component Workstation.
+    /// </summary>
+    /// <seealso cref="NSA.Model.NetworkComponents.Hardwarenode" />
     public class Workstation : Hardwarenode
     {
         private readonly Dictionary<string, Route> routingtable = new Dictionary<string, Route>();
+        /// <summary>
+        /// Gets or sets the standard gateway.
+        /// </summary>
+        /// <value>
+        /// The standard gateway.
+        /// </value>
         public IPAddress StandardGateway { get; set; }
+        /// <summary>
+        /// Gets or sets the standard gateway port.
+        /// </summary>
+        /// <value>
+        /// The standard gateway port.
+        /// </value>
         public Interface StandardGatewayPort { get; set; }
 
 

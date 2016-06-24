@@ -5,12 +5,26 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
 {
+    /// <summary>
+    /// Class for the HistoryControl of the InfoControl. 
+    /// It displays the history of all executed simulations with the possiblilty to rerun any simulation.
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class HistoryControl : UserControl
     {
         private readonly DataTable data = new DataTable();
 
+        /// <summary>
+        /// Occurs when the simulation rerun button is clicked.
+        /// </summary>
         public event EventHandler HistoryRerunButtonClicked;
+        /// <summary>
+        /// Occurs when delete simulation from history button is clicked.
+        /// </summary>
         public event EventHandler HistoryDeleteButtonClicked;
+        /// <summary>
+        /// Occurs when clear history button is clicked.
+        /// </summary>
         public event EventHandler HistoryClearButtonClicked;
 
         /// <summary>

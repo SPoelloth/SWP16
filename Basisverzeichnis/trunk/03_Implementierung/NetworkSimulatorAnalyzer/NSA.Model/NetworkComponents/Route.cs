@@ -3,12 +3,46 @@ using System.Net;
 
 namespace NSA.Model.NetworkComponents
 {
+    /// <summary>
+    /// class for a single route of the routingtable
+    /// </summary>
     public class Route
     {
+        /// <summary>
+        /// Gets the name (id) of the route.
+        /// Every route has a unique id.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name { get; private set; }
+        /// <summary>
+        /// Gets the destination IP.
+        /// </summary>
+        /// <value>
+        /// The destination.
+        /// </value>
         public IPAddress Destination { get; private set; }
+        /// <summary>
+        /// Gets the subnetmask.
+        /// </summary>
+        /// <value>
+        /// The subnetmask.
+        /// </value>
         public IPAddress Subnetmask { get; private set; }
+        /// <summary>
+        /// Gets the gateway.
+        /// </summary>
+        /// <value>
+        /// The gateway.
+        /// </value>
         public IPAddress Gateway { get; private set; }
+        /// <summary>
+        /// Gets the interface.
+        /// </summary>
+        /// <value>
+        /// The interface.
+        /// </value>
         public Interface Iface { get; private set; }
 
         /// <summary>

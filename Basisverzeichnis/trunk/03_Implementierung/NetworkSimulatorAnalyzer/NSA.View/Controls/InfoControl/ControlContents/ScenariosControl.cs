@@ -5,11 +5,22 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
 {
+    /// <summary>
+    /// Class for the ScenariosControl of the InfoControl. 
+    /// It displays a list of all loaded testscenarios.
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class ScenariosControl : UserControl
     {
         private readonly DataTable data = new DataTable();
+        /// <summary>
+        /// Occurs when the start scenario button is clicked.
+        /// </summary>
         public event EventHandler StartScenarioButtonClicked;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScenariosControl"/> class.
+        /// </summary>
         public ScenariosControl()
         {
             InitializeComponent();
@@ -23,7 +34,6 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         private void AddColumns()
         {
             data.Columns.Add("Testszenario", typeof(string));
-            data.Columns.Add("Simulationen", typeof(int));
 
             var dataCol1 = new DataGridViewTextBoxColumn
             {
@@ -32,35 +42,26 @@ namespace NSA.View.Controls.InfoControl.ControlContents
                 DisplayIndex = 1
             };
 
-            var dataCol2 = new DataGridViewTextBoxColumn
-            {
-                HeaderText = "Anzahl an Simulationen",
-                DataPropertyName = "Simulationen",
-                DisplayIndex = 2
-            };
-
-
             var bnCol = new DataGridViewButtonColumn
             {
                 HeaderText = "Aktion",
                 Text = "Ausführen",
                 UseColumnTextForButtonValue = true,
-                DisplayIndex = 3
+                DisplayIndex = 2
             };
 
             dgvScenario.DataSource = data;
-            dgvScenario.Columns.AddRange(dataCol1, dataCol2, bnCol);
+            dgvScenario.Columns.AddRange(dataCol1, bnCol);
         }
 
         /// <summary>
         /// Adds the test scenario.
         /// </summary>
         /// <param name="ScenarioName">Name of the scenario.</param>
-        /// <param name="SimulationCount">The simulation count.</param>
-        public void AddTestScenario(string ScenarioName, int SimulationCount)
+        public void AddTestScenario(string ScenarioName)
         {
             var row = data.NewRow();
-            row.ItemArray = new object[] { ScenarioName, SimulationCount };
+            row.ItemArray = new object[] { ScenarioName };
 
             data.Rows.InsertAt(row, 0);
         }

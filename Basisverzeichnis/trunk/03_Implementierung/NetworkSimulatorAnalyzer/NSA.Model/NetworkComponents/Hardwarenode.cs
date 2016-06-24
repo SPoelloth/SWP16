@@ -8,12 +8,39 @@ using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
 {
+    /// <summary>
+    /// Implements the basis class for hardwarenodes. 
+    /// </summary>
     public class Hardwarenode
     {
+        /// <summary>
+        /// Gets the layerstack.
+        /// </summary>
+        /// <value>
+        /// The layerstack.
+        /// </value>
         public Layerstack Layerstack { get; } = new Layerstack();
+        /// <summary>
+        /// Gets or sets the connections.
+        /// </summary>
+        /// <value>
+        /// The connections.
+        /// </value>
         public Dictionary<string, Connection> Connections { get; protected set; } = new Dictionary<string, Connection>();
+        /// <summary>
+        /// Gets or sets the name of the hardwarenode.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the interfaces.
+        /// </summary>
+        /// <value>
+        /// The interfaces.
+        /// </value>
         public List<Interface> Interfaces { get; protected set; } = new List<Interface>();
 
         /// <summary>

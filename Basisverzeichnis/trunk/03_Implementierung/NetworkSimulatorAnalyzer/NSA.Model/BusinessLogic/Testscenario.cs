@@ -11,7 +11,7 @@ namespace NSA.Model.BusinessLogic
 
         public string FileName { get; private set; }
         public string Id { get; }
-        public int SimulationCount { get; private set; }
+        public int SimulationCount { get; private set; } // wird jetzt nicht mehr angezeigt, kann raus, wenn sonst nicht mehr gebraucht.
         
         public Testscenario(string T, Network N, string FileName)
         {

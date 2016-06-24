@@ -4,6 +4,11 @@ using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents
 {
+
+    /// <summary>
+    /// Implements the network component switch.
+    /// </summary>
+    /// <seealso cref="NSA.Model.NetworkComponents.Hardwarenode" />
     public class Switch : Hardwarenode
     {
 

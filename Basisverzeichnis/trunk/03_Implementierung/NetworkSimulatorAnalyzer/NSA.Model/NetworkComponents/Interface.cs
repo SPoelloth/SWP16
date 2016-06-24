@@ -2,12 +2,36 @@
 
 namespace NSA.Model.NetworkComponents
 {
+    /// <summary>
+    /// Class for a interface of an hardwarenode.
+    /// </summary>
     public class Interface
     {
+        /// <summary>
+        /// Gets the name of the interface
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name { get; private set; }
+        /// <summary>
+        /// Gets or sets the ip address.
+        /// </summary>
+        /// <value>
+        /// The ip address.
+        /// </value>
         public IPAddress IpAddress { get; set; }
+        /// <summary>
+        /// Gets or sets the subnetmask.
+        /// </summary>
+        /// <value>
+        /// The subnetmask.
+        /// </value>
         public IPAddress Subnetmask { get; set; }
 
+        /// <summary>
+        /// The name prefix of the interfacename.
+        /// </summary>
         public const string NamePrefix = "eth";
 
         /// <summary>

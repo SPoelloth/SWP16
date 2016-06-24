@@ -2,10 +2,32 @@
 
 namespace NSA.Model.NetworkComponents
 {
+    /// <summary>
+    /// Class for a connection between two hardwarenodes.
+    /// </summary>
     public class Connection
     {
+        /// <summary>
+        /// Gets the start hardwarenode.
+        /// </summary>
+        /// <value>
+        /// The start.
+        /// </value>
         public Hardwarenode Start { get; }
+        /// <summary>
+        /// Gets the end hardwarenode.
+        /// </summary>
+        /// <value>
+        /// The end.
+        /// </value>
         public Hardwarenode End { get; }
+        /// <summary>
+        /// Gets the name (id) of the connection.
+        /// Every connection has a unique id.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name { get; private set; }
 
         /// <summary>

@@ -2,6 +2,11 @@
 
 namespace NSA.View.Controls.InfoControl
 {
+    /// <summary>
+    /// Class for the InfoControl of the main form.
+    /// The InfoControl displays information about executed simulations, hops and testscenarios.
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class InfoControl : UserControl
     {
         /// <summary>
