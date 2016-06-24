@@ -157,17 +157,15 @@ namespace NSA.Model.NetworkComponents
                     if (Layerstack.GetLayer(j) is CustomLayer)
                         customLayerCount++;
                 }
-                if (ValInfo.NextNodes != null)
+                if (ValInfo.NextNodes == null) continue;
+                Workstation dest = Destination as Workstation;
+                if (dest != null)
                 {
-                    Workstation dest = Destination as Workstation;
-                    if (dest != null)
-                    {
-                        Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags, i - customLayerCount);
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Destination is no Workstation.");
-                    }
+                    Layerstack.GetLayer(i).ValidateSend(dest, this, ValInfo, Tags, i - customLayerCount);
+                }
+                else
+                {
+                    throw new ArgumentException("Destination is no Workstation.");
                 }
             }
             return ValInfo.NextNodes;
@@ -188,12 +186,10 @@ namespace NSA.Model.NetworkComponents
             int customLayerCount = 0;
             for (int i = 0; i < Layerstack.GetSize(); i++)
             {
-                if (res)
-                {
-                    res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination, i - customLayerCount);
-                    if (Layerstack.GetLayer(i) is CustomLayer)
-                        customLayerCount++;
-                }
+                if (!res) continue;
+                res = Layerstack.GetLayer(i).ValidateReceive(this, ValInfo, Tags, Destination, i - customLayerCount);
+                if (Layerstack.GetLayer(i) is CustomLayer)
+                    customLayerCount++;
             }
             return res;
         }
