@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace NSA.Model.NetworkComponents
 {
+    /// <summary>
+    /// Layerstack
+    /// </summary>
     public class Layerstack
     {
         private readonly List<ILayer> layers;
@@ -70,7 +73,7 @@ namespace NSA.Model.NetworkComponents
         }
 
         /// <summary>
-        /// Inserts at.
+        /// Inserts a layer at the index.
         /// </summary>
         /// <param name="Index">The index.</param>
         /// <param name="Layer">The layer.</param>
