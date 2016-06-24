@@ -7,16 +7,61 @@ using NSA.Model.NetworkComponents.Layers;
 
 namespace NSA.Model.BusinessLogic
 {
+    /// <summary>
+    /// Class for a packet
+    /// </summary>
     public class Packet
     {
-        public Hardwarenode Source { get; private set; }
-        public Hardwarenode Destination { get; private set; }
+        /// <summary>
+        /// Returns the Source-Node
+        /// </summary>
+        /// <value>
+        /// The source
+        /// </value>
+        public Hardwarenode Source { get; }
+        /// <summary>
+        /// Returns the Destination-Node
+        /// </summary>
+        /// <value>
+        /// The destination.
+        /// </value>
+        public Hardwarenode Destination { get; }
+        /// <summary>
+        /// Returns the Hops of the packet
+        /// </summary>
+        /// <value>
+        /// The Hops
+        /// </value>
         public List<Hardwarenode> Hops { get; } = new List<Hardwarenode>();
+        /// <summary>
+        /// </summary>
+        /// <value>
+        /// The Time-To-Life
+        /// </value>
         public int Ttl { get; private set; }
+        /// <summary>
+        /// Returns the result of the packet
+        /// </summary>
+        /// <value>
+        /// Result of the packet
+        /// </value>
         public Result Result { get; private set; } = new Result();
+        /// <summary>
+        /// Returns the expected result.
+        /// </summary>
+        /// <value>
+        ///   Expected Result
+        /// </value>
         public bool ExpectedResult { get; }
         private Dictionary<string, object> tags = new Dictionary<string, object>();
 
+        /// <summary>
+        /// Constructor for Packet
+        /// </summary>
+        /// <param name="Src">Source-Node</param>
+        /// <param name="Dest">Destination-Node</param>
+        /// <param name="T">TTL</param>
+        /// <param name="ExpRes">Expected Result</param>
         public Packet(Hardwarenode Src, Hardwarenode Dest,
             int T, bool ExpRes)
         {
@@ -36,7 +81,7 @@ namespace NSA.Model.BusinessLogic
         /// <summary>
         /// Sends this packet to the destination.
         /// </summary>
-        /// <returns>The Returnpacket if sending to destination was successfull</returns>
+        /// <returns>The Returnpacket if sending to destination was successfull or null</returns>
         public Packet Send()
         {
             ValidationInfo valInfo = new ValidationInfo

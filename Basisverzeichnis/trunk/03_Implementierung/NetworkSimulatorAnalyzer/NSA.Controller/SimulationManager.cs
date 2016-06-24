@@ -22,13 +22,13 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Liefert das Ergebnis der beiden Hardwarenodes des Hops zurück.
+        /// Returns the result for both nodes of one hop
         /// </summary>
-        /// <param name="IsSendPacket">Boolescher Wert, der angibt, ob es sich um ein Hinpacket handelt</param>
-        /// <param name="PacketIndex">Der Index des Packets</param>
-        /// <param name="NodeOneName">Der Name des ersten Hardwarenodes des Hops</param>
-        /// <param name="NodeTwoName">Der Name des zweiten Hardwarenodes des Hops</param>
-        /// <returns>Ein Tuple, welches die zwei Ergebnisse enthält. Item1 gehört zu NodeOneName, Item2 zu NodeTwoName</returns>
+        /// <param name="IsSendPacket">bool, which indicates, if its a sendpacket</param>
+        /// <param name="PacketIndex">The index of the packet</param>
+        /// <param name="NodeOneName">Name of the first node of the hop</param>
+        /// <param name="NodeTwoName">Name of the second node of the Hop</param>
+        /// <returns>A Tuple, which contains the two results. Item1 is for NodeOneName, Item2 for NodeTwoName</returns>
         public Tuple<Result, Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName)
         {
             Tuple<Result, Result> res;
@@ -58,11 +58,11 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Liefert das Ergbenis der Simulation, in Abhängigkeit des erwarteten Ergebnisses zurück
+        /// Returns the result of the simulation
         /// </summary>
-        /// <param name="Id">Die ID der Simulation</param>
+        /// <param name="Id">The ID of the simulation</param>
         /// <returns>
-        /// Erfolgreich (true) oder nicht erfolgreich (false)
+        /// The result
         /// </returns>
         public bool GetSimulationResult(string Id)
         {
@@ -93,9 +93,9 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Fügt die Simulation der History hinzu und benachrichtigt die View.
+        /// Adds a simulation to the history
         /// </summary>
-        /// <param name="Sim">Die hinzuzufügende Simulation</param>
+        /// <param name="Sim">The simulation</param>
         public void AddSimulationToHistory(Simulation Sim)
         {
             Simulations.Add(Sim);
@@ -103,10 +103,10 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Startet eine neue Simulation mit den gleichen Werten wie die angegebene Simulation aus der History
+        /// Starts a new simulation with the parameters of one in the history
         /// </summary>
-        /// <param name="Id">Die ID der alten Simulation</param>
-        /// <returns>Das Ergebnis der Simulation</returns>
+        /// <param name="Id">The ID of the old simulation</param>
+        /// <returns>The result of the simulation</returns>
         public Result RunSimulationFromHistory(string Id)
         {
             Simulation sim = null, oldSim = null;
@@ -127,15 +127,15 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Erstellt eine Simulation und startet sie.
+        /// Creates and executes a simulation
         /// </summary>
-        /// <param name="Source">Der Name der Quell-Workstation</param>
-        /// <param name="Destination">Der Name der Ziel-Workstation</param>
-        /// <param name="Ttl">Die Time-To-Life</param>
-        /// <param name="ExpectedResult">Das erwartete Ergebnis der Simulation</param>
-        /// <param name="Broadcast">Gibt an, ob es sich um einen Broadcast handelt</param>
-        /// <param name="Subnet">Die Subnetzmaske des Broadcasts</param>
-        /// <returns>Das Ergebnis der Simulation</returns>
+        /// <param name="Source">The name of the sourcenode</param>
+        /// <param name="Destination">The name of the destinationnode</param>
+        /// <param name="Ttl">Time-To-Life</param>
+        /// <param name="ExpectedResult">The expected result</param>
+        /// <param name="Broadcast">Indicates if it is a broadcast</param>
+        /// <param name="Subnet">The subnetmask of the broadcast</param>
+        /// <returns>The result of this simulation</returns>
         public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl = 255, bool ExpectedResult = true, bool Broadcast = false, string Subnet = "")
         {
             Simulation sim;
@@ -162,18 +162,18 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Erstellt und führt einen Broadcast in das angegebene Netz aus.
+        /// Creates and executes a broadcast.
         /// </summary>
-        /// <param name="Source">Die Quell-Workstation</param>
-        /// <param name="Subnet">Die Subnetzaske des Subnetzes</param>
-        /// <param name="ExpectedResult">Das erwartete Ergebnis</param>
+        /// <param name="Source">The name of the sourcenode</param>
+        /// <param name="Subnet">The subnetmask of the broadcast</param>
+        /// <param name="ExpectedResult">Expected Result</param>
         public void CreateAndExecuteBroadcast(string Source, string Subnet, bool ExpectedResult)
         {
             CreateAndExecuteSimulation(Source, null, 255, ExpectedResult, true, Subnet);
         }
 
         /// <summary>
-        /// Leert die Simulationshistory
+        /// Clears the simulationhistory.
         /// </summary>
         public void ClearHistory()
         {
@@ -181,13 +181,51 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Löscht eine Simulation aus der History
+        /// Deletes a simulation from the history.
         /// </summary>
-        /// <param name="Id">Die ID der Simulation</param>
+        /// <param name="Id">The ID of the simulation</param>
         public void DeleteSimulationFromHistory(string Id)
         {
            // every simulation has a unique ID
             Simulations.RemoveAll(S => S.Id.Equals(Id));
+        }
+
+        /// <summary>
+        /// Highlights the connections packet.
+        /// </summary>
+        /// <param name="IsSendPacket">Indicates, if it's a sendpacket</param>
+        /// <param name="PacketIndex">Index of the packet.</param>
+        public void HighlightPacketConnections(bool IsSendPacket, int PacketIndex)
+        {
+            List<string> connectionNames = new List<string>();
+            Simulation sim = Simulations.LastOrDefault();
+            if (sim == null) return;
+            Packet p;
+            if (IsSendPacket)
+            {
+                if (PacketIndex >= sim.PacketsSend.Count) return;
+                p = sim.PacketsSend[PacketIndex];
+            }
+            else
+            {
+                if (PacketIndex >= sim.PacketsReceived.Count) return;
+                p = sim.PacketsReceived[PacketIndex];
+            }
+            for (int i = 1; i < p.Hops.Count; i++)
+            {
+                Connection c = NetworkManager.Instance.GetConnectionByNodes(p.Hops[i - 1], p.Hops[i]);
+                if (c != null)
+                    connectionNames.Add(c.Name);
+            }
+            NetworkViewController.Instance.HighlightConnections(connectionNames);
+        }
+
+        /// <summary>
+        /// Unhighlights the connections.
+        /// </summary>
+        public void UnhighlightConnections()
+        {
+            NetworkViewController.Instance.HighlightConnections(null);
         }
     }
 }

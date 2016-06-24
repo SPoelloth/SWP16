@@ -148,5 +148,10 @@ namespace NSA.Controller.ViewControllers
             var file = saveFileDialog.FileName;
             bitmap.Save(file, ImageFormat.Png);
         }
+
+        public void HighlightConnections(List<string> connectionNames)
+        {
+            //if null, unhighlight
+        }
     }
 }

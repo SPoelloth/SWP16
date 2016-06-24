@@ -5,57 +5,57 @@ using NSA.Model.NetworkComponents.Helper_Classes;
 namespace NSA.Model.BusinessLogic
 {
     /// <summary>
-    /// Klasse um die Simulation darzustellen
+    /// Class for the simulation
     /// </summary>
     public class Simulation
     {
         /// <summary>
-        /// Liefert die Hinpackete zurück
+        /// Returns the sendpackets
         /// </summary>
         /// <value>
-        /// Die Hinpackete
+        /// The sendpackets
         /// </value>
         public List<Packet> PacketsSend { get; } = new List<Packet>();
         /// <summary>
-        /// Liefert die Rückpackete zurück
+        /// Returns the receivedpackets
         /// </summary>
         /// <value>
-        /// Die Rückpackete
+        /// The receivedpackets
         /// </value>
         public List<Packet> PacketsReceived { get; } = new List<Packet>();
         /// <summary>
-        /// Liefert den Namen der Quell-Workstation zurück
+        /// Returns the name of the sourcenode
         /// </summary>
         /// <value>
-        /// Der Name der Quell-Workstation
+        /// Name of the sourcenode
         /// </value>
         public string Source { get; private set; }
         /// <summary>
-        /// Liefert den Namen der Ziel-Workstation zurück
+        /// Returns the name of the destinationnode
         /// </summary>
         /// <value>
-        /// Der Name der Ziel-Workstation
+        /// Name of the destinationnode
         /// </value>
         public string Destination { get; private set; }
         /// <summary>
-        /// Liefert die ID zurück
+        /// Returns the ID
         /// </summary>
         /// <value>
-        /// Die ID der Simulation
+        /// ID of the simulation
         /// </value>
         public string Id { get; private set; }
         /// <summary>
-        /// Liefert das erwartete Ergebnis zurück
+        /// Returns the expected result
         /// </summary>
         /// <value>
-        ///   Das erwartete Ergebnis
+        ///   The expected result
         /// </value>
         public bool ExpectedResult { get; private set; }
 
         /// <summary>
-        /// Konstruktor der für die Simulationen der Testszenarien verwendet wird.
+        /// Constructor for the simultion used in testscenarios
         /// </summary>
-        /// <param name="I">Die ID</param>
+        /// <param name="I">The ID</param>
         public Simulation(string I)
         {
             Id = I;
@@ -64,12 +64,12 @@ namespace NSA.Model.BusinessLogic
         }
 
         /// <summary>
-        /// Konstruktor, der für die normalen Simulationen verwendet wird.
+        /// Constructor used for normal simulation
         /// </summary>
-        /// <param name="I">Die ID</param>
-        /// <param name="S">Der Name der Quell-Workstation</param>
-        /// <param name="D">Der Name der Ziel-Workstation</param>
-        /// <param name="ExpRes">Das erwartete Ergebnis</param>
+        /// <param name="I">ID</param>
+        /// <param name="S">Name of sourcenode</param>
+        /// <param name="D">Name of destinationnode</param>
+        /// <param name="ExpRes">Expected result</param>
         public Simulation(string I, string S, string D, bool ExpRes)
 	    {
 	        Id = I;
@@ -79,16 +79,16 @@ namespace NSA.Model.BusinessLogic
 	    }
 
         /// <summary>
-        /// Fügt ein Hinpacket in die Liste ein.
+        /// Adds a packet to the sendpackets
         /// </summary>
-        /// <param name="Packet">Das hinzuzufügende Packet</param>
+        /// <param name="Packet">The packet to be added</param>
         public void AddPacketSend(Packet Packet)
 	    {
             PacketsSend.Add(Packet);
         }
 
         /// <summary>
-        /// Führt die Simulation durch.
+        /// Executes this simulation
         /// </summary>
         public Result Execute()
 	    {
@@ -118,18 +118,18 @@ namespace NSA.Model.BusinessLogic
 	    }
 
         /// <summary>
-        /// Liefert alle Packete zurück
+        /// Returns all packets
         /// </summary>
-        /// <returns>Alle Packete</returns>
+        /// <returns>All Packets</returns>
         public IEnumerable<Packet> GetAllPackets()
 	    {
 	        return PacketsSend.Concat(PacketsReceived);
 	    }
 
         /// <summary>
-        /// Liefert das letzte Packet zurück.
+        /// Returns the last packet
         /// </summary>
-        /// <returns>Null wenn es kein Packet gibt, sonst das letzte Packet</returns>
+        /// <returns>Null (if there is no packet) or the last packet</returns>
         public Packet GetLastPacket()
 	    {
 	        if (PacketsReceived.Count == 0 && PacketsSend.Count == 0)
