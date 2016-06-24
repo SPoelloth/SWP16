@@ -24,13 +24,13 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Gets the hop result.
+        /// Liefert das Ergebnis der beiden Hardwarenodes des Hops zurück.
         /// </summary>
-        /// <param name="IsSendPacket">if set to <c>true</c> [is send packet].</param>
-        /// <param name="PacketIndex">Index of the packet.</param>
-        /// <param name="NodeOneName">Name of the node one.</param>
-        /// <param name="NodeTwoName">Name of the node two.</param>
-        /// <returns></returns>
+        /// <param name="IsSendPacket">Boolescher Wert, der angibt, ob es sich um ein Hinpacket handelt</param>
+        /// <param name="PacketIndex">Der Index des Packets</param>
+        /// <param name="NodeOneName">Der Name des ersten Hardwarenodes des Hops</param>
+        /// <param name="NodeTwoName">Der Name des zweiten Hardwarenodes des Hops</param>
+        /// <returns>Ein Tuple, welches die zwei Ergebnisse enthält. Item1 gehört zu NodeOneName, Item2 zu NodeTwoName</returns>
         public Tuple<Result, Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName)
         {
             Tuple<Result, Result> res;
@@ -60,11 +60,11 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Gets the simulation result.
+        /// Liefert das Ergbenis der Simulation, in Abhängigkeit des erwarteten Ergebnisses zurück
         /// </summary>
-        /// <param name="Id">The identifier.</param>
+        /// <param name="Id">Die ID der Simulation</param>
         /// <returns>
-        /// True if it worked, false if not
+        /// Erfolgreich (true) oder nicht erfolgreich (false)
         /// </returns>
         public bool GetSimulationResult(string Id)
         {
@@ -94,6 +94,10 @@ namespace NSA.Controller
             return failedSimulations;
         }
 
+        /// <summary>
+        /// Fügt die Simulation der History hinzu und benachrichtigt die View.
+        /// </summary>
+        /// <param name="Sim">Die hinzuzufügende Simulation</param>
         public void AddSimulationToHistory(Simulation Sim)
         {
             Simulations.Add(Sim);
@@ -101,10 +105,10 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Runs the simulation from history.
+        /// Startet eine neue Simulation mit den gleichen Werten wie die angegebene Simulation aus der History
         /// </summary>
-        /// <param name="Id">The id of the simulation.</param>
-        /// <returns></returns>
+        /// <param name="Id">Die ID der alten Simulation</param>
+        /// <returns>Das Ergebnis der Simulation</returns>
         public Result RunSimulationFromHistory(string Id)
         {
             Simulation sim = null, oldSim = null;
@@ -125,15 +129,15 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Creates the simulation and starts it.
+        /// Erstellt eine Simulation und startet sie.
         /// </summary>
-        /// <param name="Source">The source.</param>
-        /// <param name="Destination">The destination.</param>
-        /// <param name="Ttl">The TTL.</param>
-        /// <param name="ExpectedResult">the expected result of the simulation.</param>
-        /// <param name="Broadcast">if set to <c>true</c>: broadcast.</param>
-        /// <param name="Subnet">The subnetmask.</param>
-        /// <returns></returns>
+        /// <param name="Source">Der Name der Quell-Workstation</param>
+        /// <param name="Destination">Der Name der Ziel-Workstation</param>
+        /// <param name="Ttl">Die Time-To-Life</param>
+        /// <param name="ExpectedResult">Das erwartete Ergebnis der Simulation</param>
+        /// <param name="Broadcast">Gibt an, ob es sich um einen Broadcast handelt</param>
+        /// <param name="Subnet">Die Subnetzmaske des Broadcasts</param>
+        /// <returns>Das Ergebnis der Simulation</returns>
         public Result CreateAndExecuteSimulation(string Source, string Destination, int Ttl = 255, bool ExpectedResult = true, bool Broadcast = false, string Subnet = "")
         {
             Simulation sim;
@@ -160,18 +164,18 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Creates the and execute a broadcast.
+        /// Erstellt und führt einen Broadcast in das angegebene Netz aus.
         /// </summary>
-        /// <param name="Source">The source.</param>
-        /// <param name="Subnet">The subnet.</param>
-        /// <param name="ExpectedResult">if set to <c>true</c> [expected result].</param>
+        /// <param name="Source">Die Quell-Workstation</param>
+        /// <param name="Subnet">Die Subnetzaske des Subnetzes</param>
+        /// <param name="ExpectedResult">Das erwartete Ergebnis</param>
         public void CreateAndExecuteBroadcast(string Source, string Subnet, bool ExpectedResult)
         {
             CreateAndExecuteSimulation(Source, null, 255, ExpectedResult, true, Subnet);
         }
 
         /// <summary>
-        /// Clears the history.
+        /// Leert die Simulationshistory
         /// </summary>
         public void ClearHistory()
         {
@@ -179,9 +183,9 @@ namespace NSA.Controller
         }
 
         /// <summary>
-        /// Deletes the simulation from history.
+        /// Löscht eine Simulation aus der History
         /// </summary>
-        /// <param name="Id">The identifier.</param>
+        /// <param name="Id">Die ID der Simulation</param>
         public void DeleteSimulationFromHistory(string Id)
         {
            // every simulation has a unique ID
