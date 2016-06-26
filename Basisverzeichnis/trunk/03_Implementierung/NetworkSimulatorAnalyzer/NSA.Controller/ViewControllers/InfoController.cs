@@ -34,6 +34,7 @@ namespace NSA.Controller.ViewControllers
         private const string receivedPacket = "Rückpaket {0}";
 
         private Simulation lastSimulation;
+        private bool hopsPageVisible;
 
         /// <summary>
         /// Initializes this instance.
@@ -65,8 +66,10 @@ namespace NSA.Controller.ViewControllers
             // Scenarios Control Eventhandler
             stc.StartScenarioButtonClicked += ScenarioTabPage_StartScenarioButtonClicked;
 
-            // Hops Control Eventhanlder
+            // Hops Control (associated) Eventhandler
             hstc.PacketSelected += hopsTabPage_PacketSelected;
+            infoControl.HopsTabPage_Selected += hopsTabPage_Selected;
+            infoControl.HopsTabPage_Deselected += hopsTabPage_Deselected;
         }
 
         #region Event Handling
@@ -143,20 +146,22 @@ namespace NSA.Controller.ViewControllers
         /// Handles the PacketSelected event of the HopsTabPage control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The instance containing the event data.</param>
+        /// <param name="e">The instance containing the name of the selected packet.</param>
         private void hopsTabPage_PacketSelected(object sender, string e)
         {
             var values = e.Split(' ');
             int index = int.Parse(values[1]);
+            bool isSendPacket = values[0].Equals(string.Format(sendPacket, "").Trim(' '));
+            bool isReceivedPacket = values[0].Equals(string.Format(receivedPacket, "").Trim(' '));
             List<Hardwarenode> hops = null;
 
             infoControl.hopsControl.ClearHopsOnly();
 
-            if (values[0].Equals(string.Format(sendPacket, "").Trim(' ')))
+            if (isSendPacket)
             {
                 hops = lastSimulation.PacketsSend[index].Hops;
             }
-            else if (values[0].Equals(string.Format(receivedPacket, "").Trim(' ')))
+            else if (isReceivedPacket)
             {
                 hops = lastSimulation.PacketsReceived[index].Hops;
             }
@@ -164,20 +169,53 @@ namespace NSA.Controller.ViewControllers
             if (hops == null)
                 return;
 
-            if (hops.Count == 1)
-            {
+            if (hops.Count > 1)
+                for (int i = 0; i < hops.Count - 1; i++)
+                {
+                    var results = SimulationManager.Instance.GetHopResult(true, index, hops[i].Name, hops[i + 1].Name);
+
+                    string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
+                    string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
+
+                    infoControl.hopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
+                }
+            else
                 infoControl.hopsControl.AddHop(hops[0].Name, "-", "-", "-");
-            }
 
-            for (int i = 0; i < hops.Count - 1; i++)
-            {
-                var results = SimulationManager.Instance.GetHopResult(true, index, hops[i].Name, hops[i + 1].Name);
+            if(hopsPageVisible) SimulationManager.Instance.HighlightPacketConnections(isSendPacket, index);
+        }
 
-                string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
-                string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
 
-                infoControl.hopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
-            }
+        /// <summary>
+        /// Handles the HopsTabPage_Selected event of the InfoControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void hopsTabPage_Selected(object sender, EventArgs e)
+        {
+            hopsPageVisible = true;
+
+            var values = infoControl.hopsControl.SelectedPacket?.Split(' ');
+            if(values == null) return;
+
+            int index = int.Parse(values[1]);
+            bool isSendPacket = values[0].Equals(string.Format(sendPacket, "").Trim(' '));
+            bool isReceivedPacket = values[0].Equals(string.Format(receivedPacket, "").Trim(' '));
+
+            if(!isSendPacket && !isReceivedPacket) return;
+
+            SimulationManager.Instance.HighlightPacketConnections(isSendPacket, index);
+        }
+
+        /// <summary>
+        /// Handles the HopsTabPage_Deselected event of the InfoControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void hopsTabPage_Deselected(object sender, EventArgs e)
+        {
+            hopsPageVisible = false;
+            SimulationManager.Instance.UnhighlightConnections();
         }
 
         #endregion

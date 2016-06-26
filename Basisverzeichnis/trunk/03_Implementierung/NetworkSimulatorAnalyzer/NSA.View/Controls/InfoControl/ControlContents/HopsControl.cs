@@ -22,9 +22,16 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// Occurs when [packet selected].
         /// </summary>
         public event PacketSelectedEventHandler PacketSelected;
+        /// <summary>
+        /// Gets the selected packet.
+        /// </summary>
+        /// <value>
+        /// The selected packet.
+        /// </value>
+        public string SelectedPacket => cbPackets.SelectedItem as string;
 
         private readonly DataTable gridData = new DataTable();
-     
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HopsControl"/> class.
         /// </summary>
@@ -82,6 +89,20 @@ namespace NSA.View.Controls.InfoControl.ControlContents
             dgvHops.Columns.AddRange(dataCol1, dataCol2, dataCol3, dataCol4);
         }
 
+        #region Eventhandling
+
+        /// <summary>
+        /// Handles the SelectedValueChanged event of the cbPackets control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void cbPackets_SelectedValueChanged(object sender, EventArgs e)
+        {
+            PacketSelected?.Invoke(this, cbPackets.SelectedItem as string);
+        }
+
+        #endregion
+
 
         /// <summary>
         /// Adds the hop.
@@ -123,16 +144,6 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         public void ClearHopsOnly()
         {
             gridData.Rows.Clear();
-        }
-
-        /// <summary>
-        /// Handles the SelectedValueChanged event of the cbPackets control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void cbPackets_SelectedValueChanged(object sender, EventArgs e)
-        {
-            PacketSelected?.Invoke(this, cbPackets.SelectedItem as string);
         }
     }
 }
