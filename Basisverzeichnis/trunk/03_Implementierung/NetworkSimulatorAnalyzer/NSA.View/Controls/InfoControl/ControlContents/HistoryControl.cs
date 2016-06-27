@@ -170,6 +170,22 @@ namespace NSA.View.Controls.InfoControl.ControlContents
             HistoryClearButtonClicked?.Invoke(sender, e);
         }
 
+
+        /// <summary>
+        /// Handles the KeyDown event of the dgvHistory control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        private void dgvHistory_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Delete) return;
+
+            var row = ((DataRowView)dgvHistory.SelectedRows[0].DataBoundItem).Row;
+            if (row == null) return;
+
+            HistoryDeleteButtonClicked?.Invoke(row, new EventArgs());
+        }
+
         #endregion
     }
 }

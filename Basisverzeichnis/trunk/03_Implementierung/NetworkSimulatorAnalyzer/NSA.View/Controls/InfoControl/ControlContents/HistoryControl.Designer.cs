@@ -54,6 +54,7 @@
             this.dgvHistory.Size = new System.Drawing.Size(738, 121);
             this.dgvHistory.TabIndex = 0;
             this.dgvHistory.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvHistory_CellContentClick);
+            this.dgvHistory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvHistory_KeyDown);
             // 
             // bnClearHistory
             // 

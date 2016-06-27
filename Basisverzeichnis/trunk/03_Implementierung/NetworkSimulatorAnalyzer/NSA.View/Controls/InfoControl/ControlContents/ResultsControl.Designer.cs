@@ -64,6 +64,7 @@
             this.dgvResults.Size = new System.Drawing.Size(738, 121);
             this.dgvResults.TabIndex = 2;
             this.dgvResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvResults_CellContentClick);
+            this.dgvResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvResults_KeyDown);
             // 
             // ResultsControl
             // 

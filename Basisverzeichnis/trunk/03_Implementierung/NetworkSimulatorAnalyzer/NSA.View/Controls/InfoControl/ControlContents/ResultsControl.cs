@@ -85,6 +85,21 @@ namespace NSA.View.Controls.InfoControl.ControlContents
 
 
         /// <summary>
+        /// Handles the KeyDown event of the dgvResults control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
+        private void dgvResults_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Delete) return;
+
+            var row = ((DataRowView)dgvResults.SelectedRows[0].DataBoundItem).Row;
+            if (row == null) return;
+
+            data.Rows.Remove(row);
+        }
+
+        /// <summary>
         /// Handles the Click event of the bnClearResults button.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
@@ -116,6 +131,5 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         {
             data.Rows.Clear();
         }
-
     }
 }
