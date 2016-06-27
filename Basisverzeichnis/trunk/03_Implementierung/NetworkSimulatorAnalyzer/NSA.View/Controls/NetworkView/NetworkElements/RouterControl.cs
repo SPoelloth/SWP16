@@ -153,6 +153,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             Invalidate();
         }
 
+
+        /// <summary>
+        /// Gets the port bounds by port ID.
+        /// </summary>
+        /// <param name="port">The port ID.</param>
+        /// <returns></returns>
         public override Rectangle GetPortBoundsByID(int port)
         {
             return portHitboxes[interfaces.IndexOf(port)];

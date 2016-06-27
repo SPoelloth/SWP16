@@ -4,17 +4,21 @@ using System.Windows.Forms;
 
 namespace NSA.View.Controls.NetworkView.NetworkElements.Base
 {
+    /// <summary>
+    /// The base element for every drawable element in the network editor.
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class EditorElementBase : UserControl
     {
-        Image Image;
-        public Action<EditorElementBase> Selected;
+        private Image Image;
+        internal Action<EditorElementBase> Selected;
         internal Action Deselected;
 
-        public static int ZIndexStart = 0;
-        public int ZIndex;
+        internal static int ZIndexStart = 0;
+        internal int ZIndex;
 
         private bool isSelected = false;
-        public bool IsSelected
+        internal bool IsSelected
         {
             get { return isSelected; }
             set
@@ -33,6 +37,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
 
         }
 
+        /// <summary>
+        /// Initializes the element with default values so we can see mistakes in derived classes.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="name"></param>
         public EditorElementBase(Point location, string name)
         {
             ZIndex = ZIndexStart++;
@@ -51,6 +60,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             DoubleBuffered = true;
         }
 
+        /// <summary>
+        /// Draws an image onto the drawingarea
+        /// 
+        /// </summary>
+        /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs" />, that contains the input Parameters.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
@@ -97,6 +111,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             Invalidate();
         }
 
+        /// <summary>
+        /// Löst das <see cref="E:System.Windows.Forms.Control.MouseClick" />-Ereignis aus.
+        /// </summary>
+        /// <param name="e">Ein <see cref="T:System.Windows.Forms.MouseEventArgs" />, das die Ereignisdaten enthält.</param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
             Selected?.Invoke(this);

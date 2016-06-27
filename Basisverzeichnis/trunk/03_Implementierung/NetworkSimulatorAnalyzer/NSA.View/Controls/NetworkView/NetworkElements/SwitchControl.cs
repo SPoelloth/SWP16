@@ -8,6 +8,9 @@ using NSA.View.Controls.NetworkView.NetworkElements.Base;
 
 namespace NSA.View.Controls.NetworkView.NetworkElements
 {
+    /// <summary>
+    /// This control displays a switch.
+    /// </summary>
     public partial class SwitchControl : EditorElementBase, IConfigurable
     {
         #region Parameters
@@ -41,6 +44,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         private List<Rectangle> portHitboxes = new List<Rectangle>();
         private List<int> interfaces = new List<int> { 0, 1, 2, 3, 4 };
 
+        /// <summary>
+        /// This constructor is for designer only, do not use it.
+        /// </summary>
         [Obsolete("Do not use! For Designer only!")]
         public SwitchControl() : this(new Point(10, 10), "SwitchControl")
         {
@@ -52,6 +58,11 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         //    base.ScaleCore(dx, dy);
         //}
 
+        /// <summary>
+        /// This constructor creates a new instance of the <see cref="SwitchControl"/> class.
+        /// </summary>
+        /// <param name="location">The start location of the element in the parent control.</param>
+        /// <param name="name"></param>
         public SwitchControl(Point location, string name) : base(location, name)
         {
             backgroundGradientBrush.WrapMode = WrapMode.TileFlipX;
@@ -82,6 +93,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             }
         }
 
+        /// <summary>
+        /// Removes an interface from the switch, identified by the interface ID.
+        /// </summary>
+        /// <param name="Ethernet">The ID of the ethernet port to remove.</param>
         public void RemoveInterface(int Ethernet)
         {
             interfaces.Remove(Ethernet);
@@ -90,6 +105,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             Invalidate();
         }
 
+        /// <summary>
+        /// Adds an interface to the switch, with a given interface ID.
+        /// </summary>
+        /// <param name="Ethernet">The ID of the ethernet port to add.</param>
         public void AddInterface(int Ethernet)
         {
             interfaces.Add(Ethernet);
@@ -98,6 +117,10 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             Invalidate();
         }
 
+        /// <summary>
+        /// Replaces all interfaces of the switch with new ones.
+        /// </summary>
+        /// <param name="ifaces">The new interface ID list.</param>
         public void SetInterfaces(List<int> ifaces)
         {
             interfaces = ifaces;
@@ -105,6 +128,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             calculateHitboxes();
             Invalidate();
         }
+
+        /// <summary>
+        /// Raises the <see cref="E:Paint" /> event.
+        /// Draws the switch and its interfaces.
+        /// </summary>
+        /// <param name="pe">The <see cref="PaintEventArgs"/> instance containing the event data.</param>
         protected override void OnPaint(PaintEventArgs pe)
         {
             calculateHitboxes();
@@ -116,9 +145,8 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             //g.FillRectangle(dotBrush, new Rectangle(10, offsetY + 5, 2, 2));
             //g.FillRectangle(dotBrush, new Rectangle(15, offsetY + 5, 2, 2));
 
-            for (int i = 0; i < portHitboxes.Count; i++)
+            foreach (var portRectangle in portHitboxes)
             {
-                var portRectangle = portHitboxes[i];
                 g.FillRectangle(portBackgroundBrush, portRectangle);
 
                 for (int j = 1; j < portPinCount + 1; j++)
@@ -159,14 +187,21 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
             return -1;
         }
 
-        public override Rectangle GetPortBoundsByID(int port)
-        {
-            return portHitboxes[interfaces.IndexOf(port)];
-        }
 
         public int GetInterfaceCount()
         {
             return interfaces.Count;
+        }
+
+
+        /// <summary>
+        /// Gets the port bounds by port ID.
+        /// </summary>
+        /// <param name="port">The port ID.</param>
+        /// <returns></returns>
+        public override Rectangle GetPortBoundsByID(int port)
+        {
+            return portHitboxes[interfaces.IndexOf(port)];
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NSA.View.Controls.NetworkView.NetworkElements
 {
-    public interface IConfigurable
+    internal interface IConfigurable
     {
         Rectangle GetPortBoundsByID(int Port);
         int GetPortIDByPoint(Point p);
