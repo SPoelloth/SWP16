@@ -87,27 +87,38 @@ namespace NSA.Model.NetworkComponents.Layers
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
             //if currentnode is connected to destination
-            if (CurrentNode.Connections.Values.Any(C => C.Start.Equals(Destination) || C.End.Equals(Destination)))
+            foreach (Connection c in CurrentNode.Connections.Values)
             {
-                ValInfo.NextNodes.Add(Destination);
-                ValInfo.Iface = null;
-                return;
+                if (!c.Start.Equals(Destination) && !c.End.Equals(Destination)) continue;
+                KeyValuePair<string, Connection> kvCurrent = CurrentNode.Connections.FirstOrDefault(S => S.Value.Equals(c));
+                KeyValuePair<string, Connection> kvDest = Destination.Connections.FirstOrDefault(S => S.Value.Equals(c));
+                Interface iCurr = CurrentNode.Interfaces.FirstOrDefault(I => I.Name.Equals(kvCurrent.Key));
+                Interface iDest = Destination.Interfaces.FirstOrDefault(I => I.Name.Equals(kvDest.Key));
+                if (iDest != null && (iCurr != null && iCurr.IpAddress.IsInSameSubnet(iDest.IpAddress, iCurr.Subnetmask)))
+                {
+                    ValInfo.NextNodes.Add(Destination);
+                    ValInfo.Iface = null;
+                    return;
+                }
             }
             //if connected over switch
             foreach (Connection c in CurrentNode.Connections.Values)
             {
                 Switch sw;
+                KeyValuePair<string, Connection> kvCurrent = CurrentNode.Connections.FirstOrDefault(S => S.Value.Equals(c));
+                Interface iCurr = CurrentNode.Interfaces.FirstOrDefault(I => I.Name.Equals(kvCurrent.Key));
+                if (iCurr == null) continue;
                 if (c.Start.Equals(CurrentNode))
                 {
                     sw = c.End as Switch;
                     if (sw == null) continue;
-                    if (!sw.SendToDestination(Destination, ValInfo, c)) continue;
+                    if (!sw.SendToDestination(Destination, ValInfo, c, iCurr.IpAddress, iCurr.Subnetmask)) continue;
                     ValInfo.NextNodes.Insert(0, sw);
                     return;
                 }
                 sw = c.Start as Switch;
                 if (sw == null) continue;
-                if (!sw.SendToDestination(Destination, ValInfo, c)) continue;
+                if (!sw.SendToDestination(Destination, ValInfo, c, iCurr.IpAddress, iCurr.Subnetmask)) continue;
                 ValInfo.NextNodes.Insert(0, sw);
                 return;
             }
