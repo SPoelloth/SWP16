@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NSA.Model.NetworkComponents;
 
@@ -26,7 +26,15 @@ namespace NSA.Model.BusinessLogic
 
         public string StartNodeString { get; }
 
-        public Hardwarenode StartNode => network.GetHardwarenodeByName(StartNodeString);
+        public Hardwarenode StartNode
+        {
+            get
+            {
+                var node = network.GetHardwarenodeByName(StartNodeString);
+                if (node == null) node = new Workstation(StartNodeString);
+                return node;
+            }
+        }
         public List<string> EndNodesString { get; }
 
         public List<Hardwarenode> EndNodes
@@ -105,6 +113,7 @@ namespace NSA.Model.BusinessLogic
             {
                 var newIndex = Rule.IndexOf(BusinessLogic.Rule.Separator, index + 1, StringComparison.Ordinal);
                 var info = newIndex == -1 ? Rule.Substring(index + 1, Rule.Length - index - 1) : Rule.Substring(index + 1, newIndex - index - 1);
+                info = info.Trim();
 
                 switch (i)
                 {
