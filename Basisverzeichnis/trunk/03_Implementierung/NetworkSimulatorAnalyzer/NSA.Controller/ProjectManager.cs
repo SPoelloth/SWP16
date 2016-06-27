@@ -332,7 +332,8 @@ namespace NSA.Controller
                 }
 
                 #endregion Connection
-                
+
+                CurrentProject.Path = file;
                 LoadTestscenarios();
             }
             catch
@@ -340,7 +341,6 @@ namespace NSA.Controller
                 ClearProject();
                 MessageBox.Show("Laden des Projekts fehlgeschlagen");
             }
-            CurrentProject.Path = file;
         }
 
         /// <summary>
@@ -369,7 +369,10 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-            DirectoryInfo d = new DirectoryInfo(CurrentProject.Path + "/" + TestscenarioDirectoryName);
+
+            DirectoryInfo d = new DirectoryInfo(Path.GetDirectoryName(CurrentProject.Path) + "/" + TestscenarioDirectoryName);
+
+            if(!d.Exists) return;
 
             foreach (var file in d.GetFiles("*.txt"))
             {

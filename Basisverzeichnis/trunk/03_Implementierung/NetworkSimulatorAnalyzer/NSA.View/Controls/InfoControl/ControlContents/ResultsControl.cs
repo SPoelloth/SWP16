@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
@@ -62,29 +63,6 @@ namespace NSA.View.Controls.InfoControl.ControlContents
             dgvResults.Columns.AddRange(dataCol1, dataCol2, bnCol1);
         }
 
-        /// <summary>
-        /// Adds the result data.
-        /// </summary>
-        /// <param name="ScenarioName">Name of the scenario.</param>
-        /// <param name="Result">The result.</param>
-        public void AddResultData(string ScenarioName, string Result)
-        {
-            var row = data.NewRow();
-            row.ItemArray = new object[] { ScenarioName, Result };
-
-            data.Rows.InsertAt(row, 0);
-        }
-
-
-        /// <summary>
-        /// Deletes the given result data row.
-        /// </summary>
-        /// <param name="Row">The row.</param>
-        public void DeleteResultData(DataRow Row)
-        {
-            data.Rows.Remove(Row);
-        }
-
         #region Eventhandling
 
         /// <summary>
@@ -118,6 +96,18 @@ namespace NSA.View.Controls.InfoControl.ControlContents
 
         #endregion
 
+        /// <summary>
+        /// Adds the result data.
+        /// </summary>
+        /// <param name="ScenarioName">Name of the scenario.</param>
+        /// <param name="Result">The result.</param>
+        public void AddResultData(string ScenarioName, string Result)
+        {
+            var row = data.NewRow();
+            row.ItemArray = new object[] { Path.GetFileNameWithoutExtension(ScenarioName), Result };
+
+            data.Rows.InsertAt(row, 0);
+        }
 
         /// <summary>
         /// Clears this tab.

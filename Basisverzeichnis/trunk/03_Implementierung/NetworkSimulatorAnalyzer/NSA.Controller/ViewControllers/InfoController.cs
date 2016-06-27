@@ -124,21 +124,21 @@ namespace NSA.Controller.ViewControllers
             DataRow row = sender as DataRow;
             if (row == null) return;
 
-            var scenarioName = row["Testszenario"].ToString();
-            Testscenario ts = ProjectManager.Instance.GetTestscenarioByName(scenarioName);
+            var scenarioNameFull = row["Testszenario Pfad"].ToString();
+            Testscenario ts = ProjectManager.Instance.GetTestscenarioByName(scenarioNameFull);
             if (ts == null) return;
 
             List<Simulation> failedSimulations = SimulationManager.Instance.StartTestscenario(ts);
-            if (failedSimulations.Count == 0) addScenarioResultToResultsTab(scenarioName, "Erfolgreich");
+            if (failedSimulations.Count == 0) addScenarioResultToResultsTab(scenarioNameFull, "Erfolgreich");
             else
             {
                 foreach (Simulation s in failedSimulations)
                 {
                     string simResult = string.Format(baseResult, s.Source, s.Destination, "");
-                    addScenarioResultToResultsTab(scenarioName, simResult);
+                    addScenarioResultToResultsTab(scenarioNameFull, simResult);
                 }
 
-                addScenarioResultToResultsTab(scenarioName, "Fehler aufgetreten");
+                addScenarioResultToResultsTab(scenarioNameFull, "Fehler aufgetreten");
             }
         }
 

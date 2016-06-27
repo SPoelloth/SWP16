@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.InfoControl.ControlContents
@@ -33,6 +34,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         private void AddColumns()
         {
+            data.Columns.Add("Testszenario Pfad", typeof(string));
             data.Columns.Add("Testszenario", typeof(string));
 
             var dataCol1 = new DataGridViewTextBoxColumn
@@ -61,7 +63,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         public void AddTestScenario(string ScenarioName)
         {
             var row = data.NewRow();
-            row.ItemArray = new object[] { ScenarioName };
+            row.ItemArray = new object[] { ScenarioName, Path.GetFileNameWithoutExtension(ScenarioName) };
 
             data.Rows.InsertAt(row, 0);
         }
