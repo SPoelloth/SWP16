@@ -64,8 +64,10 @@ namespace NSA.View.Controls.NetworkView
                 if (m.Msg == WM_LBUTTONUP && firstConnectionPoint != null)
                 {
                     var upPoint = new Point((short)(m.LParam.ToInt32() & 0xffff), (short)((m.LParam.ToInt32() >> 16) & 0xffff));
-                    if (upPoint == firstConnectionPoint) return true;
-                    NewConnection?.Invoke(firstConnectionControl, firstConnectionPoint.Value, Control.FromHandle(m.HWnd), upPoint);
+                    var distance = Point.Subtract(upPoint, (Size)firstConnectionPoint.Value);
+                    var upControl = Control.FromHandle(m.HWnd);
+                    if (distance.X * distance.X + distance.Y * distance.Y < 25 && firstConnectionControl == upControl) return true;
+                    NewConnection?.Invoke(firstConnectionControl, firstConnectionPoint.Value, upControl, upPoint);
                     currentState = State.Normal;
 
                     return true;
@@ -95,15 +97,13 @@ namespace NSA.View.Controls.NetworkView
                 if (m.Msg == WM_LBUTTONUP && firstConnectionPoint != null)
                 {
                     var upPoint = new Point(m.LParam.ToInt32() & 0xffff, (m.LParam.ToInt32() >> 16) & 0xffff);
-                    if (upPoint == firstConnectionPoint)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        NewSimulation?.Invoke(firstConnectionControl, firstConnectionPoint.Value, Control.FromHandle(m.HWnd), upPoint);
-                        currentState = State.Normal;
-                    }
+                    var distance = Point.Subtract(upPoint, (Size)firstConnectionPoint.Value);
+                    var upControl = Control.FromHandle(m.HWnd);
+                    if (distance.X * distance.X + distance.Y * distance.Y < 25 && firstConnectionControl == upControl) return true;
+
+                    NewSimulation?.Invoke(firstConnectionControl, firstConnectionPoint.Value, upControl, upPoint);
+                    currentState = State.Normal;
+
                     return true;
                 }
             }
