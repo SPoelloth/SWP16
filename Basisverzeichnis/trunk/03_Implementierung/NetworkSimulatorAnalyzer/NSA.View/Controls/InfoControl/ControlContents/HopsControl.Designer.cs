@@ -44,14 +44,14 @@
             this.dgvHops.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvHops.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvHops.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dgvHops.Location = new System.Drawing.Point(0, 25);
+            this.dgvHops.Location = new System.Drawing.Point(0, 30);
             this.dgvHops.MultiSelect = false;
             this.dgvHops.Name = "dgvHops";
             this.dgvHops.ReadOnly = true;
             this.dgvHops.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dgvHops.RowHeadersVisible = false;
             this.dgvHops.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvHops.Size = new System.Drawing.Size(738, 125);
+            this.dgvHops.Size = new System.Drawing.Size(738, 120);
             this.dgvHops.TabIndex = 2;
             // 
             // cbPackets
