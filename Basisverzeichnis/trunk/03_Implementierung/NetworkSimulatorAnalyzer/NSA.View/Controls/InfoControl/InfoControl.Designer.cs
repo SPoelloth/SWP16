@@ -32,12 +32,12 @@ namespace NSA.View.Controls.InfoControl
         {
             this.tcPages = new System.Windows.Forms.TabControl();
             this.tabPageHistory = new System.Windows.Forms.TabPage();
-            this.tabPageHops = new System.Windows.Forms.TabPage();
-            this.tabPageScenarios = new System.Windows.Forms.TabPage();
-            this.tabPageResults = new System.Windows.Forms.TabPage();
             this.historyControl = new NSA.View.Controls.InfoControl.ControlContents.HistoryControl();
+            this.tabPageHops = new System.Windows.Forms.TabPage();
             this.hopsControl = new NSA.View.Controls.InfoControl.ControlContents.HopsControl();
+            this.tabPageScenarios = new System.Windows.Forms.TabPage();
             this.scenariosControl = new NSA.View.Controls.InfoControl.ControlContents.ScenariosControl();
+            this.tabPageResults = new System.Windows.Forms.TabPage();
             this.resultsControl = new NSA.View.Controls.InfoControl.ControlContents.ResultsControl();
             this.tcPages.SuspendLayout();
             this.tabPageHistory.SuspendLayout();
@@ -60,6 +60,8 @@ namespace NSA.View.Controls.InfoControl
             this.tcPages.SelectedIndex = 0;
             this.tcPages.Size = new System.Drawing.Size(684, 173);
             this.tcPages.TabIndex = 0;
+            this.tcPages.Selected += new System.Windows.Forms.TabControlEventHandler(this.tcPages_Selected);
+            this.tcPages.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tcPages_Deselected);
             // 
             // tabPageHistory
             // 
@@ -71,6 +73,15 @@ namespace NSA.View.Controls.InfoControl
             this.tabPageHistory.Text = "Verlauf";
             this.tabPageHistory.UseVisualStyleBackColor = true;
             // 
+            // historyControl
+            // 
+            this.historyControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.historyControl.Location = new System.Drawing.Point(0, 0);
+            this.historyControl.Name = "historyControl";
+            this.historyControl.Size = new System.Drawing.Size(676, 147);
+            this.historyControl.TabIndex = 0;
+            this.historyControl.Tag = "HistoryTabPage";
+            // 
             // tabPageHops
             // 
             this.tabPageHops.Controls.Add(this.hopsControl);
@@ -80,6 +91,14 @@ namespace NSA.View.Controls.InfoControl
             this.tabPageHops.TabIndex = 1;
             this.tabPageHops.Text = "Hops";
             this.tabPageHops.UseVisualStyleBackColor = true;
+            // 
+            // hopsControl
+            // 
+            this.hopsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hopsControl.Location = new System.Drawing.Point(0, 0);
+            this.hopsControl.Name = "hopsControl";
+            this.hopsControl.Size = new System.Drawing.Size(676, 147);
+            this.hopsControl.TabIndex = 0;
             // 
             // tabPageScenarios
             // 
@@ -91,6 +110,14 @@ namespace NSA.View.Controls.InfoControl
             this.tabPageScenarios.Text = "Szenarios";
             this.tabPageScenarios.UseVisualStyleBackColor = true;
             // 
+            // scenariosControl
+            // 
+            this.scenariosControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.scenariosControl.Location = new System.Drawing.Point(0, 0);
+            this.scenariosControl.Name = "scenariosControl";
+            this.scenariosControl.Size = new System.Drawing.Size(676, 147);
+            this.scenariosControl.TabIndex = 0;
+            // 
             // tabPageResults
             // 
             this.tabPageResults.Controls.Add(this.resultsControl);
@@ -100,31 +127,6 @@ namespace NSA.View.Controls.InfoControl
             this.tabPageResults.TabIndex = 3;
             this.tabPageResults.Text = "Ergebnisse";
             this.tabPageResults.UseVisualStyleBackColor = true;
-            // 
-            // historyControl
-            // 
-            this.historyControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.historyControl.Location = new System.Drawing.Point(0, 0);
-            this.historyControl.Name = "historyControl";
-            this.historyControl.Size = new System.Drawing.Size(676, 147);
-            this.historyControl.TabIndex = 0;
-            this.historyControl.Tag = "HistoryTabPage";
-            // 
-            // hopsControl
-            // 
-            this.hopsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hopsControl.Location = new System.Drawing.Point(0, 0);
-            this.hopsControl.Name = "hopsControl";
-            this.hopsControl.Size = new System.Drawing.Size(676, 147);
-            this.hopsControl.TabIndex = 0;
-            // 
-            // scenariosControl
-            // 
-            this.scenariosControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scenariosControl.Location = new System.Drawing.Point(0, 0);
-            this.scenariosControl.Name = "scenariosControl";
-            this.scenariosControl.Size = new System.Drawing.Size(676, 147);
-            this.scenariosControl.TabIndex = 0;
             // 
             // resultsControl
             // 
