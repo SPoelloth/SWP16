@@ -30,7 +30,8 @@ namespace NSA.View.Controls.NetworkView
                 Keys kc = (Keys)m.WParam.ToInt64() & Keys.KeyCode;
                 if (m.Msg == WM_KEYDOWN && kc == Keys.Delete)
                 {
-                    if (!(Control.FromHandle(m.HWnd) is TextBox))
+                    var control = Control.FromHandle(m.HWnd);
+                    if (!(control is TextBox || control is DataGridView))
                     {
                         OnDeletePressed?.Invoke();
                         return true;
