@@ -262,10 +262,10 @@ namespace NSA.Controller
                     if (routenXML == null) throw new InvalidDataException();
                     foreach (var route in routenXML.Elements())
                     {
-                        var rDest = route.Attribute("IPAddress").Value;
+                        var rDest = route.Attribute("Destination").Value;
                         var rgateway = route.Attribute("Gateway").Value;
                         var rsubnet = route.Attribute("SubnetMask").Value;
-                        var rinterface = route.Attribute("SubnetMask").Value;
+                        var rinterface = route.Attribute("Iface").Value;
 
                         hwNode.AddRoute(new Route(IPAddress.Parse(rDest), IPAddress.Parse(rsubnet), IPAddress.Parse(rgateway), hwNode.Interfaces.First(i => i.Name == rinterface)));
                     }
