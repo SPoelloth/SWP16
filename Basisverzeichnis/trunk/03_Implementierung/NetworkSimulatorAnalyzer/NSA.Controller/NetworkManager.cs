@@ -191,7 +191,7 @@ namespace NSA.Controller
         /// <param name="Subnetmask">The new subnetmask</param>
         /// <param name="Gateway">The new gateway</param>
         /// <param name="Iface">The new interface</param>
-        public void RouteChanged(string WorkstationName, string RouteName, IPAddress Destination, IPAddress Subnetmask, IPAddress Gateway, Interface Iface)
+        public void RouteChanged(string WorkstationName, string RouteName, IPAddress Destination, IPAddress Gateway, IPAddress Subnetmask, Interface Iface)
         {
             if (GetWorkstationByName(WorkstationName)?.SetRoute(RouteName, Destination, Subnetmask, Gateway, Iface) != true)
             {

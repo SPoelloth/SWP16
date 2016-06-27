@@ -63,7 +63,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         {
             if (initialized && ipValidInput && comboBoxInterfaces.SelectedIndex > -1)
             {
-                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
+                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedItem.ToString(), checkBoxInternetAccess.Checked);
             }
         }
 
@@ -85,13 +85,14 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         private void checkBoxInternetAccess_CheckedChanged(object Sender, EventArgs E) {
             if (initialized)
             {
-                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
+                OnDataChanged();
             }
         }
 
         private void comboBoxInterfaces_SelectedIndexChanged(object Sender, EventArgs E) {
-            if (initialized) {
-                GatewayChanged?.Invoke(IPAddress.Parse(textBoxIpAddress.Text), comboBoxInterfaces.SelectedText, checkBoxInternetAccess.Checked);
+            if (initialized)
+            {
+                OnDataChanged();
             }
         }
 

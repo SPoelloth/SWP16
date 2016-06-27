@@ -61,8 +61,8 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
         }
 
         private void OnDataChanged() {
-            if (initialized && destinationValidInput && netMaskValidInput && routeValidInput && !String.IsNullOrEmpty(comboBoxInterfaces.SelectedText)) {
-                RouteChanged?.Invoke(RouteName, IPAddress.Parse(textBoxDestination.Text), IPAddress.Parse(textBoxRoute.Text), IPAddress.Parse(textBoxSubnetMask.Text), comboBoxInterfaces.SelectedText);
+            if (initialized && destinationValidInput && netMaskValidInput && routeValidInput && comboBoxInterfaces.SelectedIndex > -1) {
+                RouteChanged?.Invoke(RouteName, IPAddress.Parse(textBoxDestination.Text), IPAddress.Parse(textBoxRoute.Text), IPAddress.Parse(textBoxSubnetMask.Text), comboBoxInterfaces.SelectedItem.ToString());
             }
         }
 
@@ -98,7 +98,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
 
         private void textBoxSubnetMask_TextChanged(object Sender, EventArgs E)
         {
-            if (IsValidSubnetMask(IPAddress.Parse(textBoxSubnetMask.Text)))
+            if (IsValidIP(textBoxSubnetMask.Text) && IsValidSubnetMask(IPAddress.Parse(textBoxSubnetMask.Text)))
             {
                 textBoxSubnetMask.BackColor = SystemColors.Window;
                 netMaskValidInput = true;

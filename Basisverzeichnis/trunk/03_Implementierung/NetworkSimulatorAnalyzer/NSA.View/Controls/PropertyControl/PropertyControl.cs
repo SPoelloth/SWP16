@@ -130,12 +130,12 @@ namespace NSA.View.Controls.PropertyControl {
         /// Creates a RouteConfigControl and adds it to the list of routes to be displayed.
         /// </summary>
         /// <param name="RouteName"></param>
-        /// <param name="Source">IP address of the route source</param>
         /// <param name="Destination">IP address of the route destination</param>
         /// <param name="Route">IP address of the route</param>
+        /// <param name="Subnetmask">Assigned subnetmasks</param>
         /// <param name="Parameters">Parameters for the route</param>
-        public void AddRouteConfigControl(string RouteName, IPAddress Source, IPAddress Destination, IPAddress Route, string Parameters) {
-            var newControl = new RouteConfigControl(RouteName, Source, Destination, Route, Parameters);
+        public void AddRouteConfigControl(string RouteName, IPAddress Destination, IPAddress Route, IPAddress Subnetmask, string Parameters) {
+            var newControl = new RouteConfigControl(RouteName, Destination, Route, Subnetmask, Parameters);
             newControl.Closing += ConfigControl_Closing;
             newControl.RouteChanged += RouteConfigControl_RouteChanged;
             routeConfigControls.Add(newControl);
