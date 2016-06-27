@@ -47,7 +47,7 @@ namespace NSA.ModelTests.BusinessLogic
 
             network.AddConnection("eth0", "eth0", new Connection(A, B));
             network.AddConnection("eth1", "eth0", new Connection(B, C));
-            network.AddConnection("eth0", "eth9", new Connection(X, A));
+            network.AddConnection("eth0", "eth1", new Connection(X, A));
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace NSA.ModelTests.BusinessLogic
         [TestMethod]
         public void TestSimulationShouldFail()
         {
-            Testscenario t = new Testscenario("A|(D)|{TTL:64}|TRUE", network, "x");
+            Testscenario t = new Testscenario("O| (T) |{TTL:64}|TRUE", network, "x");
 
             List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
@@ -114,7 +114,7 @@ namespace NSA.ModelTests.BusinessLogic
         [TestMethod]
         public void TestAonlyReachesBShouldFail()
         {
-            Testscenario t = new Testscenario("A|ONLY(B)|TRUE", network, "y");
+            Testscenario t = new Testscenario("E|ONLY(B)|TRUE", network, "y");
 
             List<ITestscenarioRunnable> runnables = t.GetTestscenarioRunnables();
 
