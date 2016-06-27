@@ -332,7 +332,8 @@ namespace NSA.Controller
                 }
 
                 #endregion Connection
-
+                
+                LoadTestscenarios();
             }
             catch
             {
@@ -374,8 +375,7 @@ namespace NSA.Controller
             {
                 try
                 {
-                    Testscenario ts = new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network,
-                        file.FullName);
+                    Testscenario ts = new Testscenario(File.ReadAllText(file.FullName), CurrentProject.Network, file.FullName);
                     testscenarios.Add(ts);
                     InfoController.Instance.AddTestscenarioToScenarioTab(ts);
                 }
