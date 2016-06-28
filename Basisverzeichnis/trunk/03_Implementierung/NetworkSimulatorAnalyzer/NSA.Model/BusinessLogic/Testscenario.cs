@@ -40,7 +40,7 @@ namespace NSA.Model.BusinessLogic
                         case SimulationType.Only: runnables.Add(new OnlyTestscenarioRunnable(rule, network)); break;
                     }
                 }
-                catch (Exception)
+                catch
                 {
                 }
             }
