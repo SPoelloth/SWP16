@@ -58,6 +58,7 @@
             this.dgvScenario.MultiSelect = false;
             this.dgvScenario.Name = "dgvScenario";
             this.dgvScenario.RowHeadersVisible = false;
+            this.dgvScenario.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvScenario.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvScenario.Size = new System.Drawing.Size(738, 150);
             this.dgvScenario.TabIndex = 1;

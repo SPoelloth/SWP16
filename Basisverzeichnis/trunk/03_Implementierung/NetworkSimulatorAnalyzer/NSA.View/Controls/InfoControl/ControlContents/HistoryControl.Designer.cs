@@ -50,6 +50,7 @@
             this.dgvHistory.ReadOnly = true;
             this.dgvHistory.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dgvHistory.RowHeadersVisible = false;
+            this.dgvHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvHistory.Size = new System.Drawing.Size(738, 121);
             this.dgvHistory.TabIndex = 0;

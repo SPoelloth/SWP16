@@ -34,6 +34,7 @@ namespace NSA.Controller.ViewControllers
         private const string receivedPacket = "Rückpaket {0}";
 
         private Simulation lastSimulation;
+        private int executedScenarioCount;
         private bool hopsPageVisible;
 
         /// <summary>
@@ -129,17 +130,20 @@ namespace NSA.Controller.ViewControllers
             if (ts == null) return;
 
             List<Simulation> failedSimulations = SimulationManager.Instance.StartTestscenario(ts);
-            if (failedSimulations.Count == 0) addScenarioResultToResultsTab(scenarioNameFull, "Erfolgreich");
+
+            if (failedSimulations.Count == 0) addScenarioResultToResultsTab(scenarioNameFull, "Erfolgreich", executedScenarioCount);
             else
             {
                 foreach (Simulation s in failedSimulations)
                 {
                     string simResult = string.Format(baseResult, s.Source, s.Destination, "");
-                    addScenarioResultToResultsTab(scenarioNameFull, simResult);
+                    addScenarioResultToResultsTab(scenarioNameFull, simResult, executedScenarioCount);
                 }
 
-                addScenarioResultToResultsTab(scenarioNameFull, "Fehler aufgetreten");
+                addScenarioResultToResultsTab(scenarioNameFull, "Fehler aufgetreten", executedScenarioCount);
             }
+
+            executedScenarioCount++;
         }
 
         /// <summary>
@@ -233,7 +237,7 @@ namespace NSA.Controller.ViewControllers
 
             lastSimulation = Sim;
             infoControl.historyControl.AddHistoryData(Sim.Id, expectedRes, simResult, Sim.Source, Sim.Destination);
-            UpdateHopsFromLastSimulation(Sim);
+            UpdatePacketsFromLastSimulation(Sim);
         }
 
         /// <summary>
@@ -260,16 +264,17 @@ namespace NSA.Controller.ViewControllers
         /// </summary>
         /// <param name="ScenarioName">Name of the scenario.</param>
         /// <param name="ScenarioResult">The scenario result.</param>
-        private void addScenarioResultToResultsTab(string ScenarioName, string ScenarioResult)
+        /// <param name="Number">A consecutive number foreach executed testscenario.</param>
+        private void addScenarioResultToResultsTab(string ScenarioName, string ScenarioResult, int Number)
         {
-            infoControl.resultsControl.AddResultData(ScenarioName, ScenarioResult);
+            infoControl.resultsControl.AddResultData(ScenarioName, ScenarioResult, Number);
         }
 
         /// <summary>
         /// Updates the hops from last simulation.
         /// </summary>
         /// <param name="Sim">The sim.</param>
-        public void UpdateHopsFromLastSimulation(Simulation Sim)
+        public void UpdatePacketsFromLastSimulation(Simulation Sim)
         {
             infoControl.hopsControl.Clear();
 

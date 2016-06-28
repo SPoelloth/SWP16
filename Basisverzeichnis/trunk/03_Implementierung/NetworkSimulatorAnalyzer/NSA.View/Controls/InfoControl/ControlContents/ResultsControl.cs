@@ -31,8 +31,17 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         private void AddColumns()
         {
+            data.Columns.Add("Nummer", typeof(int));
             data.Columns.Add("Testszenario", typeof(string));
             data.Columns.Add("Ergebnis", typeof(string));
+
+            var dataCol0 = new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Nr.",
+                DataPropertyName = "Nummer",
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                DisplayIndex = 0
+            };
 
             var dataCol1 = new DataGridViewTextBoxColumn
             {
@@ -60,7 +69,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
             };
 
             dgvResults.DataSource = data;
-            dgvResults.Columns.AddRange(dataCol1, dataCol2, bnCol1);
+            dgvResults.Columns.AddRange(dataCol0, dataCol1, dataCol2, bnCol1);
         }
 
         #region Eventhandling
@@ -116,10 +125,11 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         /// <param name="ScenarioName">Name of the scenario.</param>
         /// <param name="Result">The result.</param>
-        public void AddResultData(string ScenarioName, string Result)
+        /// <param name="Number">A consecutive number for each executed testscenario.</param>
+        public void AddResultData(string ScenarioName, string Result, int Number)
         {
             var row = data.NewRow();
-            row.ItemArray = new object[] { Path.GetFileNameWithoutExtension(ScenarioName), Result };
+            row.ItemArray = new object[] { Number, Path.GetFileNameWithoutExtension(ScenarioName), Result };
 
             data.Rows.InsertAt(row, 0);
         }
