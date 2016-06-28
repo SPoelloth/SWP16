@@ -50,10 +50,19 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Count">The count.</param>
         public void SetInterfaceCount(int Count)
         {
-            Interfaces.Clear();
-            for (int i = 0; i < Count; i++)
+            if (Count > Interfaces.Count)
             {
-                Interfaces.Add(new Interface(null, null, getNewInterfaceNumber()));
+                for (int i = 0; i < (Count - Interfaces.Count); i++)
+                {
+                    Interfaces.Add(new Interface(null, null, getNewInterfaceNumber()));
+                }
+            }
+            else if(Interfaces.Count > Count)
+            {
+                for (int i = Interfaces.Count; i > Count; i--)
+                {
+                    Interfaces.RemoveAll(I => I.Name.Equals(Interface.NamePrefix + (i - 1)));
+                }
             }
         }
 
