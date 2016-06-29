@@ -42,35 +42,39 @@ namespace NSA.Model.NetworkComponents
         /// <param name="StartNodeInterfaceName">Start name of the node interface.</param>
         /// <param name="EndNodeInterfaceName">End name of the node interface.</param>
         /// <param name="NewConnection">The new connection.</param>
-        /// Connection already exists!
-        /// or
-        /// Interface of startnode is already used!
-        /// or
-        /// Interface of endnode is already used!
-        public void AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection NewConnection)
+        /// <returns>True on success, false if the connection could not be added because
+        /// the connection already exists or the connection contains an invalid start- or end-node or if 
+        /// the interface of the start- or endnode is already used.</returns>
+        public bool AddConnection(string StartNodeInterfaceName, string EndNodeInterfaceName, Connection NewConnection)
 	    {
-	        if (!nodes.Contains(NewConnection.Start) || !nodes.Contains(NewConnection.End)) return;
+            if (!nodes.Contains(NewConnection.Start) || !nodes.Contains(NewConnection.End))
+            {
+                // Start or end-node do not exist!
+                return false;
+            }
             if (Connections.Count(C => C.Equals(NewConnection)) > 0)
             {
-                Debug.Assert(Connections.Count(C => C.Equals(NewConnection)) <= 0, "Connection already exists!");
-                return;
+                // Connection already exists!
+                return false;
             }
 
             if (NewConnection.Start.InterfaceIsUsed(StartNodeInterfaceName))
             {
-                Debug.Assert(NewConnection.Start.InterfaceIsUsed(StartNodeInterfaceName) == false, "Interface of startnode is already used!");
-                return;
+                // Interface of startnode is already used!
+                return false;
             }
 
             if (NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName))
             {
-                Debug.Assert(NewConnection.End.InterfaceIsUsed(EndNodeInterfaceName) == false, "Interface of endnode is already used!");
-                return;
+                // Interface of endnode is already used!
+                return false;
             }
             
             NewConnection.Start.AddConnection(StartNodeInterfaceName, NewConnection);
             NewConnection.End.AddConnection(EndNodeInterfaceName, NewConnection);
             Connections.Add(NewConnection);
+
+            return true;
 	    }
 
         /// <summary>
