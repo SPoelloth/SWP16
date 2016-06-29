@@ -18,7 +18,8 @@ namespace NSA.Controller
     {
         internal Project CurrentProject = new Project();
         private List<Testscenario> testscenarios = new List<Testscenario>();
-        private const string TestscenarioDirectoryName = "Testscenarios";
+        private const string SzenarioFolderPart = "Testscenarios";
+        private string TestscenarioDirectoryName = "Testscenarios";
 
         public static ProjectManager Instance = new ProjectManager();
 
@@ -80,7 +81,8 @@ namespace NSA.Controller
             CurrentProject.Path = file;
             SaveToFile(file);
             // create Directory
-            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", $"{Path.GetFileNameWithoutExtension(file)}_{TestscenarioDirectoryName}"));
+            TestscenarioDirectoryName = $"{Path.GetFileNameWithoutExtension(file)}_{SzenarioFolderPart}";
+            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", TestscenarioDirectoryName));
         }
 
         private bool IsProjectEmpty()
@@ -334,6 +336,7 @@ namespace NSA.Controller
                 #endregion Connection
 
                 CurrentProject.Path = file;
+                TestscenarioDirectoryName = $"{Path.GetFileNameWithoutExtension(file)}_{SzenarioFolderPart}";
                 LoadTestscenarios();
             }
             catch

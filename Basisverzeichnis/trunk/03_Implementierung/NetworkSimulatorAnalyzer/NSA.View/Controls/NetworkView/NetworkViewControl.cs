@@ -269,6 +269,7 @@ namespace NSA.View.Controls.NetworkView
         protected override void OnMouseUp(MouseEventArgs e)
         {
             enableMoving = false;
+            Invalidate();
             Refresh();
             base.OnMouseUp(e);
         }
@@ -344,7 +345,7 @@ namespace NSA.View.Controls.NetworkView
             ReverseZOrder();
             moveControls(area.Location);
             Size = oldSize;
-            return bmp;
+           return bmp;
         }
 
         private void ReverseZOrder()
