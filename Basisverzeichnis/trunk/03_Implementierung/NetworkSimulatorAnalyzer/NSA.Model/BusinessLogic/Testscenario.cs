@@ -30,13 +30,18 @@ namespace NSA.Model.BusinessLogic
             var lines = text.Split('\n');
             foreach (var line in lines)
             {
-                var rule = Rule.Parse(line, network);
-
-                switch (rule.SimulType)
+                try
                 {
-                    case SimulationType.Simple:      runnables.Add(new SimpleTestscenarioRunnable(rule));        break;
-                    case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule));   break;
-                    case SimulationType.Only:        runnables.Add(new OnlyTestscenarioRunnable(rule, network)); break;
+                    var rule = Rule.Parse(line, network);
+                    switch (rule.SimulType)
+                    {
+                        case SimulationType.Simple: runnables.Add(new SimpleTestscenarioRunnable(rule)); break;
+                        case SimulationType.HasInternet: runnables.Add(new HasInternetTestscenarioRunnable(rule)); break;
+                        case SimulationType.Only: runnables.Add(new OnlyTestscenarioRunnable(rule, network)); break;
+                    }
+                }
+                catch
+                {
                 }
             }
 

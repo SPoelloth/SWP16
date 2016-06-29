@@ -94,6 +94,7 @@ namespace NSA.View.Controls.PropertyControl.ConfigControls
                 }
                 currentIndex++;
             }
+            selectedLayerControl = null;
             Refresh();
         }
 

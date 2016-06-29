@@ -42,11 +42,20 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         private void AddColumns()
         {
+            data.Columns.Add("Nummer", typeof(int));
             data.Columns.Add("Simulations ID", typeof(string));
             data.Columns.Add("Start", typeof(string));
             data.Columns.Add("Ziel", typeof(string));
             data.Columns.Add("Erwartetes Ergebnis", typeof(string));
             data.Columns.Add("Ergebnis", typeof(string));
+
+            var dataCol0 = new DataGridViewTextBoxColumn
+            {
+                HeaderText = "Nr.",
+                DataPropertyName = "Nummer",
+                SortMode = DataGridViewColumnSortMode.NotSortable,
+                DisplayIndex = 0
+            };
 
             var dataCol1 = new DataGridViewTextBoxColumn
             {
@@ -99,7 +108,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
             };
 
             dgvHistory.DataSource = data;
-            dgvHistory.Columns.AddRange(dataCol1, dataCol2, dataCol3, dataCol4, bnCol1, bnCol2);
+            dgvHistory.Columns.AddRange(dataCol0, dataCol1, dataCol2, dataCol3, dataCol4, bnCol1, bnCol2);
         }
 
 
@@ -114,8 +123,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         public void AddHistoryData(string SimID, string ExpectedResult, string Result, string Source, string Destination)
         {
             var row = data.NewRow();
-            row.ItemArray = new object[] {SimID, Source, Destination, ExpectedResult, Result};
-
+            row.ItemArray = new object[] {data.Rows.Count+1, SimID, Source, Destination, ExpectedResult, Result};
             data.Rows.InsertAt(row, 0);
         }
 

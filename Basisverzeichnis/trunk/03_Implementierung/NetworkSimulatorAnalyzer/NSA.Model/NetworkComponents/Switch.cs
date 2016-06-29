@@ -167,15 +167,24 @@ namespace NSA.Model.NetworkComponents
         /// <param name="Destination">The destination.</param>
         /// <param name="ValInfo">The value information.</param>
         /// <param name="ComingCon">The coming connection.</param>
-        /// <returns>Bool if it could send</returns>
-        public bool SendToDestination(Workstation Destination, ValidationInfo ValInfo, Connection ComingCon)
+        /// <param name="nodeIP">The node ip of the sending node.</param>
+        /// <param name="subnetmask">The subnetmask.</param>
+        /// <returns>
+        /// Bool if it could send
+        /// </returns>
+        public bool SendToDestination(Workstation Destination, ValidationInfo ValInfo, Connection ComingCon, IPAddress nodeIP, IPAddress subnetmask)
         {
             foreach (Connection c in Connections.Values)
             {
                 if (c.End.Equals(Destination))
                 {
-                    ValInfo.NextNodes.Add(c.End);
-                    return true;
+                    KeyValuePair<string, Connection> kvDest = Destination.Connections.FirstOrDefault(S => S.Value.Equals(c));
+                    Interface iDest = Destination.Interfaces.FirstOrDefault(I => I.Name.Equals(kvDest.Key));
+                    if (iDest != null && nodeIP.IsInSameSubnet(iDest.IpAddress, subnetmask))
+                    {
+                        ValInfo.NextNodes.Add(c.End);
+                        return true;
+                    }
                 }
                 if (!c.Start.Equals(Destination)) continue;
                 ValInfo.NextNodes.Add(c.Start);
@@ -189,7 +198,7 @@ namespace NSA.Model.NetworkComponents
                 {
                     Switch s = c.End as Switch;
                     if (s == null) continue;
-                    if (!s.SendToDestination(Destination, ValInfo, c)) continue;
+                    if (!s.SendToDestination(Destination, ValInfo, c, nodeIP, subnetmask)) continue;
                     ValInfo.NextNodes.Insert(0, s);
                     return true;
                 }
@@ -197,7 +206,7 @@ namespace NSA.Model.NetworkComponents
                 {
                     Switch s = c.Start as Switch;
                     if (s == null) continue;
-                    if (!s.SendToDestination(Destination, ValInfo, c)) continue;
+                    if (!s.SendToDestination(Destination, ValInfo, c, nodeIP, subnetmask)) continue;
                     ValInfo.NextNodes.Insert(0, s);
                     return true;
                 }

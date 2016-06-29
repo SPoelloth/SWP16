@@ -60,6 +60,7 @@
             this.dgvResults.ReadOnly = true;
             this.dgvResults.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dgvResults.RowHeadersVisible = false;
+            this.dgvResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvResults.Size = new System.Drawing.Size(738, 121);
             this.dgvResults.TabIndex = 2;
