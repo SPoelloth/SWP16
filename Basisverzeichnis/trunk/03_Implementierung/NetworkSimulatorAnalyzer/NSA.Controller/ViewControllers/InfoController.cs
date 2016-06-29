@@ -176,7 +176,7 @@ namespace NSA.Controller.ViewControllers
             if (hops.Count > 1)
                 for (int i = 0; i < hops.Count - 1; i++)
                 {
-                    var results = SimulationManager.Instance.GetHopResult(true, index, hops[i].Name, hops[i + 1].Name);
+                    var results = SimulationManager.Instance.GetHopResult(isSendPacket, index, hops[i].Name, hops[i + 1].Name);
 
                     string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
                     string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
