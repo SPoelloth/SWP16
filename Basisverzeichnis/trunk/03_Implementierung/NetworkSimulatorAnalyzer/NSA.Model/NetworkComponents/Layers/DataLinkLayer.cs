@@ -59,11 +59,13 @@ namespace NSA.Model.NetworkComponents.Layers
         /// </returns>
         public bool ValidateReceive(Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, Hardwarenode Destination, int LayerIndex)
         {
+            //if nextNodeIp is null, the sending node is in the same subnet with currentNode and wanted to send it to him
             if (ValInfo.NextNodeIp == null)
                 return true;
             List<Interface> ifaces = CurrentNode.Interfaces;
             if (ifaces.Any(I => ValInfo.NextNodeIp.Equals(I.IpAddress)))
             {
+                ValInfo.NextNodeIp = null;
                 return true;
             }
             ValInfo.Res.ErrorId = Result.Errors.PacketNotForThisNode;
