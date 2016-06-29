@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using NSA.Model.BusinessLogic;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
@@ -183,7 +184,8 @@ namespace NSA.Controller.ViewControllers
             if (hops.Count > 1)
                 for (int i = 0; i < hops.Count - 1; i++)
                 {
-                    var results = SimulationManager.Instance.GetHopResult(isSendPacket, index, hops[i].Name, hops[i + 1].Name);
+                    var results = SimulationManager.Instance.GetHopResult(isSendPacket, index, hops[i].Name,
+                        hops[i + 1].Name);
 
                     string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
                     string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
@@ -191,7 +193,11 @@ namespace NSA.Controller.ViewControllers
                     infoControl.hopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
                 }
             else
-                infoControl.hopsControl.AddHop(hops[0].Name, "-", "-", "-");
+            {
+                var results = SimulationManager.Instance.GetHopResult(isSendPacket, index, hops.First().Name);
+                string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
+                infoControl.hopsControl.AddHop(hops[0].Name, res1, "-", "-");
+            }
 
             if(hopsPageVisible) SimulationManager.Instance.HighlightPacketConnections(isSendPacket, index);
         }
