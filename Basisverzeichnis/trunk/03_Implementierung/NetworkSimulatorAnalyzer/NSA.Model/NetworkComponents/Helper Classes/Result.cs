@@ -51,6 +51,10 @@
             /// </summary>
             CustomLayerError,
             /// <summary>
+            /// Custom layer index error
+            /// </summary>
+            CustomLayerIndexError,
+            /// <summary>
             /// No Packets in the simulation
             /// </summary>
             NoPackets
@@ -67,6 +71,7 @@
             "Quell- oder Zielrechner ist null.",
             "TTL ist 0, aber der Zielrechner wurde nicht erreicht.",
             "Layer {0} ist am Quell- aber nicht am Zielrechner enthalten.",
+            "Layer {0} ist am Zielrechner am falschen Index enthalten.",
             "Keine Packete in der Simulation."
         };
 

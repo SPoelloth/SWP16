@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
 namespace NSA.Model.NetworkComponents.Layers
@@ -54,6 +55,14 @@ namespace NSA.Model.NetworkComponents.Layers
         {
             if (CurrentNode.Equals(Destination) && Tags.ContainsKey(name) && LayerIndex == (int)Tags[name])
                 Tags.Remove(name);
+            if (CurrentNode.Equals(Destination) && Tags.ContainsKey(name) && LayerIndex != (int) Tags[name])
+            {
+                ValInfo.Res.ErrorId = Result.Errors.CustomLayerIndexError;
+                ValInfo.Res.SendError = false;
+                ValInfo.Res.LayerError = this;
+                ValInfo.Res.Res = String.Format(Result.ResultStrings[(int)Result.Errors.CustomLayerIndexError], name);
+                return false;
+            }
             return true;
         }
 

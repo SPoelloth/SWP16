@@ -29,13 +29,18 @@ namespace NSA.Controller
         /// <param name="NodeOneName">Name of the first node of the hop</param>
         /// <param name="NodeTwoName">Name of the second node of the Hop</param>
         /// <returns>A Tuple, which contains the two results. Item1 is for NodeOneName, Item2 for NodeTwoName</returns>
-        public Tuple<Result, Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName)
+        public Tuple<Result, Result> GetHopResult(bool IsSendPacket, int PacketIndex, string NodeOneName, string NodeTwoName = null)
         {
             Tuple<Result, Result> res;
             Packet p = IsSendPacket ? Simulations[Simulations.Count - 1].PacketsSend?[PacketIndex] : Simulations[Simulations.Count - 1].PacketsReceived?[PacketIndex];
             if (p == null || Simulations.Count == 0)
                 return null;
             Hardwarenode nodeOne = NetworkManager.Instance.GetHardwarenodeByName(NodeOneName);
+            if (NodeTwoName == null && nodeOne != null)
+            {
+                res = new Tuple<Result, Result>(p.Result, new Result());
+                return res;
+            }
             Hardwarenode nodeTwo = NetworkManager.Instance.GetHardwarenodeByName(NodeTwoName);
             if (nodeOne == null || nodeTwo == null)
                 return null;

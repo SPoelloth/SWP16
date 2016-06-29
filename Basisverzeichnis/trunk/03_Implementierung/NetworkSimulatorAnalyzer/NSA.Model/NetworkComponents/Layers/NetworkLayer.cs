@@ -86,7 +86,7 @@ namespace NSA.Model.NetworkComponents.Layers
         /// <param name="LayerIndex">The Layer index</param>
         public void ValidateSend(Workstation Destination, Workstation CurrentNode, ValidationInfo ValInfo, Dictionary<string, object> Tags, int LayerIndex)
         {
-            //if currentnode is connected to destination
+            //if currentnode is connected to destination and is in same subnet with it
             foreach (Connection c in CurrentNode.Connections.Values)
             {
                 if (!c.Start.Equals(Destination) && !c.End.Equals(Destination)) continue;
@@ -129,7 +129,17 @@ namespace NSA.Model.NetworkComponents.Layers
                 Dictionary<string, Route>.ValueCollection routes = CurrentNode.GetRoutes();
                 foreach(Route r in routes)
                 {
-                    if (!i.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask)) continue;
+                    if (r.Destination.GetNetworkAddress(r.Subnetmask).Equals(r.Destination))
+                    {
+                        //Networkaddress
+                        if (!i.IpAddress.IsInSameSubnet(r.Destination, r.Subnetmask)) continue;
+                    }
+                    else
+                    {
+                        //IPAddress
+                        if (!r.Destination.Equals(i.IpAddress)) continue;
+
+                    }
                     ValInfo.NextNodeIp = r.Gateway;
                     ValInfo.Iface = r.Iface;
                 }
