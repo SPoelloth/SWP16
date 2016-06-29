@@ -48,6 +48,7 @@ namespace NSA.Model.NetworkComponents
         /// Sets the interface count to the given value.
         /// </summary>
         /// <param name="Count">The count.</param>
+        /// <returns>Returns a list of removed interfaces</returns>
         public List<Interface> SetInterfaceCount(int Count)
         {
             List<Interface> removedInterfaces = new List<Interface>();

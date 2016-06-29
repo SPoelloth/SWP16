@@ -80,12 +80,12 @@ namespace NSA.Controller
             CurrentProject.Path = file;
             SaveToFile(file);
             // create Directory
-            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", TestscenarioDirectoryName));
+            Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", $"{Path.GetFileNameWithoutExtension(file)}_{TestscenarioDirectoryName}"));
         }
 
         private bool IsProjectEmpty()
         {
-           return NetworkManager.Instance.GetAllConnections().Count + NetworkManager.Instance.GetAllHardwareNodes().Count < 1;
+            return NetworkManager.Instance.GetAllConnections().Count + NetworkManager.Instance.GetAllHardwareNodes().Count < 1;
         }
 
         private DialogResult AskSave()
@@ -372,7 +372,7 @@ namespace NSA.Controller
 
             DirectoryInfo d = new DirectoryInfo(Path.GetDirectoryName(CurrentProject.Path) + "/" + TestscenarioDirectoryName);
 
-            if(!d.Exists) return;
+            if (!d.Exists) return;
 
             foreach (var file in d.GetFiles("*.txt"))
             {
