@@ -54,6 +54,7 @@ namespace NSA.Controller.ViewControllers
             var htc = infoControl.historyControl;
             var stc = infoControl.scenariosControl;
             var hstc = infoControl.hopsControl;
+            var rtc = infoControl.resultsControl;
 
             Debug.Assert(htc != null, "HistoryTabControl was null/not found");
             Debug.Assert(stc != null, "ScenariosTabControl was null/not found");
@@ -71,6 +72,10 @@ namespace NSA.Controller.ViewControllers
             hstc.PacketSelected += hopsTabPage_PacketSelected;
             infoControl.HopsTabPage_Selected += hopsTabPage_Selected;
             infoControl.HopsTabPage_Deselected += hopsTabPage_Deselected;
+
+            // Result Control Eventhandler
+            rtc.ClearButtonClicked += resultsTabPage_ClearButtonClicked;
+
         }
 
         #region Event Handling
@@ -144,6 +149,7 @@ namespace NSA.Controller.ViewControllers
             }
 
             executedScenarioCount++;
+            infoControl.ChangeToResultsTab();
         }
 
         /// <summary>
@@ -220,6 +226,18 @@ namespace NSA.Controller.ViewControllers
         {
             hopsPageVisible = false;
             SimulationManager.Instance.UnhighlightConnections();
+        }
+
+
+        /// <summary>
+        /// Handles the ClearButtonClicked event of the resultsTabPage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void resultsTabPage_ClearButtonClicked(object sender, EventArgs e)
+        {
+            infoControl.resultsControl.Clear();
+            executedScenarioCount = 0;
         }
 
         #endregion
@@ -303,6 +321,7 @@ namespace NSA.Controller.ViewControllers
             infoControl.scenariosControl.Clear();
 
             lastSimulation = null;
+            executedScenarioCount = 0;
         }
 
         #endregion
