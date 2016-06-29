@@ -116,7 +116,8 @@ namespace NSA.Controller.ViewControllers
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         private void historyTabPage_HistoryClearButtonClicked(object sender, EventArgs e)
         {
-            ClearHistory();
+            SimulationManager.Instance.ClearHistory();
+            infoControl.historyControl.Clear();
         }
 
         /// <summary>
@@ -257,16 +258,6 @@ namespace NSA.Controller.ViewControllers
             infoControl.historyControl.AddHistoryData(Sim.Id, expectedRes, simResult, Sim.Source, Sim.Destination);
             UpdatePacketsFromLastSimulation(Sim);
         }
-
-        /// <summary>
-        /// Clears the history.
-        /// </summary>
-        public void ClearHistory()
-        {
-            SimulationManager.Instance.ClearHistory();
-            infoControl.historyControl.Clear();
-        }
-
 
         /// <summary>
         /// Adds the testscenario to scenario tab.
