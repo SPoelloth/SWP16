@@ -52,12 +52,11 @@ namespace NSA.View.Controls.InfoControl
         #endregion
 
         /// <summary>
-        /// Gets the tab control.
+        /// Changes over to the results tab page.
         /// </summary>
-        /// <returns></returns>
-        public TabControl GetTabControl()
+        public void ChangeToResultsTab()
         {
-            return tcPages;
+            tcPages.SelectedTab = tabPageResults;
         }
     }
 }

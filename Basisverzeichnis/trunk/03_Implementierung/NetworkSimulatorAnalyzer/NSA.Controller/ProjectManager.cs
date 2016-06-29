@@ -50,6 +50,8 @@ namespace NSA.Controller
                 NetworkManager.Instance.RemoveHardwarenode(h.Name);
             }
 
+            InfoController.Instance.ClearInfoControl();
+
             CurrentProject.Path = null;
         }
 

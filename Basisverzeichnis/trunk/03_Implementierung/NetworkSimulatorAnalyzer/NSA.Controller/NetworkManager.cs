@@ -343,9 +343,12 @@ namespace NSA.Controller
                 return;
             }
             if (a == b) return;
+
             Connection connection = new Connection(a, b);
-            network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, connection);
-            NetworkViewController.Instance.AddConnection(connection);
+            if (network.AddConnection(StartNodeInterfaceName, EndNodeInterfaceName, connection))
+            {
+                NetworkViewController.Instance.AddConnection(connection);
+            }
         }
 
         /// <summary>

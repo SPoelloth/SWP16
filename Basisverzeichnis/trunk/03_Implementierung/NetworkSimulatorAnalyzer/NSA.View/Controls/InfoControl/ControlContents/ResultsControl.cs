@@ -13,6 +13,11 @@ namespace NSA.View.Controls.InfoControl.ControlContents
     /// <seealso cref="System.Windows.Forms.UserControl" />
     public partial class ResultsControl : UserControl
     {
+        /// <summary>
+        /// Occurs when the results clear button is clicked.
+        /// </summary>
+        public event EventHandler ClearButtonClicked;
+
         private readonly DataTable data = new DataTable();
 
         /// <summary>
@@ -115,7 +120,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void bnClearResults_Click(object sender, EventArgs e)
         {
-            Clear();
+            ClearButtonClicked?.Invoke(sender, EventArgs.Empty);
         }
 
         #endregion
