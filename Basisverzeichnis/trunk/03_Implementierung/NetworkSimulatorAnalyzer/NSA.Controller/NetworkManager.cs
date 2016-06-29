@@ -166,9 +166,7 @@ namespace NSA.Controller
                 return;
             }
             if (NewCount == nodeSwitch.GetInterfaceCount()) return;
-            var interfaceDiff = nodeSwitch.Interfaces.ToList();
-            nodeSwitch.SetInterfaceCount(NewCount);
-            interfaceDiff = interfaceDiff.Except(nodeSwitch.Interfaces).ToList();
+            var interfaceDiff = nodeSwitch.SetInterfaceCount(NewCount);
             foreach (var i in interfaceDiff)
             {
                 string connnectionName = nodeSwitch.Connections.FirstOrDefault(C => C.Key.Equals(i.Name)).Value?.Name;

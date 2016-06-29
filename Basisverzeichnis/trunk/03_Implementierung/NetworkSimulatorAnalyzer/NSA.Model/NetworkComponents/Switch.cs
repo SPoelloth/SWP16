@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents.Helper_Classes;
 
@@ -47,13 +48,21 @@ namespace NSA.Model.NetworkComponents
         /// Sets the interface count to the given value.
         /// </summary>
         /// <param name="Count">The count.</param>
-        public void SetInterfaceCount(int Count)
+        public List<Interface> SetInterfaceCount(int Count)
         {
-            Interfaces.Clear();
-            for (int i = 0; i < Count; i++)
+            List<Interface> removedInterfaces = new List<Interface>();
+            for (int i = Interfaces.Count; i < Count; i++)
             {
                 Interfaces.Add(new Interface(null, null, getNewInterfaceNumber()));
             }
+            for (int i = Interfaces.Count; i > Count; i--)
+            {
+                var last = Interfaces.Last();
+                removedInterfaces.Add(last);
+                Interfaces.Remove(last);
+            }
+
+            return removedInterfaces;
         }
 
         #endregion
