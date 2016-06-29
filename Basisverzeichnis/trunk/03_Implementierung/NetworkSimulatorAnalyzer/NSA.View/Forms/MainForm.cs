@@ -38,6 +38,7 @@ namespace NSA.View.Forms
             propertyControl.Refresh();
             infoControl.Location = new Point(margin, networkViewControl.Location.Y + networkViewControl.Height + margin);
             infoControl.Width = networkViewControl.Width;
+            infoControl.Refresh();
             networkViewControl.Invalidate();
         }
 
