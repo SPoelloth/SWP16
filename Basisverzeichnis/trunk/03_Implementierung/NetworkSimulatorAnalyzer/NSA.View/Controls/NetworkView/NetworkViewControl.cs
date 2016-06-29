@@ -11,6 +11,9 @@ namespace NSA.View.Controls.NetworkView
 {
     public partial class NetworkViewControl : UserControl
     {
+        /// <summary>
+        /// Occurs when [selection changed].
+        /// </summary>
         public event Action<EditorElementBase> SelectionChanged;
         public event Action<VisualConnection> RemoveConnectionPressed;
         public event Action<EditorElementBase> RemoveElementPressed;
@@ -100,6 +103,10 @@ namespace NSA.View.Controls.NetworkView
             foreach (var c in Controls.OfType<Control>()) c.Cursor = Cursor;
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.Control.Paint" />-event.
+        /// </summary>
+        /// <param name="e">A <see cref="T:System.Windows.Forms.PaintEventArgs" />that contains the event data.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
