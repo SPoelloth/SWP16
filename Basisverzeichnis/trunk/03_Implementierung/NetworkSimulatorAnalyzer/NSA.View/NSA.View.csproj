@@ -329,7 +329,9 @@
     <None Include="Icons\Logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Icons\Broadcasting-90.png" />
     <Content Include="Icons\Router.png" />
+    <None Include="Icons\Screenshot-90.png" />
     <Content Include="Icons\Switch.png" />
     <Content Include="Icons\Workstation.png" />
   </ItemGroup>

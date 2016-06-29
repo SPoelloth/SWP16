@@ -83,12 +83,12 @@ namespace NSA.Controller.ViewControllers
             flp.AddButton(btn);
             t.SetToolTip(btn, "Erweiterte Simulation ausführen");
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Broadcast" };
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Broadcasting_90, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += Broadcast_Click;
             flp.AddButton(btn);
             t.SetToolTip(btn, "Broadcast ausführen");
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, Text = "Screenshot erstellen"};
+            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Screenshot_90, BackgroundImageLayout = ImageLayout.Stretch };
             btn.Click += Screenshot_Click;
             flp.AddButton(btn);
             t.SetToolTip(btn, "Netzwerk als Bild exportieren");
