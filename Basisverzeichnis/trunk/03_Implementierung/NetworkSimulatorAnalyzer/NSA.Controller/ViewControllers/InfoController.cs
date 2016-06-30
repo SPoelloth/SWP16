@@ -210,6 +210,7 @@ namespace NSA.Controller.ViewControllers
             }
 
             if(hopsPageVisible) SimulationManager.Instance.HighlightPacketConnections(isSendPacket, index);
+            Hstc_HopSelected(0);
         }
 
 
@@ -230,9 +231,21 @@ namespace NSA.Controller.ViewControllers
                 error2Index = destResult.LayerError.GetLayerIndex();
             }
 
+            // Quick n Dirty, zu spät für was schöneres:
+            // If there's more than one result set receiveError in dest to true in order to gray it out. 
+            bool receiveError = currentHops.Count == 1;
+            int sourceIndex = HopIndex;
+            int destIndex = HopIndex + (currentHops.Count > 1 ? 1 : 0);
             infoControl.hopVisualizationControl.LoadHopInfo(
-                currentHops[HopIndex].Name, currentHops[HopIndex].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(), error1Index,
-                currentHops[HopIndex + 1].Name, currentHops[HopIndex + 1].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(), error2Index);
+                currentHops[sourceIndex].Name,
+                currentHops[sourceIndex].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(),
+                error1Index,
+                srcResult.SendError,
+                currentHops[destIndex].Name,
+                currentHops[destIndex].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(),
+                error2Index,
+                receiveError
+                );
         }
 
 
@@ -296,6 +309,12 @@ namespace NSA.Controller.ViewControllers
             lastSimulation = Sim;
             infoControl.historyControl.AddHistoryData(Sim.Id, expectedRes, simResult, Sim.Source, Sim.Destination);
             UpdatePacketsFromLastSimulation(Sim);
+            // Quick n Dirty, ist zu verwurschtelt alles leider
+            if (Sim.PacketsSend.Count > 0)
+            {
+                hopsTabPage_PacketSelected(this, "Hinpaket 0");
+                Hstc_HopSelected(0);
+            }
         }
 
         /// <summary>
@@ -338,6 +357,7 @@ namespace NSA.Controller.ViewControllers
             {
                 infoControl.hopsControl.AddPacket(string.Format(receivedPacket, i));
             }
+            Hstc_HopSelected(0);
         }
 
         /// <summary>
@@ -349,7 +369,7 @@ namespace NSA.Controller.ViewControllers
             infoControl.resultsControl.Clear();
             infoControl.hopsControl.Clear();
             infoControl.scenariosControl.Clear();
-
+            infoControl.hopVisualizationControl.ClearHopInfo();
             lastSimulation = null;
             executedScenarioCount = 0;
         }

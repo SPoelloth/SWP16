@@ -29,10 +29,11 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// <param name="NodeName">Name of the node</param>
         /// <param name="Layers">Layers of the node</param>
         /// <param name="ErrorIndex">Index of the layer where an error occured</param>
-        public void LoadHopData(string NodeName, List<string> Layers, int ErrorIndex = -1)
+        /// <param name="ReceiveError">Flag indicating whether a receive error occured</param>
+        public void LoadHopData(string NodeName, List<string> Layers, int ErrorIndex = -1, bool ReceiveError = false)
         {
             flpLayers.Controls.Clear();
-            labelHardwarenode.Text = NodeName;
+            labelHardwarenode.Text = ReceiveError ? "Nicht erreichbar" : NodeName;
             for(int i = 0; i < Layers.Count; i++)
             {
                 Label newLabel = new Label() { AutoSize = false, Text = Layers[i], BorderStyle = BorderStyle.FixedSingle, TextAlign = ContentAlignment.MiddleCenter};
@@ -40,7 +41,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
                 {
                     newLabel.BackColor = Color.Red;
                 }
-                else if (ErrorIndex > -1 && i > ErrorIndex)
+                else if (ReceiveError || ErrorIndex > -1 && i > ErrorIndex)
                 {
                     newLabel.BackColor = Color.LightGray;
                 }

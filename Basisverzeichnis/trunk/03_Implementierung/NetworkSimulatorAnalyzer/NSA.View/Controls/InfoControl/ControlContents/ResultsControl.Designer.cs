@@ -48,11 +48,13 @@
             this.dgvResults.AllowUserToAddRows = false;
             this.dgvResults.AllowUserToDeleteRows = false;
             this.dgvResults.AllowUserToResizeRows = false;
+            this.dgvResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvResults.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvResults.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvResults.Location = new System.Drawing.Point(0, 29);
             this.dgvResults.MultiSelect = false;
@@ -62,7 +64,7 @@
             this.dgvResults.RowHeadersVisible = false;
             this.dgvResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dgvResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvResults.Size = new System.Drawing.Size(738, 121);
+            this.dgvResults.Size = new System.Drawing.Size(738, 153);
             this.dgvResults.TabIndex = 2;
             this.dgvResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvResults_CellContentClick);
             this.dgvResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvResults_KeyDown);
@@ -72,7 +74,7 @@
             this.Controls.Add(this.bnClearResult);
             this.Controls.Add(this.dgvResults);
             this.Name = "ResultsControl";
-            this.Size = new System.Drawing.Size(738, 150);
+            this.Size = new System.Drawing.Size(738, 185);
             ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
             this.ResumeLayout(false);
 

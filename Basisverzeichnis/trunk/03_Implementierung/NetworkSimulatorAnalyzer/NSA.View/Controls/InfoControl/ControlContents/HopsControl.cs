@@ -144,7 +144,10 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         public void AddPacket(string PacketName)
         {
             cbPackets.Items.Add(PacketName);
-            cbPackets.SelectedItem = PacketName;
+            if (cbPackets.SelectedIndex != 0)
+            {
+                cbPackets.SelectedIndex = 0;
+            }
         }
         
         /// <summary>

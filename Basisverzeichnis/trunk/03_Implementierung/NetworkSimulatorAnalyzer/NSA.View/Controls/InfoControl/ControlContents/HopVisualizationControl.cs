@@ -22,18 +22,23 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         }
 
         /// <summary>
-        /// 
+        /// Clears LayerstackVisualizationControls and forwards information to them
         /// </summary>
-        /// <param name="Node1Name"></param>
-        /// <param name="Node1Layers"></param>
-        /// <param name="error1Index"></param>
-        /// <param name="Node2Name"></param>
-        /// <param name="Node2Layers"></param>
-        /// <param name="error2Index"></param>
-        public void LoadHopInfo(string Node1Name, List<string> Node1Layers, int error1Index, string Node2Name, List<string> Node2Layers, int error2Index)
+        /// <param name="NodeSrcName"></param>
+        /// <param name="NodeSrcLayers"></param>
+        /// <param name="ErrorSrcIndex"></param>
+        /// <param name="SendErrorSrc"></param>
+        /// <param name="NodeDestName"></param>
+        /// <param name="NodeDestLayers"></param>
+        /// <param name="ErrorDestIndex"></param>
+        /// <param name="ReceiveError"></param>
+        public void LoadHopInfo(
+            string NodeSrcName, List<string> NodeSrcLayers, int ErrorSrcIndex, bool SendErrorSrc,
+            string NodeDestName, List<string> NodeDestLayers, int ErrorDestIndex, bool ReceiveError)
         {
-            layerStackVisualizationControl1.LoadHopData(Node1Name, Node1Layers, error1Index);
-            layerStackVisualizationControl2.LoadHopData(Node2Name, Node2Layers, error2Index);
+            ClearHopInfo();
+            layerStackVisualizationControlSrc.LoadHopData(NodeSrcName, NodeSrcLayers, ErrorSrcIndex);
+            layerStackVisualizationControlDest.LoadHopData(NodeDestName, NodeDestLayers, ErrorDestIndex, ReceiveError);
         }
 
         /// <summary>
@@ -41,8 +46,8 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// </summary>
         public void ClearHopInfo()
         {
-            layerStackVisualizationControl1.Reset();
-            layerStackVisualizationControl2.Reset();
+            layerStackVisualizationControlSrc.Reset();
+            layerStackVisualizationControlDest.Reset();
         }
     }
 }

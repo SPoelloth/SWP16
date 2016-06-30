@@ -38,11 +38,13 @@
             this.dgvHops.AllowUserToAddRows = false;
             this.dgvHops.AllowUserToDeleteRows = false;
             this.dgvHops.AllowUserToResizeRows = false;
+            this.dgvHops.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvHops.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvHops.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvHops.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvHops.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHops.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgvHops.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvHops.Location = new System.Drawing.Point(0, 30);
             this.dgvHops.MultiSelect = false;

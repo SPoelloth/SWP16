@@ -36,17 +36,17 @@
             // 
             this.flpLayers.AutoSize = true;
             this.flpLayers.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
-            this.flpLayers.Location = new System.Drawing.Point(3, 23);
+            this.flpLayers.Location = new System.Drawing.Point(3, 16);
             this.flpLayers.Name = "flpLayers";
             this.flpLayers.Padding = new System.Windows.Forms.Padding(1);
-            this.flpLayers.Size = new System.Drawing.Size(162, 125);
+            this.flpLayers.Size = new System.Drawing.Size(162, 144);
             this.flpLayers.TabIndex = 5;
             this.flpLayers.WrapContents = false;
             // 
             // labelHardwarenode
             // 
             this.labelHardwarenode.AutoSize = true;
-            this.labelHardwarenode.Location = new System.Drawing.Point(43, 7);
+            this.labelHardwarenode.Location = new System.Drawing.Point(46, 1);
             this.labelHardwarenode.Name = "labelHardwarenode";
             this.labelHardwarenode.Size = new System.Drawing.Size(77, 13);
             this.labelHardwarenode.TabIndex = 6;
@@ -61,7 +61,7 @@
             this.Controls.Add(this.labelHardwarenode);
             this.Controls.Add(this.flpLayers);
             this.Name = "LayerStackVisualizationControl";
-            this.Size = new System.Drawing.Size(168, 153);
+            this.Size = new System.Drawing.Size(168, 163);
             this.ResumeLayout(false);
             this.PerformLayout();
 

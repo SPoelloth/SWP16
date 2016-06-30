@@ -28,34 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.layerStackVisualizationControl2 = new NSA.View.Controls.InfoControl.ControlContents.LayerStackVisualizationControl();
-            this.layerStackVisualizationControl1 = new NSA.View.Controls.InfoControl.ControlContents.LayerStackVisualizationControl();
+            this.layerStackVisualizationControlDest = new NSA.View.Controls.InfoControl.ControlContents.LayerStackVisualizationControl();
+            this.layerStackVisualizationControlSrc = new NSA.View.Controls.InfoControl.ControlContents.LayerStackVisualizationControl();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // layerStackVisualizationControl2
+            // layerStackVisualizationControlDest
             // 
-            this.layerStackVisualizationControl2.AutoSize = true;
-            this.layerStackVisualizationControl2.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.layerStackVisualizationControl2.Location = new System.Drawing.Point(469, 3);
-            this.layerStackVisualizationControl2.Name = "layerStackVisualizationControl2";
-            this.layerStackVisualizationControl2.Size = new System.Drawing.Size(168, 154);
-            this.layerStackVisualizationControl2.TabIndex = 1;
+            this.layerStackVisualizationControlDest.AutoSize = true;
+            this.layerStackVisualizationControlDest.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.layerStackVisualizationControlDest.Location = new System.Drawing.Point(469, 3);
+            this.layerStackVisualizationControlDest.Name = "layerStackVisualizationControlDest";
+            this.layerStackVisualizationControlDest.Size = new System.Drawing.Size(168, 154);
+            this.layerStackVisualizationControlDest.TabIndex = 1;
             // 
-            // layerStackVisualizationControl1
+            // layerStackVisualizationControlSrc
             // 
-            this.layerStackVisualizationControl1.AutoSize = true;
-            this.layerStackVisualizationControl1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.layerStackVisualizationControl1.Location = new System.Drawing.Point(99, 3);
-            this.layerStackVisualizationControl1.Name = "layerStackVisualizationControl1";
-            this.layerStackVisualizationControl1.Size = new System.Drawing.Size(168, 154);
-            this.layerStackVisualizationControl1.TabIndex = 0;
+            this.layerStackVisualizationControlSrc.AutoSize = true;
+            this.layerStackVisualizationControlSrc.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.layerStackVisualizationControlSrc.Location = new System.Drawing.Point(99, 3);
+            this.layerStackVisualizationControlSrc.Name = "layerStackVisualizationControlSrc";
+            this.layerStackVisualizationControlSrc.Size = new System.Drawing.Size(168, 154);
+            this.layerStackVisualizationControlSrc.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 22);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Quelle:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(402, 3);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 22);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Ziel:";
             // 
             // HopVisualizationControl
             // 
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.Controls.Add(this.layerStackVisualizationControl2);
-            this.Controls.Add(this.layerStackVisualizationControl1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.layerStackVisualizationControlDest);
+            this.Controls.Add(this.layerStackVisualizationControlSrc);
             this.Name = "HopVisualizationControl";
             this.Size = new System.Drawing.Size(738, 165);
             this.ResumeLayout(false);
@@ -65,7 +89,9 @@
 
         #endregion
 
-        private LayerStackVisualizationControl layerStackVisualizationControl1;
-        private LayerStackVisualizationControl layerStackVisualizationControl2;
+        private LayerStackVisualizationControl layerStackVisualizationControlSrc;
+        private LayerStackVisualizationControl layerStackVisualizationControlDest;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
