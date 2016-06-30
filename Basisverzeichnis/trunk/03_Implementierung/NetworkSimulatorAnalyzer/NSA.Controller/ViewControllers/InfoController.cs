@@ -8,6 +8,7 @@ using NSA.Model.BusinessLogic;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
 using NSA.View.Controls.InfoControl;
+using NSA.View.Controls.InfoControl.ControlContents;
 using NSA.View.Forms;
 
 namespace NSA.Controller.ViewControllers
@@ -37,6 +38,9 @@ namespace NSA.Controller.ViewControllers
         private Simulation lastSimulation;
         private int executedScenarioCount;
         private bool hopsPageVisible;
+
+        private List<Hardwarenode> currentHops = new List<Hardwarenode>();
+        private List<Tuple<Result, Result>> currentResults = new List<Tuple<Result, Result>>();
 
         /// <summary>
         /// Initializes this instance.
@@ -73,11 +77,12 @@ namespace NSA.Controller.ViewControllers
             hstc.PacketSelected += hopsTabPage_PacketSelected;
             infoControl.HopsTabPage_Selected += hopsTabPage_Selected;
             infoControl.HopsTabPage_Deselected += hopsTabPage_Deselected;
+            hstc.HopSelected += Hstc_HopSelected;
 
             // Result Control Eventhandler
             rtc.ClearButtonClicked += resultsTabPage_ClearButtonClicked;
-
         }
+
 
         #region Event Handling
 
@@ -181,6 +186,9 @@ namespace NSA.Controller.ViewControllers
             if (hops == null)
                 return;
 
+            currentHops = hops;
+            currentResults.Clear();
+
             if (hops.Count > 1)
                 for (int i = 0; i < hops.Count - 1; i++)
                 {
@@ -191,15 +199,40 @@ namespace NSA.Controller.ViewControllers
                     string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
 
                     infoControl.hopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
+                    currentResults.Add(results);
                 }
             else
             {
                 var results = SimulationManager.Instance.GetHopResult(isSendPacket, index, hops.First().Name);
                 string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
                 infoControl.hopsControl.AddHop(hops[0].Name, res1, "-", "-");
+                currentResults.Add(results);
             }
 
             if(hopsPageVisible) SimulationManager.Instance.HighlightPacketConnections(isSendPacket, index);
+        }
+
+
+        private void Hstc_HopSelected(int HopIndex)
+        {
+            if (currentResults.Count == 0) return;
+
+            Result srcResult = currentResults[HopIndex].Item1;
+            int error1Index = -1;
+            if (srcResult.LayerError != null)
+            {
+                error1Index = srcResult.LayerError.GetLayerIndex();
+            }
+            Result destResult = currentResults[HopIndex].Item2;
+            int error2Index = -1;
+            if (destResult.LayerError != null)
+            {
+                error2Index = destResult.LayerError.GetLayerIndex();
+            }
+
+            infoControl.hopVisualizationControl.LoadHopInfo(
+                currentHops[HopIndex].Name, currentHops[HopIndex].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(), error1Index,
+                currentHops[HopIndex + 1].Name, currentHops[HopIndex + 1].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(), error2Index);
         }
 
 

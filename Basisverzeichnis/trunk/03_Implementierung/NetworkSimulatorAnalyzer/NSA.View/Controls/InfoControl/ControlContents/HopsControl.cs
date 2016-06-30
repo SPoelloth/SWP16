@@ -29,6 +29,10 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// The selected packet.
         /// </value>
         public string SelectedPacket => cbPackets.SelectedItem as string;
+        /// <summary>
+        /// Is fired when a hop is selected
+        /// </summary>
+        public event Action<int> HopSelected;
 
         private readonly DataTable gridData = new DataTable();
 
@@ -40,6 +44,20 @@ namespace NSA.View.Controls.InfoControl.ControlContents
             InitializeComponent();
             dgvHops.AutoGenerateColumns = false;
             AddColumns();
+            dgvHops.SelectionChanged += DgvHops_SelectionChanged;
+            dgvHops.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        }
+
+        private void DgvHops_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvHops.SelectedRows.Count > 0)
+            {
+                var selection = dgvHops.SelectedRows[0];
+                if (selection != null)
+                {
+                    HopSelected?.Invoke(selection.Index);
+                }
+            }
         }
 
 
