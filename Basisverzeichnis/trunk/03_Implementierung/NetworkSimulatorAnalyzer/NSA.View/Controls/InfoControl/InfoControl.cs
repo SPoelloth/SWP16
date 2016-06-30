@@ -37,6 +37,8 @@ namespace NSA.View.Controls.InfoControl
         private void tcPages_Selected(object sender, TabControlEventArgs e)
         {
             if (e.TabPage == tabPageHops) HopsTabPage_Selected?.Invoke(this, EventArgs.Empty);
+            Refresh();
+            tcPages.PerformLayout();
         }
 
         /// <summary>
