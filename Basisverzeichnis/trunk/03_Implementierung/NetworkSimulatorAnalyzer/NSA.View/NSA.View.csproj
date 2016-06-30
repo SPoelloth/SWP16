@@ -56,11 +56,23 @@
     <Compile Include="Controls\InfoControl\ControlContents\HopsControl.Designer.cs">
       <DependentUpon>HopsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\LayerStackVisualizationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\LayerStackVisualizationControl.Designer.cs">
+      <DependentUpon>LayerStackVisualizationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\InfoControl\ControlContents\ResultsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\InfoControl\ControlContents\ResultsControl.Designer.cs">
       <DependentUpon>ResultsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\HopVisualizationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\InfoControl\ControlContents\HopVisualizationControl.Designer.cs">
+      <DependentUpon>HopVisualizationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\InfoControl\ControlContents\ScenariosControl.cs">
       <SubType>UserControl</SubType>
@@ -227,8 +239,14 @@
     <EmbeddedResource Include="Controls\InfoControl\ControlContents\HopsControl.resx">
       <DependentUpon>HopsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\ControlContents\LayerStackVisualizationControl.resx">
+      <DependentUpon>LayerStackVisualizationControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\InfoControl\ControlContents\ResultsControl.resx">
       <DependentUpon>ResultsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\InfoControl\ControlContents\HopVisualizationControl.resx">
+      <DependentUpon>HopVisualizationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\InfoControl\ControlContents\ScenariosControl.resx">
       <DependentUpon>ScenariosControl.cs</DependentUpon>
