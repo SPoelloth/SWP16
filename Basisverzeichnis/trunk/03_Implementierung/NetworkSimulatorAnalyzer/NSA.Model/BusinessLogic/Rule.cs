@@ -168,7 +168,11 @@ namespace NSA.Model.BusinessLogic
                             if (info[0] == '(' && info[info.Length - 1] == ')')
                             {
                                 info = info.Substring(1, info.Length - 2); // take everything between the '(', ')' characters
-                                endNodes.AddRange(info.Split(','));
+                                
+								foreach (var endNode in info.Split(','))
+								{
+									endNodes.Add(endNode.Trim());
+								}
                             }
 
                             break;
