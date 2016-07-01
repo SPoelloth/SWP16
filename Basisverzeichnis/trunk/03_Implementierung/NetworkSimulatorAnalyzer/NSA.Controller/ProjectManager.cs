@@ -67,7 +67,7 @@ namespace NSA.Controller
             }
             else
             {
-                SaveToFile(CurrentProject.Path);
+                File.WriteAllText(CurrentProject.Path, SerializeProject());
             }
         }
 
@@ -81,7 +81,7 @@ namespace NSA.Controller
             if (result != DialogResult.OK) return;
             var file = saveFileDialog.FileName;
             CurrentProject.Path = file;
-            SaveToFile(file);
+            File.WriteAllText(CurrentProject.Path, SerializeProject());
             // create Directory
             TestscenarioDirectoryName = $"{Path.GetFileNameWithoutExtension(file)}_{SzenarioFolderPart}";
             Directory.CreateDirectory(Path.Combine(Path.GetDirectoryName(file) ?? "", TestscenarioDirectoryName));
@@ -95,12 +95,15 @@ namespace NSA.Controller
         private DialogResult AskSave()
         {
             if (IsProjectEmpty()) return DialogResult.OK;
+            if (!File.Exists(CurrentProject.Path)) return DialogResult.OK;
+            if (SerializeProject() == File.ReadAllText(CurrentProject.Path)) return DialogResult.OK;
+
             var result = MessageBox.Show("Willst du das Projekt speichern?", "Projekt ist nicht leer", MessageBoxButtons.YesNoCancel);
             if (result == DialogResult.Yes) Save();
             return result;
         }
 
-        private void SaveToFile(string file)
+        private string SerializeProject()
         {
             XDocument doc = new XDocument();
             XElement root = new XElement("Project");
@@ -216,7 +219,7 @@ namespace NSA.Controller
             root.Add(switchesXML);
             root.Add(connectionsXML);
             doc.Add(root);
-            doc.Save(file);
+            return doc.ToString();
         }
 
         private void LoadFromFile(string file)
