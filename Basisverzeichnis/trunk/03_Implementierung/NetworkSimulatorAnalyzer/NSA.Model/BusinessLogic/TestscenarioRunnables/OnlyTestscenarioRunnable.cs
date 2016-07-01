@@ -10,15 +10,18 @@ namespace NSA.Model.BusinessLogic.TestscenarioRunnables
         private readonly List<Hardwarenode> endNodes;
         private readonly Rule rule;
         private readonly Hardwarenode startNode;
-        
-        public int SimulationCount { get; }
 
+		/// <summary>
+		/// Initializes a new instance of the
+		/// <see cref="NSA.Model.BusinessLogic.TestscenarioRunnables.OnlyTestscenarioRunnable"/> class.
+		/// </summary>
+		/// <param name="Rule">Rule object</param>
+		/// <param name="N">Network</param>
         public OnlyTestscenarioRunnable(Rule Rule, Network N)
         {
             rule = Rule;
             startNode = Rule.StartNode;
             endNodes = Rule.EndNodes;
-            SimulationCount = N.GetAllWorkstations().Count; 
             network = N;
         }
 

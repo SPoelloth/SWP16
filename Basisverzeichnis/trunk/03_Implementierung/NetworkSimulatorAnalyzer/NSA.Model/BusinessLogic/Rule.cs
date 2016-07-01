@@ -4,7 +4,9 @@ using NSA.Model.NetworkComponents;
 
 namespace NSA.Model.BusinessLogic
 {
-    [Flags]
+	/// <summary>
+	/// Simulation types
+	/// </summary>
     public enum SimulationType
     {
         Simple = 0,
@@ -12,20 +14,31 @@ namespace NSA.Model.BusinessLogic
         HasInternet = 2
     }
 
+	/// <summary>
+	/// Rule class parses the text and if it is valid, the Rule object will be used for simulations
+	/// 
+	/// Expected input:
+	/// PC_NAME | (PC_NAME, ...) | { OPTIONS } | TRUE/FALSE
+	/// PC_NAME | (SUBNET(PC_NAME), ...) | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
+	/// PC_NAME | ONLY(PC_NAME, ...) | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
+	/// PC_NAME | HAS_INTERNET | TRUE/FALSE
+	/// </summary>
     public class Rule
     {
-        /**
-         * Expected input:
-         * PC_NAME | (PC_NAME, ...) | { OPTIONS } | TRUE/FALSE
-         * PC_NAME | (SUBNET(PC_NAME), ...) | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
-         * PC_NAME | ONLY(PC_NAME, ...) | {TTL: 64, SSL: TRUE, ...} | TRUE/FALSE 
-         * PC_NAME | HAS_INTERNET | TRUE/FALSE
-         */
-
+		/// <summary>
+		/// Gets the type of the simul.
+		/// </summary>
+		/// <value>The type of the simul.</value>
         public SimulationType SimulType { get; }
 
+		/// <summary>
+		/// String representation of startNode
+		/// </summary>
         public string StartNodeString { get; }
 
+		/// <summary>
+		/// Gets the start node.
+		/// </summary>
         public Hardwarenode StartNode
         {
             get
@@ -35,8 +48,15 @@ namespace NSA.Model.BusinessLogic
                 return node;
             }
         }
+
+		/// <summary>
+		/// String representation of endNodes
+		/// </summary>
         public List<string> EndNodesString { get; }
 
+		/// <summary>
+		/// Gets the end nodes.
+		/// </summary>
         public List<Hardwarenode> EndNodes
         {
             get
@@ -64,13 +84,25 @@ namespace NSA.Model.BusinessLogic
             }
         }
 
+		/// <summary>
+		/// Rule options
+		/// </summary>
         public Dictionary<string, int> Options { get; }
+        
+		/// <summary>
+        /// Expected result for the Rule
+        /// </summary>
+		public bool ExpectedResult { get; }
 
-        public bool ExpectedResult { get; }
-
+		/// <summary>
+		/// constant separators, that are needed for parsing
+		/// </summary>
         private const string Separator = "|";
         private const string OptionSeparator = ":";
 
+		/// <summary>
+		/// Accepted parameter types
+		/// </summary>
         public static List<string> Parameters = new List<string> 
         {
             "TTL",
@@ -78,6 +110,15 @@ namespace NSA.Model.BusinessLogic
         };
 
         private readonly Network network;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NSA.Model.BusinessLogic.Rule"/> class.
+		/// </summary>
+		/// <param name="StartNode">Start node.</param>
+		/// <param name="EndNodes">End nodes.</param>
+		/// <param name="Options">Options.</param>
+		/// <param name="SimulationType">Simulation type.</param>
+		/// <param name="ExpectedResult">the expected result: True or False</param>
+		/// <param name="N">Network</param>
         public Rule(string StartNode, List<string> EndNodes, Dictionary<string, int> Options, SimulationType SimulationType, bool ExpectedResult, Network N)
         {
             StartNodeString = StartNode;
@@ -170,6 +211,12 @@ namespace NSA.Model.BusinessLogic
             return new Rule(startNode, endNodes, options, simulationType, expectedResult, N);
         }
 
+		/// <summary>
+		/// Checks if text contains TRUE or FALSE
+		/// </summary>
+		/// <returns> true if TRUE, false if FALSE, else throws an exception</returns>
+		/// <param name="Text">text to parse</param>
+		/// <param name="Rule">Rule string, which is needed, in order to inform the user about invalid Rule input</param>
         public static bool CheckForTrueOrFalse(string Text, string Rule)
         {
             if (Text.ToUpper().Contains("TRUE")) return true;

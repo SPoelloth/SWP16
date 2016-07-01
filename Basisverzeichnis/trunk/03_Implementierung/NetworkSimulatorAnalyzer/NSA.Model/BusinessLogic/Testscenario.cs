@@ -7,13 +7,34 @@ namespace NSA.Model.BusinessLogic
 {
     public class Testscenario
     {
+		/// <summary>
+		/// The network.
+		/// </summary>
         private readonly Network network;
-        private readonly string text;
-
-        public string FileName { get; private set; }
-        public string Id { get; }
-        public int SimulationCount { get; private set; } // wird jetzt nicht mehr angezeigt, kann raus, wenn sonst nicht mehr gebraucht.
         
+		/// <summary>
+		/// The text.
+		/// </summary>
+		private readonly string text;
+
+		/// <summary>
+		/// Gets the name of the file.
+		/// </summary>
+		/// <value>The name of the file.</value>
+        public string FileName { get; private set; }
+
+		/// <summary>
+		/// Gets the identifier.
+		/// </summary>
+		/// <value>The identifier.</value>
+        public string Id { get; }
+        
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NSA.Model.BusinessLogic.Testscenario"/> class.
+		/// </summary>
+		/// <param name="T">Text to parse</param>
+		/// <param name="N">Network</param>
+		/// <param name="FileName">File name</param>
         public Testscenario(string T, Network N, string FileName)
         {
             network = N;
@@ -41,15 +62,7 @@ namespace NSA.Model.BusinessLogic
                         case SimulationType.Only: runnables.Add(new OnlyTestscenarioRunnable(rule, network)); break;
                     }
                 }
-                catch
-                {
-                }
-            }
-
-            SimulationCount = 0;
-            foreach (var runnable in runnables)
-            {
-                SimulationCount += runnable.SimulationCount;
+                catch{}
             }
 
             return runnables;
