@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace NSA.View.Controls.NetworkView.NetworkElements.Base
@@ -32,7 +33,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             }
         }
 
-        internal EditorElementBase() 
+        internal EditorElementBase()
         {
 
         }
@@ -71,15 +72,13 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             g.DrawImage(Image, 0, 0, Image.Width, Image.Height);
         }
 
-        internal Point lastMouseLocation = new Point();
+        internal Point mouseDownOffset = new Point();
         bool dragging = false;
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (e.Button.HasFlag(MouseButtons.Left))
-            {
-                dragging = true;
-                lastMouseLocation = e.Location;
-            }
+            if (!e.Button.HasFlag(MouseButtons.Left)) return;
+            dragging = true;
+            mouseDownOffset = e.Location;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -87,7 +86,9 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
             if (!dragging) return;
             if (e.Button.HasFlag(MouseButtons.Left))
             {
-                Location = new Point(Location.X + e.X - lastMouseLocation.X, Location.Y + e.Y - lastMouseLocation.Y);
+                var mouseLoc = Parent.PointToClient(Cursor.Position);
+                Location = new Point(mouseLoc.X - mouseDownOffset.X, mouseLoc.Y - mouseDownOffset.Y);
+                Invalidate();
             }
         }
 
@@ -107,7 +108,6 @@ namespace NSA.View.Controls.NetworkView.NetworkElements.Base
         {
             Cursor = Cursor == Cursors.Hand ? Cursors.Default : Cursor;
             base.OnMouseLeave(e);
-            lastMouseLocation = new Point();
             Invalidate();
         }
 
