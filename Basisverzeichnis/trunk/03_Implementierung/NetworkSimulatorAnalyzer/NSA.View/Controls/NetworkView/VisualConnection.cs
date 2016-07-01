@@ -60,7 +60,6 @@ namespace NSA.View.Controls.NetworkView
                 c.IsSelected = true;
             }
             Selected?.Invoke(this);
-
         }
 
         private void Element_LocationChanged(object sender, EventArgs e)
@@ -255,6 +254,11 @@ namespace NSA.View.Controls.NetworkView
                 c.Parent.Controls.Remove(c);
                 c.Dispose();
             }
+        }
+
+        public void Highlight(bool highlight)
+        {
+            foreach (var c in connectionControls) c.Highlight(highlight);
         }
 
         [Flags]

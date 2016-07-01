@@ -151,7 +151,14 @@ namespace NSA.Controller.ViewControllers
 
         public void HighlightConnections(List<string> connectionNames)
         {
-            //if null, unhighlight
+            if (connectionNames == null)
+            {
+                foreach (var c in networkViewControl.connections) c.Highlight(false);
+            }
+            else
+            {
+                foreach (var c in networkViewControl.connections) c.Highlight(connectionNames.Contains(c.Name));
+            }
         }
     }
 }

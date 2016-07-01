@@ -9,6 +9,8 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         public new static int ZIndexStart = 10000;
         private const int LineWidth = 3;
 
+        bool highlighted = false;
+
         Point Point1, Point2;
 
         public ConnectionControl(string name, Point point1, Point point2)
@@ -39,7 +41,7 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
         protected override void OnPaint(PaintEventArgs pe)
         {
             var g = pe.Graphics;
-            g.Clear(IsSelected ? Color.Red : Color.Black);
+            g.Clear(highlighted ? Color.Lime : IsSelected ? Color.Red : Color.Black);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -48,6 +50,12 @@ namespace NSA.View.Controls.NetworkView.NetworkElements
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
+        }
+
+        public void Highlight(bool highlight)
+        {
+            highlighted = highlight;
+            Invalidate();
         }
     }
 }

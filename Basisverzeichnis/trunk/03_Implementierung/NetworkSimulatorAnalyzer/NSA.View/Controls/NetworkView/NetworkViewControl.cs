@@ -345,7 +345,7 @@ namespace NSA.View.Controls.NetworkView
             ReverseZOrder();
             moveControls(area.Location);
             Size = oldSize;
-           return bmp;
+            return bmp;
         }
 
         private void ReverseZOrder()

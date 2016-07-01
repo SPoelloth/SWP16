@@ -374,7 +374,7 @@ namespace NSA.Controller
         /// </summary>
         public void LoadTestscenarios()
         {
-
+            testscenarios = new List<Testscenario>();
             DirectoryInfo d = new DirectoryInfo(Path.GetDirectoryName(CurrentProject.Path) + "/" + TestscenarioDirectoryName);
 
             if (!d.Exists) return;
