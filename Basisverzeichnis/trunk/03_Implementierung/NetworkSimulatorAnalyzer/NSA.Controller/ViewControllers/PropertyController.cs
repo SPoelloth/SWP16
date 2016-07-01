@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using NSA.Model.NetworkComponents;
@@ -61,7 +60,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControl_InterfaceAdded()
         {
             Workstation station = (Workstation) selectedNode;
-            NetworkManager.Instance.AddInterfaceToWorkstation(station.Name, IPAddress.None, IPAddress.None);
+            NetworkManager.Instance.AddInterfaceToWorkstation(station.Name, IPAddress.None, new IPAddress(new byte[] { 255, 255, 255, 0 }));
             propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
             propertyControl.RetainScrollPosition = false;
@@ -85,7 +84,7 @@ namespace NSA.Controller.ViewControllers
         private void PropertyControlAddRoute()
         {
             Workstation station = (Workstation) selectedNode;
-            NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, IPAddress.None, IPAddress.None, station.Interfaces.First());
+            NetworkManager.Instance.AddRoute(station.Name, IPAddress.None, new IPAddress(new byte[] { 255, 255, 255, 0 }), IPAddress.None, station.Interfaces.First());
             propertyControl.RetainScrollPosition = true;
             LoadElementProperties(selectedNode.Name);
             propertyControl.RetainScrollPosition = false;

@@ -8,7 +8,6 @@ using NSA.Model.BusinessLogic;
 using NSA.Model.NetworkComponents;
 using NSA.Model.NetworkComponents.Helper_Classes;
 using NSA.View.Controls.InfoControl;
-using NSA.View.Controls.InfoControl.ControlContents;
 using NSA.View.Forms;
 
 namespace NSA.Controller.ViewControllers
@@ -64,6 +63,7 @@ namespace NSA.Controller.ViewControllers
             Debug.Assert(htc != null, "HistoryTabControl was null/not found");
             Debug.Assert(stc != null, "ScenariosTabControl was null/not found");
             Debug.Assert(hstc != null, "HopsTabControl was null/not found");
+            Debug.Assert(rtc != null, "ResultTabControl was null/not found");
 
             // History Control Eventhandler
             htc.HistoryRerunButtonClicked += historyTabPage_HistoryRerunButtonClicked;
