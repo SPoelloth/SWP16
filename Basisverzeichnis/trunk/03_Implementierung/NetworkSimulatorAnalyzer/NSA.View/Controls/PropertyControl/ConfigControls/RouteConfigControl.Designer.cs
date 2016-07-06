@@ -53,9 +53,9 @@
             this.labelDestination.AutoSize = true;
             this.labelDestination.Location = new System.Drawing.Point(5, 38);
             this.labelDestination.Name = "labelDestination";
-            this.labelDestination.Size = new System.Drawing.Size(37, 13);
+            this.labelDestination.Size = new System.Drawing.Size(65, 13);
             this.labelDestination.TabIndex = 12;
-            this.labelDestination.Text = "Ziel IP";
+            this.labelDestination.Text = "Ziel Adresse";
             this.labelDestination.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBoxDestination
@@ -89,17 +89,17 @@
             // labelRoute
             // 
             this.labelRoute.AutoSize = true;
-            this.labelRoute.Location = new System.Drawing.Point(3, 64);
+            this.labelRoute.Location = new System.Drawing.Point(5, 64);
             this.labelRoute.Name = "labelRoute";
-            this.labelRoute.Size = new System.Drawing.Size(62, 13);
+            this.labelRoute.Size = new System.Drawing.Size(90, 13);
             this.labelRoute.TabIndex = 15;
-            this.labelRoute.Text = "Gateway IP";
+            this.labelRoute.Text = "Gateway Adresse";
             this.labelRoute.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelSubnetMask
             // 
             this.labelSubnetMask.AutoSize = true;
-            this.labelSubnetMask.Location = new System.Drawing.Point(3, 90);
+            this.labelSubnetMask.Location = new System.Drawing.Point(5, 90);
             this.labelSubnetMask.Name = "labelSubnetMask";
             this.labelSubnetMask.Size = new System.Drawing.Size(81, 13);
             this.labelSubnetMask.TabIndex = 18;
@@ -135,7 +135,6 @@
             this.Controls.Add(this.labelRoute);
             this.Controls.Add(this.labelDestination);
             this.Controls.Add(this.textBoxDestination);
-            this.DoubleBuffered = true;
             this.Name = "RouteConfigControl";
             this.Size = new System.Drawing.Size(214, 141);
             this.Controls.SetChildIndex(this.labelName, 0);
