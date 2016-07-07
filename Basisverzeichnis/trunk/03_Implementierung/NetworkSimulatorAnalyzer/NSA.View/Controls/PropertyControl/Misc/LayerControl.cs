@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace NSA.View.Controls.PropertyControl.Misc
 {
     /// <summary>
-    /// Control representing a layer in the <see cref="LayerStackConfigControl"/>.
+    /// Control representing a layer in the <see cref="NSA.View.Controls.PropertyControl.ConfigControls.LayerstackConfigControl"/>.
     /// </summary>
     public partial class LayerControl : UserControl
     {

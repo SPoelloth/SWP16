@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using NSA.View.Controls.InfoControl.ControlContents;
 
 namespace NSA.View.Controls.InfoControl
 {
@@ -20,6 +21,35 @@ namespace NSA.View.Controls.InfoControl
         public event EventHandler HopsTabPage_Deselected;
 
         /// <summary>
+        /// Property for the tab control
+        /// </summary>
+        public TabControl TcPages { get; set; }
+        /// <summary>
+        /// Property for the History control
+        /// </summary>
+        public HistoryControl HistoryControl => historyControl;
+
+        /// <summary>
+        /// Property for the HopsControl control
+        /// </summary>
+        public HopsControl HopsControl => hopsControl;
+
+        /// <summary>
+        /// Property for the Scenarios control
+        /// </summary>
+        public ScenariosControl ScenariosControl => scenariosControl;
+
+        /// <summary>
+        /// Property for the Results control
+        /// </summary>
+        public ResultsControl ResultsControl => resultsControl;
+
+        /// <summary>
+        /// Property for the HopVisualization control
+        /// </summary>
+        public HopVisualizationControl HopVisualizationControl => hopVisualizationControl;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="InfoControl"/> class.
         /// </summary>
         public InfoControl()
@@ -38,7 +68,7 @@ namespace NSA.View.Controls.InfoControl
         {
             if (e.TabPage == tabPageHops) HopsTabPage_Selected?.Invoke(this, EventArgs.Empty);
             Refresh();
-            tcPages.PerformLayout();
+            TcPages.PerformLayout();
         }
 
         /// <summary>
@@ -58,7 +88,7 @@ namespace NSA.View.Controls.InfoControl
         /// </summary>
         public void ChangeToResultsTab()
         {
-            tcPages.SelectedTab = tabPageResults;
+            TcPages.SelectedTab = tabPageResults;
         }
     }
 }

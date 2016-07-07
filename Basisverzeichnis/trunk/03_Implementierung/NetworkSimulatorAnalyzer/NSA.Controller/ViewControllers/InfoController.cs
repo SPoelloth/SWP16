@@ -55,10 +55,10 @@ namespace NSA.Controller.ViewControllers
             infoControl = MainForm.Instance.GetComponent("InfoControl") as InfoControl;
             Debug.Assert(infoControl != null, "InfoControl was null/not found");
 
-            var htc = infoControl.historyControl;
-            var stc = infoControl.scenariosControl;
-            var hstc = infoControl.hopsControl;
-            var rtc = infoControl.resultsControl;
+            var htc = infoControl.HistoryControl;
+            var stc = infoControl.ScenariosControl;
+            var hstc = infoControl.HopsControl;
+            var rtc = infoControl.ResultsControl;
 
             Debug.Assert(htc != null, "HistoryTabControl was null/not found");
             Debug.Assert(stc != null, "ScenariosTabControl was null/not found");
@@ -111,7 +111,7 @@ namespace NSA.Controller.ViewControllers
             if (row == null) return;
             string simID = row["Simulations ID"].ToString();
             SimulationManager.Instance.DeleteSimulationFromHistory(simID);
-            infoControl.historyControl.DeleteHistoryData(row);
+            infoControl.HistoryControl.DeleteHistoryData(row);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace NSA.Controller.ViewControllers
         private void historyTabPage_HistoryClearButtonClicked(object sender, EventArgs e)
         {
             SimulationManager.Instance.ClearHistory();
-            infoControl.historyControl.Clear();
+            infoControl.HistoryControl.Clear();
         }
 
         /// <summary>
@@ -143,16 +143,16 @@ namespace NSA.Controller.ViewControllers
 
             List<Simulation> failedSimulations = SimulationManager.Instance.StartTestscenario(ts);
 
-            if (failedSimulations.Count == 0) addScenarioResultToResultsTab(scenarioNameFull, "Erfolgreich", executedScenarioCount);
+            if (failedSimulations.Count == 0) AddScenarioResultToResultsTab(scenarioNameFull, "Erfolgreich", executedScenarioCount);
             else
             {
                 foreach (Simulation s in failedSimulations)
                 {
                     string simResult = string.Format(baseResult, s.Source, s.Destination, "");
-                    addScenarioResultToResultsTab(scenarioNameFull, simResult, executedScenarioCount);
+                    AddScenarioResultToResultsTab(scenarioNameFull, simResult, executedScenarioCount);
                 }
 
-                addScenarioResultToResultsTab(scenarioNameFull, "Fehler aufgetreten", executedScenarioCount);
+                AddScenarioResultToResultsTab(scenarioNameFull, "Fehler aufgetreten", executedScenarioCount);
             }
 
             executedScenarioCount++;
@@ -172,7 +172,7 @@ namespace NSA.Controller.ViewControllers
             bool isReceivedPacket = values[0].Equals(string.Format(receivedPacket, "").Trim(' '));
             List<Hardwarenode> hops = null;
 
-            infoControl.hopsControl.ClearHopsOnly();
+            infoControl.HopsControl.ClearHopsOnly();
 
             if (isSendPacket)
             {
@@ -198,14 +198,14 @@ namespace NSA.Controller.ViewControllers
                     string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
                     string res2 = results.Item2.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item2.Res;
 
-                    infoControl.hopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
+                    infoControl.HopsControl.AddHop(hops[i].Name, res1, hops[i + 1].Name, res2);
                     currentResults.Add(results);
                 }
             else
             {
                 var results = SimulationManager.Instance.GetHopResult(isSendPacket, index, hops.First().Name);
                 string res1 = results.Item1.ErrorId == Result.Errors.NoError ? "kein Fehler" : results.Item1.Res;
-                infoControl.hopsControl.AddHop(hops[0].Name, res1, "-", "-");
+                infoControl.HopsControl.AddHop(hops[0].Name, res1, "-", "-");
                 currentResults.Add(results);
             }
 
@@ -236,7 +236,7 @@ namespace NSA.Controller.ViewControllers
             bool receiveError = currentHops.Count == 1;
             int sourceIndex = HopIndex;
             int destIndex = HopIndex + (currentHops.Count > 1 ? 1 : 0);
-            infoControl.hopVisualizationControl.LoadHopInfo(
+            infoControl.HopVisualizationControl.LoadHopInfo(
                 currentHops[sourceIndex].Name,
                 currentHops[sourceIndex].Layerstack.GetAllLayers().Select(n => n.GetLayerName()).ToList(),
                 error1Index,
@@ -258,7 +258,7 @@ namespace NSA.Controller.ViewControllers
         {
             hopsPageVisible = true;
 
-            var values = infoControl.hopsControl.SelectedPacket?.Split(' ');
+            var values = infoControl.HopsControl.SelectedPacket?.Split(' ');
             if(values == null) return;
 
             int index = int.Parse(values[1]);
@@ -289,7 +289,7 @@ namespace NSA.Controller.ViewControllers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void resultsTabPage_ClearButtonClicked(object sender, EventArgs e)
         {
-            infoControl.resultsControl.Clear();
+            infoControl.ResultsControl.Clear();
             executedScenarioCount = 0;
         }
 
@@ -307,7 +307,7 @@ namespace NSA.Controller.ViewControllers
             string simResult = SimulationManager.Instance.GetSimulationResult(Sim.Id) ? "Erfolgreich" : "Fehler aufgetreten";
 
             lastSimulation = Sim;
-            infoControl.historyControl.AddHistoryData(Sim.Id, expectedRes, simResult, Sim.Source, Sim.Destination);
+            infoControl.HistoryControl.AddHistoryData(Sim.Id, expectedRes, simResult, Sim.Source, Sim.Destination);
             UpdatePacketsFromLastSimulation(Sim);
             // Quick n Dirty, ist zu verwurschtelt alles leider
             if (Sim.PacketsSend.Count > 0)
@@ -323,7 +323,7 @@ namespace NSA.Controller.ViewControllers
         /// <param name="T">The t.</param>
         public void AddTestscenarioToScenarioTab(Testscenario T)
         {
-            infoControl.scenariosControl.AddTestScenario(T.FileName);
+            infoControl.ScenariosControl.AddTestScenario(T.FileName);
         }
 
         /// <summary>
@@ -332,9 +332,9 @@ namespace NSA.Controller.ViewControllers
         /// <param name="ScenarioName">Name of the scenario.</param>
         /// <param name="ScenarioResult">The scenario result.</param>
         /// <param name="Number">A consecutive number foreach executed testscenario.</param>
-        private void addScenarioResultToResultsTab(string ScenarioName, string ScenarioResult, int Number)
+        private void AddScenarioResultToResultsTab(string ScenarioName, string ScenarioResult, int Number)
         {
-            infoControl.resultsControl.AddResultData(ScenarioName, ScenarioResult, Number);
+            infoControl.ResultsControl.AddResultData(ScenarioName, ScenarioResult, Number);
         }
 
         /// <summary>
@@ -343,19 +343,19 @@ namespace NSA.Controller.ViewControllers
         /// <param name="Sim">The sim.</param>
         public void UpdatePacketsFromLastSimulation(Simulation Sim)
         {
-            infoControl.hopsControl.Clear();
+            infoControl.HopsControl.Clear();
 
             var sendPackets = Sim.PacketsSend;
             var receivedPackets = Sim.PacketsReceived;
             
             for (int i = 0; i < sendPackets.Count; i++)
             {
-                infoControl.hopsControl.AddPacket(string.Format(sendPacket, i));
+                infoControl.HopsControl.AddPacket(string.Format(sendPacket, i));
             }
 
             for (int i = 0; i < receivedPackets.Count; i++)
             {
-                infoControl.hopsControl.AddPacket(string.Format(receivedPacket, i));
+                infoControl.HopsControl.AddPacket(string.Format(receivedPacket, i));
             }
             Hstc_HopSelected(0);
         }
@@ -365,11 +365,11 @@ namespace NSA.Controller.ViewControllers
         /// </summary>
         public void ClearInfoControl()
         {
-            infoControl.historyControl.Clear();
-            infoControl.resultsControl.Clear();
-            infoControl.hopsControl.Clear();
-            infoControl.scenariosControl.Clear();
-            infoControl.hopVisualizationControl.ClearHopInfo();
+            infoControl.HistoryControl.Clear();
+            infoControl.ResultsControl.Clear();
+            infoControl.HopsControl.Clear();
+            infoControl.ScenariosControl.Clear();
+            infoControl.HopVisualizationControl.ClearHopInfo();
             lastSimulation = null;
             executedScenarioCount = 0;
         }

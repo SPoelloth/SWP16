@@ -1,4 +1,5 @@
-﻿using NSA.View.Controls.InfoControl.ControlContents;
+﻿using System.Windows.Forms;
+using NSA.View.Controls.InfoControl.ControlContents;
 
 namespace NSA.View.Controls.InfoControl
 {
@@ -30,7 +31,7 @@ namespace NSA.View.Controls.InfoControl
         /// </summary>
         private void InitializeComponent()
         {
-            this.tcPages = new System.Windows.Forms.TabControl();
+            this.TcPages = new System.Windows.Forms.TabControl();
             this.tabPageHistory = new System.Windows.Forms.TabPage();
             this.historyControl = new NSA.View.Controls.InfoControl.ControlContents.HistoryControl();
             this.tabPageHops = new System.Windows.Forms.TabPage();
@@ -41,7 +42,7 @@ namespace NSA.View.Controls.InfoControl
             this.scenariosControl = new NSA.View.Controls.InfoControl.ControlContents.ScenariosControl();
             this.tabPageResults = new System.Windows.Forms.TabPage();
             this.resultsControl = new NSA.View.Controls.InfoControl.ControlContents.ResultsControl();
-            this.tcPages.SuspendLayout();
+            this.TcPages.SuspendLayout();
             this.tabPageHistory.SuspendLayout();
             this.tabPageHops.SuspendLayout();
             this.tabPageHopVisualization.SuspendLayout();
@@ -51,21 +52,21 @@ namespace NSA.View.Controls.InfoControl
             // 
             // tcPages
             // 
-            this.tcPages.Alignment = System.Windows.Forms.TabAlignment.Bottom;
-            this.tcPages.Controls.Add(this.tabPageHistory);
-            this.tcPages.Controls.Add(this.tabPageHops);
-            this.tcPages.Controls.Add(this.tabPageHopVisualization);
-            this.tcPages.Controls.Add(this.tabPageScenarios);
-            this.tcPages.Controls.Add(this.tabPageResults);
-            this.tcPages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tcPages.Location = new System.Drawing.Point(0, 0);
-            this.tcPages.Multiline = true;
-            this.tcPages.Name = "tcPages";
-            this.tcPages.SelectedIndex = 0;
-            this.tcPages.Size = new System.Drawing.Size(684, 195);
-            this.tcPages.TabIndex = 0;
-            this.tcPages.Selected += new System.Windows.Forms.TabControlEventHandler(this.tcPages_Selected);
-            this.tcPages.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tcPages_Deselected);
+            this.TcPages.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.TcPages.Controls.Add(this.tabPageHistory);
+            this.TcPages.Controls.Add(this.tabPageHops);
+            this.TcPages.Controls.Add(this.tabPageHopVisualization);
+            this.TcPages.Controls.Add(this.tabPageScenarios);
+            this.TcPages.Controls.Add(this.tabPageResults);
+            this.TcPages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TcPages.Location = new System.Drawing.Point(0, 0);
+            this.TcPages.Multiline = true;
+            this.TcPages.Name = "TcPages";
+            this.TcPages.SelectedIndex = 0;
+            this.TcPages.Size = new System.Drawing.Size(684, 195);
+            this.TcPages.TabIndex = 0;
+            this.TcPages.Selected += new System.Windows.Forms.TabControlEventHandler(this.tcPages_Selected);
+            this.TcPages.Deselected += new System.Windows.Forms.TabControlEventHandler(this.tcPages_Deselected);
             // 
             // tabPageHistory
             // 
@@ -165,10 +166,10 @@ namespace NSA.View.Controls.InfoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tcPages);
+            this.Controls.Add(this.TcPages);
             this.Name = "InfoControl";
             this.Size = new System.Drawing.Size(684, 195);
-            this.tcPages.ResumeLayout(false);
+            this.TcPages.ResumeLayout(false);
             this.tabPageHistory.ResumeLayout(false);
             this.tabPageHops.ResumeLayout(false);
             this.tabPageHopVisualization.ResumeLayout(false);
@@ -180,16 +181,16 @@ namespace NSA.View.Controls.InfoControl
         }
 
         #endregion
-        public System.Windows.Forms.TabControl tcPages;
+
         private System.Windows.Forms.TabPage tabPageHops;
         private System.Windows.Forms.TabPage tabPageScenarios;
         private System.Windows.Forms.TabPage tabPageResults;
         private System.Windows.Forms.TabPage tabPageHistory;
-        public HistoryControl historyControl;
-        public HopsControl hopsControl;
-        public ScenariosControl scenariosControl;
-        public ResultsControl resultsControl;
         private System.Windows.Forms.TabPage tabPageHopVisualization;
-        public HopVisualizationControl hopVisualizationControl;
+        private HistoryControl historyControl;
+        private HopsControl hopsControl;
+        private ScenariosControl scenariosControl;
+        private ResultsControl resultsControl;
+        private HopVisualizationControl hopVisualizationControl;
     }
 }

@@ -8,6 +8,9 @@ namespace NSA.View.Forms
     {
         #region Singleton
         
+        /// <summary>
+        /// Property for getting the current instance
+        /// </summary>
         public static MainForm Instance = new MainForm();
 
         #endregion Singleton
@@ -18,6 +21,11 @@ namespace NSA.View.Forms
             MainForm_Resize(null, null);
         }
         
+        /// <summary>
+        /// Looks for a user control by name
+        /// </summary>
+        /// <param name="name">Name of the control</param>
+        /// <returns>The control, if a match was found, null otherwise.</returns>
         public UserControl GetComponent(string name)
         {
             foreach (UserControl control in Controls)

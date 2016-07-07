@@ -7,10 +7,16 @@ using NSA.View.Forms;
 
 namespace NSA.Controller.ViewControllers
 {
+    /// <summary>
+    /// Controller for the Toolbar control
+    /// </summary>
     public class ToolbarController
     {
         #region Singleton
 
+        /// <summary>
+        /// Property fo getting the current instance
+        /// </summary>
         public static ToolbarController Instance = new ToolbarController();
 
         #endregion Singleton
@@ -104,6 +110,9 @@ namespace NSA.Controller.ViewControllers
             ProjectManager.Instance.CreateNewProject();
         }
 
+        /// <summary>
+        /// Initializes the instance
+        /// </summary>
         public void Init()
         {
 

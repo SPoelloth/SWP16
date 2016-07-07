@@ -24,14 +24,14 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         /// <summary>
         /// Clears LayerstackVisualizationControls and forwards information to them
         /// </summary>
-        /// <param name="NodeSrcName"></param>
-        /// <param name="NodeSrcLayers"></param>
-        /// <param name="ErrorSrcIndex"></param>
-        /// <param name="SendErrorSrc"></param>
-        /// <param name="NodeDestName"></param>
-        /// <param name="NodeDestLayers"></param>
-        /// <param name="ErrorDestIndex"></param>
-        /// <param name="ReceiveError"></param>
+        /// <param name="NodeSrcName">Name of the source hardwarenode</param>
+        /// <param name="NodeSrcLayers">Layers of the source hardwarenode</param>
+        /// <param name="ErrorSrcIndex">Index of the source error</param>
+        /// <param name="SendErrorSrc">Flag indicating whether an error occured at the source</param>
+        /// <param name="NodeDestName">Name of the target hardwarenode</param>
+        /// <param name="NodeDestLayers">Layers of the target hardwarenode</param>
+        /// <param name="ErrorDestIndex">Flag indicating whether an error occured at the target</param>
+        /// <param name="ReceiveError">Index of the target error</param>
         public void LoadHopInfo(
             string NodeSrcName, List<string> NodeSrcLayers, int ErrorSrcIndex, bool SendErrorSrc,
             string NodeDestName, List<string> NodeDestLayers, int ErrorDestIndex, bool ReceiveError)
@@ -42,7 +42,7 @@ namespace NSA.View.Controls.InfoControl.ControlContents
         }
 
         /// <summary>
-        /// 
+        /// Clears the controls contents
         /// </summary>
         public void ClearHopInfo()
         {
