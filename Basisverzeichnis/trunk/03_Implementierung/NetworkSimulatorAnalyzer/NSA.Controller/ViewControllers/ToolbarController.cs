@@ -94,10 +94,14 @@ namespace NSA.Controller.ViewControllers
             flp.AddButton(btn);
             t.SetToolTip(btn, "Broadcast ausführen");
 
-            btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Screenshot_90, BackgroundImageLayout = ImageLayout.Stretch };
-            btn.Click += Screenshot_Click;
-            flp.AddButton(btn);
-            t.SetToolTip(btn, "Netzwerk als Bild exportieren");
+            var isLinux = Type.GetType("Mono.Runtime") != null;
+            if(!isLinux)
+            {
+                btn = new Button { Height = btnHeight, Width = btnWidth, BackColor = btnColor, BackgroundImage = View.Properties.Resources.Screenshot_90, BackgroundImageLayout = ImageLayout.Stretch };
+                btn.Click += Screenshot_Click;
+                flp.AddButton(btn);
+                t.SetToolTip(btn, "Netzwerk als Bild exportieren");
+            }
         }
 
         private void Screenshot_Click(object sender, EventArgs e)
